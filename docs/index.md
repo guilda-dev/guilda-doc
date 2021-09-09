@@ -1,11 +1,11 @@
-# <div style="text-align: center;"><span style="font-size: 140%; color: black;">電力系統に対する</br>レトロフィット制御シミュレータ</span></div>
-本サイトはpower_simulator の公式ドキュメントです.
+# <div style="text-align: center;"><span style="font-size: 140%; color: black;">GUILDA: Grid & Utility Infrastructure Linkage Dynamics Analyzer</span></div>
+本サイトは GUILDA の公式ドキュメントです.
 
 <br>
 
 ---
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【power_simulatorとは？】</span></div>
-power_simulatorは、各人で電力系統システムの設計・解析するために作られたMATLAB言語のプログラムです。具体的には、以下の事などをシュミレーター上で行え様々な状況を想定した解析を補助します。
+### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【GUILDAとは？】</span></div>
+GUILDAは、制御工学者が電力系統システムの設計・解析するために作られたMATLAB言語のプログラムです。具体的には、以下の事などをシュミレーター上で行え様々な状況を想定した解析を補助します。
 
 - 解析したい電力ネットワークを定義する
 - その初期応答や外乱応答、線形化システムの導出などの解析を行う
@@ -15,7 +15,7 @@ power_simulatorは、各人で電力系統システムの設計・解析する�
 
 <br><br>
 
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【power_simulatorの数理モデル】</span></div>
+### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【電力システムの数理モデル】</span></div>
 power_simulatorを制作する背景に使われている数理モデル等は「**参考書：電力システム制御理論**」の内容に即しており、こちらで紹介された理論をもとに構築されたものとなっております。理論に基づいてシュミレーションを進めて行きたい方は [**参考書の内容にそれぞれ対応付けながら進めていくチュートリアル**](./Tutorials/withText) も設けているので、そちらを見ていただくと分かりやすいかと思います。
 
 <br><br>
