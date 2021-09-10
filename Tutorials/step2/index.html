@@ -417,7 +417,7 @@
         
           <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    線形化したシステムのシュミレーションの実行
+    線形化したシステムのシミュレーションの実行
   </a>
   
 </li>
@@ -666,7 +666,7 @@
         
           <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    線形化したシステムのシュミレーションの実行
+    線形化したシステムのシミュレーションの実行
   </a>
   
 </li>
@@ -756,13 +756,13 @@
     ネットワーク内部の情報としてbus, branch, generator, controllerなどの情報が含まれる
 <br></li>
 </ul>
-<h3 id="_4"><strong>線形化したシステムのシュミレーションの実行</strong><a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>線形化したシステムのシュミレーションは以下のように行う.
+<h3 id="_4"><strong>線形化したシステムのシミュレーションの実行</strong><a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>線形化したシステムのシミュレーションは以下のように行う.
 <div class="highlight"><pre><span></span><code>option=struct();
 option.linear=true;
 out = net.simulate([0 20], option)
 </code></pre></div>
-<code>option.linear</code>が<code>true</code>の場合はシステムを線形化してシミュレーションを行い、<code>faulse</code>の場合は線形化を行わずにシュミレーションを行う.<br />
+<code>option.linear</code>が<code>true</code>の場合はシステムを線形化してシミュレーションを行い、<code>faulse</code>の場合は線形化を行わずにシミュレーションを行う.<br />
 それ以外の変数の設定や実行については、<a href="../step1">STEP1</a>に示されている<code>net.simulate(t,option)</code>と同様であるため，そちらを参照されたい.
 <br></p>
 <h3 id="_5"><strong>線形化したシステムの状態空間表現を得る</strong><a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
@@ -957,7 +957,7 @@ power_networkのインスタンスを用いている場合、そのクラスの�
 </code></pre></div></p>
 <h2 id="3">例３：線形化したシステムのシミュレーション結果を見る<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <p>以下のコードは68busシステムを線形化し，その出力をグラフで表示するものです。ここでは2種類のサンプルコードを紹介します。  </p>
-<p>まず1つ目のコードは、地絡応答についての応答を線形化を行ってシュミレーションしたプロットに、<code>get_sys</code>を用いて得られた状態空間モデルをもとに、<code>initial()</code>関数を用いて時間応答を求めたものを重ねたものです。下の結果を見ると2つの時間応答が一致していることがわかります。なお<code>initial()</code>は[Control System Toolbox]に標準搭載されている関数です。
+<p>まず1つ目のコードは、地絡応答についての応答を線形化を行ってシミュレーションしたプロットに、<code>get_sys</code>を用いて得られた状態空間モデルをもとに、<code>initial()</code>関数を用いて時間応答を求めたものを重ねたものです。下の結果を見ると2つの時間応答が一致していることがわかります。なお<code>initial()</code>は[Control System Toolbox]に標準搭載されている関数です。
 <div class="highlight"><pre><span></span><code>net= network_68bus();
 option_fault = struct();
 option_fault.fault = {{[0, 0.01], 1}};
@@ -983,7 +983,7 @@ end
 </code></pre></div></p>
 <p><img src="../../Figures/step2_initial_bus8.png" width=49.5%;>
 <img src="../../Figures/step2_initial_bus15.png" width=49.5%;></p>
-<p>2つめコードは１つめと同様に地絡応答についてのシュミレーションですが、ここでは同じネットワークシステム、同じ地絡条件のもとで線形化シュミレーションと非線形のままのシュミレーションの結果を比較するコードとなっています。出力結果は下のとおりです。
+<p>2つめコードは１つめと同様に地絡応答についてのシミュレーションですが、ここでは同じネットワークシステム、同じ地絡条件のもとで線形化シミュレーションと非線形のままのシミュレーションの結果を比較するコードとなっています。出力結果は下のとおりです。
 <div class="highlight"><pre><span></span><code>net = network_68bus();
 option = struct();
 option.fault = {{[0,0.01], 1}};

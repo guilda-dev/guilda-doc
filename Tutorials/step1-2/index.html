@@ -751,13 +751,13 @@
               
                 
                 
-                <h1 id="_1">シュミレーション結果のデータの読み方<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+                <h1 id="_1">シミュレーション結果のデータの読み方<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="simulate">simulate関数の出力変数の読み方<a class="headerlink" href="#simulate" title="Permanent link">&para;</a></h2>
-<p>前のステップでsimulate関数を用いて対象の電力システムのシュミレーションを行い、その結果を変数<code>out</code>に格納しました。  </p>
+<p>前のステップでsimulate関数を用いて対象の電力システムのシミュレーションを行い、その結果を変数<code>out</code>に格納しました。  </p>
 <p>本ステップでは、この出力変数<code>out</code>からのデータの読み方を解説していきます。<br />
-この変数<code>out</code>は構造体となっており、内部にいくつかの変数を格納しています。この中でシュミレーションした結果の各発電機の状態を調べるために着目すべき変数は<code>t , X , V , I</code>です。</p>
+この変数<code>out</code>は構造体となっており、内部にいくつかの変数を格納しています。この中でシミュレーションした結果の各発電機の状態を調べるために着目すべき変数は<code>t , X , V , I</code>です。</p>
 <h4 id="t">・変数 <code>t</code><a class="headerlink" href="#t" title="Permanent link">&para;</a></h4>
-<p>シュミレーション結果は設定した時間区間の中で何点かサンプリングする時間を決めその時点での各バスの状態や電圧・電流の値を求めます。そのサンプリングする時間を表としてまとめたものが変数<code>t</code>に格納されています。  </p>
+<p>シミュレーション結果は設定した時間区間の中で何点かサンプリングする時間を決めその時点での各バスの状態や電圧・電流の値を求めます。そのサンプリングする時間を表としてまとめたものが変数<code>t</code>に格納されています。  </p>
 <h4 id="x_v_i">・変数 <code>X, V, I</code><a class="headerlink" href="#x_v_i" title="Permanent link">&para;</a></h4>
 <p>それぞれ各バスの状態、電圧、電流の値が時系列に並んで格納されています。<br />
 データの読み方は変数<code>X</code>の場合を例にとって、以下の図に示しました。変数<code>V</code>,<code>I</code>についても同様です。
@@ -787,7 +787,7 @@ for i = 1:num_generator
 end
 </code></pre></div></p>
 <h3 id="_3">コード例<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<p>例としてシュミレーションを行い結果をグラフ化するコードと、その出力結果のうち１番目のバスと２番めのバスのグラフを載せておきます。
+<p>例としてシミュレーションを行い結果をグラフ化するコードと、その出力結果のうち１番目のバスと２番めのバスのグラフを載せておきます。
 <div class="highlight"><pre><span></span><code><span class="c">% ネットワークの定義</span><span class="w"></span>
 <span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_68bus</span><span class="p">();</span><span class="w"></span>
 
@@ -813,11 +813,11 @@ end
 </code></pre></div>
 <img src="../../Figures/tutorial1-1-1.jpg" width=45%> <img src="../../Figures/tutorial1-1-2.jpg" width=45%></p>
 <h2 id="_4">結果から考察できること<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>以上の仮定でシュミレーション結果の読み方グラフ化の仕方まで解説しました。最後に、この出力結果から考察できることの例をあげておこうと思います。  </p>
+<p>以上の仮定でシミュレーション結果の読み方グラフ化の仕方まで解説しました。最後に、この出力結果から考察できることの例をあげておこうと思います。  </p>
 <h3 id="0">・<u>Δωは０に収束しているか？</u><a class="headerlink" href="#0" title="Permanent link">&para;</a></h3>
 <p>系統周波数は関東では50Hz,関西では60Hzと定められている。このΔωつまり周波数偏差はその系統周波数との差を表しており、Δω＝0のときが発電の周波数が系統周波数に一致している状態を指している。もちろん、発電機の周波数が系統周波数と一致することが望ましく、Δωが０に収束するかどうかということは電力システムを評価する上で重要な指標になる。</p>
 <h3 id="e">・<u>δ、Eの収束値</u><a class="headerlink" href="#e" title="Permanent link">&para;</a></h3>
-<p>テキストの第５章の内容でも触れられていましたが、ある電力ネットワークについてシュミレーションした際の各時刻における回転子偏角<code>δ</code>と内部電圧<code>E</code>のの値は、平衡点の安定領域を見積もる際の考察には重要な情報となったりします。各時刻(t番目のサンプル時刻)におけるi番目のバス状態の値は
+<p>テキストの第５章の内容でも触れられていましたが、ある電力ネットワークについてシミュレーションした際の各時刻における回転子偏角<code>δ</code>と内部電圧<code>E</code>のの値は、平衡点の安定領域を見積もる際の考察には重要な情報となったりします。各時刻(t番目のサンプル時刻)におけるi番目のバス状態の値は
 <div class="highlight"><pre><span></span><code><span class="n">out</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="nb">i</span><span class="p">}(</span><span class="n">t</span><span class="p">,:)</span><span class="w"></span>
 </code></pre></div>
 などで見ることができます。</p>

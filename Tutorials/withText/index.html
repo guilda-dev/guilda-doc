@@ -446,7 +446,7 @@
       
         <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
-    シュミレーションの実行
+    シミュレーションの実行
   </a>
   
 </li>
@@ -868,7 +868,7 @@
       
         <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
-    シュミレーションの実行
+    シミュレーションの実行
   </a>
   
 </li>
@@ -910,7 +910,7 @@
 <p>本チュートリアルにおいては以下の図ような単純な電力系統システムを自作します．</p>
 <p><img alt="" src="../../Figures/write_3bus.png" /></p>
 <p>この電力系統システムでは３つのバスと機器が繋がっているシステムです．<br />
-ここで上の３busシステムをシュミレータ上で定義するにあたり、一度情報を表にして以下にまとめてみます。(<span style="font-size: 80%; color: red;">※表中の赤字のパラメータの値は適当に決めています。</span>)</p>
+ここで上の３busシステムをシミュレータ上で定義するにあたり、一度情報を表にして以下にまとめてみます。(<span style="font-size: 80%; color: red;">※表中の赤字のパラメータの値は適当に決めています。</span>)</p>
 <h4 id="_2">・バスの情報<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
 <p>図からも分かるように、このシステムは３つのバスによって構成されています。</p>
 <table>
@@ -994,13 +994,13 @@
 </tr>
 </tbody>
 </table>
-<p>表の各変数の記号はテキストと同じ様にしましたが、シュミレータ内では  </p>
+<p>表の各変数の記号はテキストと同じ様にしましたが、シミュレータ内では  </p>
 <div style="text-align: center;">Xd'→ Xdp　、　τｄ→ Tdo　、　D→ d</div>
 <p>という変数名になっています。<br />
 なお、発電機を円筒形にしたい場合は、<code>Xdp</code>に<code>Xq</code>と同じ値を入れます。</p>
 <h4 id="avrpss">・制御器の情報(AVR,PSSなど)<a class="headerlink" href="#avrpss" title="Permanent link">&para;</a></h4>
 <p>一般に世の中で稼働している発電所の発電機はAVR,PSSなどの制御機が内蔵されています。</p>
-<p>本シュミレータでは後にも実行の仕方を触れますが、制御器を内蔵した発電機モデルを定義する関数<code>generator_AGC</code>という関数があります。その関数を実行する際に制御器のパラメータも引数として代入します。<br />
+<p>本シミュレータでは後にも実行の仕方を触れますが、制御器を内蔵した発電機モデルを定義する関数<code>generator_AGC</code>という関数があります。その関数を実行する際に制御器のパラメータも引数として代入します。<br />
 制御器のパラメータのデータは１発電機に１つ必要になるため、今回のシステムでは２つ設定する必要があります。</p>
 <table>
 <thead>
@@ -1033,7 +1033,7 @@
 </tbody>
 </table>
 <p>といったように先に紹介した3busシステムでもこれだけの情報が割り当てられています。<br />
-それでは実際に以下にこれらの情報をもとにシュミレータ内でこの3busシステムを定義していきましょう。</p>
+それでは実際に以下にこれらの情報をもとにシミュレータ内でこの3busシステムを定義していきましょう。</p>
 <h2 id="_5"><strong><em><span style="color: purple;">電力系統システムの定義</span></em></strong><a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>全ての電力系統システムは<code>power_network</code>クラスを用いて実装されます．以下のようにして電力系統クラスを定義します．</p>
 <div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">power_network</span><span class="p">();</span><span class="w"></span>
@@ -1196,7 +1196,7 @@ generatorを自作するためには以下のような関数を用います．</
 </code></pre></div>
 <hr />
 <h2 id="_10"><strong><em><span style="color: purple;">アドミタンス行列の導出</span></em></strong><a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
-<p>テキストではブランチのパラメータをもとにアドミタンス行列を求めていました。ここでも試しにシュミレータを使って求めてみましょう。<br />
+<p>テキストではブランチのパラメータをもとにアドミタンス行列を求めていました。ここでも試しにシミュレータを使って求めてみましょう。<br />
 以下のように実行するとアドミタンス行列が求まります。
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">get_admittance_matrix</span><span class="w"></span>
 
@@ -1245,7 +1245,7 @@ generatorを自作するためには以下のような関数を用います．</
 </code></pre></div>
 <ul>
 <li>発電機の状態の定常値:<br />
-このシュミレータでは発電機の状態ベクトル１つあたりに７つの変数が格納されており、発電機の状態の定常値が格納されている変数<code>x_ss</code>は7×(発電機の個数)個の要素を持ちます。<br />
+このシミュレータでは発電機の状態ベクトル１つあたりに７つの変数が格納されており、発電機の状態の定常値が格納されている変数<code>x_ss</code>は7×(発電機の個数)個の要素を持ちます。<br />
 ７変数の状態ベクトルのうち上から３つは順に[回転子偏角(δ);周波数偏差(Δω);内部電圧(E)]を指しています。残りの４つの解説はここでは割愛させていただきます。そのため以下のように実行すれば、回転子偏角と内部電圧の定常値の情報を１番目の発電機から順に並べた表が得られます。
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">xss</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">array2table</span><span class="p">([</span><span class="n">net</span><span class="p">.</span><span class="n">x_ss</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span><span class="k">end</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">net</span><span class="p">.</span><span class="n">x_ss</span><span class="p">(</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span><span class="k">end</span><span class="p">,</span><span class="mi">1</span><span class="p">)],</span><span class="k">...</span><span class="w"></span>
 <span class="w">    </span><span class="s">&#39;VariableNames&#39;</span><span class="p">,{</span><span class="s">&#39;回転子偏角δ&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;内部電圧E&#39;</span><span class="p">})</span><span class="w"></span>
@@ -1259,17 +1259,17 @@ generatorを自作するためには以下のような関数を用います．</
 </code></pre></div></li>
 </ul>
 <hr />
-<h2 id="_12"><strong><em><span style="color: purple;">シュミレーションの実行</span></em></strong><a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
-<p>自作したシステムに対しシュミレーションを行ってみましょう。<br />
-シュミレーションの実行は<code>simulate</code>という関数を用います。入力引数の<code>option</code>を設定することで、地絡応答や初期値応答、外乱応答などを行うことができます。ここでは地絡を加えたシミュレーションを実行してみましょう。初期値応答や外乱応答などの他のシュミレーションの実行は<a href="../withSimulation">シュミレータベースのTutorial</a>を参照して下さい。  </p>
+<h2 id="_12"><strong><em><span style="color: purple;">シミュレーションの実行</span></em></strong><a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p>自作したシステムに対しシミュレーションを行ってみましょう。<br />
+シミュレーションの実行は<code>simulate</code>という関数を用います。入力引数の<code>option</code>を設定することで、地絡応答や初期値応答、外乱応答などを行うことができます。ここでは地絡を加えたシミュレーションを実行してみましょう。初期値応答や外乱応答などの他のシミュレーションの実行は<a href="../withSimulation">シミュレータベースのTutorial</a>を参照して下さい。  </p>
 <p>以下がコード例です．</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">option</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">struct</span><span class="p">();</span><span class="w"></span>
 <span class="n">option</span><span class="p">.</span><span class="n">fault</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{{[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mf">10.01</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">}};</span><span class="w"></span>
 
 <span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">],</span><span class="w"> </span><span class="n">option</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-ここでは0秒から0.01秒の間にバス１に、10秒から10.01秒の間にバス２にそれぞれ地絡をくわえたときの、0秒から100秒までの時間応答をシュミレーションします。  </p>
-<p>シュミレーション結果は変数<code>out</code>の中に格納されています。この中のデータの内、例として２つ目のgeneratorのシミュレーション結果をグラフとして表示すると以下のようになります．</p>
+ここでは0秒から0.01秒の間にバス１に、10秒から10.01秒の間にバス２にそれぞれ地絡をくわえたときの、0秒から100秒までの時間応答をシミュレーションします。  </p>
+<p>シミュレーション結果は変数<code>out</code>の中に格納されています。この中のデータの内、例として２つ目のgeneratorのシミュレーション結果をグラフとして表示すると以下のようになります．</p>
 <div class="highlight"><pre><span></span><code><span class="n">names</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;\delta&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;\Delta\omega&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;E&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_{fd}&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;\xi_1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;\xi_2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;\xi_3&#39;</span><span class="p">};</span><span class="w"></span>
 <span class="k">for</span><span class="w"> </span><span class="nb">j</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="w"></span>
 <span class="w">    </span><span class="nb">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">j</span><span class="p">),</span><span class="w"> </span><span class="nb">plot</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">out</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="mi">2</span><span class="p">}(:,</span><span class="w"> </span><span class="nb">j</span><span class="p">));</span><span class="w"></span>
@@ -1291,7 +1291,7 @@ generatorを自作するためには以下のような関数を用います．</
 <div class="highlight"><pre><span></span><code><span class="n">cg</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">controller_broadcast_PI_AGC_normal</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">5000</span><span class="p">);</span><span class="w"></span>
 <span class="n">net</span><span class="p">.</span><span class="n">add_controller_global</span><span class="p">(</span><span class="n">cg</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
-<p>このように、電力システムにコントローラを付加した後、先程と同じようにシュミレーションを実行し、同様に２つ目のgeneratorのシミュレーション結果をグラフとして表示したものが以下となります．</p>
+<p>このように、電力システムにコントローラを付加した後、先程と同じようにシミュレーションを実行し、同様に２つ目のgeneratorのシミュレーション結果をグラフとして表示したものが以下となります．</p>
 <p><img alt="" src="../../Figures/Tuto_text_result2.png" /></p>
 <hr />
                 

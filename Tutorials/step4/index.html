@@ -1014,7 +1014,7 @@ slackバスでは電圧の絶対値と位相角を指定します。そのため
     位相調整変圧器のパラメータ</li>
 </ul>
 <h4 id="branch">branchを定義する際のサンプルコード。<a class="headerlink" href="#branch" title="Permanent link">&para;</a></h4>
-<p>この<code>branch</code>という変数はtable型になっており、さらに各列の変数名は以下のコードのようにそれぞれ「<code>bus_from</code>,・・・,<code>phase</code>」となっていることが重要です。本シュミレーション内ではこの変数名をもとにデータの抽出を行っています。以下のコードを参考にしてください。</p>
+<p>この<code>branch</code>という変数はtable型になっており、さらに各列の変数名は以下のコードのようにそれぞれ「<code>bus_from</code>,・・・,<code>phase</code>」となっていることが重要です。本シミュレーション内ではこの変数名をもとにデータの抽出を行っています。以下のコードを参考にしてください。</p>
 <div class="highlight"><pre><span></span><code><span class="n">branch_array</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span>ここにデータを入れる<span class="p">];</span><span class="w"></span>
 <span class="n">branch</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">array2table</span><span class="p">(</span><span class="n">branch_array</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;VariableNames&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
 <span class="w">    </span><span class="p">{</span><span class="s">&#39;bus_from&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;bus_to&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_real&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_imag&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;tap&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;phase&#39;</span><span class="p">}</span><span class="k">...</span><span class="w"></span>
@@ -1097,7 +1097,7 @@ componentの定義には以下のような関数があります。</p>
 <strong><span style="color: red; font-size: 140%">load_varying_impedanceの引数はどうなっている?</span></strong></p>
 <p>という様にして負荷を接続することができます。</p>
 <hr />
-<p>これで電力ネットワークの定義が一通り終わりました。ここで作成した変数<code>net</code>を持って<a href="../analysis_net">解析編</a>のシュミレーションや線形化などを行うこともできます。次のパートではこの電力ネットワークにコントローラを追加する方法などを解説していきます。</p>
+<p>これで電力ネットワークの定義が一通り終わりました。ここで作成した変数<code>net</code>を持って<a href="../analysis_net">解析編</a>のシミュレーションや線形化などを行うこともできます。次のパートではこの電力ネットワークにコントローラを追加する方法などを解説していきます。</p>
                 
               
               
