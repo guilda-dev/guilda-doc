@@ -67,9 +67,7 @@
 |:---:|:---:|:---:|:---:|:---:|:---|
 |バス１|<span style="color: red;">Ka = 2.0</span>|<span style="color: red;">Te = 0.05</span>|<span style="color: red;">Kpss = 200</span>|<span style="color: red;">Tpss = 10</span>|<span style="color: red;">TL1 = 0.015 , TL1'= 0.05</br>TL2 = 0.01 , TL2'= 0.08</span>|
 |バス２|<span style="color: red;">Ka = 2.0</span>|<span style="color: red;">Te = 0.05</span>|<span style="color: red;">Kpss = 200</span>|<span style="color: red;">Tpss = 10</span>|<span style="color: red;">TL1 = 0.015 , TL1'= 0.05</br>TL2 = 0.01 , TL2'= 0.08</span>|
-
-<span style="font-size: 140%; color: green;">この表の変数が何を指しているのか分からなかったです。</span>
-  
+ 
 といったように先に紹介した3busシステムでもこれだけの情報が割り当てられています。  
 それでは実際に以下にこれらの情報をもとにシュミレータ内でこの3busシステムを定義していきましょう。
 
@@ -402,9 +400,3 @@ net.add_controller_global(cg)
 
 
 ---
-<span style="color: red">完成後削除</span>
-## __docを参照している部分__
-```
-[hoge](path_to_doc_hoge)
-```
-というかんじで未完成のdocを参照している部分が多々ありあます．docが完成したあとこの部分を書き換えていただけると有り難いです．
