@@ -4,7 +4,7 @@
 
 ***
 前の章では電力ネットワークを定義し、その情報を変数`net`に格納する所までできたと思います。
-本章では、その変数`net`をクラス内でメソッドとして定義されている関数を用いて、シュミレーションしていきます。  
+本章では、その変数`net`をクラス内でメソッドとして定義されている関数を用いて、シミュレーションしていきます。  
   
 <br>
 <span style="font-size: 125%; color: black;">__本章を始めるにあたって用意するもの：`電力ネットワークの情報を格納した変数net`__</span>  
@@ -20,16 +20,16 @@ net = network_70bus; %70busモデルの情報をnetに格納する
 
 ```
 
-## <span style="font-size: 100%; color: black;">【定義した電力モデルのシュミレーション】</span>
+## <span style="font-size: 100%; color: black;">【定義した電力モデルのシミュレーション】</span>
 
-:material-arrow-right-drop-circle: [シュミレーションの実行方法とオプションの設定方法。](../step1)  
+:material-arrow-right-drop-circle: [シミュレーションの実行方法とオプションの設定方法。](../step1)  
 
-:material-arrow-right-drop-circle: [シュミレーションの結果データの構造と見方。](../step1-2)  
+:material-arrow-right-drop-circle: [シミュレーションの結果データの構造と見方。](../step1-2)  
 
 ## <span style="font-size: 100%; color: black;">【定義した電力モデルの線形化】</span>
 :material-arrow-right-drop-circle: [対象の電力システムを数理モデルとして線形化し状態空間表現を得る。](../step2)  
 
-:material-arrow-right-drop-circle: [線形化したシステムのシュミレーションを実行する。](../step2-2)  
+:material-arrow-right-drop-circle: [線形化したシステムのシミュレーションを実行する。](../step2-2)  
 
 <br><br><br>
 
