@@ -1,5 +1,5 @@
 # <div style="text-align: center;"><span style="font-size: 140%; color: black;">GUILDA: Grid & Utility Infrastructure Linkage Dynamics Analyzer</span></div>
-本サイトは GUILDA の公式ドキュメントです.
+本サイトは GUILDA の初学者向けチュートリアル（暫定版）です.
 
 <br>
 
