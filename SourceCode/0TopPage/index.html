@@ -1,0 +1,966 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../Figures/modularsmall.png">
+      <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-6.0.1">
+    
+    
+      
+        <title>GUILDA Doc</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f72e892.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600,800">
+    
+      <link rel="stylesheet" href="https://unpkg.com/mermaid@8.0.0/dist/mermaid.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="GUILDA Doc" class="md-header-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            GUILDA Doc
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../.." class="md-tabs__link md-tabs__link--active">
+          Topページ
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GUILDA Doc" class="md-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    GUILDA Doc
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+    
+    <label class="md-nav__link" for="nav-1">
+      Topページ
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Topページ" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon"></span>
+        Topページ
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../aboutPowerSystem/0TopPage/" title="電力系統モデルについて" class="md-nav__link">
+      電力系統モデルについて
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SetEnvironment/0TopPage/" title="GUILDAの環境設定" class="md-nav__link">
+      GUILDAの環境設定
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4" type="checkbox" id="nav-1-4">
+    
+    <label class="md-nav__link" for="nav-1-4">
+      リファレンス
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="リファレンス" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-4">
+        <span class="md-nav__icon md-icon"></span>
+        リファレンス
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-2" type="checkbox" id="nav-1-4-2">
+    
+    <label class="md-nav__link" for="nav-1-4-2">
+      電力系統モデルの定義
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="電力系統モデルの定義" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-2">
+        <span class="md-nav__icon md-icon"></span>
+        電力系統モデルの定義
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/NewPowerNetwork/" title="新しい電力系統モデルの定義" class="md-nav__link">
+      新しい電力系統モデルの定義
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/NewComponent/" title="新たな機器モデルの定義" class="md-nav__link">
+      新たな機器モデルの定義
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-3" type="checkbox" id="nav-1-4-3">
+    
+    <label class="md-nav__link" for="nav-1-4-3">
+      制御器の付加
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="制御器の付加" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-3">
+        <span class="md-nav__icon md-icon"></span>
+        制御器の付加
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/addController/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/addController/NewController/" title="新たな制御器モデルの実装" class="md-nav__link">
+      新たな制御器モデルの実装
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-4" type="checkbox" id="nav-1-4-4">
+    
+    <label class="md-nav__link" for="nav-1-4-4">
+      シミュレ−ションの実行
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="シミュレ−ションの実行" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-4">
+        <span class="md-nav__icon md-icon"></span>
+        シミュレ−ションの実行
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/net_simulate/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/SampleCode/" title="コード例" class="md-nav__link">
+      コード例
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/net_getsys/" title="近似線形化モデルの導出" class="md-nav__link">
+      近似線形化モデルの導出
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SeriesAnalysis/0TopPage/" title="一連の解析実行例" class="md-nav__link">
+      一連の解析実行例
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-6" type="checkbox" id="nav-1-6" checked>
+    
+    <label class="md-nav__link" for="nav-1-6">
+      ソースコードの解説
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="ソースコードの解説" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-6">
+        <span class="md-nav__icon md-icon"></span>
+        ソースコードの解説
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="" class="md-nav__link md-nav__link--active">
+      
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    【実装クラス】
+  </a>
+  
+    <nav class="md-nav" aria-label="【実装クラス】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power_network" class="md-nav__link">
+     power_network:電力系統モデルの大枠となるクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branch" class="md-nav__link">
+     branch:送電網を定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bus" class="md-nav__link">
+     bus：母線を定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component" class="md-nav__link">
+     component：機器モデルを定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller" class="md-nav__link">
+     controller：制御器モデルを定義するクラス
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ieee68buspower_network" class="md-nav__link">
+    IEEE68busモデルを例にしたpower_networkクラスのデータ構造の解説
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    Tips:クラスの検索 
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../power_network/" title="電力系統クラス" class="md-nav__link">
+      電力系統クラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bus/" title="母線のクラス" class="md-nav__link">
+      母線のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../component/" title="機器のクラス" class="md-nav__link">
+      機器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../controller/" title="制御器のクラス" class="md-nav__link">
+      制御器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../branch/" title="送電網のクラス" class="md-nav__link">
+      送電網のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../NetProperties/" title="netのパラメータの読み方" class="md-nav__link">
+      netのパラメータの読み方
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    【実装クラス】
+  </a>
+  
+    <nav class="md-nav" aria-label="【実装クラス】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power_network" class="md-nav__link">
+     power_network:電力系統モデルの大枠となるクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branch" class="md-nav__link">
+     branch:送電網を定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bus" class="md-nav__link">
+     bus：母線を定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component" class="md-nav__link">
+     component：機器モデルを定義するクラス
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller" class="md-nav__link">
+     controller：制御器モデルを定義するクラス
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ieee68buspower_network" class="md-nav__link">
+    IEEE68busモデルを例にしたpower_networkクラスのデータ構造の解説
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    Tips:クラスの検索 
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <p><img src="../../Figures/index-4.jpg" width=100%;></p>
+<h1 id="_1"><div style="text-align: center;"><span style="font-size: 120%; color: black;">ソースコードの解説</span></div><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<hr />
+<p>GUILDAでは基本的には、ユーザーが直接呼び出して使うことを想定しているクラスや関数は冒頭に用途・使用方法をコメントすることをルールにしています。使用したいクラス・関数があれば一度、コードを開いて見ていただくか、help/doc関数を利用してみてください。
+<code>matlab
+% sample.mの関数を調べたい場合。
+help sample
+doc sample</code></p>
+<hr />
+<h2 id="_2"><div style="text-align: center;"><span style="font-size: 130%; color: black;"><strong>【実装クラス】</strong></span></div><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>GUILDAを中心的な機能を担っているクラスは大きく分けて「電力系統モデル」「送電網モデル」「母線モデル」「機器モデル」「制御器モデル」を表現したクラスの5種類に分けられます。各クラスは以下に示す５つのスーパークラスの子クラスとして定義されています。ここでは、この5つのスーパークラスに実装されているメンバ変数やメソッドについて解説します。<br />
+その他のクラスに関しては、本ページでは解説されていませんが上述したように<code>help</code>関数を実行することで、モデルの説明やメンバ変数の意味について確認することが出来ます。<br />
+例えば同期発電機の一軸モデルを表した<code>generator_1axis</code>クラスは、機器モデルを実装した<code>component</code>クラスの子クラスになります。そのため、<code>generator_1axis</code>クラスが<code>component</code>クラスから継承したメンバ変数やメソッドについては、以下の<code>component</code>クラスの解説ページを参照して下さい。そして、<code>generator_1axis</code>で新たに定義されたメンバ変数などに関しては、
+```matlab</p>
+<blockquote>
+<blockquote>
+<p>help generator_1axis
+```
+と実行すれば確認できます。</p>
+</blockquote>
+</blockquote>
+<h3 id="power_network"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm-28.9 143.6l75.5 72.4H120c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h182.6l-75.5 72.4c-9.7 9.3-9.9 24.8-.4 34.3l11 10.9c9.4 9.4 24.6 9.4 33.9 0L404.3 273c9.4-9.4 9.4-24.6 0-33.9L271.6 106.3c-9.4-9.4-24.6-9.4-33.9 0l-11 10.9c-9.5 9.6-9.3 25.1.4 34.4z"/></svg></span> <strong><a href="../power_network/">power_network</a></strong>:電力系統モデルの大枠となるクラス<a class="headerlink" href="#power_network" title="Permanent link">&para;</a></h3>
+<p>解析に必要なmethod各種が定義されています。</p>
+<h3 id="branch"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm-28.9 143.6l75.5 72.4H120c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h182.6l-75.5 72.4c-9.7 9.3-9.9 24.8-.4 34.3l11 10.9c9.4 9.4 24.6 9.4 33.9 0L404.3 273c9.4-9.4 9.4-24.6 0-33.9L271.6 106.3c-9.4-9.4-24.6-9.4-33.9 0l-11 10.9c-9.5 9.6-9.3 25.1.4 34.4z"/></svg></span> <strong><a href="../branch/">branch</a></strong>:送電網を定義するクラス<a class="headerlink" href="#branch" title="Permanent link">&para;</a></h3>
+<p>アドミタンス行列の導出に必要なmethodなどが定義されています。</p>
+<h3 id="bus"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm-28.9 143.6l75.5 72.4H120c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h182.6l-75.5 72.4c-9.7 9.3-9.9 24.8-.4 34.3l11 10.9c9.4 9.4 24.6 9.4 33.9 0L404.3 273c9.4-9.4 9.4-24.6 0-33.9L271.6 106.3c-9.4-9.4-24.6-9.4-33.9 0l-11 10.9c-9.5 9.6-9.3 25.1.4 34.4z"/></svg></span> <strong><a href="../bus/">bus</a></strong>：母線を定義するクラス<a class="headerlink" href="#bus" title="Permanent link">&para;</a></h3>
+<p>潮流計算に必要な制約条件を定義するmethodなどが定義されています。</p>
+<h3 id="component"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm-28.9 143.6l75.5 72.4H120c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h182.6l-75.5 72.4c-9.7 9.3-9.9 24.8-.4 34.3l11 10.9c9.4 9.4 24.6 9.4 33.9 0L404.3 273c9.4-9.4 9.4-24.6 0-33.9L271.6 106.3c-9.4-9.4-24.6-9.4-33.9 0l-11 10.9c-9.5 9.6-9.3 25.1.4 34.4z"/></svg></span> <strong><a href="../component/">component</a></strong>：機器モデルを定義するクラス<a class="headerlink" href="#component" title="Permanent link">&para;</a></h3>
+<p>機器の動特性や近似線形化モデルの導出に必要なmethodが定義されています。</p>
+<h3 id="controller"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm-28.9 143.6l75.5 72.4H120c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h182.6l-75.5 72.4c-9.7 9.3-9.9 24.8-.4 34.3l11 10.9c9.4 9.4 24.6 9.4 33.9 0L404.3 273c9.4-9.4 9.4-24.6 0-33.9L271.6 106.3c-9.4-9.4-24.6-9.4-33.9 0l-11 10.9c-9.5 9.6-9.3 25.1.4 34.4z"/></svg></span> <strong><a href="../controller/">controller</a></strong>：制御器モデルを定義するクラス<a class="headerlink" href="#controller" title="Permanent link">&para;</a></h3>
+<p>観測信号から入力信号までの動特性を決めるmethodが定義されています。</p>
+<p><br><br></p>
+<h2 id="ieee68buspower_network"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>IEEE68busモデルを例にした<br>power_networkクラスのデータ構造の解説</strong></span></div><a class="headerlink" href="#ieee68buspower_network" title="Permanent link">&para;</a></h2>
+<p>GUILDAでは電力系統モデルを<code>power_network</code>というクラスの変数として定義する訳ですが、この章ではこの<code>power_network</code>クラスのプロパティの値を見て、どの様な電力系統モデルを実装しているのか想像できるようになることを目的としています。<br>
+<strong>↓clickして解説ページへ</strong><br>
+<a href="../NetProperties/"><div align="center"><img src="../../../Figures/net_workspace.jpg" width=80%; style="border: 7px pink solid;"></div></a></p>
+<p><br>
+<br></p>
+<hr />
+<h2 id="tips"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>Tips:クラスの検索</strong> </span></div><a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
+<p>GUILDA上で実装されているクラスをリストとして見たい場合、本ソースコード内の"+func"内に検索する用の関数が設置されていますので参考にしてみてください。<br />
+<strong>実行例：</strong></p>
+<p>```matlab
+%引数がない場合handleクラスを継承しているクラスの一覧を表示</p>
+<blockquote>
+<blockquote>
+<p>func.class_dictionary();</p>
+</blockquote>
+</blockquote>
+<p>%特定のクラスのみ検索したい場合は引数にクラス名を指定します.
+%例：'component'クラスの場合</p>
+<blockquote>
+<blockquote>
+<p>func.class_dictionary('component');
+```</p>
+</blockquote>
+</blockquote>
+<p><strong>引数なしの場合の実行結果例</strong>
+```matlab
+Search : "handle" class．．．</p>
+<h1 id="handle_class">handle class：<a class="headerlink" href="#handle_class" title="Permanent link">&para;</a></h1>
+<pre class="codehilite"><code class="linenums">  Link　　       　class tree
+</code></pre>
+
+<p>===================================================
+ [help], [doc]     handle
+ [help], [doc]       ┣━ tools.simulationResult
+ [help], [doc]       ┣━ tools.Reporter
+ [help], [doc]       ┣━ power_network
+ [help], [doc]       ┃   ┣━ network_IEEE68bus
+ [help], [doc]       ┃   ┗━ network_sample3bus
+ [help], [doc]       ┣━ avr
+ [help], [doc]       ┃   ┣━ avr_IEEE_ST1
+ [help], [doc]       ┃   ┗━ avr_sadamoto2019
+ [help], [doc]       ┣━ branch
+ [help], [doc]       ┃   ┣━ branch_pi
+ [help], [doc]       ┃   ┗━ branch_pi_transformer
+ [help], [doc]       ┣━ bus
+ [help], [doc]       ┃   ┣━ bus_PQ
+ [help], [doc]       ┃   ┣━ bus_PV
+ [help], [doc]       ┃   ┗━ bus_slack
+ [help], [doc]       ┣━ component
+ [help], [doc]       ┃   ┣━ component_empty
+ [help], [doc]       ┃   ┣━ generator_1axis
+ [help], [doc]       ┃   ┣━ generator_classical
+ [help], [doc]       ┃   ┗━ load_impedance
+ [help], [doc]       ┣━ controller
+ [help], [doc]       ┃   ┗━ controller_broadcast_PI_AGC
+ [help], [doc]       ┣━ governor
+ [help], [doc]       ┗━ pss
+===================================================
+```</p>
+<p><br></p>
+<hr />
+<h3 id="function"><div style="text-align: center;"><span style="font-size: 130%; color: black;">"+function"ディレクトリの関数</span></div><a class="headerlink" href="#function" title="Permanent link">&para;</a></h3>
+<p>このディレクトリでは、GUILDAを使用する上で作業効率化のため役に立ちそうな関数を保管しています。こちらも基本的には、コード冒頭に用途・使用方法を書くことをルールにしているため、help/doc関数を利用することで使い方が分かるようになっています。是非参考にしてみてください！</p>
+<p><br></p>
+<hr />
+<h3 id="tools"><div style="text-align: center;"><span style="font-size: 130%; color: black;">"+tools"ディレクトリの関数</span></div><a class="headerlink" href="#tools" title="Permanent link">&para;</a></h3>
+<p>このディレクトリには、GUILDAで実装されている。クラスや関数のコードの中で使われる関数を保管しています。頻繁に使用される実行内容のモジュール化や、ソースコードの一覧性を良くすることを目的に作成されています。そのため、このディレクトリの配下にあるコードはユーザーが直接使用する関数ではないため、本チュートリアルでの解説は省略させていただきます。</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../SeriesAnalysis/0TopPage/" title="一連の解析実行例" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  前
+                </span>
+                一連の解析実行例
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../power_network/" title="電力系統クラス" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  次
+                </span>
+                電力系統クラス
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright © 2020- Tokyo Tech, Ishizaki Lab.
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e]+", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1077 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../../Figures/modularsmall.png">
+      <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-6.0.1">
+    
+    
+      
+        <title>GUILDA Doc</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f72e892.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600,800">
+    
+      <link rel="stylesheet" href="https://unpkg.com/mermaid@8.0.0/dist/mermaid.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="GUILDA Doc" class="md-header-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            GUILDA Doc
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../.." class="md-tabs__link md-tabs__link--active">
+          Topページ
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="GUILDA Doc" class="md-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    GUILDA Doc
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+    
+    <label class="md-nav__link" for="nav-1">
+      Topページ
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Topページ" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon"></span>
+        Topページ
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../aboutPowerSystem/0TopPage/" title="電力系統モデルについて" class="md-nav__link">
+      電力系統モデルについて
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SetEnvironment/0TopPage/" title="GUILDAの環境設定" class="md-nav__link">
+      GUILDAの環境設定
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4" type="checkbox" id="nav-1-4" checked>
+    
+    <label class="md-nav__link" for="nav-1-4">
+      リファレンス
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="リファレンス" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-4">
+        <span class="md-nav__icon md-icon"></span>
+        リファレンス
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-2" type="checkbox" id="nav-1-4-2">
+    
+    <label class="md-nav__link" for="nav-1-4-2">
+      電力系統モデルの定義
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="電力系統モデルの定義" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-2">
+        <span class="md-nav__icon md-icon"></span>
+        電力系統モデルの定義
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../defineNet/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../defineNet/NewPowerNetwork/" title="新しい電力系統モデルの定義" class="md-nav__link">
+      新しい電力系統モデルの定義
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../defineNet/NewComponent/" title="新たな機器モデルの定義" class="md-nav__link">
+      新たな機器モデルの定義
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-3" type="checkbox" id="nav-1-4-3">
+    
+    <label class="md-nav__link" for="nav-1-4-3">
+      制御器の付加
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="制御器の付加" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-3">
+        <span class="md-nav__icon md-icon"></span>
+        制御器の付加
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../addController/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../addController/NewController/" title="新たな制御器モデルの実装" class="md-nav__link">
+      新たな制御器モデルの実装
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-4" type="checkbox" id="nav-1-4-4" checked>
+    
+    <label class="md-nav__link" for="nav-1-4-4">
+      シミュレ−ションの実行
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="シミュレ−ションの実行" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-4">
+        <span class="md-nav__icon md-icon"></span>
+        シミュレ−ションの実行
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="" class="md-nav__link md-nav__link--active">
+      
+    </a>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../SampleCode/" title="コード例" class="md-nav__link">
+      コード例
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../net_getsys/" title="近似線形化モデルの導出" class="md-nav__link">
+      近似線形化モデルの導出
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SeriesAnalysis/0TopPage/" title="一連の解析実行例" class="md-nav__link">
+      一連の解析実行例
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-6" type="checkbox" id="nav-1-6">
+    
+    <label class="md-nav__link" for="nav-1-6">
+      ソースコードの解説
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="ソースコードの解説" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-6">
+        <span class="md-nav__icon md-icon"></span>
+        ソースコードの解説
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/power_network/" title="電力系統クラス" class="md-nav__link">
+      電力系統クラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/bus/" title="母線のクラス" class="md-nav__link">
+      母線のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/component/" title="機器のクラス" class="md-nav__link">
+      機器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/controller/" title="制御器のクラス" class="md-nav__link">
+      制御器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/branch/" title="送電網のクラス" class="md-nav__link">
+      送電網のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../SourceCode/NetProperties/" title="netのパラメータの読み方" class="md-nav__link">
+      netのパラメータの読み方
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <p><img src="../../../Figures/index-2.jpg" width=100%;></p>
+<h1 id="_1"><div style="text-align: center;"><span style="font-size: 130%; color: black;">数値シミュレーションの実行</span></div><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<hr />
+<p>前の章では電力ネットワークを定義し、その情報を変数<code>net</code>に格納する所までできたと思います。
+本章では、その変数<code>net</code>をクラス内でメソッドとして定義されている関数を用いて、シュミレーションしていきます。まだ変数<code>net</code>を定義していない場合は、電力系統モデル作成の<a href="../../defineNet/0TopPage/">解説ページ</a>を参考にして下さい。<br />
+<br>
+<span style="font-size: 110%; color: black;"><strong>・本章を始めるにあたって用意するもの：<code>電力ネットワークの情報を格納した変数net</code></strong></span>
+<br>
+<br></p>
+<h1 id="_2"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【シミュレーション実行方法】</strong></span></div><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h1>
+<p>電力系統モデルのシミュレーションを行う関数は、<code>simulate</code>とう名でpower_networkクラスのmethodとして定義されています。実行方法は以下のようです。
+```matlab
+%オプション設定を行う場合
+out = net.simulate(time,option);</p>
+<p>%システムに入力を加えたシミュレーションを行う場合
+out = net.simulate(time,u,u_idx);</p>
+<p>%オプション設定もシステムへの入力も加える場合
+out = net.simulate(time,u,u_idx,option);
+<code>``
+では、この</code>simulate<code>の引数について順に説明します。出力結果の</code>out`のデータ構造に関しては本ページ後半の【シミュレーション結果のデータ構造】の節を参照してください。</p>
+<h2 id="time"><span style="color: Navy; "><strong>・引数：time</strong></span><a class="headerlink" href="#time" title="Permanent link">&para;</a></h2>
+<p>シミュレーションを行う時間を指定します。例えば0~60秒のシミュレーションを行いたい場合は<code>time=[0,60]</code>と指定すれば良いことになります。</p>
+<h2 id="u_u_idx"><span style="color: Navy; "><strong>・引数：u , u_idx</strong></span><a class="headerlink" href="#u_u_idx" title="Permanent link">&para;</a></h2>
+<p>この引数の値を指定することでシステムへ入力を加えたシミュレーションを行うことができます。以下にその指定方法をステップに分けて解説します。ここでは、実際にIEEE68busモデルを解析対象として入力信号を指定するコード例を混じえながら解説します。</p>
+<ol>
+<li><strong>入力を印加する機器の指定</strong><br>　入力を印加する機器番号は<code>u_idx</code>に配列として定義します。機器番号は、その機器に接続された母線の番号です。ここでは例として「1,16,20」番の機器に入力を印加することを考えます。
+  <code>matlab
+  u_idx = [1,16,20];</code></li>
+<li><strong>機器の入力ポートの把握</strong><br>　入力値を設定するには対象の機器のポート数、そして入力を与えるポート番号を把握する必要があります。ポート数に関しては、componentクラスに入力ポートの個数を取得する関数<code>get_nu</code>を定義することが義務化されているため、以下のように調べる事ができます。
+  ```matlab<blockquote>
+<blockquote>
+<p>for idx = [1,16,20] 
+        nu = net.a_bus{idx}.component.get_nu;
+        disp(['bus',num2str(idx,'%.2d'),':nu=',num2str(nu),'port'])
+     end
+  <code>``
+  　入力を印加するポート番号はそれぞれの機器モデルを把握した上で、自身が入力を加えたいパラメータに対応するポート番号を考える必要があります。  
+  　例えばIEEE68busモデルで機器1,機器16は</code>generator_1axis<code>クラスが代入されているため1番目の入力ポートは界磁電圧の指令値への入力、2番目の入力ポートは機械トルクの指令値への入力となるように設定されています。一方で機器20は</code>load_impedance`クラスであるため1番目の入力ポートはインピーダンスの実部の倍率の指令値、２番目は虚部の倍率の指令値となるよう設定されています。</p>
+</blockquote>
+</blockquote>
+</li>
+<li>
+<p><strong>入力信号に合わせた<code>time</code>,<code>u</code>を定義する</strong><br>
+   では、最後に<code>u</code>を定義して入力値を指定していきます。前節では<code>time</code>をシミュレーション開始時刻と終了時刻の1✕2の配列として定義しましたが、入力信号を指定する場合は<code>time</code>は入力信号の時刻のインデックスになります。以下の画像を参考にしてください。<code>u</code>の次元は「入力を加える機器のポート数の総和」✕「時刻のインデックス数」となります。
+   <img src="../../../Figures/analysis_u_zoh.jpg" width=100%;></p>
+<p><code>matlab
+  %上図の様にtime,u,u_idxを定義しsimulate関数に代入する
+  out = net.simulate(time,u,u_idx);</code>
+   上図のように定義すると、図右側のように０次ホールドによる入力信号が各機器に加えた場合のシミュレーションになります。<br />
+<del><strong>・1次ホールドの入力波形</strong></del><span style="color: red; "><strong>(未実装)</strong></span><br />
+<del>次節でオプションの設定方法を解説しますが、以下のようにオプション設定することで１次ホールドの入力波形でのシミュレーションを行うことができます。</del>
+  <code>matlab
+  %上図の様にtime,u,u_idxを定義しsimulate関数に代入する
+  out = net.simulate(time,u,u_idx,'method','foh');</code>
+   <img src="../../../Figures/analysis_u_foh.jpg" width=100%;></p>
+</li>
+</ol>
+<h2 id="option"><span style="color: Navy; "><strong>・引数：option</strong></span><a class="headerlink" href="#option" title="Permanent link">&para;</a></h2>
+<p>関数<code>simulate</code>では、引数<code>option</code>に構造体の形として、様々なパラメータを代入することで、細かなシミュレーションの条件設定ができる様になります。シミュレーション条件の設定手順とそのコード例は以下の通りです。</p>
+<ol>
+<li>シミュレーション条件の情報を格納する構造体の変数を定義する (＝"<code>option</code>"）</li>
+<li>設定したい条件に対応するフィールドを<code>option</code>の配下に作り、値を代入する</li>
+<li>条件設定の情報を入れた変数<code>option</code>を関数<code>simulate</code>の引数として代入する
+    <br>
+    <strong>コード例</strong>
+```matlab
+%1.条件設定するための変数optionを構造体として定義する。
+option = struct();</li>
+</ol>
+<p>%2. システムの状態の初期値を設定する。
+option.x0_sys = net.x_equilibrium;
+option.x0_sys(2) = option.x0_sys(2)+0.01;%母線１の発電機のΔωが0.01ずれた場合</p>
+<p>%3. シミュレーション実行
+time = [0,60];
+out = net.simulate(time,option);
+<code>``
+※</code>x0_sys(2)`が母線１の周波数偏差に対応していることは<a href="../../../SourceCode/NetProperties/">【power_networkのデータ構造】</a>を参考にしてみてください。</p>
+<p>以下にoptionで設定できる条件の一覧を載せます。なお、上記のコード例のように、<code>x0_sys</code>のみ設定し関数<code>simulate</code>に代入した場合、設定しなかった条件は以下のリスト内に示されている「規定値」の値に補完されるようmethod内で定義されています。</p>
+<h3 id="option_1"><strong>【optionの条件設定項目一覧】</strong><a class="headerlink" href="#option_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong><code>linear</code>:線形/非線形シミュレーションの設定</strong></p>
+<blockquote>
+<p>規定値：非線形モデルでのシミュレーション
+   <code>matlab
+   option.linear = false;</code>
+  条件設定例：近似線形化したモデルでのシミュレーション
+  <code>matlab
+  option.linear = true;</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>fault</code>：地絡発生の設定</strong></p>
+<blockquote>
+<p>規定値：地絡発生なし
+   <code>matlab
+   option.fault = {};</code>
+  条件設定例1：<br>→母線1に1~1.01秒の間に地絡が発生した場合
+  <code>matlab
+  option.fault = {{[1,1.01],1}};</code>
+  条件設定例2：<br>→条件設定例1の地絡発生に加え、母線2と母線3に5~5.01秒の間に地絡が発生した場合
+  <code>matlab
+  option.fault = {{[1,1.01],1},{[5,5.01],[2,3]}};</code>
+  条件設定例3：<br>→条件設定例2の地絡発生に加え、母線4〜10に10~10.01秒の間に地絡が発生した場合
+  <code>matlab
+  option.fault = {{[1,1.01],1},{[5,5.01],[2,3]},{[10,10.01],4:10}};</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>x0_sys</code>：システム状態の初期条件</strong></p>
+<blockquote>
+<p>規定値：平衡点をシステムの状態の初期値
+   <code>matlab
+   option.x0_sys = net.x_equilibrium;</code>
+ 条件設定例：略(上のコード例を参考)</p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>V0</code>：母線電圧の初期条件</strong></p>
+<blockquote>
+<p>規定値：潮流状態を各母線電圧の初期値
+   <code>matlab
+   option.V0 = net.V_equilibrium;</code>
+ 条件設定例：潮流状態の母線電圧から母線１の電圧のみが|V|=0となった場合を初期値にした場合
+ <code>matlab
+ option.V0 = net.V_equilibrium;
+ option.V0(1) = 0;</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>I0</code>：母線電流の初期条件</strong></p>
+<blockquote>
+<p>規定値：潮流状態を各母線電流の初期値
+   <code>matlab
+   option.I0 = net.I_equilibrium;</code>
+ 条件設定例：潮流状態の母線電流から母線16の電流フェーザの位相がπ/30ずれた場合を初期値にした場合
+ <code>matlab
+ option.I0 = net.I_equilibrium;
+ option.I0(16) = option.I0(16)*(cos(pi/30)+1j*sin(pi/30));</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>x0_con_local</code>：ローカルコントローラの状態の初期条件</strong></p>
+<blockquote>
+<p>規定値：各ローカルコントローラの状態の初期値は平衡点のまま<br>
+   <code>matlab
+   option.x0_con_local = tools.vcellfun(@(c) c.get_x0(), obj.a_controller_local)</code>
+ 条件設定例：略(フィールド<code>x0_sys</code>の設定と同様)</p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>x0_con_global</code>：グローバルコントローラの状態の初期条件</strong></p>
+<blockquote>
+<p>規定値：各グローバルコントローラの状態の初期値は平衡点のまま
+   <code>matlab
+   option.x0_con_global = tools.vcellfun(@(c) c.get_x0(), obj.a_controller_local)</code>
+ 条件設定例：略(フィールド<code>x0_sys</code>の設定と同様)</p>
+</blockquote>
+</li>
+<li>
+<p><del><strong><code>method</code>：入力印加の方法の設定。0次ホールド/1次ホールド</strong></del><span style="color: red; "><strong>(未実装)</strong></span></p>
+<blockquote>
+<p>規定値：入力は0次ホールドの信号として見る
+   <code>matlab
+   option.method = 'zoh';</code>
+  条件設定例：入力を1次ホールドの信号として見る
+    <code>matlab
+    option.method = 'foh';</code>
+  0次ホールドと1次ホールドの違いは本ページ前半の関数<code>simulate</code>の引数<code>u</code>,<code>u_idx</code>についての章を参考</p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>AbsTol</code> , <code>RelTol</code>：数値積分の誤差閾値の設定</strong></p>
+<blockquote>
+<p>規定値：10^(-8)
+ <code>matlab
+ option.AbsTol = 1e-8;
+ option.RelTol = 1e-8;</code>
+ 条件設定例：GUILDAの数値積分にはode15sを使用しています。許容誤差の調節に関してはMATLABのode15sに関する<a href="https://jp.mathworks.com/help/matlab/math/summary-of-ode-options.html">公式ドキュメント</a>を参考にしてください。</p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>do_report</code>：シミュレーション状況の出力設定</strong></p>
+<blockquote>
+<p>規定値：出力する
+   <code>matlab
+   option.do_report = true;</code>
+ 条件設定例：シミュレーション状況の出力を消す
+  <code>matlab
+  option.do_report = false;</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>reset_time</code>：シミュレーションの強制終了時間</strong></p>
+<blockquote>
+<p>規定値：無限（強制終了時間なし）
+   <code>matlab
+   option.reset_time = inf;</code>
+ 条件設定例：60秒以内に数値解析が終わらなければ、その時点で解析を終了する
+    <code>matlab
+    option.reset_time = 60;
+    option.do_retry = false;</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>do_retry</code>：強制終了時間を過ぎた際の、数値積分をやり直しの有無</strong></p>
+<blockquote>
+<p>規定値：やり直す
+   <code>matlab
+   option.do_retry = true;</code>
+ 条件設定例：<code>reset_time</code>の条件設定例を参考</p>
+</blockquote>
+</li>
+<li>
+<p><strong><code>tools</code>：解析結果の形式の選択</strong></p>
+<blockquote>
+<p>規定値：構造体として出力
+    <code>matlab
+    option.tools = false;</code>
+   条件設定例：
+    <code>matlab
+    option.tools = true;</code>
+    既定値では、解析結果を構造体として出力します。このオプションを<code>true</code> にした場合、解析結果をプロットするためのmethodなどが定義された<code>simulationResult</code>というクラスのインスタンスとして出力されます。UIでプロットの条件を設定する機能もあるため、GUILDAを使いこなすための補助ツールとして参考にしてみて下さい。<br />
+    シミュレーションを何度も行い出力結果のデータを保管していく場合は容量が重くなってしまうので既定値のまま構造体として出力する方が良いでしょう。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="option_2"><strong>【option指定が単純な場合の便利な機能】</strong><a class="headerlink" href="#option_2" title="Permanent link">&para;</a></h4>
+<p>上ではオプション情報を構造体で定義する方法を解説しましたが、関数<code>simulate</code>では個々の条件を引数として直接指定することも可能です。例えば以下のコードを書いたとします。
+```matlab
+option = struct();</p>
+<p>%母線１の発電機のΔωが平衡点から0.01ずれた初期値
+option.x0_sys = net.x_equilibrium;
+option.x0_sys(2) = option.x0_sys(2)+0.01;</p>
+<p>option.fault = {{[5,5.01],5}};%母線5に5s~5.01sで地絡発生</p>
+<p>out = net.simulate([0,10],option);%0~10秒のシミュレーション
+<code>上記のシミュレーション条件を</code>matlab
+option = struct();</p>
+<p>x0 = net.x_equilibrium;
+x0(2) = x0(2)+0.01;</p>
+<p>out = net.simulate([0,10],'x0_sys',x0,'fault',{{[5,5.01],5}});
+<code>``
+というように書くことも可能です。引数には</code>"「指定する条件に対応したフィールド名」,「指定する値」"`の順に代入します。</p>
+<p><br></p>
+<hr />
+<h1 id="simulate"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【simulate結果のデータ構造】</strong></span></div><a class="headerlink" href="#simulate" title="Permanent link">&para;</a></h1>
+<p>前節での関数<code>simulate</code>の使い方を解説しました。
+<code>matlab
+out = net.simulate(varargin);</code>
+本節では、出力結果<code>out</code>のデータの読み方を解説します。<br />
+<strong><span style="color: DarkOrange; ">今回は以下のシミュレーションを行った場合を例に出力outの各フィールドの解説を行います。</span></strong><br></p>
+<p><strong><span style="color: DarkOrange; ">simulation例</span></strong></p>
+<p><img src="../../../Figures/simulation_out_sample.png" width=100%; style="border: 7px DarkOrange solid;"></p>
+<h2 id="t"><span style="color: Navy; "><strong>・フィールド名：t</strong></span><a class="headerlink" href="#t" title="Permanent link">&para;</a></h2>
+<p>このフィールドはシミュレーションのサンプリング時間を表すフィールドです。「サンプリング数」✕1次元の配列が格納されており、他のフィールド<code>X,V,I,Xk_global,U_global,U</code>に格納されている応答データも全て、この<code>t</code>と同じ行数となっており、i行目の応答データは<code>out.t(i)</code>で示される時刻に対応しています。<strong><span style="color: DarkOrange; ">上のシミュレーション結果</span></strong> の場合、1455個のサンプリングがあることが分かります。</p>
+<h2 id="x"><span style="color: Navy; "><strong>・フィールド名：X</strong></span><a class="headerlink" href="#x" title="Permanent link">&para;</a></h2>
+<p>このフィールドは各母線に接続された機器の状態の応答データが格納されています、<code>out.X</code>にはcell配列が格納されており、各セルは機器一つずつと対応しています。そのため、<strong><span style="color: DarkOrange; ">上のsimulation例</span></strong> のように68busモデルを解析対象とすると<code>out.X</code>は68✕1次元のcell配列となります。</p>
+<div align="center"><img src="../../../Figures/simulation_out_workspace_X.png" width=30%; style="border: 1px black solid;"></div>
+<p>また、各セルにはdouble型の配列が格納されています。数字配列の次元は「サンプリング数」✕「対応する機器の状態の個数」となります。そのためIEEE68busモデルの場合1~16番目の母線には7つの状態を持つ<code>generator_1axis</code> が付加されているため次元は1455✕7次元の数字配列となっています。一方で、17番目以降の母線には状態を持たない<code>load_impedance</code>が付加されているため状態の応答は存在せず空配列となっています。例えば母線4に接続された機器の2番目の状態の応答を見たい場合、以下のようになります。</p>
+<p><code>matlab
+plot(out.t,out.X{4}(:,2))</code></p>
+<h2 id="v_i"><span style="color: Navy; "><strong>・フィールド名：V,　I</strong></span><a class="headerlink" href="#v_i" title="Permanent link">&para;</a></h2>
+<p>このフィールドは、それぞれ母線の電圧フェーザと電流フェーザの応答を格納したフィールドです。こちらも<code>out.X</code>と同様に系統モデルの母線の数と同じ大きさのcell配列となっています。各セルは「サンプリング数」✕2の数字配列が格納されており、1列目はフェーザ値の実部の応答、2列目は虚部の応答データとなっています。</p>
+<div align="center"><img src="../../../Figures/simulation_out_workspace_VI.png" width=60%; style="border: 1px black solid;"></div>
+
+<p>例えば母線10の電圧と電流の大きさの応答をプロットしたい場合は電圧・電流フェーザの絶対値を取れば良いため以下のようになります。<strong><span style="color: DarkOrange; ">今回のsimulation例<span></strong> では母線10に10~10.01秒目の間に地絡が起きるというシミュレーション条件であったためプロットも10秒の辺りで電圧の絶対値が0になっていることが分かります！</p>
+<p><code>matlab
+V10 = out.V{10}(:,1) + 1j* out.V{10}(:,2);
+I10 = out.I{10}(:,1) + 1j* out.I{10}(:,2);
+plot(out.t,abs(V10),out.t,abs(I10),'LineWidth',2)
+legend({'|V|','|I|'})
+xlabel('時刻(s)')</code></p>
+<div align="center"><img src="../../../Figures/simulation_out_workspace_VIplot.png" width=100%;></div>
+
+<h2 id="xk_global"><span style="color: Navy; "><strong>・フィールド名：Xk_global</strong></span><a class="headerlink" href="#xk_global" title="Permanent link">&para;</a></h2>
+<p>このフィールドはグローバルコントローラの状態の応答を格納したフィールドになります。<strong><span style="color: DarkOrange; ">今回のsimulation例</span></strong> の場合、グローバルコントローラを1つ付加した電力系統を解析対象にしたため、<code>out.Xk_global</code>は1✕1のcell配列となっています。また今回付加した<code>coontroller_broadcast_PI_AGC</code>というコントローラクラスは状態を1つしか持たないため<code>out.Xk_global{1}</code>に格納されたデータは"サンプリング数"✕1の数字配列となっています。</p>
+<h2 id="u_global"><span style="color: Navy; "><strong>・フィールド名：U_global</strong></span><a class="headerlink" href="#u_global" title="Permanent link">&para;</a></h2>
+<p>このフィールドはグローバルコントローラからの入力値の応答を格納しています。このフィールドも<code>out.Xk_global</code>と同様に解析対象の電力系統に付加されている、コントローラの個数と同じ次元のcell配列となっています。各セルの中のデータを見ると、２次元の数字配列となっていることがわかると思います。行方向は他のフィールドと同様時系列順になっています。一方で列方向は入力ポートに従っています。
+例えば<span style="color: DarkOrange; "><strong>今回のsimulation例</strong></span>で付加したコントローラは、　<strong>母線1〜16の機器の周波数偏差を読み取り全体の需給バランスを整えるよう各機器（母線1〜16に付加）のPmechポートに指令値を与えるAGCコントローラ</strong>　でした。この場合、コントローラは入力ポートを2つ持つ<code>generator_1axis</code> 16機に入力を加えるため、2*16=32個の出力先を持ちます。そのため、<code>out.U_gloobal{1}</code>のデータを見ると「1455✕32 double」となっています。各機器への入力ポートと応答データの対応は、今回は入力先の機器を下コードのように<code>1:16</code>と昇順に指定したため下図のようになります。</p>
+<p><code>matlab
+con = controller_broadcast_PI_AGC(net,1:16,1:16,-10,-500);</code></p>
+<div align="center"><img src="../../../Figures/simulation_out_workspace_Uglobal.png" width=100%;></div>
+
+<p>画像が小さく見づらいですが、各機器ごとの入力値のデータを見ると1列目は全て0となっています。これは、<code>generator_1axis</code>の入力ポートは1つめが<code>Vfield</code>、2つめが<code>Pmech</code>のポートとなっており、付加したAGCコントローラはPmechに指令値を与えるコントローラとなっているためです。</p>
+<h2 id="u"><span style="color: Navy; "><strong>・フィールド名：U</strong></span><a class="headerlink" href="#u" title="Permanent link">&para;</a></h2>
+<p>このフィールドは系統に付加されたローカルコントローラからの入力の応答を格納したフィールドになります。<strong><span style="color: DarkOrange; ">今回のsimulation例</span></strong> ではローカルコントローラを付加していないため、空のcell配列となっています。データの読み方は基本的に<code>U_global</code>のフィールドと同様になります。</p>
+<h2 id="linear"><span style="color: Navy; "><strong>・フィールド名：linear</strong></span><a class="headerlink" href="#linear" title="Permanent link">&para;</a></h2>
+<p>このフィールドはシミュレーションが非線形の電力系統モデルを対象に行なったのか、近似線形化を行った線形な電力系統モデルを対象に行なったのかを示すインデックスです。</p>
+<ul>
+<li><strong><code>out.linear = 0</code>の場合</strong><br>→非線形モデルでのシミュレーション</li>
+<li><strong><code>out.linear = 1</code>の場合</strong><br>→近似線形モデルでのシミュレーション</li>
+</ul>
+<p><br><br></p>
+<hr />
+<hr />
+<p>残りの4つのフィールドのデータを解説する前に、関数<code>simulate</code>の内部で行われている処理を簡単に説明します。関数<code>simulate</code>では、シミュレーションの応答を解析する際に、非連続になる点で数値解析を区切って行われています。つまり、非連続な入力が与えられる場合や、地絡により突然母線電圧が0になるような条件が加えられた場合です。このような場合、非連続になる部分で区切り、前半部分の数値解析の最終値をとり、その値に非連続となる要素を適応したものを後半部分の数値解析の初期値として新たにソルバーを立ち上げるというような処理が行われます。<br />
+<strong><span style="color: DarkOrange; ">今回のsimulation例</span></strong> を見てみましょう。</p>
+<p><code>matlab
+net  = network_IEEE68bus;
+time = [0,5,20];
+u_idx= [20,30];
+u    = ones(4,1)*[0,0.1,0.1]
+fault = {{[10,10.01],10}};
+con = controller_broadcast_PI_AGC(net,1:16,1:16,-10,-500);
+net.add_controller_global(con);
+out = net.simulate(time,u,u_idx,'fault',fault)</code></p>
+<p>入力信号は以下の様になります。</p>
+<div align="center"><img src="../../../Figures/simulation_out_u_plot.png" width=100%;></div>
+
+<p>さらに10~10.01秒の間に地絡が起きています。これらを合わせて考えると非連続な部分は、「入力値が変化する5秒の地点」、「地絡が発生した10秒の地点」「地絡が終わった10.01秒の地点」の3つになります。そのため数値解析は「0〜5秒」「5〜10秒」「10〜10.01秒」「10.01〜20秒」の <strong><span style="color: MediumSeaGreen; ">4つのターム</span></strong> に分けて行われます。以下に解説する4つのフィールドには、シミュレーションの実行処理を行う際の内部で使われている解析条件が記録されています。その際に上述の <strong><span style="color: MediumSeaGreen; ">各ターム</span></strong> ごとにcell配列にセルを追加して記録するようになっています。<strong><span style="color: DarkOrange; ">今回のsimulation例</span></strong> では、<strong><span style="color: MediumSeaGreen; ">4ターム</sapn></strong> に分けて解析されるため、以下解説する4つのフィールドは4✕1のセル配列となっています。</p>
+<hr />
+<hr />
+<h2 id="simulated_bus"><span style="color: Navy; "><strong>・フィールド名：simulated_bus</strong></span><a class="headerlink" href="#simulated_bus" title="Permanent link">&para;</a></h2>
+<p>シミュレーションの解析対象となっている機器のインデックスが解析の<span style="color: MediumSeaGreen; "><strong>各ターム</strong></span>毎に格納されています。<code>power_netowork</code>の機器に対応するプロパティに<code>component_empty</code>が接続される形となっている母線は、実質的にはnon-unit母線として機器が接続されていない母線として扱われるため、この<code>simulated_bus</code>フィールドに格納される解析対象の機器インデックスから場外されています。</p>
+<h2 id="fault_bus"><span style="color: Navy; "><strong>・フィールド名：fault_bus</strong></span><a class="headerlink" href="#fault_bus" title="Permanent link">&para;</a></h2>
+<p><strong><span style="color: MediumSeaGreen; ">各解析ターム</span></strong> 内で、地絡が発生している母線のインデックスをcell配列区分し格納するフィールドです。</p>
+<h2 id="ymat_reproduce"><span style="color: Navy; "><strong>・フィールド名：Ymat_reproduce</strong></span><a class="headerlink" href="#ymat_reproduce" title="Permanent link">&para;</a></h2>
+<p><strong><span style="color: MediumSeaGreen; ">各解析ターム</span></strong> においてシミュレーション条件に合わせて生成された系統全体のアドミタンス行列をターム毎にcell配列で格納されたフィールドです。</p>
+<h2 id="sols"><span style="color: Navy; "><strong>・フィールド名：sols</strong></span><a class="headerlink" href="#sols" title="Permanent link">&para;</a></h2>
+<p><strong><span style="color: MediumSeaGreen; ">各解析ターム</span></strong> で実行されているソルバーをタームごとにcell配列で格納したフィールドです。</p>
+<p><br><br></p>
+<h3 id="simulationresult"><strong>【simulationResultクラスのインスタンスとして出力した場合】</strong><a class="headerlink" href="#simulationresult" title="Permanent link">&para;</a></h3>
+<p>最後に、シミュレーション条件設定の際に<code>option.tools = true;</code>とした場合の出力変数の内容/使い方を説明したいと思います。simulationResultクラスのインスタンスとして出力した場合、上で説明した各フィールドに加え以下のフィールドが新たに生成されます。</p>
+<ul>
+<li>Vabs:母線電圧の絶対値</li>
+<li>Vangle:母線電圧の偏角</li>
+<li>Iabs:母線電流の絶対値</li>
+<li>Iangle:母線電流の偏角</li>
+<li>P:有効電力</li>
+<li>Q:無効電力　　</li>
+</ul>
+<p>これらのデータは<code>out.V</code>と<code>out.I</code>のデータから求めることが出来るため、冗長なデータと言えます。そのため、容量の観点からは不要なフィールドとも取れますが、この<code>simulationResult</code>クラスは出力結果の内容を把握しやすくするための補助としての役割を目的として実装されているため上記のフィールドを生成しています。<br />
+実行すると以下の様な表示が出ます。「<code>使い方を表示しますか？(y/n)：</code>」に対して<code>y</code>と入力し「enter」すると使い方を見ることができます。  </p>
+<p><strong>実行例</strong>
+```matlab</p>
+<blockquote>
+<blockquote>
+<p>out = net.simulate([0,10],'fault',{{[1,1.01],3}},'tools',true)
+0|                                                            |10
+ |=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;=&gt;|</p>
+</blockquote>
+</blockquote>
+<p>==================================
+  シミュレーション結果出力の補助ツール<br />
+      SimulationResultクラス     <br />
+==================================</p>
+<p>使い方を表示しますか？(y/n)：
+```
+このクラスのmethodにはコマンド入力でプロットを実行する方法とUIの操作でプロットする方法があります。基本的にはUIでの実行で全ての機能を網羅できますし、直感的に動かすことが出来ると思うので、そちらを使えば問題ないです。  </p>
+<p><strong>実行例</strong>
+```matlab</p>
+<blockquote>
+<blockquote>
+<p>out.UIplot
+```</p>
+</blockquote>
+</blockquote>
+<hr />
+<h1 id="_3"><span style="font-size: 70%; color: black;"><strong>【コード例】</strong></span><a class="headerlink" href="#_3" title="Permanent link">&para;</a></h1>
+<p><a class="md-button center" href="../SampleCode/">シミュレーション実行例</a>
+<br><br></p>
+<hr />
+<p><br><br></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../addController/NewController/" title="新たな制御器モデルの実装" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  前
+                </span>
+                新たな制御器モデルの実装
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../SampleCode/" title="コード例" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  次
+                </span>
+                コード例
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright © 2020- Tokyo Tech, Ishizaki Lab.
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e]+", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

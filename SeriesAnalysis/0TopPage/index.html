@@ -1,0 +1,1507 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../Figures/modularsmall.png">
+      <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-6.0.1">
+    
+    
+      
+        <title>一連の解析実行例 - GUILDA Doc</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f72e892.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600,800">
+    
+      <link rel="stylesheet" href="https://unpkg.com/mermaid@8.0.0/dist/mermaid.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="GUILDA Doc" class="md-header-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            GUILDA Doc
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              一連の解析実行例
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../.." class="md-tabs__link md-tabs__link--active">
+          Topページ
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GUILDA Doc" class="md-nav__button md-logo" aria-label="GUILDA Doc">
+      
+  <img src="../../Figures/modularsmall.png" alt="logo">
+
+    </a>
+    GUILDA Doc
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+    
+    <label class="md-nav__link" for="nav-1">
+      Topページ
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Topページ" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon"></span>
+        Topページ
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../aboutPowerSystem/0TopPage/" title="電力系統モデルについて" class="md-nav__link">
+      電力系統モデルについて
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SetEnvironment/0TopPage/" title="GUILDAの環境設定" class="md-nav__link">
+      GUILDAの環境設定
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4" type="checkbox" id="nav-1-4">
+    
+    <label class="md-nav__link" for="nav-1-4">
+      リファレンス
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="リファレンス" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-4">
+        <span class="md-nav__icon md-icon"></span>
+        リファレンス
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-2" type="checkbox" id="nav-1-4-2">
+    
+    <label class="md-nav__link" for="nav-1-4-2">
+      電力系統モデルの定義
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="電力系統モデルの定義" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-2">
+        <span class="md-nav__icon md-icon"></span>
+        電力系統モデルの定義
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/NewPowerNetwork/" title="新しい電力系統モデルの定義" class="md-nav__link">
+      新しい電力系統モデルの定義
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/defineNet/NewComponent/" title="新たな機器モデルの定義" class="md-nav__link">
+      新たな機器モデルの定義
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-3" type="checkbox" id="nav-1-4-3">
+    
+    <label class="md-nav__link" for="nav-1-4-3">
+      制御器の付加
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="制御器の付加" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-3">
+        <span class="md-nav__icon md-icon"></span>
+        制御器の付加
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/addController/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/addController/NewController/" title="新たな制御器モデルの実装" class="md-nav__link">
+      新たな制御器モデルの実装
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-4" type="checkbox" id="nav-1-4-4">
+    
+    <label class="md-nav__link" for="nav-1-4-4">
+      シミュレ−ションの実行
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="シミュレ−ションの実行" data-md-level="3">
+      <label class="md-nav__title" for="nav-1-4-4">
+        <span class="md-nav__icon md-icon"></span>
+        シミュレ−ションの実行
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/net_simulate/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/SampleCode/" title="コード例" class="md-nav__link">
+      コード例
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Reference/Analysis/net_getsys/" title="近似線形化モデルの導出" class="md-nav__link">
+      近似線形化モデルの導出
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        一連の解析実行例
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="一連の解析実行例" class="md-nav__link md-nav__link--active">
+      一連の解析実行例
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    【本ページの流れ】
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    【電力系統モデルの構築】
+  </a>
+  
+    <nav class="md-nav" aria-label="【電力系統モデルの構築】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power_network" class="md-nav__link">
+    ・power_networkクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branch" class="md-nav__link">
+    ・branchクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bus" class="md-nav__link">
+    ・busクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component" class="md-nav__link">
+    ・componentクラスの定義
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    【アドミタンス行列の導出】
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    【シミュレーションの実行】
+  </a>
+  
+    <nav class="md-nav" aria-label="【シミュレーションの実行】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    ・シミュレーションの条件設定
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    ・解析の実行
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    ・解析結果のプロット
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    【制御器の導入】
+  </a>
+  
+    <nav class="md-nav" aria-label="【制御器の導入】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controller" class="md-nav__link">
+    ・controllerクラスの定義
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    【シミュレーションの再実行】
+  </a>
+  
+    <nav class="md-nav" aria-label="【シミュレーションの再実行】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    ・制御器を付ける前と後の比較
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    【サンプルコード全文】
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-6" type="checkbox" id="nav-1-6">
+    
+    <label class="md-nav__link" for="nav-1-6">
+      ソースコードの解説
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="ソースコードの解説" data-md-level="2">
+      <label class="md-nav__title" for="nav-1-6">
+        <span class="md-nav__icon md-icon"></span>
+        ソースコードの解説
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/0TopPage/" title="" class="md-nav__link">
+      
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/power_network/" title="電力系統クラス" class="md-nav__link">
+      電力系統クラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/bus/" title="母線のクラス" class="md-nav__link">
+      母線のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/component/" title="機器のクラス" class="md-nav__link">
+      機器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/controller/" title="制御器のクラス" class="md-nav__link">
+      制御器のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/branch/" title="送電網のクラス" class="md-nav__link">
+      送電網のクラス
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../SourceCode/NetProperties/" title="netのパラメータの読み方" class="md-nav__link">
+      netのパラメータの読み方
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    【本ページの流れ】
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    【電力系統モデルの構築】
+  </a>
+  
+    <nav class="md-nav" aria-label="【電力系統モデルの構築】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#power_network" class="md-nav__link">
+    ・power_networkクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#branch" class="md-nav__link">
+    ・branchクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bus" class="md-nav__link">
+    ・busクラスの定義
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component" class="md-nav__link">
+    ・componentクラスの定義
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    【アドミタンス行列の導出】
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    【シミュレーションの実行】
+  </a>
+  
+    <nav class="md-nav" aria-label="【シミュレーションの実行】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    ・シミュレーションの条件設定
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    ・解析の実行
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    ・解析結果のプロット
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    【制御器の導入】
+  </a>
+  
+    <nav class="md-nav" aria-label="【制御器の導入】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controller" class="md-nav__link">
+    ・controllerクラスの定義
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    【シミュレーションの再実行】
+  </a>
+  
+    <nav class="md-nav" aria-label="【シミュレーションの再実行】">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    ・制御器を付ける前と後の比較
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    【サンプルコード全文】
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <p><img src="../../Figures/tuto-withText.jpg" width=100%;></p>
+<h1 id="_1"><div style="text-align: center;"><span style="font-size: 130%; color: black;">簡単なモデルを用いた一連の解析</span></div><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<hr />
+<p>このページでは、テキストで扱われていた3busシステムを実際にGUILDA上に実装し、シミュレーションを行ってみます。定義してから解析するまでの流れが１本のストーリーとなるよう構成していますので、順番に読み進めながら手元でも実行してみると理解が深まると思います！  </p>
+<h2 id="_2"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【本ページの流れ】</strong></span></div><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ol>
+<li>3busの電力系統モデルをGUILDA上に実装する<ul>
+<li><code>power_network</code>クラスの定義 [<a href="#power_network">jump</a>]</li>
+<li><code>branch</code>クラスの定義および<code>power_network</code>クラスへの代入 [<a href="#branch">jump</a>]</li>
+<li><code>bus</code>クラスの定義および<code>power_network</code>クラスへの代入 [<a href="#bus">jump</a>]</li>
+<li><code>component</code>クラスの定義および<code>bus</code>クラスへの代入 [<a href="#component">jump</a>]</li>
+</ul>
+</li>
+<li>シミュレーションの実行<ul>
+<li>シミュレーションの条件定義 [<a href="#_6">jump</a>]</li>
+<li>解析の実行と条件設定 [<a href="#_7">jump</a>]</li>
+<li>解析結果のプロット [<a href="#_8">jump</a>]</li>
+</ul>
+</li>
+<li>電力系統モデルに制御器を組み込む<ul>
+<li><code>controller</code>クラスの定義および<code>power_network</code>クラスへの代入 [<a href="#controller">jump</a>]</li>
+</ul>
+</li>
+<li>シミュレーションの再実行<ul>
+<li>２と同様の条件で解析を行った際の結果 [<a href="#_10">jump</a>]</li>
+<li>制御器の有無による応答の比較 [<a href="#_11">jump</a>]</li>
+</ul>
+</li>
+</ol>
+<p>といった流れで進めていきます。</p>
+<h2 id="_3"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【電力系統モデルの構築】</strong></span></div><a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>今回は下図に示された3busのみで構成された電力系統システムを作成します．</p>
+<p><img alt="" src="../../Figures/write_3bus.png" /></p>
+<hr />
+<h3 id="power_network"><span style="color: Navy; "><strong>・power_networkクラスの定義</strong></span><a class="headerlink" href="#power_network" title="Permanent link">&para;</a></h3>
+<p>では、まず電力系統モデルの大枠となる<code>power_network</code>クラスを定義します。このクラスには、各母線やブランチ、機器などの情報を整理して格納しておく<code>properties</code>と、それらのデータを用いてシミュレーション等の解析を行う<code>method</code>が定義されています。この大枠に以下ではデータを代入します。<br />
+<code>power_network</code>クラスの定義は簡単で以下のように実行するだけです。</p>
+<p><code>matlab
+net = power_network();</code></p>
+<h3 id="branch"><span style="color: Navy; "><strong>・branchクラスの定義</strong></span><a class="headerlink" href="#branch" title="Permanent link">&para;</a></h3>
+<p><strong>情報の整理</strong><br>
+次に送電線(ブランチ)の情報を整理します。GUILDAでは送電線の種類として、π型回路モデルの送電線(<code>branch_pi</code>クラス)と、さらに位相調整変圧器も含む送電線(<code>branch_pi_transfer</code>クラス)の2種類を実装しています。今回は送電線上に位相調整変圧器は含まれないと仮定します。<br />
+実装するモデルには「母線1-母線2」と「母線2-母線3」の２本の送電線が存在します。それぞれの送電線上のインピーダンスと対地静電容量の値は以下とします。</p>
+<table>
+<thead>
+<tr>
+<th align="center">ブランチが接続している母線</th>
+<th align="center">ブランチ上のインピーダンス</th>
+<th align="center">対地静電容量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">母線1ー母線2</td>
+<td align="center"><span style="font-size: 100%; color: red;"> x12 = 0.010 + 0.085j</span></td>
+<td align="center"><span style="font-size: 100%; color: red;">b12 = 0</span></td>
+</tr>
+<tr>
+<td align="center">母線2ー母線3</td>
+<td align="center"><span style="font-size: 100%; color: red;"> x23 = 0.017 + 0.092j</span></td>
+<td align="center"><span style="font-size: 100%; color: red;">b23 = 0</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>GUILDA上への実装方法</strong><br> 
+送電網の定義手順は、以下のようになります。</p>
+<ol>
+<li>送電網の情報を代入した<code>branch</code>クラスの変数を各送電網ごとに定義する。<br>定義方法：<code>branch_pi(from,to,[xreal,ximag],b);</code><ul>
+<li><code>from</code> , <code>to</code> : 送電線が繋ぐ母線番号</li>
+<li><code>xreal</code>, <code>x_imag</code> : インピーダンスの実部、虚部</li>
+<li><code>b</code> : 対地静電容量</li>
+</ul>
+</li>
+<li>生成した<code>branch</code>クラスの変数を<code>power_network</code>クラスの<code>add_branch</code>というmethodを用いて代入する。</li>
+</ol>
+<p>では実際に代入しましょう。</p>
+<p><code>matlab
+%母線1と母線2を繋ぐ送電線の定義
+branch12 = branch_pi(1,2,[0.010,0.085],0);
+net.add_branch(branch12);
+%母線2と母線3を繋ぐ送電線の定義
+branch23 = branch_pi(2,3,[0.017,0.092],0);
+net.add_branch(branch23);</code></p>
+<p>送電網の定義について詳しくは<a href="../../Reference/defineNet/NewPowerNetwork/">系統モデルの作成ページ</a>を参照してください</p>
+<h3 id="bus"><span style="color: Navy; "><strong>・busクラスの定義</strong></span><a class="headerlink" href="#bus" title="Permanent link">&para;</a></h3>
+<p><strong>情報の整理</strong><br>
+次に、母線の種類（PV,PQ,slack）と各母線の潮流設定の値を決定します。<br />
+今回は以下のように設定してみます。</p>
+<table>
+<thead>
+<tr>
+<th align="center">母線番号</th>
+<th align="center">各母線の潮流設定値</th>
+<th align="center">母線の種類</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">母線１</td>
+<td align="center"><span style="font-size: 100%; color: red;">｜V｜ =2.0 , ∠V＝0.0 </span></td>
+<td align="center">slack母線</td>
+</tr>
+<tr>
+<td align="center">母線２</td>
+<td align="center"><span style="font-size: 100%; color: red;"> P = 0.5 , ｜V｜=2 </span></td>
+<td align="center">PV母線</td>
+</tr>
+<tr>
+<td align="center">母線３</td>
+<td align="center"><span style="font-size: 100%; color: red;"> P = -3 , Q = 0 </span></td>
+<td align="center">PQ母線</td>
+</tr>
+</tbody>
+</table>
+<p>表中のP、Q、|V|、∠V はそれぞれ「有効電力」「無効電力」「母線電圧の大きさ」「電圧の偏角」を指しています。母線の種類や潮流設定の各パラメータの意味に関しては<a href="../../aboutPowerSystem/0TopPage/">「電力ネットワークの解説ページ」</a>を参考にして下さい。<br></p>
+<p><strong>GUILDA上での実装方法</strong><br></p>
+<p>母線の定義についても、送電線の定義と同様に<code>bus</code>クラスの変数を定義し、<code>power_network</code>クラスの<code>add_bus</code>というmethodを用いて代入します。また、<code>bus</code>クラスには<code>bus_PV</code>、<code>bus_PQ</code>、<code>bus_slack</code>という子クラスが定義されており各母線の種類ごとにこれらを使い分けて定義します。</p>
+<ol>
+<li>slack母線の場合:<code>bus_i = bus_slack(Vabs,Vangle,shunt);</code></li>
+<li>PV母線の場合:<code>bus_i = bus_PV(P,Vabs,shunt);</code></li>
+<li>PQ母線の場合:<code>bus_i = bus_PQ(P,Q,shunt);</code></li>
+</ol>
+<p>各関数の引数については[電力系統モデルの作成ページ]](../Reference/defineNet/NewPowerNetwork.md)」を参照してください。それでは、実際に各母線の情報を定義していきます。</p>
+<p><code>matlab
+shunt = [0,0];
+%母線1の定義
+bus_1 = bus_slack(2,0,shunt);
+net.add_bus(bus_1);
+%母線2の定義
+bus_2 = bus_PV(0.5,2,shunt);
+net.add_bus(bus_2);
+%母線3の定義
+bus_3 = bus_PQ(-3,0,shunt);
+net.add_bus(bus_3);</code>
+ここでの注意点は、<code>power_network</code>は母線番号を<code>add_bus</code>で定義された順番で管理している点です。母線を定義する際は母線番号の順番に代入していってください。</p>
+<h3 id="component"><span style="color: Navy; "><strong>・componentクラスの定義</strong></span><a class="headerlink" href="#component" title="Permanent link">&para;</a></h3>
+<p><strong>情報の整理</strong><br>
+次に今回実装する3busモデルの各母線に付加する機器を決めます。今回のモデルでは母線1と母線2が発電機バス(slack母線とPV母線)、母線3が負荷母線(PQ母線)となっています。また、今回の実行例では、発電機母線に接続するのは同期発電機の1軸モデル、負荷母線に接続するのは定インピーダンスモデルの負荷とします。同期発電機の1軸モデルは下式のようになっています。<br />
+<br>
+<img src="../../Figures/eq_generator_1axis.png" width=70%;><br />
+<br>
+同期発電機モデルを適応する場合は、上式の各パラメータを決定する必要があります。以上の情報をまとめると下の表のようになります。</p>
+<table>
+<thead>
+<tr>
+<th align="center">母線</th>
+<th align="center">機器の種類</th>
+<th align="center">q軸/d軸の</br>同期リアクタンス</th>
+<th align="center">d軸の</br>過渡リアクタンス</th>
+<th align="center">d軸の</br>界磁回路の時定数</th>
+<th align="center">慣性定数</th>
+<th align="center">制動係数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">母線１</td>
+<td align="center">同期発電機(1軸モデル)</td>
+<td align="center"><span style="color: red;">Xd =1.569<br>Xq =0.963</span></td>
+<td align="center"><span style="color: red;">Xd_prime =0.963 </span></td>
+<td align="center"><span style="color: red;">T =5.14 </span></td>
+<td align="center"><span style="color: red;">M =100 </span></td>
+<td align="center"><span style="color: red;">D =2 </span></td>
+</tr>
+<tr>
+<td align="center">母線２</td>
+<td align="center">同期発電機(1軸モデル)</td>
+<td align="center"><span style="color: red;">Xd =1.220<br>Xq =0.667</span></td>
+<td align="center"><span style="color: red;">Xd'=0.667 </span></td>
+<td align="center"><span style="color: red;">T =8.97 </span></td>
+<td align="center"><span style="color: red;">M =12 </span></td>
+<td align="center"><span style="color: red;">D =10 </span></td>
+</tr>
+<tr>
+<td align="center">母線3</td>
+<td align="center">定負荷モデル</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>なお、同期発電機のパラメータの内、MATLABに実装できる変数名の制約により、そのまま書けない変数名は以下のように書き換えて表現しています。</p>
+<div style="text-align: center;">Xd'→ "Xd_prime"<br>τd→　"T"</div>
+
+<p><strong>GUILDA上への実装方法</strong><br>
+機器の定義についても、母線の定義と同様に<code>component</code>クラスの変数を定義し、それを系統に代入します。ただ、機器の定義は、送電網や母線のように<code>power_network</code>クラスに代入するのではなく、<code>power_network</code>クラスに代入されている、<code>bus</code>クラスに代入します。機器は各母線ごとに接続されているためです。<br>
+また、同期発電機の1軸モデルは<code>generator_1axis</code>というクラスで定義されています。また定インピーダンスモデルは<code>load_impedance</code>というクラスで定義しています。それでは実際に系統に機器モデルを代入していきます。</p>
+<p>```matlab
+%系統周波数の定義
+omega0 = 60<em>2</em>pi;</p>
+<p>%母線1に同期発電機の1軸モデルを付加
+Xd = 1.569; Xd_prime = 0.963; Xq = 0.963; T = 5.14; M = 100; D = 10;
+mac_data = table(Xd,Xd_prime,Xq,T,M,D);
+component1 = generator_1axis( omega0, mac_data);
+net.a_bus{1}.set_component(component1);</p>
+<p>%母線2にも同期発電機の1軸モデルを付加
+Xd = 1.220; Xd_prime = 0.667; Xq = 0.667; T = 8.97; M = 12; D = 10;
+mac_data = table(Xd,Xd_prime,Xq,T,M,D);
+comp2 = generator_1axis( omega0, mac_data);
+net.a_bus{2}.set_component(comp2);</p>
+<p>%母線3には定インピーダンスモデルを付加
+comp3 = load_impedance();
+net.a_bus{3}.set_component(comp3);
+```</p>
+<p>ここでの注意点は、generator_1axisの引数のtable型変数の定義についてです。generator_1axisは引数で与えられたテーブル型の変数から、対応する列名の値を抽出していいるため、各パラメータの変数名はコード例と同じになるようにしてください。</p>
+<p><br><br><br>
+以上で電力系統モデルの定義ができました。最後に</p>
+<p><code>matlab
+net.initialize;</code><br />
+と実行します。これは<code>power_network</code>クラス内に定義された<code>initialize</code>というmethodを実行しており、プロパティに代入されたパラメータをもとに潮流計算を行い、系統全体のシステムの平衡点を計算し、各値を新たなプロパティとして保存する関数です。これらの値はワークスペースから閲覧することができます。各パラメータの見方は、「<a href="../../SourceCode/NetProperties/">power_networkクラスのデータ構造</a>」のページを参考にしてください。</p>
+<hr />
+<hr />
+<h2 id="_4"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【アドミタンス行列の導出】</strong></span></div><a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>テキストではブランチのパラメータをもとにアドミタンス行列を求めていました。ここでも試しにシュミレータを使って求めてみましょう。<br />
+以下のように実行するとアドミタンス行列が求まります。
+```matlab</p>
+<blockquote>
+<blockquote>
+<p>net.get_admittance_matrix
+ans =
+   (1,1)      1.3652 -11.6041i
+   (2,1)     -1.3652 +11.6041i
+   (1,2)     -1.3652 +11.6041i
+   (2,2)      3.3074 -22.1148i
+   (3,2)     -1.9422 +10.5107i
+   (2,3)     -1.9422 +10.5107i
+   (3,3)      1.9422 -10.5107i
+```
+この様な出力が出てくると思います。この例だと分かりづらいですがアドミタンス行列は一般的に疎行列となり、このように行列内の非零の要素の(行,列)とその要素の値を並べた表として出力しています。<br />
+行列表示にしたい場合は以下のように実行します。</p>
+</blockquote>
+</blockquote>
+<p>```matlab</p>
+<blockquote>
+<blockquote>
+<p>full(net.get_admittance_matrix)
+ans =
+   1.3652 -11.6041i  -1.3652 +11.6041i   0.0000 + 0.0000i
+  -1.3652 +11.6041i   3.3074 -22.1148i  -1.9422 +10.5107i
+   0.0000 + 0.0000i  -1.9422 +10.5107i   1.9422 -10.5107i
+<code>``
+因みに、潮流計算にアドミタンス行列が必要なことから分かるように、この</code>get_admittance_matrix<code>という関数は先程解説した</code>initialize`という関数の計算内部でも使われています。</p>
+</blockquote>
+</blockquote>
+<hr />
+<hr />
+<h2 id="_5"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【シミュレーションの実行】</strong></span></div><a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>では、ここまでで電力系統モデルをGUILDA上に定義できたので、このモデルを使って実際にシミュレーションを実行してみましょう。</p>
+<h3 id="_6"><span style="color: Navy; "><strong>・シミュレーションの条件設定</strong></span><a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>今回は、「母線３の負荷が大きくなった際の母線1と母線２の同期発電機の周波数偏差の応答」を観察してみます。ではシミュレーションの設定条件を以下にまとめます。</p>
+<table>
+<thead>
+<tr>
+<th align="center">解析時間</th>
+<th align="center">負荷の変化するタイミング</th>
+<th align="center">負荷の変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0~60秒</td>
+<td align="center">10秒<br>20秒</td>
+<td align="center">１回目の変化(10秒時点)：インピーダンス値の実部が 5%増加<br>２回目の変化(20秒時点)：インピーダンス値の実部が10%増加</td>
+</tr>
+</tbody>
+</table>
+<p>つまり負荷の変化率が以下のような場合を考えます。<br />
+<br>
+<img src="../../Figures/sample_code_u_plot.png" width=80%;></p>
+<h3 id="_7"><span style="color: Navy; "><strong>・解析の実行</strong></span><a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>では、上記のような条件でシミュレーションを実行します。ここでは、実行コードのみ紹介します。条件設定方法の詳細な解説や、他の条件設定に関しては、リファレンスの「<a href="../../Reference/Analysis/net_simulate/">シミュレーションの実行</a>」のページを参考にしてください。</p>
+<p>```matlab
+time = [0,10,20,60];
+u_idx = 3;
+u     = [0, 0.05, 0.1, 0.1;...
+         0,    0,   0,   0];</p>
+<p>out1 = net.simulate(time,u, u_idx);
+```</p>
+<h3 id="_8"><span style="color: Navy; "><strong>・解析結果のプロット</strong></span><a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>上記のように実行すると解析が開始され、コマンドウィンドウに解析進行度が表示されます。解析が終了したら、出力結果を見てみましょう。今回は母線1と母線2の周波数偏差を見たいため、出力(<code>out1</code>)の中の<code>X</code>というフィールドに着目します。母線1,2に付加した<code>generator_1axis</code>モデルの実装コード内では、状態を「回転子偏角δ,周波数偏差Δω,内部電圧E」という順で実装しているため、今回は２番目の状態の応答を見れば良いということになります。出力結果のデータの読み取り方は「<a href="../../Reference/Analysis/net_simulate/">シミュレーションの実行</a>」のページを参考にしてください。では実際に結果をプロットしてみます。  </p>
+<p>```matlab
+%データ抽出
+sampling_time = out1.t;
+omega1 = out1.X{1}(:,2);
+omega2 = out1.X{2}(:,2);</p>
+<p>%プロット
+figure;
+hold on;
+plot(sampling_time, omega2,'LineWidth',2)
+plot(sampling_time, omega1,'LineWidth',2)
+xlabel('時刻(s)','FontSize',15);
+ylabel('周波数偏差','FontSize',15);
+legend({'機器2の周波数偏差','機器1の周波数偏差'})
+title('各同期発電機の周波数偏差','FontSize',20)
+hold off
+```</p>
+<div align="center">
+<img src="../../Figures/sample_code_out1_omega_plot.png" width=80%;>
+</div>
+
+<p>この結果を見ると負荷のインピーダンス値が上がる10秒の時点と20秒の時点で周波数偏差が大きく変化していることが分かります。系統全体で需給バランスが取れていた潮流状態から、負荷の消費電力が増加し需給バランスが取れなくなったためです。周波数偏差が非零の状態で電力供給を行い続けるのは、電力品質が良いとは言えませんし精密な機器を扱う工場等にとっては大問題です。そのため、現実の電力系統運用では制御器を組み込み周波数偏差を0に戻すようにしています。次の章ではAGCというコントローラを電力系統モデルに組み込んでみます。</p>
+<h2 id="_9"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【制御器の導入】</strong></span></div><a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>今回は電力モデルにAGCを付加することを考えます。AGCは系統全体もしくは一部のエリアに属した同期発電機から周波数偏差の値を観測し、系統全体の需給バランスを整えるよう各発電機へ機械入力(<code>Pmech</code>)の指令値を発信するPIコントローラです。</p>
+<h3 id="controller"><span style="color: Navy; "><strong>・controllerクラスの定義</strong></span><a class="headerlink" href="#controller" title="Permanent link">&para;</a></h3>
+<p>GUILDAではAGCを<code>controller_broadcast_PI_AGC</code>というクラス名で定義しています。</p>
+<ul>
+<li>定義方法：<code>controller_broadcast_PI_AGC(net,y_idx,u_idx,Kp,Ki)</code>;<ul>
+<li><code>net</code>:付加する電力系統モデル</li>
+<li><code>y_idx</code>:観測する機器のインデックス</li>
+<li><code>u_idx</code>:指令値を与える機器のインデックス</li>
+<li><code>Kp,Ki</code>:PIコントローラの各ゲイン  </li>
+</ul>
+</li>
+</ul>
+<p>今回は母線1,2に接続された同期発電機群を観測対象、かつ入力対象とします。そのため、<code>y_idx=1:2</code>と<code>u_idx=1:2</code>となります。その他の設定方法について詳細は、「<a href="../../Reference/Analysis/net_simulate/">リファレンス</a>」のページを参考にしてください。では実際にGUILDA上で実装してみましょう。</p>
+<p>```matlab
+%AGCコントローラを定義
+con = controller_broadcast_PI_AGC(net,1:2,1:2,-10,-500);</p>
+<p>%電力系統にcontrollerクラスを代入
+net.add_controller_global(con);
+```</p>
+<h2 id="_10"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【シミュレーションの再実行】</strong></span></div><a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>では、制御器を付加した系統モデルで先程と同様のシミュレーション行ってみます。
+```matlab
+%解析実行
+out2 = net.simulate(time,u, u_idx);</p>
+<p>%データ抽出
+sampling_time = out2.t;
+omega1 = out2.X{1}(:,2);
+omega2 = out2.X{2}(:,2);</p>
+<p>%プロット
+figure;
+hold on;
+plot(sampling_time, omega2,'LineWidth',2)
+plot(sampling_time, omega1,'LineWidth',2)
+xlabel('時刻(s)','FontSize',15); 
+ylabel('周波数偏差','FontSize',15);
+legend({'機器2の周波数偏差','機器1の周波数偏差'})
+title('各同期発電機の周波数偏差','FontSize',20)
+hold off</p>
+<p>```</p>
+<div align="center">
+<img src="../../Figures/sample_code_out2_omega_plot.png" width=80%;>
+</div>
+
+<p>上の結果を見ると、負荷が増大する10秒,20秒の時点では変わらず振動しているものの、制御器を付加したことで各機器の周波数偏差は0付近に収束する様になったことが分かります。</p>
+<h3 id="_11"><span style="color: Navy; "><strong>・制御器を付ける前と後の比較</strong></span><a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>最後に制御器を付加する前と付加した後の結果を比較してみます。下の図は上の２つの結果を同じスケール上にプロットしたものです。同じ負荷の変動に対して、AGCを付加した場合の方が大幅に周波数偏差を抑制していることが明らかに見て取れます。つまりAGCコントローラが系統全体の需給バランスを調整し、周波数偏差を抑制できているということが分かりました。</p>
+<div align="center">
+<img src="../../Figures/sample_code_out2_omega_plot_rescale.png" width=80%;>
+</div>
+
+<p><br><br>
+解説は以上になります。</p>
+<hr />
+<p>いかがでしたでしょうか？本ページでは一連の解析の様子を解説してきました。GUILDAでは</p>
+<ul>
+<li>まず「電力系統モデルを実装する」</li>
+<li>そして「作成した系統モデルに制御器を組み込む」</li>
+<li>最後に「それらの系統モデルにたいして条件設定をしてシミュレーションを行う」  </li>
+</ul>
+<p>といったことができます。また本シミュレータでは今後様々な電力系統モデルの実装にも対応できるよう、拡張性を配慮した構造になるよう設計されてきました。今回はほんの一例を紹介しましたが、今回とは違った使い方や各クラスについて、さらに詳しく知りたいという場合は、解説中にも所々リンクを載せていましたが「<a href="../../Reference/0TopPage/">リファレンス</a>」などのページも参考にしてみてください。</p>
+<hr />
+<h2 id="_12"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【サンプルコード全文】</strong></span></div><a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p>```matlab
+%電力系統のフレームワークを作成
+net = power_network;</p>
+<p>%ブランチ(branch)の定義</p>
+<pre class="codehilite"><code class="linenums">%母線1と母線2を繋ぐ送電線の定義
+branch12 = branch_pi(1,2,[0.010,0.085],0);
+net.add_branch(branch12);
+%母線2と母線3を繋ぐ送電線の定義
+branch23 = branch_pi(2,3,[0.017,0.092],0);
+net.add_branch(branch23);
+</code></pre>
+
+<p>%母線(bus)の定義
+    shunt = [0,0];
+    %母線1の定義
+    bus_1 = bus_slack(2,0,shunt);
+    net.add_bus(bus_1);
+    %母線2の定義
+    bus_2 = bus_PV(0.5,2,shunt);
+    net.add_bus(bus_2);
+    %母線3の定義
+    bus_3 = bus_PQ(-3,0,shunt);
+    net.add_bus(bus_3);</p>
+<p>%機器(component)の定義</p>
+<pre class="codehilite"><code class="linenums">%系統周波数の定義
+omega0 = 60*2*pi;
+
+%母線1に同期発電機の1軸モデルを付加
+Xd = 1.569; Xd_prime = 0.963; Xq = 0.963; T = 5.14; M = 100; D = 10;
+mac_data = table(Xd,Xd_prime,Xq,T,M,D);
+component1 = generator_1axis( omega0, mac_data);
+net.a_bus{1}.set_component(component1);
+
+%母線2にも同期発電機の1軸モデルを付加
+Xd = 1.220; Xd_prime = 0.667; Xq = 0.667; T = 8.97; M = 12; D = 10;
+mac_data = table(Xd,Xd_prime,Xq,T,M,D);
+comp2 = generator_1axis( omega0, mac_data);
+net.a_bus{2}.set_component(comp2);
+
+%母線3には定インピーダンスモデルを付加
+comp3 = load_impedance();
+net.a_bus{3}.set_component(comp3);
+</code></pre>
+
+<p>%潮流計算の実行
+net.initialize</p>
+<p>%余談 <sub>アドミタンス行列の導出</sub>
+full(net.get_admittance_matrix)</p>
+<p>%シミュレーションの実行(制御器なしver)</p>
+<pre class="codehilite"><code class="linenums">%条件設定
+time = [0,10,20,60];
+u_idx = 3;
+u = [0, 0.05, 0.1, 0.1;...
+     0,    0,   0,   0];
+
+%入力信号波形プロット
+figure; hold on;
+u_percent = u*100;
+stairs(time,u_percent(1,:),'LineWidth',2)
+stairs(time,u_percent(2,:),'--','LineWidth',2)
+xlabel('時刻(s)','FontSize',15); 
+ylabel('定常値からの変化率(%)','FontSize',15);
+ylim([-20,20])
+legend({'インピーダンスの実部','インピーダンスの虚部'},'Location','southeast')
+title('母線3のインピーダンスの値の変化','FontSize',20)
+hold off;
+
+%解析実行
+out1 = net.simulate(time,u, u_idx);
+
+%データ抽出
+sampling_time = out1.t;
+omega1 = out1.X{1}(:,2);
+omega2 = out1.X{2}(:,2);
+
+%プロット
+figure; hold on;
+plot(sampling_time, omega2,'LineWidth',2)
+plot(sampling_time, omega1,'LineWidth',2)
+xlabel('時刻(s)','FontSize',15); 
+ylabel('周波数偏差','FontSize',15);
+legend({'機器2の周波数偏差','機器1の周波数偏差'})
+title('各同期発電機の周波数偏差','FontSize',20)
+hold off
+</code></pre>
+
+<p>%電力系統に制御器を付加 </p>
+<pre class="codehilite"><code class="linenums">%AGCコントローラを定義
+con = controller_broadcast_PI_AGC(net,1:2,1:2,-10,-500);
+
+%電力系統にcontrollerクラスを代入
+net.add_controller_global(con);
+</code></pre>
+
+<p>%シミュレーションの実行(制御器ありver)</p>
+<pre class="codehilite"><code class="linenums">%解析実行
+out2 = net.simulate(time,u,u_idx);
+
+%データ抽出
+sampling_time = out2.t;
+omega1 = out2.X{1}(:,2);
+omega2 = out2.X{2}(:,2);
+
+%プロット
+figure; hold on;
+plot(sampling_time, omega2,'LineWidth',2)
+plot(sampling_time, omega1,'LineWidth',2)
+xlabel('時刻(s)','FontSize',15); 
+ylabel('周波数偏差','FontSize',15);
+legend({'機器2の周波数偏差','機器1の周波数偏差'})
+title('各同期発電機の周波数偏差','FontSize',20)
+hold off
+</code></pre>
+
+<p>%制御器を付ける前と後の比較のプロット
+    figure; hold on;
+    plot(out1.t, out1.X{2}(:,2),'Color','#A2142F','LineWidth',1.5)
+    plot(out1.t, out1.X{1}(:,2),'Color','#EDB120','LineWidth',1.5)
+    plot(out2.t, out2.X{2}(:,2),'Color','#0072BD','LineWidth',1.5)
+    plot(out2.t, out2.X{1}(:,2),'Color','#77AC30','LineWidth',1.5)
+    xlabel('時刻(s)','FontSize',15); 
+    ylabel('周波数偏差','FontSize',15);
+    legend({'機器2の周波数偏差(AGCなし)','機器1の周波数偏差(AGCなし)',...
+                '機器2の周波数偏差(AGCあり)','機器1の周波数偏差(AGCあり)'},...
+                'Location','east')
+    title('各同期発電機の周波数偏差','FontSize',20)
+    hold off
+```</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../Reference/Analysis/net_getsys/" title="近似線形化モデルの導出" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  前
+                </span>
+                近似線形化モデルの導出
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../SourceCode/0TopPage/" title="" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  次
+                </span>
+                
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright © 2020- Tokyo Tech, Ishizaki Lab.
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e]+", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
