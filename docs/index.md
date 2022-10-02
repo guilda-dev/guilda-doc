@@ -1,64 +1,59 @@
-# <div style="text-align: center;"><span style="font-size: 140%; color: black;">GUILDA: Grid & Utility Infrastructure Linkage Dynamics Analyzer</span></div>
-本サイトは GUILDA の初学者向けチュートリアル（暫定版）です.
+# <div style="text-align: center;"><span style="font-size: 130%; color: black;">Tutorial TopPage</span></div>
 
-<br>
+***
+本サイトはGUILDA の公式ドキュメントです.
 
----
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【GUILDAとは？】</span></div>
-GUILDAは、制御工学者が電力系統システムの設計・解析するために作られたMATLAB言語のプログラムです。具体的には、以下の事などをシミュレーター上で行え様々な状況を想定した解析を補助します。
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【GUILDAとは？】</span></div>
 
-- 解析したい電力ネットワークを定義する
-- その初期応答や外乱応答、線形化システムの導出などの解析を行う
-     - 落雷などによって地絡が起きた際の状態の解析
-     - コントローラを新しく設計し導入した時の応答の解析
-     - etc...
+<div style="text-align: center;"><img src="./Figures/GUILDAicon.png" width=70%;></div>
+GUIDAは、本研究室と群馬大の川口助教を中心に開発を進めているスマートエネルギーマネジメントの数値シミュレータです。システム制御分野の学生や研究者に対して、最小限の電力システムの知識だけで利用可能な先端的な数値シミュレーション環境を提供することを目的としています。関連知識をシステム制御分野のことばで解説した教科書（2022年にコロナ社から刊行予定）とも密に連携させることで、数学的な基礎と数値シミュレーション環境の構築を並行して学習できるように工夫しています。このような活動を通して、電力システムを身近なベンチマークモデルの1つとしてシステム制御分野に定着させることにより、本分野の技術や知見が電力システム改革を推進する一助となることを目指しています。
+
 
 <br><br>
 
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【電力システムの数理モデル】</span></div>
-power_simulatorを制作する背景に使われている数理モデル等は「**参考書：電力システム制御理論**」の内容に即しており、こちらで紹介された理論をもとに構築されたものとなっております。理論に基づいてシミュレーションを進めて行きたい方は [**参考書の内容にそれぞれ対応付けながら進めていくチュートリアル**](./Tutorials/withText) も設けているので、そちらを見ていただくと分かりやすいかと思います。
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【GUILDAの数理モデル】</span></div>
+GUILDAを構築する背景に使われている数理モデル等は上述した教科書の内容に即しており、こちらで紹介された理論をもとに解析に必要な一連の実行処理をプロシージャとして整理した形に構築されたものとなっています。大まかな電力システムの構成については以下にある 【電力システムって何で構成されているの？】 のページでも紹介していますので、こちらも参考にしてみてください。細かな数理モデルや状態空間モデルに関する数式も要所々々で紹介していますが、体系的に理解したい場合は教科書をご参照ください。
 
 <br><br>
 
 ---
 
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【そもそも電力システムって何で構成されてるの？】</span></div>
-まず、シミュレータのチュートリアルの前に電力システムについて簡単に説明します。(__イラストをclick↓__)
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【電力システムって何で構成されてるの？】</span></div>
+電力システムの構成について簡単に説明します。(__イラストをclick↓__)  
+[<div align="center"><img src="./Figures/index-3.jpg" width=80%; style="border: 7px pink solid;"></div>](aboutPowerSystem/0TopPage.md)
+<br><br>
 
-<br>
-[<img src="./Figures/index-3.jpg" width=100%; style="border: 3px pink solid;">](./abstract)
+
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【GUILDAの環境設定】</span></div>
+公開ソースコードのダウンロード及び環境設定について解説します。(__イラストをclick↓__)  
+[<div align="center"><img src="./Figures/set_GUILDA.jpeg" width=80%; style="border: 7px pink solid;"></div>](SetEnvironment/0TopPage.md)
 
 <br><br>
 
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;"><div style="text-align: center;">【チュートリアル】</span></div>
-本サイトでは２つのタイプでのチュートリアルを用意しました。  
-どちらを先に読んでいただいても構いません。(__イラストをclick↓__)
 
-[<img src="./Figures/tuto-withText.jpg" width=49.5%; style="border: 3px pink solid;">](./Tutorials/withText)
-[<img src="./Figures/tuto-newSystem.jpg" width=49.5%; style="border: 3px pink solid;">](./Tutorials/withSimulation)
-
-「教科書に沿って学ぶ」ベースのチュートリアル(左側)
-> テキストではじめに紹介されていた3busシステムの制作と解析を目標とする、定義してから解析するまでの流れが１本のストーリーとなるような構成となっています。
->
-> - テキストの内容に対応付けながら進めたい方
-> - 電力システムを定義し解析していく流れを掴みたい方
-
-「シミュレータを動かす」ベースのチュートリアル(右側)
-> 電力システムの「制作part」,「解析part」に分け各機能ごとにテーマを設けそれぞれの操作方法を解説していきます。前者のチュートリアルより、もう少し詳しく踏み込んだ内容まで示しています。
->
-> - シミュレータの動かし方、仕組みの理解に重きを置きたい方
-> - 前者のチュートリアルを終え、さらに詳しいシミュレータの操作を知りたい方
-<br><br><br>
-
----
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【Docs】</span></div>
-- [__既存のメソッドやクラスについての情報集__](./Docs/docs)  
-Tutorial内にDocのリンクが必要に応じて貼られているので基本はそちらを見て頂き、適宜このページを参照していただければいいと思います。
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;"><div style="text-align: center;">【簡単なモデルを用いた一連の解析実行例】</span></div>
+テキストで紹介されていた3母線システムを解析対象として、そのモデルを本シミュレータ上で実装し実際にシミュレーションを実行し応答を見てみます。定義してから解析するまでの流れが１本のストーリーとなるよう構成しています。初めてGUILDAを触れる方はこちらを参考に全体の流れを掴んでいただければと思います。(__イラストをclick↓__)  
+[<div align="center"><img src="./Figures/tuto-withText.jpg" width=80%; style="border: 7px pink solid;"></div>](SeriesAnalysis/0TopPage.md)
 
 <br><br>
 
-### <div style="text-align: center;"><span style="font-size: 130%; color: black;">【Require】</span><div style="text-align: center;">
-このシミュレータを動かすにあたって必要なToolbox。
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;"><div style="text-align: center;">【リファレンス】</span></div>
+
+モデル実装及び解析の実行を、各ステップごとに解説していきます。具体的には解析を行うにあたり使用するメソッドの使用方法や、新たな機器・制御器モデルをクラスとして定義する方法について解説します。__(イラストをclick↓)__  
+[<div align="center"><img src="./Figures/tuto-newSystem.jpg" width=80%; style="border: 7px pink solid;"></div>](Reference/0TopPage.md)
+
+<br><br>
+
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【ソースコードの解説】</span></div><div style="text-align: center;">
+__(イラストをclick↓)__
+[<div align="center"><img src="./Figures/index-4.jpg" width=80%; style="border: 7px pink solid;"></div>](SourceCode/0TopPage.md)
+
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【UIを使った操作】</span></div><div style="text-align: center;">
+__(イラストをclick↓)__
+<div align="center"><img src="./Figures/index-GUI.jpg" width=80%; style="border: 7px pink solid;"></div>
+
+### <div style="text-align: center;"><span style="font-size: 150%; color: black;">【Require】</span><div style="text-align: center;">
+このシュミレータを動かすにあたって必要なToolbox。
 
 - Optimization Toolbox
 - Control System Toolbox

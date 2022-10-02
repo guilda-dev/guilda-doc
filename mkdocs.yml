@@ -1,9 +1,9 @@
-site_name: GUILDA Tutorial
+site_name: GUILDA Doc
 theme:
     name: material
     language: 'ja'
-    icon:
-        logo: material/book-open-page-variant
+    logo: Figures/modularsmall.png
+    favicon: Figures/modularsmall.png
     features:
         - navigation.tabs
     palette:
@@ -12,28 +12,32 @@ theme:
         accent: light blue
 
 nav:
-    - Home: index.md
-    - Abstract: abstract.md
-    - Tutorials:
-        - "": Tutorials/tutorials.md
-        - withText: Tutorials/withText.md
-        - withSimulation: Tutorials/withSimulation.md
-        - Contents:
-            - make_net: Tutorials/make_net.md
-            - analysis_net: Tutorials/analysis_net.md
-            - step1: Tutorials/step1.md
-            - step1-2: Tutorials/step1-2.md
-            - step2: Tutorials/step2.md
-            - step3: Tutorials/step3.md
-            - step4: Tutorials/step4.md
-            - step5: Tutorials/step5.md
-            - step6: Tutorials/step6.md
-    - Docs:
-        - "": Docs/docs.md
-        - power_network: Docs/power_network.md
-        - bus: Docs/bus.md
-        - component: Docs/component.md
-        - controller: Docs/controller.md
+    - Topページ:
+        - "": index.md
+        - 電力系統モデルについて: aboutPowerSystem/0TopPage.md
+        - GUILDAの環境設定: SetEnvironment/0TopPage.md
+        - リファレンス:
+            - "": Reference/0TopPage.md
+            - 電力系統モデルの定義:
+                - "": Reference/defineNet/0TopPage.md
+                - 新しい電力系統モデルの定義: Reference/defineNet/NewPowerNetwork.md
+                - 新たな機器モデルの定義: Reference/defineNet/NewComponent.md
+            - 制御器の付加:
+                - "": Reference/addController/0TopPage.md
+                - 新たな制御器モデルの実装: Reference/addController/NewController.md
+            - シミュレ−ションの実行:
+                - "": Reference/Analysis/net_simulate.md
+                - コード例: Reference/Analysis/SampleCode.md
+            - 近似線形化モデルの導出: Reference/Analysis/net_getsys.md
+        - 一連の解析実行例: SeriesAnalysis/0TopPage.md
+        - ソースコードの解説:
+            - "": SourceCode/0TopPage.md
+            - 電力系統クラス: SourceCode/power_network.md
+            - 母線のクラス: SourceCode/bus.md
+            - 機器のクラス: SourceCode/component.md
+            - 制御器のクラス: SourceCode/controller.md
+            - 送電網のクラス: SourceCode/branch.md
+            - netのパラメータの読み方: SourceCode/NetProperties.md
 
 extra:
     search:
@@ -58,15 +62,16 @@ markdown_extensions:
         guess_lang: false
         use_pygments: false
         noclasses: true
-    - footnotes
-    - admonition
+    - footnotes:
+    - admonition:
     - toc:
         permalink: true
         separator: '_'
-    - attr_list
+    - attr_list:
     - pymdownx.emoji:
         emoji_index: !!python/name:materialx.emoji.twemoji
         emoji_generator: !!python/name:materialx.emoji.to_svg
+    - pymdownx.tilde:
 extra_javascript:
     - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML'
     - 'https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js'
