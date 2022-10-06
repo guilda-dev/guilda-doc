@@ -671,8 +671,8 @@ out = net.simulate(time,u,u_idx,option);
   %上図の様にtime,u,u_idxを定義しsimulate関数に代入する
   out = net.simulate(time,u,u_idx);</code>
    上図のように定義すると、図右側のように０次ホールドによる入力信号が各機器に加えた場合のシミュレーションになります。<br />
-<del><strong>・1次ホールドの入力波形</strong></del><span style="color: red; "><strong>(未実装)</strong></span><br />
-<del>次節でオプションの設定方法を解説しますが、以下のようにオプション設定することで１次ホールドの入力波形でのシミュレーションを行うことができます。</del>
+<strong>・1次ホールドの入力波形</strong><br />
+   次節でオプションの設定方法を解説しますが、以下のようにオプション設定することで１次ホールドの入力波形でのシミュレーションを行うことができます。
   <code>matlab
   %上図の様にtime,u,u_idxを定義しsimulate関数に代入する
   out = net.simulate(time,u,u_idx,'method','foh');</code>
@@ -782,7 +782,7 @@ out = net.simulate(time,option);
 </blockquote>
 </li>
 <li>
-<p><del><strong><code>method</code>：入力印加の方法の設定。0次ホールド/1次ホールド</strong></del><span style="color: red; "><strong>(未実装)</strong></span></p>
+<p><strong><code>method</code>：入力印加の方法の設定。0次ホールド/1次ホールド</strong></p>
 <blockquote>
 <p>規定値：入力は0次ホールドの信号として見る
    <code>matlab
