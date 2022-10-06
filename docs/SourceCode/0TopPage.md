@@ -15,7 +15,7 @@ doc sample
 GUILDAを中心的な機能を担っているクラスは大きく分けて「電力系統モデル」「送電網モデル」「母線モデル」「機器モデル」「制御器モデル」を表現したクラスの5種類に分けられます。各クラスは以下に示す５つのスーパークラスの子クラスとして定義されています。ここでは、この5つのスーパークラスに実装されているメンバ変数やメソッドについて解説します。  
 その他のクラスに関しては、本ページでは解説されていませんが上述したように`help`関数を実行することで、モデルの説明やメンバ変数の意味について確認することが出来ます。  
 例えば同期発電機の一軸モデルを表した`generator_1axis`クラスは、機器モデルを実装した`component`クラスの子クラスになります。そのため、`generator_1axis`クラスが`component`クラスから継承したメンバ変数やメソッドについては、以下の`component`クラスの解説ページを参照して下さい。そして、`generator_1axis`で新たに定義されたメンバ変数などに関しては、
-```matlab
+``` matlab
 >> help generator_1axis
 ```
 と実行すれば確認できます。
@@ -40,7 +40,7 @@ GUILDAを中心的な機能を担っているクラスは大きく分けて「�
 ## <div style="text-align: center;"><span style="font-size: 120%; color: black;">__IEEE68busモデルを例にした<br>power_networkクラスのデータ構造の解説__</span></div>
 GUILDAでは電力系統モデルを`power_network`というクラスの変数として定義する訳ですが、この章ではこの`power_network`クラスのプロパティの値を見て、どの様な電力系統モデルを実装しているのか想像できるようになることを目的としています。<br>
 __↓clickして解説ページへ__<br>
-[<div align="center"><img src="../../../Figures/net_workspace.jpg" width=80%; style="border: 7px pink solid;"></div>](./NetProperties.md)
+[<div align="center"><img src="../../Figures/net_workspace.jpg" width=80%; style="border: 7px pink solid;"></div>](./NetProperties.md)
 
 <br>
 <br>
@@ -50,7 +50,7 @@ __↓clickして解説ページへ__<br>
 GUILDA上で実装されているクラスをリストとして見たい場合、本ソースコード内の"+func"内に検索する用の関数が設置されていますので参考にしてみてください。  
 __実行例：__
 
-```matlab
+``` matlab
 %引数がない場合handleクラスを継承しているクラスの一覧を表示
 >> func.class_dictionary();
 
@@ -60,7 +60,7 @@ __実行例：__
 ```
 
 __引数なしの場合の実行結果例__
-```matlab
+``` matlab
 Search : "handle" class．．．
 
 handle class：

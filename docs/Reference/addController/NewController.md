@@ -21,7 +21,7 @@ GUILDA上に新しい制御器モデルを実装するには、`controller`ク�
 `properties`には制御器モデルの実装にあたり必要なメンバ変数を適宜定義して下さい。`methods`に定義する関数の要件に関しては、必ず実装しなくてはならない「抽象メソッド」と、「一部の解析を行う際に実装しておく必要がある関数」に分け以下で順に解説を行います。
 
 __myController.m__
-```matlab
+``` matlab
 classdef myController < controller
 %実装するモデルの説明
 %状態変数と入力端の説明

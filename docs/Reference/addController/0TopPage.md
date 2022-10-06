@@ -37,11 +37,11 @@ GUILDAでは制御機モデルをローカルコントローラとグローバ�
 この２つのコントローラはどちらもcontrollerクラスのオブジェクトとして定義されます。違いは、localコントローラは観測値としてglobalコントローラからの指令値を取得することが出来るという点です。コード上ではcontrollerクラスでは`get_dx_u`というメソッドを定義しますが、以下のように呼び出され方が異なります。
 
 - localコントローラの場合は
-     ```matlab
+     ``` matlab
      [dx, u] = get_dx_u(obj, t, x, X, V, I, u_global)
      ```
 - globalコントローラの場合は
-     ```matlab
+     ``` matlab
      [dx, u] = get_dx_u(obj, t, x, X, V, I, [])
      ```
 
@@ -50,11 +50,11 @@ GUILDAでは制御機モデルをローカルコントローラとグローバ�
 ## __【controllerクラスを電力系統に付加する】__
 付加するコントローラがlocalコントローラかglobalコントローラかによって、呼び出す関数が異なりますのでご注意ください。  
 まず、初めにローカルコントローラを`con`という名前のインスタンス変数に定義したとします。**(※controllerクラスの定義の仕方は、各関数の実装方法によりますので、使いたいコントローラクラスのdocを参照してください。)**このコントローラを系統に付加する方法は、
-```matlab
+``` matlab
 net.add_controller_local(con);
 ```
 となり、一方でグローバルコントローラを`con`というインスタンス変数として定義した場合、このコントローラを系統に付加する方法は、
-```matlab
+``` matlab
 net.add_controller_global(con);
 ```
 となります。すると、`power_network`クラスの`a_controller_~`のプロパティにcell配列が生成され付加した順番にコントローラクラスの変数が並びます。
@@ -63,11 +63,11 @@ net.add_controller_global(con);
 </div>
 以上でコントローラを電力系統に付加することができました。  
 また、これらのコントローラを取り除く際は以下の様にできます。
-```matlab
+``` matlab
 % a_controller_localのcell配列の内,1番目のコントローラを取り除きたい場合
 net.remove_controller_local(1);
 ```
-```matlab
+``` matlab
 % a_controller_globalのcell配列の内,3番目のコントローラを取り除きたい場合
 net.remove_controller_global(3);
 ```
@@ -76,7 +76,7 @@ net.remove_controller_global(3);
 ## __【実行例】__
 最後に系統に制御機を付加する際の一連の実行例を紹介したいと思います。  
 今回は`controller_broadcast_PI_AGC`というコントローラを例に行います。このコントローラはAGCのモデルを実装した制御器モデルですので、発電機の周波数偏差を観測し偏差を0にするよう各発電機に入力を与える制御器になります。このcontrollerクラスの使い方は、
-```matlab
+``` matlab
 con = controller_broadcast_PI_AGC_normal(net, y_idx, u_idx, Kp, Ki);
 ```
 となります。それぞれの引数は以下のようになります。
@@ -101,7 +101,7 @@ con = controller_broadcast_PI_AGC_normal(net, y_idx, u_idx, Kp, Ki);
 - `Kp = -10` `Ki = -500`  
     コントローラのPIゲイン．
 
-```matlab
+``` matlab
 net = network_IEEE68bus;
 con = controller_broadcast_PI_AGC_normal(net, 1:16, 1:16, -10, -500);
 net.add_controller_global(con);

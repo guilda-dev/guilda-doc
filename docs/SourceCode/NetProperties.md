@@ -6,7 +6,7 @@
 今回はIEEE68busモデルを定義したモデルを例に解説します。  
 以下のコマンドを実行すると下図の電力系統モデルが定義できるので、是非各々でも手元で動かして照らし合わせながら読み進めると分かりやすいと思います。ワークスペースから`net`をダブルクリックし、各プロパティの情報を見ることができます。
 
-```matlab
+``` matlab
 net = network_IEEE68bus;
 ```
 
@@ -72,7 +72,7 @@ PQ_bus_idx = find(bus_idx==2)
 slack_bus_idx = find(bus_idx==3)
 ```
 ### __・各母線の潮流設定を知りたい場合__
-```matlab
+``` matlab
 bus_num = numel(net.a_bus);
 bus_idx = cell(bus_num,1);
 Vabs  = nan(bus_num,1);
