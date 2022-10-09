@@ -317,7 +317,7 @@ hold off
 ---
 
 ## <div style="text-align: center;"><span style="font-size: 120%; color: black;">__【サンプルコード全文】__</span></div>
-```matlab
+``` matlab
 %電力系統のフレームワークを作成
 net = power_network;
 
