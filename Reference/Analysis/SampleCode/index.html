@@ -8,8 +8,8 @@
       
       
       
-      <link rel="shortcut icon" href="../../../Figures/modularsmall.png">
-      <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-6.0.1">
+      <link rel="icon" href="../../../Figures/modularsmall.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
     
     
       
@@ -17,26 +17,28 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.38780c08.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.472b142f.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f72e892.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.08040f6c.min.css">
         
           
           
           <meta name="theme-color" content="#02a6f2">
         
       
+      
+
     
     
     
       
         
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
-    
     
     
       <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansjp.css">
@@ -45,8 +47,11 @@
     
       <link rel="stylesheet" href="https://unpkg.com/mermaid@8.0.0/dist/mermaid.css">
     
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+
+    
     
     
   </head>
@@ -58,8 +63,9 @@
     
     
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
-      
   
+    
+    
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
@@ -75,53 +81,63 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="../../.." title="GUILDA Doc" class="md-header-nav__button md-logo" aria-label="GUILDA Doc">
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../../.." title="GUILDA Doc" class="md-header__button md-logo" aria-label="GUILDA Doc" data-md-component="logo">
       
   <img src="../../../Figures/modularsmall.png" alt="logo">
 
     </a>
-    <label class="md-header-nav__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
-    <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             GUILDA Doc
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               コード例
             
           </span>
         </div>
-      
+      </div>
     </div>
     
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            検索を初期化
           </div>
           <ol class="md-search-result__list"></ol>
         </div>
@@ -132,6 +148,7 @@
     
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
@@ -139,22 +156,25 @@
       
         
           
-
-  
-
-<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
       
         
   
   
+    
+  
+
+
+  
+  
+  
     <li class="md-tabs__item">
-      
-        <a href="../../.." class="md-tabs__link md-tabs__link--active">
-          Topページ
-        </a>
-      
+      <a href="../../.." class="md-tabs__link md-tabs__link--active">
+        Topページ
+      </a>
     </li>
   
 
@@ -162,18 +182,25 @@
     </ul>
   </div>
 </nav>
+          
         
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="GUILDA Doc" class="md-nav__button md-logo" aria-label="GUILDA Doc">
+    <a href="../../.." title="GUILDA Doc" class="md-nav__button md-logo" aria-label="GUILDA Doc" data-md-component="logo">
       
   <img src="../../../Figures/modularsmall.png" alt="logo">
 
@@ -188,267 +215,321 @@
       
 
   
-
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+  
+  
     
-    <label class="md-nav__link" for="nav-1">
-      Topページ
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Topページ" data-md-level="1">
-      <label class="md-nav__title" for="nav-1">
-        <span class="md-nav__icon md-icon"></span>
-        Topページ
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../.." title="" class="md-nav__link">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-    </a>
-  </li>
-
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Topページ
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Topページ" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Topページ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../aboutPowerSystem/0TopPage/" title="電力系統モデルについて" class="md-nav__link">
-      電力系統モデルについて
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SetEnvironment/0TopPage/" title="GUILDAの環境設定" class="md-nav__link">
-      GUILDAの環境設定
-    </a>
-  </li>
-
-        
-          
-          
-          
-
+      </a>
+    </li>
   
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4" type="checkbox" id="nav-1-4" checked>
-    
-    <label class="md-nav__link" for="nav-1-4">
-      リファレンス
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="リファレンス" data-md-level="2">
-      <label class="md-nav__title" for="nav-1-4">
-        <span class="md-nav__icon md-icon"></span>
-        リファレンス
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
+            
           
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../0TopPage/" title="" class="md-nav__link">
-      
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-2" type="checkbox" id="nav-1-4-2">
-    
-    <label class="md-nav__link" for="nav-1-4-2">
-      電力系統モデルの定義
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="電力系統モデルの定義" data-md-level="3">
-      <label class="md-nav__title" for="nav-1-4-2">
-        <span class="md-nav__icon md-icon"></span>
-        電力系統モデルの定義
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../defineNet/0TopPage/" title="" class="md-nav__link">
-      
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../defineNet/NewPowerNetwork/" title="新しい電力系統モデルの定義" class="md-nav__link">
-      新しい電力系統モデルの定義
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../defineNet/NewComponent/" title="新たな機器モデルの定義" class="md-nav__link">
-      新たな機器モデルの定義
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-3" type="checkbox" id="nav-1-4-3">
-    
-    <label class="md-nav__link" for="nav-1-4-3">
-      制御器の付加
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="制御器の付加" data-md-level="3">
-      <label class="md-nav__title" for="nav-1-4-3">
-        <span class="md-nav__icon md-icon"></span>
-        制御器の付加
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../addController/0TopPage/" title="" class="md-nav__link">
-      
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../addController/NewController/" title="新たな制御器モデルの実装" class="md-nav__link">
-      新たな制御器モデルの実装
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../aboutPowerSystem/0TopPage/" class="md-nav__link">
+        電力系統モデルについて
+      </a>
+    </li>
   
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-4-4" type="checkbox" id="nav-1-4-4" checked>
-    
-    <label class="md-nav__link" for="nav-1-4-4">
-      シミュレ−ションの実行
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="シミュレ−ションの実行" data-md-level="3">
-      <label class="md-nav__title" for="nav-1-4-4">
-        <span class="md-nav__icon md-icon"></span>
-        シミュレ−ションの実行
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
+            
           
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../net_simulate/" title="" class="md-nav__link">
-      
-    </a>
-  </li>
-
-        
-          
-          
-          
-
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SetEnvironment/0TopPage/" class="md-nav__link">
+        GUILDAの環境設定
+      </a>
+    </li>
   
 
-
-  <li class="md-nav__item md-nav__item--active">
+            
+          
+            
+              
+  
+  
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+  
+  
     
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4" type="checkbox" id="__nav_1_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4">
+          リファレンス
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="リファレンス" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          リファレンス
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../0TopPage/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4_2" type="checkbox" id="__nav_1_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4_2">
+          電力系統モデルの定義
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="電力系統モデルの定義" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          電力系統モデルの定義
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../defineNet/0TopPage/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../defineNet/NewPowerNetwork/" class="md-nav__link">
+        新しい電力系統モデルの定義
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../defineNet/NewComponent/" class="md-nav__link">
+        新たな機器モデルの定義
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
-      <label class="md-nav__link md-nav__link--active" for="__toc">
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4_3" type="checkbox" id="__nav_1_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4_3">
+          制御器の付加
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="制御器の付加" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          制御器の付加
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addController/0TopPage/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addController/NewController/" class="md-nav__link">
+        新たな制御器モデルの実装
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4_4" type="checkbox" id="__nav_1_4_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4_4">
+          シミュレ−ションの実行
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="シミュレ−ションの実行" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          シミュレ−ションの実行
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../net_simulate/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          コード例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         コード例
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-    
-    <a href="./" title="コード例" class="md-nav__link md-nav__link--active">
-      コード例
-    </a>
-    
+      </a>
       
+        
+
 <nav class="md-nav md-nav--secondary" aria-label="目次">
+  
   
   
     
@@ -458,7 +539,7 @@
       <span class="md-nav__icon md-icon"></span>
       目次
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
@@ -511,157 +592,189 @@
     </ul>
   
 </nav>
-    
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../net_getsys/" title="近似線形化モデルの導出" class="md-nav__link">
-      近似線形化モデルの導出
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SeriesAnalysis/0TopPage/" title="一連の解析実行例" class="md-nav__link">
-      一連の解析実行例
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-6" type="checkbox" id="nav-1-6">
-    
-    <label class="md-nav__link" for="nav-1-6">
-      ソースコードの解説
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="ソースコードの解説" data-md-level="2">
-      <label class="md-nav__title" for="nav-1-6">
-        <span class="md-nav__icon md-icon"></span>
-        ソースコードの解説
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/0TopPage/" title="" class="md-nav__link">
       
-    </a>
-  </li>
+    </li>
+  
 
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../net_getsys/" class="md-nav__link">
+        近似線形化モデルの導出
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SeriesAnalysis/0TopPage/" class="md-nav__link">
+        一連の解析実行例
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_6" type="checkbox" id="__nav_1_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_6">
+          ソースコードの解説
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="ソースコードの解説" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_6">
+          <span class="md-nav__icon md-icon"></span>
+          ソースコードの解説
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/0TopPage/" class="md-nav__link">
         
+      </a>
+    </li>
+  
+
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/power_network/" class="md-nav__link">
+        電力系統クラス
+      </a>
+    </li>
+  
+
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/bus/" class="md-nav__link">
+        母線のクラス
+      </a>
+    </li>
+  
+
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/component/" class="md-nav__link">
+        機器のクラス
+      </a>
+    </li>
+  
 
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/power_network/" title="電力系統クラス" class="md-nav__link">
-      電力系統クラス
-    </a>
-  </li>
-
-        
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/controller/" class="md-nav__link">
+        制御器のクラス
+      </a>
+    </li>
+  
+
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/branch/" class="md-nav__link">
+        送電網のクラス
+      </a>
+    </li>
+  
+
+            
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SourceCode/NetProperties/" class="md-nav__link">
+        netのパラメータの読み方
+      </a>
+    </li>
+  
 
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/bus/" title="母線のクラス" class="md-nav__link">
-      母線のクラス
-    </a>
-  </li>
-
-        
+            
           
+        </ul>
+      </nav>
+    </li>
+  
+
+            
           
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/component/" title="機器のクラス" class="md-nav__link">
-      機器のクラス
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/controller/" title="制御器のクラス" class="md-nav__link">
-      制御器のクラス
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/branch/" title="送電網のクラス" class="md-nav__link">
-      送電網のクラス
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../../SourceCode/NetProperties/" title="netのパラメータの読み方" class="md-nav__link">
-      netのパラメータの読み方
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
+        </ul>
+      </nav>
+    </li>
+  
 
     
   </ul>
@@ -671,11 +784,14 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="目次">
+  
   
   
     
@@ -685,7 +801,7 @@
       <span class="md-nav__icon md-icon"></span>
       目次
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
@@ -743,12 +859,14 @@
               </div>
             
           
-          <div class="md-content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-                
-                <h1 id="simulation">simulationサンプルコード<a class="headerlink" href="#simulation" title="Permanent link">&para;</a></h1>
+                  
+
+
+<h1 id="simulation">simulationサンプルコード<a class="headerlink" href="#simulation" title="Permanent link">&para;</a></h1>
 <h2 id="1">例1：初期値応答<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <ul>
 <li>解析内容<ul>
@@ -759,36 +877,36 @@
 </ul>
 </li>
 </ul>
-<p><code>matlab
-% ネットワークの定義
-net = network_IEEE68bus();
-% シミュレーションのためのオプションを定義・決定
-option          = struct();
-option.x0_sys   = net.x_equilibrium;
-option.x0_sys(16)= option.x0_sys(16) + 0.01;
-% シミュレーションの実行
-out = net.simulate([0 20], option);</code>
+<p><div class="highlight"><pre><span></span><code><span class="c">% ネットワークの定義</span><span class="w"></span>
+<span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="c">% シミュレーションのためのオプションを定義・決定</span><span class="w"></span>
+<span class="n">option</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="nb">struct</span><span class="p">();</span><span class="w"></span>
+<span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">x_equilibrium</span><span class="p">;</span><span class="w"></span>
+<span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="p">(</span><span class="mi">16</span><span class="p">)=</span><span class="w"> </span><span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
+<span class="c">% シミュレーションの実行</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">20</span><span class="p">],</span><span class="w"> </span><span class="n">option</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 同一の解析実行例
-<code>matlab
-net = network_IEEE68bus();
-x0    = net.x_equilibrium;
-x0(16)= x0(16) + 0.01;
-out = net.simulate([0 20],'x0_sys',x0);</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="n">x0</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">x_equilibrium</span><span class="p">;</span><span class="w"></span>
+<span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)=</span><span class="w"> </span><span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">20</span><span class="p">],</span><span class="s">&#39;x0_sys&#39;</span><span class="p">,</span><span class="n">x0</span><span class="p">);</span><span class="w"></span>
+</code></pre></div></p>
 <p>ちなみに、母線３に接続された機器の２番目の状態が、上のコードのように系統全体の状態の16番目に対応しているのは、系統全体の状態を母線番号順に機器の状態を繋げたベクトルとしておりIEEE68busモデルの場合、母線1と2に状態を7つ持つ機器が接続されているためです。しかし、系統内の何番目に状態を何個持つ機器が接続されているか把握するのは難しいでしょう。そういった場合は以下の様に各componentクラスの<code>get_nx</code>という関数を上手く使うと、より一般的な実装とすることが可能です。</p>
-<p>```matlab
-bus_idx   = 3; %3番目の母線
-state_idx = 2; %2番目の状態
-%母線1から母線(bus_idx-1)番目までの状態の個数を足し合わせる
-idx = 0;
-for i = 1:bus_idx-1
-    idx = idx+net.a_bus{i}.component.get_nx;
-end
-%状態の2番目のインデックスを知りたいため
-idx = idx+state_idx;
-%IEEE68busモデルの場合は、idx = 7+7+2= 16となります。</p>
-<p>option.x0_sys(idx)= option.x0sys(idx) + 0.1;
-            ：
-```</p>
+<div class="highlight"><pre><span></span><code><span class="n">bus_idx</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="c">%3番目の母線</span><span class="w"></span>
+<span class="n">state_idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c">%2番目の状態</span><span class="w"></span>
+<span class="c">%母線1から母線(bus_idx-1)番目までの状態の個数を足し合わせる</span><span class="w"></span>
+<span class="n">idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">bus_idx</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">idx</span><span class="o">+</span><span class="n">net</span><span class="p">.</span><span class="n">a_bus</span><span class="p">{</span><span class="nb">i</span><span class="p">}.</span><span class="n">component</span><span class="p">.</span><span class="n">get_nx</span><span class="p">;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="c">%状態の2番目のインデックスを知りたいため</span><span class="w"></span>
+<span class="n">idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">idx</span><span class="o">+</span><span class="n">state_idx</span><span class="p">;</span><span class="w"></span>
+<span class="c">%IEEE68busモデルの場合は、idx = 7+7+2= 16となります。</span><span class="w"></span>
+
+<span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="p">(</span><span class="n">idx</span><span class="p">)=</span><span class="w"> </span><span class="n">option</span><span class="p">.</span><span class="n">x0sys</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span>：<span class="w"></span>
+</code></pre></div>
 <hr />
 <hr />
 <p><br></p>
@@ -802,19 +920,19 @@ idx = idx+state_idx;
 </ul>
 </li>
 </ul>
-<p><code>matlab
-% ネットワークの定義
-net = network_IEEE68bus();
-% シミュレーションのためのオプションを定義・決定
-option = struct();
-option.fault = {{[0 0.07], 1}, {[15 15.05], 1}, {[10,10.01],[2,5:7]}};
-% シミュレーションの実行
-out = net.simulate([0 30], option);</code>
+<p><div class="highlight"><pre><span></span><code><span class="c">% ネットワークの定義</span><span class="w"></span>
+<span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="c">% シミュレーションのためのオプションを定義・決定</span><span class="w"></span>
+<span class="n">option</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">struct</span><span class="p">();</span><span class="w"></span>
+<span class="n">option</span><span class="p">.</span><span class="n">fault</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{{[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.07</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">15</span><span class="w"> </span><span class="mf">15.05</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.01</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]}};</span><span class="w"></span>
+<span class="c">% シミュレーションの実行</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">30</span><span class="p">],</span><span class="w"> </span><span class="n">option</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 同一の解析実行例
-<code>matlab
-net = network_IEEE68bus();
-out = net.simulate([0 30],...
-            'fault',{{[0 0.07], 1}, {[15 15.05], 1}, {[10,10.01],[2,5:7]}});</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">30</span><span class="p">],</span><span class="k">...</span><span class="w"></span>
+<span class="w">            </span><span class="s">&#39;fault&#39;</span><span class="p">,{{[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.07</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">15</span><span class="w"> </span><span class="mf">15.05</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.01</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]}});</span><span class="w"></span>
+</code></pre></div></p>
 <hr />
 <hr />
 <p><br></p>
@@ -828,58 +946,62 @@ out = net.simulate([0 30],...
 </ul>
 </li>
 </ul>
-<p><code>matlab
-% ネットワークの定義
-net = network_sample3bus();
-%条件設定
-time = [0,10,20,60];
-u_idx = 3;
-u = [0, 0.05, 0.1, 0.1;...
-     0,    0,   0,   0];
-%解析実行
-out = net.simulate(time,u, u_idx);</code></p>
+<div class="highlight"><pre><span></span><code><span class="c">% ネットワークの定義</span><span class="w"></span>
+<span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_sample3bus</span><span class="p">();</span><span class="w"></span>
+<span class="c">%条件設定</span><span class="w"></span>
+<span class="nb">time</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">];</span><span class="w"></span>
+<span class="n">u_idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="k">...</span><span class="w"></span>
+<span class="w">     </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<span class="c">%解析実行</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">(</span><span class="nb">time</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">u_idx</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 <hr />
 <hr />
 <p><br></p>
 <h2 id="4">例4：初期値・外乱・入出力応答（組み合わせ）<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <p>ここまでの設定を全て組み合わせて以下のような場合のシュミレーションを実行させます。「バス1の初期状態のみを平衡点から少しずらし，0<sub>0.07秒にバス1，10</sub>10.05秒にバス10の地絡を外乱として印加する状況で，バス1,10にランダムの入力を加えた時の応答」
-```matlab
-% ネットワークの定義
-net = network_IEEE68bus();</p>
-<p>% シミュレーションのためのオプションを定義・決定
-option          = struct();
-option.x0_sys   = net.x_equilibrium;
-option.x0_sys(16)= option.x0_sys(16) + 0.01;</p>
-<p>option.fault = {{[0 0.07], 1}, {[15 15.05], 1}, {[10,10.01],[2,5:7]}};</p>
-<p>%条件設定
-time = [0,10,20,60];
-u_idx = 20;
-u = [0, 0.05, 0.1, 0.1;...
-     0,    0,   0,   0];</p>
-<p>% シミュレーションの実行
-out = net.simulate(time, u, u_idx, option);
-<code>同一の解析実行例</code>matlab
-net = network_IEEE68bus();
-x0    = net.x_equilibrium;
-x0(16)= x0(16) + 0.01;
-out = net.simulate([0 20],u,u_idx,...
-                'x0_sys',x0,...
-                'fault',{{[0 0.07], 1}, {[15 15.05], 1}, {[10,10.01],[2,5:7]}});
-```</p>
+<div class="highlight"><pre><span></span><code><span class="c">% ネットワークの定義</span><span class="w"></span>
+<span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+
+<span class="c">% シミュレーションのためのオプションを定義・決定</span><span class="w"></span>
+<span class="n">option</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="nb">struct</span><span class="p">();</span><span class="w"></span>
+<span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">x_equilibrium</span><span class="p">;</span><span class="w"></span>
+<span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="p">(</span><span class="mi">16</span><span class="p">)=</span><span class="w"> </span><span class="n">option</span><span class="p">.</span><span class="n">x0_sys</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">option</span><span class="p">.</span><span class="n">fault</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{{[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.07</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">15</span><span class="w"> </span><span class="mf">15.05</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.01</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]}};</span><span class="w"></span>
+
+<span class="c">%条件設定</span><span class="w"></span>
+<span class="nb">time</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">];</span><span class="w"></span>
+<span class="n">u_idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="k">...</span><span class="w"></span>
+<span class="w">     </span><span class="mi">0</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+
+<span class="c">% シミュレーションの実行</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">(</span><span class="nb">time</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">u_idx</span><span class="p">,</span><span class="w"> </span><span class="n">option</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+同一の解析実行例
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="n">x0</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">x_equilibrium</span><span class="p">;</span><span class="w"></span>
+<span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)=</span><span class="w"> </span><span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">20</span><span class="p">],</span><span class="n">u</span><span class="p">,</span><span class="n">u_idx</span><span class="p">,</span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span><span class="s">&#39;x0_sys&#39;</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span><span class="s">&#39;fault&#39;</span><span class="p">,{{[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.07</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">15</span><span class="w"> </span><span class="mf">15.05</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.01</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]}});</span><span class="w"></span>
+</code></pre></div></p>
 <hr />
 <hr />
 <p><br></p>
 <h2 id="_1">シミュレーション結果を見る<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>今回解析対象とした、IEEE68busモデルの発電機母線は1〜16番目となっています。また、これらの発電機母線の発電機モデルは全て<code>generator_1axis</code>クラスのインスタンスとなっています。そのため例えば各発電機院周波数偏差が見たいとなった場合は、各機器の2番目の状態を見れば良いということになります。このような場合は簡単で、以下の様にプロットすれば良いです。</p>
-<p><code>matlab
-figure;
-hold on
-arrayfun(@(idx) plot(out.t,out.X{idx}(:,2)),1:16);
-xlabel('時刻(s)','FontSize',15); 
-ylabel('周波数偏差','FontSize',15);
-legend()
-title('各同期発電機の周波数偏差','FontSize',20)
-hold off</code>
+<p><div class="highlight"><pre><span></span><code><span class="nb">figure</span><span class="p">;</span><span class="w"></span>
+<span class="n">hold</span><span class="w"> </span><span class="s">on</span><span class="w"></span>
+<span class="nb">arrayfun</span><span class="p">(@(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="nb">plot</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">t</span><span class="p">,</span><span class="n">out</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="n">idx</span><span class="p">}(:,</span><span class="mi">2</span><span class="p">)),</span><span class="mi">1</span><span class="p">:</span><span class="mi">16</span><span class="p">);</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;時刻(s)&#39;</span><span class="p">,</span><span class="s">&#39;FontSize&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">);</span><span class="w"> </span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;周波数偏差&#39;</span><span class="p">,</span><span class="s">&#39;FontSize&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">);</span><span class="w"></span>
+<span class="nb">legend</span><span class="p">()</span><span class="w"></span>
+<span class="nb">title</span><span class="p">(</span><span class="s">&#39;各同期発電機の周波数偏差&#39;</span><span class="p">,</span><span class="s">&#39;FontSize&#39;</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span><span class="w"></span>
+<span class="nb">hold</span><span class="w"> </span><span class="n">off</span><span class="w"></span>
+</code></pre></div>
 しかし今回のモデルのように状態を持つ機器が１種類でない場合は、各機器の状態を考慮する必要があります。以下で説明する<code>simulationResult</code>クラスを用いたプロットでは内部のmethodで各機器の状態変数名を用いて自動で分類を行いプロットします。</p>
 <hr />
 <hr />
@@ -889,101 +1011,100 @@ hold off</code>
 <ul>
 <li>例４の実行例でsiimulationResultクラスの出力にする場合</li>
 </ul>
-<p><code>matlab
-net = network_IEEE68bus();
-x0    = net.x_equilibrium;
-x0(16)= x0(16) + 0.1;
-out = net.simulate([0 20],u,u_idx,...
-            'x0_sys',x0,...
-            'fault',{{[0 0.07], 1}, {[15 15.05], 1}, {[10,10.01],[2,5:7]}},...
-            'tools',true);</code>
+<p><div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">network_IEEE68bus</span><span class="p">();</span><span class="w"></span>
+<span class="n">x0</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">x_equilibrium</span><span class="p">;</span><span class="w"></span>
+<span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)=</span><span class="w"> </span><span class="n">x0</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+<span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">net</span><span class="p">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="mi">20</span><span class="p">],</span><span class="n">u</span><span class="p">,</span><span class="n">u_idx</span><span class="p">,</span><span class="k">...</span><span class="w"></span>
+<span class="w">            </span><span class="s">&#39;x0_sys&#39;</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="k">...</span><span class="w"></span>
+<span class="w">            </span><span class="s">&#39;fault&#39;</span><span class="p">,{{[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.07</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">15</span><span class="w"> </span><span class="mf">15.05</span><span class="p">],</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span><span class="w"> </span><span class="p">{[</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.01</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]}},</span><span class="k">...</span><span class="w"></span>
+<span class="w">            </span><span class="s">&#39;tools&#39;</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 と実行します。<br />
 プロットを行う際は、以下の様に実行します。
-<code>matlab
-out.UIplot</code>
+<div class="highlight"><pre><span></span><code><span class="n">out</span><span class="p">.</span><span class="n">UIplot</span><span class="w"></span>
+</code></pre></div>
 プロットの条件を行うUIが表示されるので、適当にチェックを入れて「plot」ボタンを押して頂くとプロットが表示されます。この際に「コマンド出力」のボックスにチェックを入れて頂くと、プロットを行うためのコマンドが表示されます。</p>
-                
-              
-              
-                
 
 
-              
-            </article>
-          </div>
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
+        
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="フッター" >
+      
         
-          <a href="../net_simulate/" title="" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <a href="../net_simulate/" class="md-footer__link md-footer__link--prev" aria-label="前: " rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                前
+              </span>
+              
             </div>
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  前
-                </span>
-                
-              </div>
-            </div>
-          </a>
+          </div>
+        </a>
+      
+      
         
-        
-          <a href="../net_getsys/" title="近似線形化モデルの導出" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  次
-                </span>
-                近似線形化モデルの導出
-              </div>
+        <a href="../net_getsys/" class="md-footer__link md-footer__link--next" aria-label="次: 近似線形化モデルの導出" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                次
+              </span>
+              近似線形化モデルの導出
             </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-          <div class="md-footer-copyright__highlight">
-            Copyright © 2020- Tokyo Tech, Ishizaki Lab.
-          </div>
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-      </div>
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2020- Tokyo Tech, Ishizaki Lab.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
     </div>
   </div>
 </footer>
       
     </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
     
-      <script src="../../../assets/javascripts/vendor.77e55a48.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e]+", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "Missing"}</script>
-      
-      <script>
-        app = initialize({
-          base: "../../..",
-          features: ['navigation.tabs', 'content.code.annotate'],
-          search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e]+", "search.placeholder": "\u691c\u7d22", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
       
