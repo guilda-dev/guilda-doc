@@ -47,16 +47,16 @@ __↓clickして解説ページへ__<br>
 ---
 
 ## <div style="text-align: center;"><span style="font-size: 120%; color: black;">__Tips:クラスの検索__ </span></div>  
-GUILDA上で実装されているクラスをリストとして見たい場合、本ソースコード内の"+func"内に検索する用の関数が設置されていますので参考にしてみてください。  
+GUILDA上で実装されているクラスをリストとして見たい場合、本ソースコード内の"+function"内に検索する用の関数が設置されていますので参考にしてみてください。  
 __実行例：__
 
 ``` matlab
 %引数がない場合handleクラスを継承しているクラスの一覧を表示
->> func.class_dictionary();
+>> function.class_dictionary();
 
 %特定のクラスのみ検索したい場合は引数にクラス名を指定します.
 %例：'component'クラスの場合
->> func.class_dictionary('component');
+>> function.class_dictionary('component');
 ```
 
 __引数なしの場合の実行結果例__
