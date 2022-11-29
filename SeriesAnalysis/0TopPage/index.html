@@ -1160,8 +1160,8 @@
 <li>PV母線の場合:<code>bus_i = bus_PV(P,Vabs,shunt);</code></li>
 <li>PQ母線の場合:<code>bus_i = bus_PQ(P,Q,shunt);</code></li>
 </ol>
-<p>各関数の引数については[電力系統モデルの作成ページ]](../Reference/defineNet/NewPowerNetwork.md)」を参照してください。それでは、実際に各母線の情報を定義していきます。</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">shunt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<p>各関数の引数については<a href="../../Reference/defineNet/NewPowerNetwork/">電力系統モデルの作成ページ</a>」を参照してください。それでは、実際に各母線の情報を定義していきます。</p>
+<div class="highlight"><pre><span></span><code><span class="n">shunt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
 <span class="c">%母線1の定義</span><span class="w"></span>
 <span class="n">bus_1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_slack</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">shunt</span><span class="p">);</span><span class="w"></span>
 <span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">bus_1</span><span class="p">);</span><span class="w"></span>
@@ -1172,7 +1172,7 @@
 <span class="n">bus_3</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_PQ</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">shunt</span><span class="p">);</span><span class="w"></span>
 <span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">bus_3</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-ここでの注意点は、<code>power_network</code>は母線番号を<code>add_bus</code>で定義された順番で管理している点です。母線を定義する際は母線番号の順番に代入していってください。</p>
+<p>ここでの注意点は、<code>power_network</code>は母線番号を<code>add_bus</code>で定義された順番で管理している点です。母線を定義する際は母線番号の順番に代入していってください。</p>
 <h3 id="component"><span style="color: Navy; "><strong>・componentクラスの定義</strong></span><a class="headerlink" href="#component" title="Permanent link">&para;</a></h3>
 <p><strong>情報の整理</strong><br>
 次に今回実装する3busモデルの各母線に付加する機器を決めます。今回のモデルでは母線1と母線2が発電機バス(slack母線とPV母線)、母線3が負荷母線(PQ母線)となっています。また、今回の実行例では、発電機母線に接続するのは同期発電機の1軸モデル、負荷母線に接続するのは定インピーダンスモデルの負荷とします。同期発電機の1軸モデルは下式のようになっています。<br />
@@ -1248,11 +1248,11 @@
 <span class="n">net</span><span class="p">.</span><span class="n">a_bus</span><span class="p">{</span><span class="mi">3</span><span class="p">}.</span><span class="n">set_component</span><span class="p">(</span><span class="n">comp3</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <p>ここでの注意点は、generator_1axisの引数のtable型変数の定義についてです。generator_1axisは引数で与えられたテーブル型の変数から、対応する列名の値を抽出していいるため、各パラメータの変数名はコード例と同じになるようにしてください。</p>
-<p><br><br><br>
+<p><br>
 以上で電力系統モデルの定義ができました。最後に</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">net</span><span class="p">.</span><span class="n">initialize</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
-と実行します。これは<code>power_network</code>クラス内に定義された<code>initialize</code>というmethodを実行しており、プロパティに代入されたパラメータをもとに潮流計算を行い、系統全体のシステムの平衡点を計算し、各値を新たなプロパティとして保存する関数です。これらの値はワークスペースから閲覧することができます。各パラメータの見方は、「<a href="../../SourceCode/NetProperties/">power_networkクラスのデータ構造</a>」のページを参考にしてください。</p>
+と実行します。これは<code>power_network</code>クラス内に定義された<code>initialize</code>というmethodを実行しており、プロパティに代入されたパラメータから潮流計算を行い、系統全体のシステムの平衡点を計算し、各値を新たなプロパティとして保存する関数です。これらの値はワークスペースから閲覧することができます。各パラメータの見方は、「<a href="../../SourceCode/NetProperties/">power_networkクラスのデータ構造</a>」のページを参考にしてください。</p>
 <hr />
 <hr />
 <h2 id="_4"><div style="text-align: center;"><span style="font-size: 120%; color: black;"><strong>【アドミタンス行列の導出】</strong></span></div><a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
@@ -1268,7 +1268,7 @@
 <span class="w">   </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w">     </span><span class="o">-</span><span class="mf">1.9422</span><span class="w"> </span><span class="o">+</span><span class="mi">10</span><span class="p">.</span>5107<span class="nb">i</span><span class="w"></span>
 <span class="w">   </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w">      </span><span class="mf">1.9422</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">.</span>5107<span class="nb">i</span><span class="w"></span>
 </code></pre></div>
-この様な出力が出てくると思います。この例だと分かりづらいですがアドミタンス行列は一般的に疎行列となり、このように行列内の非零の要素の(行,列)とその要素の値を並べた表として出力しています。<br />
+この様な出力が出てくると思います。アドミタンス行列は一般的に疎行列となり、このように行列内の非零の要素の(行,列)とその要素の値を並べた表として出力しています。<br />
 行列表示にしたい場合は以下のように実行します。</p>
 <p><div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nb">full</span><span class="p">(</span><span class="n">net</span><span class="p">.</span><span class="n">get_admittance_matrix</span><span class="p">)</span><span class="w"></span>
 <span class="nb">ans</span><span class="w"> </span><span class="p">=</span><span class="w"></span>

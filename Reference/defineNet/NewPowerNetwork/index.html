@@ -430,7 +430,7 @@
         
           <li class="md-nav__item">
   <a href="#branch" class="md-nav__link">
-    branchを定義する際のサンプルコード。
+    branchを定義する際のサンプルコード
   </a>
   
 </li>
@@ -505,6 +505,13 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    機器モデルを母線クラスへ付加
+  </a>
   
 </li>
         
@@ -888,7 +895,7 @@
         
           <li class="md-nav__item">
   <a href="#branch" class="md-nav__link">
-    branchを定義する際のサンプルコード。
+    branchを定義する際のサンプルコード
   </a>
   
 </li>
@@ -966,6 +973,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    機器モデルを母線クラスへ付加
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -989,13 +1003,13 @@
 <p><img src="../../../Figures/make_power_net.jpg" width=100%;></p>
 <hr />
 <p><strong><div style="text-align: center;"><span style="font-size: 150%; color: red;">【はじめに】</span></div></strong><br />
-電力系統モデル作成に関する解説は<a href="../../../SeriesAnalysis/0TopPage/"><strong>「一連の解析実行例」</strong> </a>でも行っています。そちらのページと本ページではどちらも3母線の電力系統モデルという同規模のモデルを作成していますが、こちらのページで解説する定義方法の方がやや上級者向けとなっています。</p>
+電力系統モデル作成に関する解説は<a href="../../../SeriesAnalysis/0TopPage/"><strong>「一連の解析実行例ページ」</strong> </a>でも行っています。そちらのページと本ページではどちらも3母線の電力系統モデルという同規模のモデルを作成していますが、こちらのページで解説する定義方法の方がやや上級者向けとなっています。</p>
 <ul>
 <li><strong>「一連の解析実行例」ページの構築方法</strong><br />
     各母線・機器・ブランチ毎に１つずつ定義を行い系統モデルを構築していく<br />
     ※GUILDAのソースコードにある<code>network_sample3bus</code>はこちらの方法で書かれています。</li>
 <li><strong>本ページの構築方法</strong><br />
-    各母線・機器・ブランチの情報をcsvファイルとしてまとめておき、そのデータからfor文による繰り返し処理によって自動的に系統モデルを構築していく<br />
+    各母線・機器・ブランチの情報をテーブルとしてまとめておき、そのデータからfor文による繰り返し処理によって自動的に系統モデルを構築していく<br />
     ※GUILDAのソースコードにある<code>network_IEEE68bus</code>はこちらの方法で書かれています。</li>
 </ul>
 <p>前者の場合、仮に何百もの母線で構成される系統モデルを構築する際、その分、大量の行数のコードを書く必要が出てきます。一方後者の場合、系統を構成する母線の数が増えようとcsvデータが大きくなるだけでコードを変化させる必要はないため、汎用性に優れていると言えます。<br />
@@ -1005,16 +1019,15 @@
 <hr />
 <h2 id="_2"><strong><div style="text-align: center;"><span style="font-size: 150%; color: black;">【解説】</span></div></strong><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h3 id="_3">ネットワークの定義<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<p>今回はネットワークの情報を<code>net</code>と名付けた変数に定義していきます。<br />
-まずはじめに以下のようにして電力系統クラスを定義します。全ての電力系統システムは<code>power_network</code>クラスを用いて実装されます。</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">power_network</span><span class="p">();</span><span class="w"> </span><span class="c">% 何も定義されていないネットワーク</span><span class="w"></span>
+<p>今回はネットワークの情報を<code>net</code>と名付けた変数に定義していきます。初めに以下のように電力系統クラスを定義します。電力系統モデルは<code>power_network</code>クラスを用いて実装されます。</p>
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">power_network</span><span class="p">();</span><span class="w"> </span><span class="c">% 何も定義されていないネットワーク</span><span class="w"></span>
 </code></pre></div>
-この動作はイメージでいうと、空のテンプレート表のようなものを変数<code>net</code>にあてはめており、これからこの表に機器の情報やブランチ・母線の情報を書き込んでいくための準備のようなプロセスです。</p>
+<p>これで、電力系統モデルのクラスの準備が出来ました。しかし、このままでは構成要素の無い系統モデルの状態です。以下では、ブランチモデル、母線モデル、機器モデルを順に定義し、このpower_networkクラスのクラス変数に格納していきます。</p>
 <hr />
 <h3 id="_4">ブランチの定義<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>母線をつなぐ送電網の情報は、<code>branch</code>というクラス変数に<code>table</code>型のデータで格納します。
-例えば3busだと以下のようなデータになります。</p>
-<p><div class="highlight"><pre><span></span><code><span class="w">  </span><span class="mi">9</span>×<span class="mi">7</span><span class="w"> </span><span class="nb">table</span><span class="w"></span>
+<p>母線をつなぐ送電網の情報を一度、<code>table</code>型のデータで格納します。
+例えば今回構成する3busモデルでは「母線1と母線2」と「母線2と母線3」を繋ぐ２本の送電網があるため、テーブルは以下のようになります。</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="mi">9</span>×<span class="mi">7</span><span class="w"> </span><span class="nb">table</span><span class="w"></span>
 
 <span class="w">    </span><span class="n">bus_from</span><span class="w">    </span><span class="n">bus_to</span><span class="w">    </span><span class="n">x_real</span><span class="w">    </span><span class="n">x_imag</span><span class="w">      </span><span class="n">y</span><span class="w">       </span><span class="n">tap</span><span class="w">    </span><span class="n">phase</span><span class="w"></span>
 <span class="w">    </span><span class="n">________</span><span class="w">    </span><span class="n">______</span><span class="w">    </span><span class="n">______</span><span class="w">    </span><span class="n">______</span><span class="w">    </span><span class="n">______</span><span class="w">    </span><span class="n">___</span><span class="w">    </span><span class="n">_____</span><span class="w"></span>
@@ -1022,7 +1035,6 @@
 <span class="w">       </span><span class="mi">1</span><span class="w">          </span><span class="mi">2</span><span class="w">            </span><span class="mi">0</span><span class="w">    </span><span class="mf">0.0576</span><span class="w">         </span><span class="mi">0</span><span class="w">     </span><span class="mi">1</span><span class="w">       </span><span class="mi">0</span><span class="w">  </span>
 <span class="w">       </span><span class="mi">3</span><span class="w">          </span><span class="mi">2</span><span class="w">            </span><span class="mi">0</span><span class="w">    </span><span class="mf">0.0625</span><span class="w">         </span><span class="mi">0</span><span class="w">     </span><span class="mi">1</span><span class="w">       </span><span class="mi">0</span><span class="w">  </span>
 </code></pre></div>
-どのような電力ネットワークを定義する際も<code>branch</code>が7列であることは不変ですが、行数は各バス間をつなぐブランチ(送電網)の本数によって変わります。</p>
 <ul>
 <li>bus_from
     接続元のバスの番号</li>
@@ -1036,8 +1048,8 @@
 <li>tap , phase
     位相調整変圧器のパラメータ</li>
 </ul>
-<h4 id="branch">branchを定義する際のサンプルコード。<a class="headerlink" href="#branch" title="Permanent link">&para;</a></h4>
-<p>この<code>branch</code>という変数はtable型になっており、さらに各列の変数名は上のコードのようにそれぞれ「<code>bus_from</code>,・・・,<code>phase</code>」となっていることが重要です。本シミュレーション内ではこの変数名をもとにデータの抽出を行っています。抽出する際ののコードは次を参考にしてください。</p>
+<h4 id="branch">branchを定義する際のサンプルコード<a class="headerlink" href="#branch" title="Permanent link">&para;</a></h4>
+<p>ではブランチの情報を定義したtable型のデータから、各行毎に順に値を取得し、先ほど定義したpower_networkクラス内のa_branchというクラス変数内に格納していきます。</p>
 <div class="highlight"><pre><span></span><code><span class="c">% データの数字のみを行列の形で代入</span><span class="w"></span>
 <span class="n">branch_array</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span>ここにデータを入れる<span class="p">];</span><span class="w"></span>
 <span class="c">% `branch_array`に変数名を追加して`table`型に</span><span class="w"></span>
@@ -1045,10 +1057,8 @@
 <span class="n">branch</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">array2table</span><span class="p">(</span><span class="n">branch_array</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;VariableNames&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
 <span class="w">    </span><span class="p">{</span><span class="s">&#39;bus_from&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;bus_to&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_real&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_imag&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;tap&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;phase&#39;</span><span class="p">}</span><span class="k">...</span><span class="w"></span>
 <span class="w">    </span><span class="p">);</span><span class="w"></span>
-</code></pre></div>
-<p>なお、<code>branch_array</code>とは<code>array</code>型のデータで変数名のない行列になります。</p>
-<p>以上のようにして作ったブランチの変数<code>branch</code>を電力網の変数に追加するためには、</p>
-<p><div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">size</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">size</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">branch</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;tap&#39;</span><span class="p">}</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
 <span class="w">        </span><span class="n">br</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">branch_pi</span><span class="p">(</span><span class="n">branch</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;bus_from&#39;</span><span class="p">},</span><span class="w"> </span><span class="n">branch</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;bus_to&#39;</span><span class="p">},</span><span class="k">...</span><span class="w"></span>
 <span class="w">            </span><span class="n">branch</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;x_real&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;x_imag&#39;</span><span class="p">}},</span><span class="w"> </span><span class="n">branch</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p">});</span><span class="w"></span>
@@ -1060,11 +1070,13 @@
 <span class="w">    </span><span class="n">net</span><span class="p">.</span><span class="n">add_branch</span><span class="p">(</span><span class="n">br</span><span class="p">);</span><span class="w"></span>
 <span class="k">end</span><span class="w"></span>
 </code></pre></div>
-と記述してください。
-ブランチの変数名と電力網の変数名をそれぞれ<code>branch</code>、<code>net</code>としているならばこのコードのままで動くはずです。</p>
+<p>上記のコードはpower_networkクラスを<code>net</code>という変数名で保存している場合のコードですので、<code>net3bus</code>などとしている場合は、それに合わせて、最後から２行目の部分を</p>
+<div class="highlight"><pre><span></span><code><span class="n">net3bus</span><span class="p">.</span><span class="n">ad_branch</span><span class="p">(</span><span class="n">br</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+<p>などと変更してください。</p>
 <hr />
 <h3 id="_5">母線の変数<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>一般的に母線に関係する変数として以下の6つのものがあります。<br />
+<p>母線のパラメータ変数として以下の6つのものが考えられます。<br />
 これについては、電力システムの構成要素に関する<a href="../../../aboutPowerSystem/0TopPage/">解説ページ</a>を参考にしてください。</p>
 <ul>
 <li>
@@ -1072,17 +1084,16 @@
 <li>
 <script type="math/tex">Q</script>: 無効電力</li>
 <li>
-<script type="math/tex">|V|</script>: 電圧</li>
+<script type="math/tex">|V|</script>: 電圧の絶対値</li>
 <li>
-<script type="math/tex">\delta</script>: 位相角</li>
+<script type="math/tex">\angle V</script>: 電圧の位相角</li>
 <li>
-<script type="math/tex">G_{\mathrm{shunt}}, B_{\mathrm{shunt}}</script>: 地面に繋がっているシャント抵抗のインピーダンス</li>
+<script type="math/tex">G_{\mathrm{shunt}}, B_{\mathrm{shunt}}</script>: 地面に繋がっているシャント抵抗のアドミタンス</li>
 </ul>
-<p>以下の３種の母線は<script type="math/tex">P,Q,V,\delta</script>のうち2つの変数とシャント抵抗の値を指定します．</p>
+<p>以下の３種の母線は<script type="math/tex">P,Q,V,\angle V</script>のうち2つの変数とシャント抵抗の値を指定します．</p>
 <h3 id="_6">母線の定義<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>母線の情報は<code>net</code>の<code>a_bus</code>というフィールドに格納されます。
-また、自分で母線を新たに定義するための関数が用意されています。
-母線の種類によって定義に用いる関数は異なり、以下の例のように定義してください。</p>
+母線のクラスには「PV母線、PQ母線、slack母線」の３種類があります。各母線の種類毎に、対応するクラスのインスタンスを定義し、<code>net</code>の<code>a_bus</code>フィールドにcell配列として格納していきます。</p>
 <div class="highlight"><pre><span></span><code><span class="c">% slack母線のとき</span><span class="w"></span>
 <span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_slack</span><span class="p">(</span>…<span class="p">)</span>；<span class="w"></span>
 
@@ -1092,20 +1103,7 @@
 <span class="c">% PQ母線のとき</span><span class="w"></span>
 <span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_PQ</span><span class="p">(</span>…<span class="p">);</span><span class="w"></span>
 </code></pre></div>
-<p>ここで、<code>b</code>は各母線を表すクラスであり、全ての母線に関して定義する必要があります。
-なお、母線を定義する際、<code>bus_slack,bus_PV,bus_PQ</code>の引数を<code>...</code>と省略していますが、実行する際はここにパラメータを代入する必要があります。<br />
-詳しい引数の説明はこの後の節で行います。
-また、母線に機器を繋げる時には、</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span>…<span class="p">);</span><span class="w"></span>
-</code></pre></div>
-という関数を用いてください。
-引数は、機器のクラスの変数が入ります。（詳しくは後述）</p>
-<p>さらに、既に定義した電力ネットワークを表す構造体の変数<code>net</code>に母線を追加するには、</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"></span>
-</code></pre></div>
-のように用意されている関数を用いてください。
-このとき、順番に母線を追加するように気をつけてください。</p>
-<p>それでは、以下にこの引数に必要なパラメータの設定について解説していきます。</p>
+<p>上記のコード例では、母線を定義する際、<code>bus_slack,bus_PV,bus_PQ</code>の引数を<code>...</code>と省略していますが、実行する際はここにパラメータを代入する必要があります。  </p>
 <h4 id="slack_bus">・slack bus<a class="headerlink" href="#slack_bus" title="Permanent link">&para;</a></h4>
 <p>電力ネットワーク内の発電機バスは基本全てPVバスに分類されますが、一つだけ電圧の位相を指定し基準として機能するような特殊なバスが存在します。それがslackバスです。<br />
 slackバスでは電圧の絶対値と位相角を指定します。そのため、slackバスの定義は以下のように<code>V_abs,V_angle</code>を引数としています。</p>
@@ -1154,61 +1152,19 @@ slackバスでは電圧の絶対値と位相角を指定します。そのため
 </ul>
 </li>
 </ul>
-<p>ここまでで、バスの各種類とそれぞれの定義方法をしめしたので、ここまでのまとめとして、バスを定義するコードをまとめておきます。<br />
-この例では、１つ目の母線はPVバス、２つ目の母線はPQバス、3つ目の母線はslackバスとして設定しています。
-<div class="highlight"><pre><span></span><code><span class="n">bus_array</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mf">1.00</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">0.60</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="mi">0</span><span class="w">   </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
-<span class="w">             </span><span class="n">2</span><span class="w"> </span><span class="s">1.00</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">5.45</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">1.0</span><span class="w"> </span><span class="s">1.0</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">3</span><span class="p">;</span><span class="w"></span>
-<span class="w">             </span><span class="n">3</span><span class="w"> </span><span class="s">1.00</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">1.00</span><span class="w"> </span><span class="s">2</span><span class="w"> </span><span class="s">0</span><span class="w">   </span><span class="s">0</span><span class="w">   </span><span class="s">0</span><span class="w"> </span><span class="s">0</span><span class="w"> </span><span class="s">1]</span><span class="p">;</span><span class="w"></span>
-
-<span class="n">bus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">array2table</span><span class="p">(</span><span class="n">bus_array</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;VariableNames&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="s">&#39;No&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_abs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_angle&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;P_gen&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Q_gen&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;P_load&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Q_load&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;G_shunt&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;B_shunt&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;type&#39;</span><span class="p">}</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
-<span class="w">    </span><span class="p">);</span><span class="w"></span>
-
-<span class="k">for</span><span class="w"> </span><span class="nb">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="nb">size</span><span class="p">(</span><span class="n">bus</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">shunt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;G_shunt&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;B_shunt&#39;</span><span class="p">}};</span><span class="w"></span>
-<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;type&#39;</span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">            </span><span class="n">V_abs</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_abs&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">V_angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_angle&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_slack</span><span class="p">(</span><span class="n">V_abs</span><span class="p">,</span><span class="w"> </span><span class="n">V_angle</span><span class="p">,</span><span class="w"> </span><span class="n">shunt</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="n">get_generator</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="n">machinery</span><span class="p">,</span><span class="w"> </span><span class="n">excitation</span><span class="p">,</span><span class="w"> </span><span class="n">pss_data</span><span class="p">,</span><span class="w"> </span><span class="n">omega0</span><span class="p">));</span><span class="w"></span>
-
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
-<span class="w">            </span><span class="n">V_abs</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;V_abs&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">P</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;P_gen&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_PV</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">V_abs</span><span class="p">,</span><span class="w"> </span><span class="n">shunt</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="n">get_generator</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="n">machinery</span><span class="p">,</span><span class="w"> </span><span class="n">excitation</span><span class="p">,</span><span class="w"> </span><span class="n">pss_data</span><span class="p">,</span><span class="w"> </span><span class="n">omega0</span><span class="p">));</span><span class="w"></span>
-
-<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
-<span class="w">            </span><span class="n">P</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;P_load&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">Q</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus</span><span class="p">{</span><span class="nb">i</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Q_load&#39;</span><span class="p">};</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">bus_PQ</span><span class="p">(</span><span class="o">-</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">shunt</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">P</span><span class="o">~=</span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">Q</span><span class="o">~=</span><span class="mi">0</span><span class="w"></span>
-<span class="w">                </span><span class="nb">load</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">load_impedance</span><span class="p">();</span><span class="w"></span>
-<span class="w">                </span><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="nb">load</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="k">end</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">end</span><span class="w"></span>
-<span class="w">    </span><span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
-</code></pre></div></p>
-<hr />
 <h3 id="_7">機器の定義<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>先述の通り、母線への機器接続は以下のように行います．</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="n">component</span><span class="p">);</span><span class="w"></span>
-</code></pre></div>
-以下の解説で機器を定義する関数の解説を行いますが、機器の定義の方法の流れとしては、</p>
+<p>上記で母線のクラスのインスタンスを作成することまで完了しました。母線クラスを定義した変数<code>b</code>をpower_networkのフィールドに格納する前に、各母線クラスに接続する機器モデルを<code>component</code>フィールドに格納します。</p>
+<p>機器の定義の方法の流れとしては、</p>
 <ol>
 <li>変数<code>component</code>を機器のクラスのインスタンスとする</li>
 <li>そのcomponent変数をそれぞれの母線を表すクラス変数<code>b</code>に<code>set_component</code>関数を用いて代入する
 といった流れです。  </li>
 </ol>
 <p>それでは各componentの定義を行っていきます。<br />
-componentの定義には以下のような関数があります。</p>
+componentの例として以下の２種類のクラスについて解説を行います。</p>
 <ul>
 <li>generator_1axis</li>
-<li>load_impedance
-<span style="color: red; ">他のcomponentの子クラスも載せるべき？</span></li>
+<li>load_impedance</li>
 </ul>
 <h4 id="_8"><u>発電機の定義</u><a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
 <p>発電機の定義には<code>generator_1axis</code>という関数を用います。この関数は同期発電機のモデルを各パラメータを引数として得ることで定義する関数です。
@@ -1275,13 +1231,40 @@ componentの定義には以下のような関数があります。</p>
 <p>負荷の定義には<code>load_impedance</code>という関数を用います。この関数は以下の様に定義します。</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">component</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">load_impedance</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
-コードを見て分かるように負荷を接続するときは、既に定義しているバスのパラメータを用いるため、新しく定義する必要のあるパラメータはありません。<br />
-したがって、つなげる母線の変数<code>b</code>に
-<div class="highlight"><pre><span></span><code><span class="nb">load</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">load_impedance</span><span class="p">();</span><span class="w"></span>
-<span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="nb">load</span><span class="p">);</span><span class="w"></span>
-</code></pre></div></p>
-<p>という様にして負荷を接続することができます。</p>
-<p>ここまで長々と説明してきましたが、一旦全てをまとめたコードをここに書いておきます。
+コードを見て分かるように負荷を接続するときは、既に定義しているバスのパラメータを用いるため、新しく定義する必要のあるパラメータはありません。  </p>
+<h3 id="_10">機器モデルを母線クラスへ付加<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>母線クラスの<code>set_component</code>というメソッドを用いることで機器モデルを格納します。本解説ページでは、</p>
+<ol>
+<li>母線クラスを変数<code>b</code>として定義</li>
+<li>機器モデルを定義した変数<code>component</code>を<code>b</code>に格納</li>
+<li><code>power_network</code>クラスに<code>b</code>を格納</li>
+</ol>
+<p>という手順を行なっています。この場合は、以下のようなコマンドを実行することになります。</p>
+<div class="highlight"><pre><span></span><code><span class="n">b</span><span class="p">.</span><span class="n">set_component</span><span class="p">(</span><span class="n">component</span><span class="p">);</span><span class="w"></span>
+<span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>一方で、</p>
+<ol>
+<li>母線クラスを変数<code>b</code>として定義</li>
+<li><code>power_network</code>クラスに<code>b</code>を格納</li>
+<li><code>power_network</code>クラスに格納された母線クラスに機器モデルを定義した変数<code>component</code>を格納</li>
+</ol>
+<p>とする場合は、以下のようになります。</p>
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="p">.</span><span class="n">add_bus</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"></span>
+<span class="n">net</span><span class="p">.</span><span class="n">a_bus</span><span class="p">{</span><span class="nb">i</span><span class="p">}.</span><span class="n">set_component</span><span class="p">(</span><span class="n">component</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>power_networkクラスのメソッド<code>add_bus</code>では指定された母線クラスを<code>a_bus</code>というフィールドに格納します。このとき、気をつけるべきポイントはフィールド<code>a_bus</code>には代入された順番に母線が定義されます。つまり最初に<code>net.add_bus(b)</code>された母線クラスが「母線1」という扱いになるわけです。上のコードの</p>
+<div class="highlight"><pre><span></span><code><span class="n">net</span><span class="p">.</span><span class="n">a_bus</span><span class="p">{</span><span class="nb">i</span><span class="p">}.</span><span class="n">set_component</span><span class="p">(</span><span class="n">component</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>での<code>i</code>に関しては、1行前に<code>add_bus</code>した母線がi番目に代入された母線であるということと対応します。そのため後者の手順だと、「今、代入した母線が何番目の母線か？」ということを調べる必要が出てきてしまいます。その点、前者では先に母線クラスに機器モデルを格納してから<code>power_network</code>クラスに格納しているため、その手間が必要ありません。</p>
+<p>ただ、例えば５番目の母線に付加されている機器モデルを定インピーダンス負荷に後から変更したくなったという場合は、</p>
+<div class="highlight"><pre><span></span><code><span class="n">component</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">load_impedance</span><span class="p">();</span><span class="w"></span>
+<span class="n">net</span><span class="p">.</span><span class="n">a_bus</span><span class="p">{</span><span class="mi">5</span><span class="p">}.</span><span class="n">set_component</span><span class="p">(</span><span class="n">component</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>と実行するのが有効的ですね。</p>
+<hr />
+<p>以上で電力系統の定義が完了しました。
+ここまでのコードを最後にまとめておきます。</p>
 <div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>net<span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">network_3bus_1axis</span><span class="p">()</span><span class="w"></span>
 
 <span class="n">omega0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">60</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="nb">pi</span><span class="p">;</span><span class="w"></span>
@@ -1374,10 +1357,10 @@ componentの定義には以下のような関数があります。</p>
 <span class="k">end</span><span class="w"></span>
 <span class="k">end</span><span class="w"></span>
 </code></pre></div>
-上のコードでは、３busの電力ネットワークを例にとって実装しています。<br />
-ただ、パラメータの値(bus_array等)を変えるだけで、任意のネットワーク形状や機器を実装することができます。</p>
+<p>今回は３母線の電力ネットワークを例として実装しています。ただ上のコードでは、パラメータを定義するテーブル(bus_array,branch_array,mac_array,...)を変えさえすれば、任意のネットワーク形状や機器を実装することができます。</p>
 <hr />
-<p>これで電力ネットワークの定義が一通り終わりました。ここで作成した変数<code>net</code>に対して<a href="../../Analysis/net_getsys/">状態方程式を求めたり</a>、<a href="../../Analysis/net_simulate/">数値シミュレーションを行う</a>ことができます。また、ここで作成した電力系統モデルに制御器を付加して解析を行いたい場合は次のパートの<a href="../../addController/0TopPage/">制御器設計編</a>を参考にして下さい。</p>
+<p>これで電力ネットワークの定義が一通り終わりました。
+作成した電力系統に対して<a href="../../Analysis/net_getsys/">状態方程式を求めたり</a>、<a href="../../Analysis/net_simulate/">数値シミュレーションを行う</a>などの解析を行うことができます。また、作成した電力系統モデルに制御器を付加して解析を行いたい場合は次のパートの<a href="../../addController/0TopPage/">制御器設計編</a>に進んでください。</p>
 
 
 
