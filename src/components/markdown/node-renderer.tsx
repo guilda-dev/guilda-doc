@@ -105,7 +105,7 @@ export class ReactRenderer implements RendererRecord {
     const grandparent = node.parent?.parent;
     if (grandparent && grandparent.type === 'list') {
       if (grandparent.listTight) {
-        return <></>;
+        return <>{ children }</>;
       }
     }
     return <p>{ children }</p>;
@@ -160,6 +160,7 @@ export const render = (root: Node) => {
   let event: NodeWalkerEvent | null = null;
   while ((event = walker.next())) {
     const { node, entering } = event;
+    // console.log(node.type, node.literal, entering, stack.length);
     const renderer = (renderers[node.type] ?? (() => <></>)).bind(renderers);
 
     if (isContainer(node)) {

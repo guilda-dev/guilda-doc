@@ -15,7 +15,7 @@ const TempApp = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch('md/index.md');
+      const res = await fetch('md/aboutPowerSystem/0TopPage.md');
       _s(await res.text());
     })().catch(console.error);
   }, []);

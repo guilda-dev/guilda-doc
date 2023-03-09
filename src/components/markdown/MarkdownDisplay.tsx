@@ -19,7 +19,7 @@ const MarkdownDisplay = (props: PropsWithChildren<MarkdownDisplayProps>) => {
     const parser = new commonmark.Parser({ smart: true });
     const ast = parser.parse(md);
     setAst(ast);
-  });
+  }, [md]);
 
   return (
     <div>
