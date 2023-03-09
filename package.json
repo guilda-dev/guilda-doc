@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "commonmark": "^0.30.0",
+    "html-react-parser": "^3.0.12",
     "i18next": "^22.4.11",
+    "mathjax-react": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.0",
     "react-router-dom": "^6.8.2",
-    "styled-components": "^5.3.8"
+    "styled-components": "^5.3.8",
+    "vite-plugin-static-copy": "^0.13.1"
   },
   "devDependencies": {
     "@types/commonmark": "^0.27.5",

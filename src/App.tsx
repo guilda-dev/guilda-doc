@@ -1,13 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
-import { ActiveLinkProvider } from './components/ActiveLink';
+import { ActiveLinkProvider } from '@/components/common/ActiveLink';
+import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
+
 
 const TempApp = () => {
   const [count, setCount] = useState(0);
+
+  const [s, _s] = useState<string>('');
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch('md/index.md');
+      _s(await res.text());
+    })().catch(console.error);
+  }, []);
+
   return <div className="App">
     <div>
       <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
@@ -26,9 +38,9 @@ const TempApp = () => {
           Edit <code>src/App.tsx</code> and save to test HMR
       </p>
     </div>
-    <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-    </p>
+    <MarkdownDisplay>
+      { s }
+    </MarkdownDisplay>
   </div>;
 };
 

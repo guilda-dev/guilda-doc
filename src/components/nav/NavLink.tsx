@@ -1,5 +1,5 @@
 import React from 'react';
-import { useActiveLinkContext } from '../ActiveLink';
+import { useActiveLinkContext } from '../common/ActiveLink';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
