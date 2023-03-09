@@ -12,6 +12,7 @@
     "commonmark": "^0.30.0",
     "html-react-parser": "^3.0.12",
     "i18next": "^22.4.11",
+    "js-yaml": "^4.1.0",
     "mathjax-react": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@types/commonmark": "^0.27.5",
+    "@types/js-yaml": "^4.0.5",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/styled-components": "^5.1.26",

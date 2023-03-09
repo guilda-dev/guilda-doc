@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
 import { ActiveLinkProvider } from '@/components/common/ActiveLink';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
+import NavTree from './components/nav/NavTree';
 
 
 const TempApp = () => {
@@ -56,6 +57,7 @@ const App = () => {
   return (
     <ActiveLinkProvider>
       <NavBar />
+      <NavTree />
       <RouterProvider router={router} />
     </ActiveLinkProvider>
   );
