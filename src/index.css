@@ -14,6 +14,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+code {
+  white-space: pre-line;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
 import { ActiveLinkProvider } from '@/components/common/ActiveLink';
-import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import NavTree from './components/nav/NavTree';
 import DocumentReader from './pages/DocumentReader';
 
