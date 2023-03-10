@@ -7,19 +7,11 @@ import NavBar from '@/components/nav/NavBar';
 import { ActiveLinkProvider } from '@/components/common/ActiveLink';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import NavTree from './components/nav/NavTree';
+import DocumentReader from './pages/DocumentReader';
 
 
 const TempApp = () => {
   const [count, setCount] = useState(0);
-
-  const [s, _s] = useState<string>('');
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch('md/aboutPowerSystem/0TopPage.md');
-      _s(await res.text());
-    })().catch(console.error);
-  }, []);
 
   return <div className="App">
     <div>
@@ -39,16 +31,17 @@ const TempApp = () => {
           Edit <code>src/App.tsx</code> and save to test HMR
       </p>
     </div>
-    <MarkdownDisplay>
-      { s }
-    </MarkdownDisplay>
   </div>;
 };
 
 const router = createBrowserRouter([
   {
     path: '/', 
-    element: <TempApp />
+    element: <TempApp />,
+  },
+  {
+    path: '/*',
+    element: <DocumentReader />,
   }
 ]);
 

@@ -128,8 +128,8 @@ export class ReactRenderer implements RendererRecord {
   }
 
   heading({ node, children }: P) { 
-    const CustomTag = `h${node.level}` as keyof JSX.IntrinsicElements;
-    return <CustomTag>{ children }</CustomTag>;
+    const HeadingTag = `h${node.level}` as keyof JSX.IntrinsicElements;
+    return <HeadingTag>{ children }</HeadingTag>;
   }
 
   thematic_break() {
@@ -160,14 +160,14 @@ export const render = (root: Node) => {
   let event: NodeWalkerEvent | null = null;
   while ((event = walker.next())) {
     const { node, entering } = event;
-    // console.log(node.type, node.literal, entering, stack.length);
+    console.log(node.type, node.literal, entering, stack.length);
     const renderer = (renderers[node.type] ?? (() => <></>)).bind(renderers);
 
     if (isContainer(node)) {
       if (entering)
         stack.push([]);
       else {
-        const children = stack.pop() as React.ReactNode[];
+        const children = React.Children.map(stack.pop(), (n, i) => (<React.Fragment key={`node_${i}`}>{ n }</React.Fragment>));
         stack[stack.length - 1].push(renderer({
           node: node, 
           children: children
