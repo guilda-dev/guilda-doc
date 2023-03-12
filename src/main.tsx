@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import App from './App';
+import './constants.css';
 import './index.css';
 import langEn from '@/assets/lang/en.json';
 
@@ -20,7 +21,7 @@ i18n
     }
   });
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.body as HTMLElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

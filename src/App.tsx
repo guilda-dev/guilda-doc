@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 import React from 'react';
@@ -8,9 +8,15 @@ import { ActiveLinkProvider } from '@/components/common/ActiveLink';
 import NavTree from './components/nav/NavTree';
 import DocumentReader from './pages/DocumentReader';
 
+import styled from 'styled-components';
+import { GlobalStyleProvider, useGlobalStyle } from './components/common/GlobalStyle';
+import PageFooter from './components/nav/PageFooter';
+
+
 
 const TempApp = () => {
   const [count, setCount] = useState(0);
+  const { darkMode, setStyle } = useGlobalStyle();
 
   return <div className="App">
     <div>
@@ -23,11 +29,14 @@ const TempApp = () => {
     </div>
     <h1>Vite + React</h1>
     <div className="card">
-      <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <button onClick={() => {
+        setCount((count) => count + 1);
+        setStyle({ darkMode: !darkMode });
+      }}>
+        count is {count}
       </button>
       <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+        Edit <code>src/App.tsx</code> and save to test HMR
       </p>
     </div>
   </div>;
@@ -35,7 +44,7 @@ const TempApp = () => {
 
 const router = createBrowserRouter([
   {
-    path: '/', 
+    path: '/',
     element: <TempApp />,
   },
   {
@@ -44,15 +53,46 @@ const router = createBrowserRouter([
   }
 ]);
 
-const App = () => {
 
+const AppContext = (props: PropsWithChildren<object>) => {
   return (
     <ActiveLinkProvider>
-      <NavBar />
-      <NavTree />
-      <RouterProvider router={router} />
+      <GlobalStyleProvider>
+        {props.children}
+      </GlobalStyleProvider>
     </ActiveLinkProvider>
   );
+};
+
+
+const MainContainer = styled.div`
+  width: 100vw;
+  padding-top: var(--navbar-height);
+  min-height: var(--page-content-min-height);
+  background-color: var(--color-bg1);
+  color: var(--color-txt1);
+`;
+
+const StateMaintainer = (props: PropsWithChildren<object>) => {
+  const { darkMode } = useGlobalStyle();
+  return <MainContainer className={(darkMode ? 'dark-mode' : '')}>
+    { props.children }
+  </MainContainer>;
+};
+
+
+const App = () => {
+  const { darkMode } = useGlobalStyle();
+
+  return <AppContext>
+    <NavBar />
+    <StateMaintainer>
+
+      <NavTree />
+      <RouterProvider router={router} />
+    </StateMaintainer>
+    <PageFooter />
+  </AppContext>;
 };
 
 export default App;

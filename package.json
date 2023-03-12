@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "commonmark": "github:BillStark001/commonmark",
+    "commonmark": "file:../commonmark",
     "html-react-parser": "^3.0.12",
     "i18next": "^22.4.11",
     "js-yaml": "^4.1.0",

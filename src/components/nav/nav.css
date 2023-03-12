@@ -1,0 +1,24 @@
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+nav li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+nav a {
+  color: #fff;
+  display: block;
+  line-height: 60px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #555;
+}

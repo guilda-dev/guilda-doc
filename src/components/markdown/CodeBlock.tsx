@@ -16,9 +16,9 @@ export type CodeSpanProps = {
 
 export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
   const code = filterStringChildren(props.children);
-  return <_codeSpan>
+  return <pre><_codeSpan>
     { code }
-  </_codeSpan>;
+  </_codeSpan></pre>;
 };
 
 export const CodeBlock = (props: PropsWithChildren<CodeSpanProps>) => {

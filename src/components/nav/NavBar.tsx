@@ -1,10 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { useGlobalStyle } from '../common/GlobalStyle';
+
+const NavBase = styled.nav`
+  background-color: var(--navbar-background-color);
+  height: var(--navbar-height);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+`;
+
+const NavContainer = styled.div`
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  max-width: var(--navbar-max-width);
+  align-items: left;
+`;
+
+import './nav.css';
+
 
 
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState('');
+  const { darkMode } = useGlobalStyle();
+
   const { t } = useTranslation();
   const links = [
     { name: 'Home', url: '/' },
@@ -20,18 +44,19 @@ const NavBar = () => {
   }, [links]);
 
   return (
-    <nav>
-      <div className="logo">{ t('test.test') }</div>
-      <ul>
-        {links.map(link => (
-          <li key={link.url} className={link.name === activeLink ? 'active' : ''}>
-            <a href={link.url} onClick={() => setActiveLink(link.name)}>
-              {link.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <NavBase className={darkMode ? 'dark-mode' : ''}>
+      <NavContainer>
+        <ul>
+          {links.map(link => (
+            <li key={link.url} className={link.name === activeLink ? 'active' : ''}>
+              <a href={link.url} onClick={() => setActiveLink(link.name)}>
+                {link.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </NavContainer>
+    </NavBase>
   );
 };
 
