@@ -57,7 +57,7 @@ const NavTreeItem = (props: NavTreeItemProps) => {
     <li className={c}>
       { hasChildren ? 
         <>
-          {label}
+          { label } { expanded }
           <ul className="list-root">
             {children?.map((node) =>
               <NavTreeItem
@@ -82,6 +82,7 @@ const NavTree = (props: NavTreeProps) => {
       {navTree.children?.map((node) =>
         <NavTreeItem
           key={node.name}
+          expanded={true}
           {...node}
           parseName={props.parseName}
           parseLink={props.parseLink}
