@@ -16,15 +16,15 @@ export type CodeSpanProps = {
 
 export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
   const code = filterStringChildren(props.children);
-  return <pre><_codeSpan>
+  return <_codeSpan>
     { code }
-  </_codeSpan></pre>;
+  </_codeSpan>;
 };
 
 export const CodeBlock = (props: PropsWithChildren<CodeSpanProps>) => {
-  return <_codeBlock>
+  return <pre><_codeBlock>
     <CodeSpan>
       { props.children }
     </CodeSpan>
-  </_codeBlock>;
+  </_codeBlock></pre>;
 };

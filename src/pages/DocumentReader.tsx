@@ -3,6 +3,7 @@ import NavTree from '@/components/nav/NavTree';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
+import { LeftSideFrame } from '@/components/page/PageFrame';
 
 const DOC_PREFIX = '/md';
 const DOC_SUFFIX = '.md';
@@ -46,7 +47,9 @@ const DocumentReader = () => {
       });
   }, [id]);
   return <>
-    <NavTree />
+    <LeftSideFrame>
+      <NavTree />
+    </LeftSideFrame>
     { resource === undefined && <div>loading...</div> }
     { typeof resource === 'string' && <MarkdownDisplay>{ resource }</MarkdownDisplay> }
     { resource instanceof Error && <ErrorPage error={resource} /> }
