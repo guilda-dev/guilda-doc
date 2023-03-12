@@ -6,7 +6,7 @@ const _codeSpan = styled.code`
   
 `;
 
-const _codeBlock = styled.div`
+const _codeBlock = styled.p`
   
 `;
 
@@ -22,9 +22,9 @@ export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
 };
 
 export const CodeBlock = (props: PropsWithChildren<CodeSpanProps>) => {
-  return <pre><_codeBlock>
+  return <_codeBlock><pre>
     <CodeSpan>
       { props.children }
-    </CodeSpan>
-  </_codeBlock></pre>;
+    </CodeSpan></pre>
+  </_codeBlock>;
 };

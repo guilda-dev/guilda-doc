@@ -10,7 +10,7 @@ import DocumentReader from './pages/DocumentReader';
 
 import styled from 'styled-components';
 import { GlobalStyleProvider, useGlobalStyle } from './components/common/GlobalStyle';
-import PageFooter from './components/nav/PageFooter';
+import PageFooter from './components/page/PageFooter';
 import { LeftSideFrame, PageFrame } from './components/page/PageFrame';
 
 
@@ -90,17 +90,6 @@ const TempApp = () => {
     </div></>;
 };
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <TempApp />,
-  },
-  {
-    path: '/*',
-    element: <DocumentReader />,
-  }
-]);
-
 
 const AppContext = (props: PropsWithChildren<object>) => {
   return (
@@ -137,6 +126,17 @@ const StateMaintainer = (props: PropsWithChildren<object>) => {
   </MainContainer>;
 };
 
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <TempApp />,
+  },
+  {
+    path: '/*',
+    element: <DocumentReader />,
+  }
+]);
 
 const App = () => {
   const { darkMode } = useGlobalStyle();

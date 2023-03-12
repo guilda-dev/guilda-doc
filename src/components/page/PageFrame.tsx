@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -21,28 +21,38 @@ export const PageFrame = (props: PropsWithChildren<object>) => {
   return <>
     <SideFrame id='left-sidebar' />
     <MainFrame id='main-page'>
-      { props.children }
+      {props.children}
     </MainFrame>
     <SideFrame id='right-sidebar' />
   </>;
 };
 
 export const LeftSideFrame = (props: PropsWithChildren<object>) => {
-  const leftSide = document.getElementById('left-sidebar');
-  if (leftSide !== null)
+  const [target, setTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setTarget(document.getElementById('left-sidebar'));
+    return () => setTarget(null);
+  });
+  if (target !== null)
     return ReactDOM.createPortal(
-      props.children, 
-      leftSide
+      props.children,
+      target
     );
   return <>ERROR: PORTAL TARGET UNDEFINED</>;
 };
 
 export const RightSideFrame = (props: PropsWithChildren<object>) => {
-  const leftSide = document.getElementById('right-sidebar');
-  if (leftSide !== null)
+  const [target, setTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setTarget(document.getElementById('right-sidebar'));
+    return () => setTarget(null);
+  });
+  if (target !== null)
     return ReactDOM.createPortal(
-      props.children, 
-      leftSide
+      props.children,
+      target
     );
   return <>ERROR: PORTAL TARGET UNDEFINED</>;
 };
+
+export default PageFrame;

@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yaml from 'js-yaml';
 
-export type StringTree = {
-  [key: string]: string | StringTree[];
+export type NavTreeItemProps = NavNode & NavTreeProps & {
+  state?: 'active' | 'inactive' | 'default';
+  expanded?: boolean;
 };
 
+export type NavTreeProps = {
+  parseName?: (raw: string) => string;
+  parseLink?: (raw: string) => string;
+  shouldExpand?: (node: NavNode) => boolean;
+  expandClass?: string
+};
+
+export const DEFAULT_EXPAND_CLASS = 'expanded';
 
 import nav from '~/nav.yml?raw';
 import { useTranslation } from 'react-i18next';
-const navTree = yaml.load(nav);
+import { compileNavRecordMap, NavNode, NavRecordMap } from '@/config/nav';
+const navTreeRaw = yaml.load(nav) as NavRecordMap;
+const navTree = compileNavRecordMap(navTreeRaw);
+console.log(navTreeRaw);
 console.log(navTree);
-
-const iterateOver = (tree: StringTree[]): [string, string | StringTree[]][] => {
-  return tree.map(x => [Object.keys(x)[0], x[Object.keys(x)[0]]]);
-};
 
 const parseMarkdownLink = (str: string) => {
   if (str.endsWith('.md'))
@@ -23,42 +31,64 @@ const parseMarkdownLink = (str: string) => {
   return str;
 };
 
-const NavTreeItem = (props: { name: string, tree: string | StringTree[], selected?: boolean }) => {
-  const { name, tree, selected } = props;
-  const treeIsString = typeof tree === 'string';
-  const { t } = useTranslation();
+const NavTreeItem = (props: NavTreeItemProps) => {
+  const { children, name, href, state, expanded } = props;
+  // monitor class modification
+  const [c, _c] = useState<string | undefined>();
+  useEffect(() => {
+    const classArr = (state ?? '').split('');
+    if (expanded)
+      classArr.push(props.expandClass ?? DEFAULT_EXPAND_CLASS);
+    const cl = classArr.filter(x => x !== '').join(' ');
+    _c(cl !== '' ? cl : undefined);
+  }, [state, expanded]);
 
-  const treeIter = treeIsString ? undefined : iterateOver(tree);
-  const link = treeIter?.filter(x => x[0] === '')[0] as [string, string] ?? ['', ''];
-  const treeRemain = treeIter?.filter(x => x[0] !== '');
+  const nameDisp = props.parseName?.(name) ?? name;
+  const hasChildren = children !== undefined && children.length !== 0;
+
+  const label = <>
+    {href !== undefined && <a href={props.parseLink?.(href) ?? href}>
+      <span className='nav-tag'>{nameDisp}</span>
+    </a>}
+    {href === undefined && <span className='nav-tag'>{nameDisp}</span>}
+  </>;
 
   return <>
-    <li className="list-item">
-      <details className={treeIsString ? 'unmarked' : ''} open={selected}>
-        { treeIsString ?
-          <summary>
-            <a href={parseMarkdownLink(tree)}>
-              { t(name ?? '') }
-            </a>
-          </summary> : <>
-            <a href={parseMarkdownLink(link[1])}>{ t(name ?? '') }</a>
-            <ul className="list-root">
-              { treeRemain?.map(([name, tree]) => <NavTreeItem key={name} name={name} tree={tree} />) }
-            </ul>
-          </>
-          
-        }
-      </details>
-    
+    <li className={c}>
+      { hasChildren ? 
+        <>
+          {label}
+          <ul className="list-root">
+            {children?.map((node) =>
+              <NavTreeItem
+                key={node.name}
+                {...node}
+                parseName={props.parseName}
+                parseLink={props.parseLink}
+                expandClass={props.expandClass}
+                shouldExpand={props.shouldExpand}
+              />)}
+          </ul>
+        </> : label
+      }
     </li>
   </>;
 };
 
-const NavTree = () => {
+
+const NavTree = (props: NavTreeProps) => {
   return <>
-    <ul id="navlist">
-      { iterateOver([navTree as StringTree]).map(([name, tree]) => <NavTreeItem key={name} name={name} tree={tree} />) }
-    </ul>    
+    <ul id="navlist" className="list-root">
+      {navTree.children?.map((node) =>
+        <NavTreeItem
+          key={node.name}
+          {...node}
+          parseName={props.parseName}
+          parseLink={props.parseLink}
+          expandClass={props.expandClass}
+          shouldExpand={props.shouldExpand}
+        />)}
+    </ul>
   </>;
 };
 
