@@ -1,10 +1,11 @@
-import { HtmlRenderingOptions, Node } from 'commonmark';
+import { HtmlRenderingOptions, Node, NodeWalker, NodeWalkerEvent } from 'commonmark';
 import React from 'react';
 import { CodeBlock, CodeSpan } from './CodeBlock';
-import { RendererRecord } from './common';
-import MathBlock from './MathBlock';
-import { isContainer, NodeWalker, NodeWalkerEvent } from './node-walker';
+import { RendererRecord, RenderFunction } from './common';
+import MathBlock, { MathSpan } from './MathBlock';
 import parse from 'html-react-parser';
+import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
+import { TableCellContent } from './base/table';
 
 const reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
 const reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
@@ -16,7 +17,7 @@ const potentiallyUnsafe = (url?: string | null) => {
 };
 
 type P = React.PropsWithChildren<{
-  node: Node;
+  node: Node<ExtendedNodeType>;
 }>;
 
 export class ReactRenderer implements RendererRecord {
@@ -121,7 +122,7 @@ export class ReactRenderer implements RendererRecord {
 
   list({ node, children }: P) {
     const start = node.listStart;
-    const _start = (start !== null && start !== 1) ? start : undefined;
+    const _start = (start !== undefined && start !== 1) ? start : undefined;
     return node.listType === 'bullet' ? 
       (<ul>{ children }</ul>) : 
       (<ol start={_start}>{ children }</ol>);
@@ -141,29 +142,50 @@ export class ReactRenderer implements RendererRecord {
     return children; 
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  custom_inline({ node, children }: P) { 
-    return <></>;
+  math_block({ node }: P) { 
+    return <MathBlock>{ node.literal }</MathBlock>;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  custom_block({ node, children }: P) { 
-    return <></>;
+  math_inline({ node }: P) { 
+    return <MathSpan>{ node.literal }</MathSpan>;
+  }
+
+  table({ children }: P) {
+    return <table>
+      { React.Children.toArray(children)[0] }
+      <tbody>
+        { React.Children.toArray(children).slice(1) }
+      </tbody>
+    </table>;
+  }
+
+  table_head({ children }: P) {
+    return <thead><tr>{ children }</tr></thead>;
+  }
+
+  table_row({ children }: P) {
+    return <tr>{ children }</tr>;
+  }
+
+  table_cell({ node, children }: P) {
+    const content = (node.customData as TableCellContent);
+    const CellTag = (content.isHeader ? 'th' : 'td') as keyof JSX.IntrinsicElements;
+    return <CellTag align={content.align}>{ children }</CellTag>;
   }
 
 }
 
-export const render = (root: Node) => {
+export const render = (root: Node<ExtendedNodeType>) => {
   const stack: React.ReactNode[][] = [[]];
   const walker = new NodeWalker(root);
   const renderers = new ReactRenderer();
-  let event: NodeWalkerEvent | null = null;
+  let event: NodeWalkerEvent<ExtendedNodeType> | undefined = undefined;
   while ((event = walker.next())) {
     const { node, entering } = event;
-    console.log(node.type, node.literal, entering, stack.length);
-    const renderer = (renderers[node.type] ?? (() => <></>)).bind(renderers);
+    const func = (renderers[node.type] ?? (() => <></>)) as RenderFunction;
+    const renderer = func.bind(renderers);
 
-    if (isContainer(node)) {
+    if (ExtendedNodeDefinition.isContainer(node)) {
       if (entering)
         stack.push([]);
       else {

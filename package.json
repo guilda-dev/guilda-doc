@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "commonmark": "^0.30.0",
+    "commonmark": "github:BillStark001/commonmark",
     "html-react-parser": "^3.0.12",
     "i18next": "^22.4.11",
     "js-yaml": "^4.1.0",
@@ -22,7 +22,6 @@
     "vite-plugin-static-copy": "^0.13.1"
   },
   "devDependencies": {
-    "@types/commonmark": "^0.27.5",
     "@types/js-yaml": "^4.0.5",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
