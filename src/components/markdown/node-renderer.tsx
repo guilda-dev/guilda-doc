@@ -141,7 +141,12 @@ export class ReactRenderer implements RendererRecord {
 
   heading({ node, children }: P) { 
     const HeadingTag = `h${node.level}` as keyof JSX.IntrinsicElements;
-    return <HeadingTag>{ children }</HeadingTag>;
+    const shouldAlignCenter = this.context.macroStore.check(HeadingTag, 'align-center') !== undefined;
+    return <HeadingTag style={
+      shouldAlignCenter ? 
+        { textAlign: 'center' } : 
+        undefined
+    }>{ children }</HeadingTag>;
   }
 
   thematic_break() {

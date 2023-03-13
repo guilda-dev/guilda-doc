@@ -1,7 +1,7 @@
 
 
 const reHtmlComment = /<!--([\s\S]*?)-->/g;
-const reMacroFormat = /(?:([\w-]+)\s*:\s*)?([\w-]+)(?:\$(?:set|restore|one[-_]time|next[-_]line))?/g;
+const reMacroFormat = /(?:([\w-]+)\s*:\s*)?([\w-]+)(?:\$(set|restore|one[-_]time|next[-_]line))?/g;
 
 export const parseMacro = (str: string) => {
   const ans: [number, MacroRecord][] = [];
@@ -15,7 +15,7 @@ export const parseMacro = (str: string) => {
     while ((matchInner = reMacroFormat.exec(rawMacro))) {
       const key = matchInner[1] ?? '';
       const val = matchInner[2];
-      const opr = (matchInner[3].replace(/_/g, '-')) as MacroSuffix ?? 'one-time';
+      const opr = (matchInner[3]?.replace(/_/g, '-')) as MacroSuffix ?? 'one-time';
       (kwMacro[key] = kwMacro[key] ?? []).push([val, opr]);
     }
     ans.push([match.index, kwMacro]);
