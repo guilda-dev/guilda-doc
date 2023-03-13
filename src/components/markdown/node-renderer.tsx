@@ -239,7 +239,7 @@ const handleHtmlElementLink = (elem: JSX.Element, parser?: (s: string) => string
       ...elem.props,
       src: parser(elem.props.src) ?? ''
     }} />;
-  } else if (
+  } /*else if (
     elem.type === 'a' ||
     elem.type === 'link'
   ) {
@@ -247,7 +247,7 @@ const handleHtmlElementLink = (elem: JSX.Element, parser?: (s: string) => string
       ...elem.props,
       href: parser(elem.props.href) ?? ''
     }} />;
-  }
+  }*/
   return elem;
 };
 
