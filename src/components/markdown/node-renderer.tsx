@@ -76,6 +76,7 @@ export class ReactRenderer implements RendererRecord {
   }
 
   html_inline({ node }: P) {
+    console.log(node.parent?.type, JSON.stringify(node.literal));
     if (this.options.safe)
       return <>[ERROR: RAW HTML OMITTED]</>;
     return parse(node.literal ?? '');

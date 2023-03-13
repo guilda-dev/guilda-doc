@@ -1,4 +1,4 @@
-# <div style="text-align: center;"><span style="font-size: 130%; color: black;">Tutorial TopPage</span></div>
+
 
 ***
 本サイトはGUILDA の公式ドキュメントです.

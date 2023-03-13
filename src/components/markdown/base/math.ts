@@ -103,7 +103,6 @@ export const parseInlineMathFence: InlineHandler<ExtendedNodeType> = (parser, bl
   if (dollarSigns === undefined) {
     return false;
   }
-
   const starting = parser.pos;
   let matched: string | undefined;
   let contents: string;
