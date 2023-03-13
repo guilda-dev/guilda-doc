@@ -102,6 +102,7 @@ export const mergeHtmlNodes = <T extends NodeType>(startNode: Node<T>, htmlParag
         const tag = match[0];
         const [, slash, name] = reTagContent.exec(tag) ?? [];
         const isCloseTag = slash === '/';
+        const isVoidTag = name === 'br' || name === 'img' || name === 'input';
 
         if (!isCloseTag) { 
           // we have another layer of html tag
@@ -111,7 +112,8 @@ export const mergeHtmlNodes = <T extends NodeType>(startNode: Node<T>, htmlParag
             startTag: tag,
           };
           currentRecord.sub.push({ type: 'html', value: newRecord });
-          stack.push(newRecord);
+          if (!isVoidTag)
+            stack.push(newRecord);
         } else {
           // end the current layer
           let currentRecord2: TemporaryHtmlRecord<T> | undefined = currentRecord;

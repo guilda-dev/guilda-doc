@@ -201,7 +201,7 @@ export class ReactRenderer implements RendererRecord {
       if (htmlBlock instanceof Array){
         if (htmlBlock.length === 0)
           return <>{ children }</>;
-        htmlBlock[0] = replaceChildren(htmlBlock[0], children);
+        // htmlBlock[0] = replaceChildren(htmlBlock[0], children);
       }
       else
         return replaceChildren(htmlBlock, children);
