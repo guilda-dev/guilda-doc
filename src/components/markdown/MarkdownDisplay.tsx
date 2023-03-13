@@ -24,7 +24,7 @@ const MarkdownDisplay = (props: PropsWithChildren<MarkdownDisplayProps>) => {
 
   return (
     <div>
-      { ast && render(ast) }
+      { ast && render(ast, undefined, ExtendedSyntaxOptions.type) }
     </div>
   );
 };

@@ -1,8 +1,9 @@
-import { Node, BlockParsingOptions, compileMaybeSpecialRegExp, compileNonSpecialCharRegExp, HtmlRenderingOptions } from 'commonmark';
+import { Node, BlockParsingOptions, compileMaybeSpecialRegExp, HtmlRenderingOptions } from 'commonmark';
 import React, { PropsWithChildren } from 'react';
 import { ExtendedNodeType, ExtendedNodeDefinition } from './base/common';
 import { MathHandler, MathTrigger, parseInlineMathFence } from './base/math';
 import { TableHandler, TableHeadHandler, TableRowHandler, TableCellHandler, TableTrigger } from './base/table';
+import { parseInlineTemplate } from './base/template';
 
 
 export const ExtendedSyntaxOptions: BlockParsingOptions<ExtendedNodeType> = {
@@ -12,7 +13,7 @@ export const ExtendedSyntaxOptions: BlockParsingOptions<ExtendedNodeType> = {
     table_head: TableHeadHandler,
     table_row: TableRowHandler,
     table_cell: TableCellHandler,
-
+  
     math_block: MathHandler,
   },
   blockStartHandlers: {
@@ -20,9 +21,10 @@ export const ExtendedSyntaxOptions: BlockParsingOptions<ExtendedNodeType> = {
     [2]: [MathTrigger],
   },
   reMaybeSpecial: compileMaybeSpecialRegExp('$', '|', true),
-  reNonSpecialChars: compileNonSpecialCharRegExp('$', true),
+  // reNonSpecialChars: compileNonSpecialCharRegExp('$', true),
   inlineHandlers: [
-    ['$', parseInlineMathFence]
+    ['$', parseInlineMathFence], 
+    ['@', parseInlineTemplate],
   ]
 };
 

@@ -1,11 +1,13 @@
-import { HtmlRenderingOptions, Node, NodeWalker, NodeWalkerEvent } from 'commonmark';
-import React from 'react';
+import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
+import React, { Children, createElement, ReactNode } from 'react';
 import { CodeBlock, CodeSpan } from './CodeBlock';
 import { RendererRecord, RenderFunction } from './common';
 import MathBlock, { MathSpan } from './MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
 import { TableCellContent } from './base/table';
+import { HtmlParagraphDefinition, isHtmlRecordNode, mergeHtmlNodes } from './base/html';
+import { TemplateParams } from './base/template';
 
 const reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
 const reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
@@ -20,16 +22,28 @@ type P = React.PropsWithChildren<{
   node: Node<ExtendedNodeType>;
 }>;
 
+export type ReactRendereingContext = {
+  heading_tags: string[];
+};
+
+export type ReactRenderingOptions = HtmlRenderingOptions & {
+  templateHandler?: (template: TemplateParams) => string | undefined;
+};
+
 export class ReactRenderer implements RendererRecord {
 
-  readonly options: HtmlRenderingOptions;
+  readonly options: ReactRenderingOptions;
   readonly esc: (s?: string) => string | undefined;
+  readonly context: ReactRendereingContext;
 
-  constructor(options?: HtmlRenderingOptions) {
+  constructor(options?: ReactRenderingOptions) {
     this.options = Object.assign({
       softbreak: '\n',
     }, options);
     this.esc = ((s) => s);
+    this.context = {
+      heading_tags: []
+    };
   }
 
   // renderers
@@ -76,7 +90,7 @@ export class ReactRenderer implements RendererRecord {
   }
 
   html_inline({ node }: P) {
-    console.log(node.parent?.type, JSON.stringify(node.literal));
+    // console.log(node.parent?.type, JSON.stringify(node.literal));
     if (this.options.safe)
       return <>[ERROR: RAW HTML OMITTED]</>;
     return parse(node.literal ?? '');
@@ -174,13 +188,87 @@ export class ReactRenderer implements RendererRecord {
     return <CellTag align={content.align}>{ children }</CellTag>;
   }
 
+  html_paragraph({ node, children }: P) {
+    const { startTag, endTag, tagName } = node.customData as HtmlParagraphDefinition;
+    const isValidNode = startTag !== undefined || tagName !== undefined;
+    if (!isValidNode)
+      return <>{ children }</>;
+    const htmlString = (startTag ?? '') + (endTag ?? '');
+    const htmlBlock = parse(htmlString !== '' ? htmlString : (
+      (tagName ?? '') !== '' ? `<${tagName}>` : ''
+    ));
+    if (typeof htmlBlock !== 'string') {
+      if (htmlBlock instanceof Array){
+        if (htmlBlock.length === 0)
+          return <>{ children }</>;
+        htmlBlock[0] = replaceChildren(htmlBlock[0], children);
+      }
+      else
+        return replaceChildren(htmlBlock, children);
+    }
+    return <>{ children }</>;
+  }
+
+  html_paragraph_text(p: P) {
+    return this.text(p);
+  }
+
+  template({ node }: P) {
+    const template = this.options.templateHandler?.(node.customData as TemplateParams);
+    if (template !== undefined)
+      return parse(template);
+    return <></>;
+  }
+
 }
 
-export const render = (root: Node<ExtendedNodeType>) => {
-  const stack: React.ReactNode[][] = [[]];
-  const walker = new NodeWalker(root);
-  const renderers = new ReactRenderer();
+const isVoidElement = (element: JSX.Element) => {
+  const elementType = element.type;
+  if (typeof elementType === 'string') {
+    const elementTypeLower = elementType.toLowerCase();
+    if (
+      elementTypeLower === 'input' || 
+      elementTypeLower === 'img' ||
+      elementTypeLower === 'br'
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const replaceChildren = (elem: JSX.Element, children: ReactNode | ReactNode[]) => {
+  if (elem === undefined || isVoidElement(elem))
+    return elem;
+  const props = { ...elem.props };
+  delete props.children;
+  return <elem.type { ... props } >
+    { children }
+  </elem.type>;
+};
+
+export const render = (
+  ast: Node<ExtendedNodeType>, 
+  options?: ReactRenderingOptions, 
+  definition?: NodeTypeDefinition<ExtendedNodeType>
+) => {
+  const walker = new NodeWalker(ast, definition);
   let event: NodeWalkerEvent<ExtendedNodeType> | undefined = undefined;
+  
+  // post processing
+  while ((event = walker.next())) {
+    const { node } = event;
+    if (isHtmlRecordNode(node)) {
+      const reducedNode = mergeHtmlNodes(node, 'html_paragraph', 'html_paragraph_text');
+      walker.resumeAt(reducedNode, true);
+    }
+  }
+
+  // render
+  const stack: React.ReactNode[][] = [[]];
+  walker.resumeAt(ast, true);
+  const renderers = new ReactRenderer(options);
   while ((event = walker.next())) {
     const { node, entering } = event;
     const func = (renderers[node.type] ?? (() => <></>)) as RenderFunction;
