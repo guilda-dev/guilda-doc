@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Node, InlineHandler, InlineParser } from 'commonmark';
 import { ExtendedNodeType } from './common';
 
@@ -98,8 +99,9 @@ export const parseInlineTemplate: InlineHandler<ExtendedNodeType> = (parser, blo
       else if (key === 'sep') {
         pushNameAndValue();
       }
-      else if (key === 'space') {
-      }
+      // do nothing
+      // else if (key === 'space') {
+      // }
       else if (key === 'assign') {
         if (typeof lastValue === 'string') {
           lastName = lastValue;

@@ -1,33 +1,27 @@
 import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
-import React, { Children, createElement, ReactNode } from 'react';
+import React from 'react';
 import { CodeBlock, CodeSpan } from './CodeBlock';
-import { RendererRecord, RenderFunction } from './common';
+import { potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
 import MathBlock, { MathSpan } from './MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
 import { TableCellContent } from './base/table';
 import { HtmlParagraphDefinition, isHtmlRecordNode, mergeHtmlNodes } from './base/html';
 import { TemplateParams } from './base/template';
+import { MacroStateMaintainer, parseMacro } from './macro';
 
-const reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
-const reSafeDataProtocol = /^data:image\/(?:png|gif|jpeg|webp)/i;
-
-const potentiallyUnsafe = (url?: string | null) => {
-  if (!url)
-    return true;
-  return reUnsafeProtocol.test(url) && !reSafeDataProtocol.test(url);
-};
 
 type P = React.PropsWithChildren<{
   node: Node<ExtendedNodeType>;
 }>;
 
 export type ReactRendereingContext = {
-  heading_tags: string[];
+  macroStore: MacroStateMaintainer
 };
 
 export type ReactRenderingOptions = HtmlRenderingOptions & {
-  templateHandler?: (template: TemplateParams) => string | undefined;
+  handleTemplate?: (template: TemplateParams) => string | undefined;
+  parseLink?: (raw: string) => string;
 };
 
 export class ReactRenderer implements RendererRecord {
@@ -42,7 +36,7 @@ export class ReactRenderer implements RendererRecord {
     }, options);
     this.esc = ((s) => s);
     this.context = {
-      heading_tags: []
+      macroStore: new MacroStateMaintainer(),
     };
   }
 
@@ -91,6 +85,8 @@ export class ReactRenderer implements RendererRecord {
 
   html_inline({ node }: P) {
     // console.log(node.parent?.type, JSON.stringify(node.literal));
+    const macros = parseMacro(node.literal ?? '');
+    macros.forEach(([, macro]) => this.context.macroStore.merge(macro));
     if (this.options.safe)
       return <>[ERROR: RAW HTML OMITTED]</>;
     return parse(node.literal ?? '');
@@ -201,7 +197,7 @@ export class ReactRenderer implements RendererRecord {
       if (htmlBlock instanceof Array){
         if (htmlBlock.length === 0)
           return <>{ children }</>;
-        // htmlBlock[0] = replaceChildren(htmlBlock[0], children);
+        htmlBlock[0] = replaceChildren(htmlBlock[0], children);
       }
       else
         return replaceChildren(htmlBlock, children);
@@ -214,7 +210,7 @@ export class ReactRenderer implements RendererRecord {
   }
 
   template({ node }: P) {
-    const template = this.options.templateHandler?.(node.customData as TemplateParams);
+    const template = this.options.handleTemplate?.(node.customData as TemplateParams);
     if (template !== undefined)
       return parse(template);
     return <></>;
@@ -222,31 +218,6 @@ export class ReactRenderer implements RendererRecord {
 
 }
 
-const isVoidElement = (element: JSX.Element) => {
-  const elementType = element.type;
-  if (typeof elementType === 'string') {
-    const elementTypeLower = elementType.toLowerCase();
-    if (
-      elementTypeLower === 'input' || 
-      elementTypeLower === 'img' ||
-      elementTypeLower === 'br'
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
-const replaceChildren = (elem: JSX.Element, children: ReactNode | ReactNode[]) => {
-  if (elem === undefined || isVoidElement(elem))
-    return elem;
-  const props = { ...elem.props };
-  delete props.children;
-  return <elem.type { ... props } >
-    { children }
-  </elem.type>;
-};
 
 export const render = (
   ast: Node<ExtendedNodeType>, 
@@ -269,14 +240,24 @@ export const render = (
   const stack: React.ReactNode[][] = [[]];
   walker.resumeAt(ast, true);
   const renderers = new ReactRenderer(options);
+  let lastLine = -1;
   while ((event = walker.next())) {
     const { node, entering } = event;
     const func = (renderers[node.type] ?? (() => <></>)) as RenderFunction;
     const renderer = func.bind(renderers);
 
     if (ExtendedNodeDefinition.isContainer(node)) {
-      if (entering)
+      if (entering){
+        const linePos = node.sourcepos[0][0];
+        if (linePos > lastLine) {
+          const diff = linePos - lastLine;
+          renderers.context.macroStore.newLine();
+          if (diff > 1)
+            renderers.context.macroStore.newLine();
+          lastLine = linePos;
+        } 
         stack.push([]);
+      }
       else {
         const children = React.Children.map(stack.pop(), (n, i) => (<React.Fragment key={`node_${i}`}>{ n }</React.Fragment>));
         stack[stack.length - 1].push(renderer({
