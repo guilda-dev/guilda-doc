@@ -4,19 +4,11 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import { LeftSideFrame } from '@/components/page/PageFrame';
+import { ResponseError } from '@/components/common/common';
 
 const DOC_PREFIX = '/md';
 const DOC_SUFFIX = '.md';
 
-class ResponseError extends Error {
-
-  readonly response: Response;
-
-  constructor(response: Response) {
-    super(`HTTP ERROR ${response.status}`);
-    this.response = response;
-  }
-}
 
 const ErrorPage = (props: { error?: Error }) => {
   const { error } = props;
