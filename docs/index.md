@@ -3,6 +3,7 @@
 
 本サイトはGUILDA の公式ドキュメントです.
 
+<!-- heading: use-hash#what-is-guilda -->
 ## 【GUILDAとは？】
 
 <div style="text-align: center;"><img src="/Figures/GUILDAicon.png" width=70%;></div>

@@ -12,6 +12,9 @@ import { MacroStateMaintainer, parseMacro } from './macro';
 import MarkdownTemplate from './MarkdownTemplate';
 import styled from 'styled-components';
 import { NavHashLink } from 'react-router-hash-link';
+import { NavNode } from '@/base/nav';
+import { RightSideFrame } from '../page/PageFrame';
+import NavTree from '../nav/NavTree';
 
 
 type P = React.PropsWithChildren<{
@@ -19,11 +22,18 @@ type P = React.PropsWithChildren<{
 }>;
 
 export type ReactRendereingContext = {
-  macroStore: MacroStateMaintainer
+  macroStore: MacroStateMaintainer;
+  rootNode: HierarchicalNavNode;
+  nodeStack: HierarchicalNavNode[];
 };
 
 export type ReactRenderingOptions = HtmlRenderingOptions & {
   parseLink?: (raw: string) => string;
+};
+
+export type HierarchicalNavNode = NavNode & {
+  hierarchy: number;
+  children?: HierarchicalNavNode[];
 };
 
 
@@ -31,7 +41,7 @@ const TitleAnchor = styled(NavHashLink)`
   
 `;
 
-const HEADER_PREFIX = 'md_';
+const HEADER_PREFIX = 'md-';
 
 export class ReactRenderer implements RendererRecord {
 
@@ -44,7 +54,13 @@ export class ReactRenderer implements RendererRecord {
     }, options);
     this.context = {
       macroStore: new MacroStateMaintainer(),
+      rootNode: {
+        name: '',
+        hierarchy: 0
+      },
+      nodeStack: []
     };
+    this.context.nodeStack.push(this.context.rootNode);
   }
 
   // renderers
@@ -149,20 +165,40 @@ export class ReactRenderer implements RendererRecord {
 
   heading({ node, children }: P) {
     const HeadingTag = `h${node.level}` as keyof JSX.IntrinsicElements;
-    const shouldAlignCenter = 
-      (this.context.macroStore.check(HeadingTag, 'align-center') ?? 
-       this.context.macroStore.check('heading', 'align-center')) !== undefined;
-    const headingHash = 
-      this.context.macroStore.data(HeadingTag, 'use-hash') ?? 
-      this.context.macroStore.data('heading', 'use-hash') ?? 
-      generateAnchorFromTitle(deepFilterStringChildren(<>{ children }</>));
+    const shouldAlignCenter =
+      (this.context.macroStore.check(HeadingTag, 'align-center') ??
+        this.context.macroStore.check('heading', 'align-center')) !== undefined;
+
+    const headingString = deepFilterStringChildren(<>{children}</>);
+    const headingHash =
+      this.context.macroStore.data(HeadingTag, 'use-hash') ??
+      this.context.macroStore.data('heading', 'use-hash') ??
+      generateAnchorFromTitle(headingString);
+
+    const href = '#' + HEADER_PREFIX + headingHash;
+
+    // process node level
+    let currentNode = this.context.nodeStack[this.context.nodeStack.length - 1];
+    while (currentNode.hierarchy >= (node.level ?? 1)) {
+      this.context.nodeStack.pop();
+      currentNode = this.context.nodeStack[this.context.nodeStack.length - 1];
+    }
+    const thisNode = {
+      name: headingString.replace(/\n\r/g, ' ').trim(),
+      hierarchy: node.level ?? 1,
+      href: href,
+    };
+    (currentNode.children = currentNode.children ?? [])
+      .push(thisNode);
+    this.context.nodeStack.push(thisNode);
+
     return <HeadingTag id={HEADER_PREFIX + headingHash} style={
       shouldAlignCenter ?
         { textAlign: 'center' } :
         undefined
     }>
-      { children }
-      <TitleAnchor to={'#' + HEADER_PREFIX + headingHash}>
+      {children}
+      <TitleAnchor to={href}>
         <svg viewBox="0 0 16 16" version="1.1" fill="currentColor" width="16" height="16" aria-hidden="true" data-v-f4cc3f5d=""><path fillRule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z" data-v-f4cc3f5d=""></path></svg>
       </TitleAnchor>
     </HeadingTag>;
@@ -324,6 +360,9 @@ export const render = (
     }
   }
   return <>
+    <RightSideFrame>
+      <NavTree rootNode={renderers.context.rootNode} />
+    </RightSideFrame>
     {stack[stack.length - 1]}
   </>;
 };
