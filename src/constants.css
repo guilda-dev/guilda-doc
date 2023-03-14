@@ -145,3 +145,8 @@
 
   --db-panel-hover-color: var(--color-txt1);
 }
+
+img.dark-mode.invert,
+.dark-mode img.invert {
+  filter: hue-rotate(180deg) invert(100%);
+}
