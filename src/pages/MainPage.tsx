@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import reactLogo from '../assets/react.svg';
-import '../App.css';
+
 import NavTree from '../components/nav/NavTree';
 
 import { useGlobalSetting } from '../components/common/GlobalSetting';
@@ -17,14 +16,6 @@ const MainPage = () => {
     <LeftSideFrame>
       <NavTree rootNode={SiteNavTree} />
     </LeftSideFrame><div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
       <h1>This is a random temporary main page</h1>
       <div className="card">
         <button onClick={() => {

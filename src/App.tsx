@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { PropsWithChildren } from 'react';
-import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
 import { CurrentPathProvider } from '@/components/common/CurrentPath';
@@ -28,12 +27,12 @@ const MainContainer = styled.div`
   width: 100vw;
   padding-top: var(--navbar-height);
   min-height: var(--page-content-min-height);
-  background-color: var(--color-bg1);
-  color: var(--color-txt1);
   justify-content: center;
   align-items: flex-start;
 
   display: flex;
+  background-color: var(--color-bg1);
+  color: var(--color-txt1);
 
   & > * {
     text-align: start;
