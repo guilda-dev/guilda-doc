@@ -9,6 +9,7 @@ const SideFrame = styled.div`
   min-height: var(--navbar-height);
   max-height: var(--page-content-min-height);
   width: var(--sidebar-max-width);
+  overflow-y: auto;
 `;
 
 const MainFrame = styled.div`
