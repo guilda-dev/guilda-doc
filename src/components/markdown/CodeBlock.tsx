@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import { filterStringChildren } from './common';
 
 const _codeSpan = styled.code`
-  
+  padding: 3px 5px;
+  margin: 1px;
+  border-radius: 4px;
+  background-color: var(--color-bg2);
 `;
 
 const _codeBlock = styled.p`
