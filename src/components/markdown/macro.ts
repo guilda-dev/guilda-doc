@@ -1,7 +1,7 @@
 
 
 const reHtmlComment = /<!--([\s\S]*?)-->/g;
-const reMacroFormat = /(?:([\w-]+)\s*:\s*)?([\w-]+)(?:\$(set|restore|one[-_]time|next[-_]line))?/g;
+const reMacroFormat = /(?:([\w-]+)\s*:\s*)?([\w-]+)(?:\$(set|restore|one[-_]time|next[-_]line))?(?:#([\w-]+))?/g;
 
 export const parseMacro = (str: string) => {
   const ans: [number, MacroRecord][] = [];
@@ -16,7 +16,8 @@ export const parseMacro = (str: string) => {
       const key = matchInner[1] ?? '';
       const val = matchInner[2];
       const opr = (matchInner[3]?.replace(/_/g, '-')) as MacroSuffix ?? 'one-time';
-      (kwMacro[key] = kwMacro[key] ?? []).push([val, opr]);
+      const dat = matchInner[4];
+      (kwMacro[key] = kwMacro[key] ?? []).push([val, opr, dat]);
     }
     ans.push([match.index, kwMacro]);
   }
@@ -25,11 +26,18 @@ export const parseMacro = (str: string) => {
 
 export type MacroSuffix = 'set' | 'restore' | 'one-time' | 'next-line';
 
-export type MacroRecord = Record<string, [string, MacroSuffix][]>;
+export type MacroRecord = Record<string, [string, MacroSuffix, string | undefined][]>;
+
+export type MacroRecordSingle = {
+  opr: MacroSuffix | 'next-line-2'
+  dat: string | undefined
+};
 
 export class MacroStateMaintainer{
 
-  readonly record: Map<string, Map<string, MacroSuffix | 'next-line-2'>>;
+  readonly record: Map<string, Map<
+    string, MacroRecordSingle
+  >>;
 
   constructor() {
     this.record = new Map();
@@ -39,25 +47,32 @@ export class MacroStateMaintainer{
     for (const key in record) {
       if (!this.record.has(key))
         this.record.set(key, new Map());
-      const states = this.record.get(key) as Map<string, MacroSuffix | 'next-line-2'>;
-      for (const [val, opr] of record[key]) {
+      const states = this.record.get(key) as Map<string, MacroRecordSingle>;
+      for (const [val, opr, dat] of record[key]) {
         if (opr === 'restore')
           states.delete(val);
-        else if (opr === 'next-line' && states.get(val) !== 'set')
-          states.set(val, 'next-line-2');
+        else if (opr === 'next-line' && states.get(val)?.opr !== 'set')
+          states.set(val, { opr: 'next-line-2', dat: dat });
         else if (opr === 'set')
-          states.set(val, 'set');
-        else if (opr === 'one-time' && states.get(val) !== 'set')
-          states.set(val, 'one-time');
+          states.set(val, { opr: 'set', dat: dat });
+        else if (opr === 'one-time' && states.get(val)?.opr !== 'set')
+          states.set(val, { opr: 'one-time', dat: dat });
       }
     }
   }
 
   peek(key: string, value: string): MacroSuffix | undefined {
     const ret = this.record.get(key)?.get(value);
-    if (ret === 'next-line-2')
+    if (ret?.opr === 'next-line-2')
       return undefined;
-    return ret;
+    return ret?.opr;
+  }
+
+  data(key: string, value: string): string | undefined {
+    const ret = this.record.get(key)?.get(value);
+    if (ret?.opr === 'one-time')
+      this.record.get(key)?.delete(value);
+    return ret?.dat;
   }
 
   check(key: string, value: string): MacroSuffix | undefined {
@@ -68,9 +83,9 @@ export class MacroStateMaintainer{
   }
 
   newLine() {
-    this.record.forEach((val) => val.forEach((opr, _val) => {
+    this.record.forEach((val) => val.forEach(({ opr, dat }, _val) => {
       if (opr === 'next-line-2')
-        val.set(_val, 'next-line');
+        val.set(_val, { opr: 'next-line', dat: dat });
       else if (opr === 'next-line')
         val.delete(_val);
     }));

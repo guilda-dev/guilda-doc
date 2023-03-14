@@ -6,8 +6,6 @@ import { useGlobalSetting } from '../components/common/GlobalSetting';
 import { LeftSideFrame } from '../components/page/PageFrame';
 import { SiteNavTree } from '../common/config';
 
-
-
 const MainPage = () => {
   const [count, setCount] = useState(0);
   const { darkMode, setSetting: setStyle } = useGlobalSetting();

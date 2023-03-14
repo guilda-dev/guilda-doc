@@ -1,15 +1,17 @@
 import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
 import React from 'react';
 import { CodeBlock, CodeSpan } from './CodeBlock';
-import { potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
+import { deepFilterStringChildren, potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
 import MathBlock, { MathSpan } from './MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
 import { TableCellContent } from './base/table';
-import { HtmlParagraphDefinition, isHtmlRecordNode, mergeHtmlNodes } from './base/html';
+import { generateAnchorFromTitle, HtmlParagraphDefinition, isHtmlRecordNode, mergeHtmlNodes } from './base/html';
 import { TemplateParams } from './base/template';
 import { MacroStateMaintainer, parseMacro } from './macro';
 import MarkdownTemplate from './MarkdownTemplate';
+import styled from 'styled-components';
+import { NavHashLink } from 'react-router-hash-link';
 
 
 type P = React.PropsWithChildren<{
@@ -23,6 +25,13 @@ export type ReactRendereingContext = {
 export type ReactRenderingOptions = HtmlRenderingOptions & {
   parseLink?: (raw: string) => string;
 };
+
+
+const TitleAnchor = styled(NavHashLink)`
+  
+`;
+
+const HEADER_PREFIX = 'md_';
 
 export class ReactRenderer implements RendererRecord {
 
@@ -140,12 +149,23 @@ export class ReactRenderer implements RendererRecord {
 
   heading({ node, children }: P) {
     const HeadingTag = `h${node.level}` as keyof JSX.IntrinsicElements;
-    const shouldAlignCenter = this.context.macroStore.check(HeadingTag, 'align-center') !== undefined;
-    return <HeadingTag style={
+    const shouldAlignCenter = 
+      (this.context.macroStore.check(HeadingTag, 'align-center') ?? 
+       this.context.macroStore.check('heading', 'align-center')) !== undefined;
+    const headingHash = 
+      this.context.macroStore.data(HeadingTag, 'use-hash') ?? 
+      this.context.macroStore.data('heading', 'use-hash') ?? 
+      generateAnchorFromTitle(deepFilterStringChildren(<>{ children }</>));
+    return <HeadingTag id={HEADER_PREFIX + headingHash} style={
       shouldAlignCenter ?
         { textAlign: 'center' } :
         undefined
-    }>{children}</HeadingTag>;
+    }>
+      { children }
+      <TitleAnchor to={'#' + HEADER_PREFIX + headingHash}>
+        <svg viewBox="0 0 16 16" version="1.1" fill="currentColor" width="16" height="16" aria-hidden="true" data-v-f4cc3f5d=""><path fillRule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z" data-v-f4cc3f5d=""></path></svg>
+      </TitleAnchor>
+    </HeadingTag>;
   }
 
   thematic_break() {
@@ -271,6 +291,7 @@ export const render = (
 
   // render
   const stack: React.ReactNode[][] = [[]];
+
   walker.resumeAt(ast, true);
   const renderers = new ReactRenderer(options);
   let lastLine = -1;
