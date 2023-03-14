@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { useGlobalStyle } from '../common/GlobalStyle';
+import { useGlobalSetting } from '../common/GlobalSetting';
 
 const PageFooterBase = styled.div`
   background-color: var(--footer-background-color);
@@ -19,7 +19,7 @@ const FooterContainer = styled.div`
 
 
 const PageFooter = () => {
-  const { darkMode } = useGlobalStyle();
+  const { darkMode } = useGlobalSetting();
 
   return <PageFooterBase className={darkMode ? 'dark-mode' : ''}>
     <FooterContainer>

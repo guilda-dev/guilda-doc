@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import { LeftSideFrame } from '@/components/page/PageFrame';
-import { ResponseError } from '@/components/common/common';
+import { ResponseError } from '@/base/common';
 
 const DOC_PREFIX = '/md';
 const DOC_SUFFIX = '.md';

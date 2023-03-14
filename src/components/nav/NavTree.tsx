@@ -17,7 +17,7 @@ export const DEFAULT_EXPAND_CLASS = 'expanded';
 
 import nav from '~/nav.yml?raw';
 import { useTranslation } from 'react-i18next';
-import { compileNavRecordMap, NavNode, NavRecordMap } from '@/config/nav';
+import { compileNavRecordMap, NavNode, NavRecordMap } from '@/base/nav';
 const navTreeRaw = yaml.load(nav) as NavRecordMap;
 const navTree = compileNavRecordMap(navTreeRaw);
 console.log(navTreeRaw);

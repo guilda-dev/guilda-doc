@@ -1,5 +1,5 @@
 import React from 'react';
-import { useActiveLinkContext } from '../common/ActiveLink';
+import { useCurrentPath } from '../common/CurrentPath';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +22,7 @@ const Link = styled.li`
 `;
 
 const NavLink = (props: NavLinkProps) => {
-  const { setActiveLink, isActiveLink } = useActiveLinkContext();
+  const { setActiveLink, isActiveLink } = useCurrentPath();
   const { key, target, children } = props.item;
   const { t } = useTranslation();
 

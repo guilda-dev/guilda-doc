@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { useGlobalStyle } from '../common/GlobalStyle';
+import { useGlobalSetting } from '../common/GlobalSetting';
 
 const NavBase = styled.nav`
   background-color: var(--navbar-background-color);
@@ -27,7 +27,7 @@ import './nav.css';
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState('');
-  const { darkMode } = useGlobalStyle();
+  const { darkMode } = useGlobalSetting();
 
   const { t } = useTranslation();
   const links = [

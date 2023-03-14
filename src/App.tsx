@@ -4,12 +4,12 @@ import './App.css';
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
-import { ActiveLinkProvider } from '@/components/common/ActiveLink';
+import { CurrentPathProvider } from '@/components/common/CurrentPath';
 import NavTree from './components/nav/NavTree';
 import DocumentReader from './pages/DocumentReader';
 
 import styled from 'styled-components';
-import { GlobalStyleProvider, useGlobalStyle } from './components/common/GlobalStyle';
+import { GlobalSettingProvider, useGlobalSetting } from './components/common/GlobalSetting';
 import PageFooter from './components/page/PageFooter';
 import { LeftSideFrame, PageFrame } from './components/page/PageFrame';
 
@@ -17,7 +17,7 @@ import { LeftSideFrame, PageFrame } from './components/page/PageFrame';
 
 const TempApp = () => {
   const [count, setCount] = useState(0);
-  const { darkMode, setStyle } = useGlobalStyle();
+  const { darkMode, setSetting: setStyle } = useGlobalSetting();
 
   return <>
     <LeftSideFrame>
@@ -93,11 +93,11 @@ const TempApp = () => {
 
 const AppContext = (props: PropsWithChildren<object>) => {
   return (
-    <ActiveLinkProvider>
-      <GlobalStyleProvider>
+    <CurrentPathProvider>
+      <GlobalSettingProvider>
         {props.children}
-      </GlobalStyleProvider>
-    </ActiveLinkProvider>
+      </GlobalSettingProvider>
+    </CurrentPathProvider>
   );
 };
 
@@ -120,7 +120,7 @@ const MainContainer = styled.div`
 `;
 
 const StateMaintainer = (props: PropsWithChildren<object>) => {
-  const { darkMode } = useGlobalStyle();
+  const { darkMode } = useGlobalSetting();
   return <MainContainer className={(darkMode ? 'dark-mode' : '')}>
     {props.children}
   </MainContainer>;
@@ -139,7 +139,7 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  const { darkMode } = useGlobalStyle();
+  const { darkMode } = useGlobalSetting();
 
   return <AppContext>
     <NavBar />

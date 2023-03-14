@@ -1,0 +1,34 @@
+lang:
+  hierarchy:
+    - ja
+    - en
+    - zh
+  fallback: ja
+
+format:
+  hierarchy:
+    - md
+    - html
+    - xml
+    - txt
+  fallback: md
+
+
+template:
+  allowed: true
+  root: '/_template/'
+  fileSuffix: t
+
+
+math:
+  allowed: true
+  interpreter: mathjax
+  allowedFormats: 
+    - math
+    - mathematics
+    - tex
+    - latex
+
+
+emoji:
+  allowed: true

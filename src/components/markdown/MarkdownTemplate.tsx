@@ -1,6 +1,6 @@
 import { Node, BlockParser, NodeTypeDefinition } from 'commonmark';
 import React, { useEffect, useState } from 'react';
-import { ResponseError } from '../common/common';
+import { ResponseError } from '../../base/common';
 import { ExtendedNodeType } from './base/common';
 
 import { compileTemplate, TemplateParams, TemplateParamsType } from './base/template';
