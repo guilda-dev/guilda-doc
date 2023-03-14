@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import * as yaml from 'js-yaml';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { NavNode } from '@/base/nav';
+import { SiteConfig } from '@/common/config';
 
-export type NavTreeItemProps = NavNode & NavTreeProps & {
+export type NavTreeItemProps = {
+  node: NavNode;
   state?: 'active' | 'inactive' | 'default';
   expanded?: boolean;
 };
@@ -10,44 +12,41 @@ export type NavTreeProps = {
   parseName?: (raw: string) => string;
   parseLink?: (raw: string) => string;
   shouldExpand?: (node: NavNode) => boolean;
-  expandClass?: string
+  expandClass?: string;
+  rootNode: NavNode;
 };
 
-export const DEFAULT_EXPAND_CLASS = 'expanded';
 
-import nav from '~/nav.yml?raw';
-import { useTranslation } from 'react-i18next';
-import { compileNavRecordMap, NavNode, NavRecordMap } from '@/base/nav';
-const navTreeRaw = yaml.load(nav) as NavRecordMap;
-const navTree = compileNavRecordMap(navTreeRaw);
-console.log(navTreeRaw);
-console.log(navTree);
+const NavTreeContext = createContext<NavTreeProps>({
+  rootNode: {
+    name: 'ERROR: NO NAV TREE ASSIGNED'
+  }
+});
 
-const parseMarkdownLink = (str: string) => {
-  if (str.endsWith('.md'))
-    str = str.slice(0, str.length - 3);
-  if (!str.startsWith('/'))
-    str = '/' + str;
-  return str;
-};
+const DEFAULT_EXPAND_CLASS = SiteConfig.nav.expandClass;
+
 
 const NavTreeItem = (props: NavTreeItemProps) => {
-  const { children, name, href, state, expanded } = props;
+  const { node, state, expanded } = props;
+  const { children, name, href } = node;
+  const treeProps = useContext(NavTreeContext);
+
+
   // monitor class modification
   const [c, _c] = useState<string | undefined>();
   useEffect(() => {
     const classArr = (state ?? '').split('');
     if (expanded)
-      classArr.push(props.expandClass ?? DEFAULT_EXPAND_CLASS);
+      classArr.push(treeProps.expandClass ?? DEFAULT_EXPAND_CLASS);
     const cl = classArr.filter(x => x !== '').join(' ');
     _c(cl !== '' ? cl : undefined);
   }, [state, expanded]);
 
-  const nameDisp = props.parseName?.(name) ?? name;
+  const nameDisp = treeProps.parseName?.(name) ?? name;
   const hasChildren = children !== undefined && children.length !== 0;
 
   const label = <>
-    {href !== undefined && <a href={props.parseLink?.(href) ?? href}>
+    {href !== undefined && <a href={treeProps.parseLink?.(href) ?? href}>
       <span className='nav-tag'>{nameDisp}</span>
     </a>}
     {href === undefined && <span className='nav-tag'>{nameDisp}</span>}
@@ -62,11 +61,7 @@ const NavTreeItem = (props: NavTreeItemProps) => {
             {children?.map((node) =>
               <NavTreeItem
                 key={node.name}
-                {...node}
-                parseName={props.parseName}
-                parseLink={props.parseLink}
-                expandClass={props.expandClass}
-                shouldExpand={props.shouldExpand}
+                node={node}
               />)}
           </ul>
         </> : label
@@ -77,20 +72,16 @@ const NavTreeItem = (props: NavTreeItemProps) => {
 
 
 const NavTree = (props: NavTreeProps) => {
-  return <>
+  return <NavTreeContext.Provider value={props}>
     <ul id="navlist" className="list-root">
-      {navTree.children?.map((node) =>
+      {props.rootNode.children?.map((node) =>
         <NavTreeItem
           key={node.name}
           expanded={true}
-          {...node}
-          parseName={props.parseName}
-          parseLink={props.parseLink}
-          expandClass={props.expandClass}
-          shouldExpand={props.shouldExpand}
+          node={node}
         />)}
     </ul>
-  </>;
+  </NavTreeContext.Provider>;
 };
 
 export default NavTree;

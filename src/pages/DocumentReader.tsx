@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import { LeftSideFrame } from '@/components/page/PageFrame';
 import { ResponseError } from '@/base/common';
+import { SiteNavTree } from '@/common/config';
 
 const DOC_PREFIX = '/md';
 const DOC_SUFFIX = '.md';
@@ -40,7 +41,7 @@ const DocumentReader = () => {
   }, [id]);
   return <>
     <LeftSideFrame>
-      <NavTree />
+      <NavTree rootNode={SiteNavTree} />
     </LeftSideFrame>
     { resource === undefined && <div>loading...</div> }
     { typeof resource === 'string' && <MarkdownDisplay>{ resource }</MarkdownDisplay> }

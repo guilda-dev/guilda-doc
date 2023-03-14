@@ -90,7 +90,7 @@ export const resolveDocumentSiteConfig = (raw?: IncompleteDocumentSiteConfig): D
       allowed: raw.emoji.allowed ?? false,
     },
     nav: {
-      expandClass: raw.nav.expandClass || /* intentional */ 'expanded',
+      expandClass: raw.nav.expandClass?.trim() || /* intentional */ 'expanded',
     }
   };
   return res;

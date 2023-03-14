@@ -1,95 +1,17 @@
-import { PropsWithChildren, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
 import React from 'react';
+
+import { PropsWithChildren } from 'react';
+import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NavBar from '@/components/nav/NavBar';
 import { CurrentPathProvider } from '@/components/common/CurrentPath';
-import NavTree from './components/nav/NavTree';
 import DocumentReader from './pages/DocumentReader';
 
 import styled from 'styled-components';
 import { GlobalSettingProvider, useGlobalSetting } from './components/common/GlobalSetting';
 import PageFooter from './components/page/PageFooter';
-import { LeftSideFrame, PageFrame } from './components/page/PageFrame';
-
-
-
-const TempApp = () => {
-  const [count, setCount] = useState(0);
-  const { darkMode, setSetting: setStyle } = useGlobalSetting();
-
-  return <>
-    <LeftSideFrame>
-      <NavTree />
-    </LeftSideFrame><div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => {
-          setCount((count) => count + 1);
-          setStyle({ darkMode: !darkMode });
-        }}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-          Edit <code>src/App.tsx</code> and save to test HMR<br></br>
-        </p>
-      </div>
-    </div></>;
-};
-
+import { PageFrame } from './components/page/PageFrame';
+import MainPage from './pages/MainPage';
 
 const AppContext = (props: PropsWithChildren<object>) => {
   return (
@@ -130,7 +52,7 @@ const StateMaintainer = (props: PropsWithChildren<object>) => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <TempApp />,
+    element: <MainPage />,
   },
   {
     path: '/*',
@@ -139,7 +61,6 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  const { darkMode } = useGlobalSetting();
 
   return <AppContext>
     <NavBar />

@@ -10,7 +10,7 @@ import { IncompleteDocumentSiteConfig, resolveDocumentSiteConfig } from '@/base/
 import { deepFreeze } from '../base/common';
 
 const _navTreeRaw = yaml.load(nav) as NavRecordMap;
-const NavTree = deepFreeze(compileNavRecordMap(_navTreeRaw));
+const SiteNavTree = deepFreeze(compileNavRecordMap(_navTreeRaw));
 
 const _configRaw = yaml.load(config) as IncompleteDocumentSiteConfig;
 const SiteConfig = deepFreeze(resolveDocumentSiteConfig(_configRaw));
@@ -20,6 +20,6 @@ const SiteConfig = deepFreeze(resolveDocumentSiteConfig(_configRaw));
 
 
 export {
-  NavTree, 
+  SiteNavTree, 
   SiteConfig
 };
