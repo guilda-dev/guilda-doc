@@ -87,6 +87,10 @@ export const potentiallyUnsafe = (url?: string | null) => {
   return reUnsafeProtocol.test(url) && !reSafeDataProtocol.test(url);
 };
 
+export function delay(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 export type RenderFunction = (props: PropsWithChildren<{ node: Node<ExtendedNodeType> }>) => React.ReactNode;
 
 export type RendererRecord = Record<ExtendedNodeType, RenderFunction>;

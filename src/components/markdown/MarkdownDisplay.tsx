@@ -1,8 +1,9 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
-import { ExtendedNodeType } from './base/common';
-import { ExtendedSyntaxOptions, filterStringChildren } from './common';
+import { ExtendedNodeDefinition } from './base/common';
+import { delay, ExtendedSyntaxOptions, filterStringChildren } from './common';
 import { ReactRenderingOptions, render } from './node-renderer';
-import { BlockParser, common, Node } from 'commonmark';
+import { BlockParser, common } from 'commonmark';
+import { useParams } from 'react-router-dom';
 
 export type MarkdownDisplayProps = {
   content?: string;
@@ -22,7 +23,9 @@ const options: ReactRenderingOptions = {
 
 const MarkdownDisplay = (props: PropsWithChildren<MarkdownDisplayProps>) => {
   const [md, setMd] = useState<string>('*NO MARKDOWN FILE*');
-  const [ast, setAst] = useState<Node<ExtendedNodeType> | undefined>();
+  // const [ast, setAst] = useState<Node<ExtendedNodeType> | undefined>();
+  const [rnd, setRnd] = useState<JSX.Element | undefined>();
+  const params = useParams();
   
   useEffect(() => {
     setMd(filterStringChildren(props.children));
@@ -31,14 +34,24 @@ const MarkdownDisplay = (props: PropsWithChildren<MarkdownDisplayProps>) => {
   useEffect(() => {
     const parser = new BlockParser(ExtendedSyntaxOptions);
     const ast = parser.parse(md);
-    setAst(ast);
+    setRnd(
+      ast !== undefined ? 
+        render(ast, options, ExtendedNodeDefinition) : 
+        undefined
+    );
   }, [md]);
 
-  return (
-    <div>
-      { ast && render(ast, options, ExtendedSyntaxOptions.type) }
-    </div>
-  );
+  useEffect(() => {
+    delay(10).then(() => {
+      const element = document.querySelector(location.hash || '#null'); 
+      element?.scrollIntoView({ block: 'start' });
+    }).catch(console.error);
+  }, [rnd]);
+  
+
+  return <>
+    { rnd }
+  </>;
 };
 
 export default MarkdownDisplay;

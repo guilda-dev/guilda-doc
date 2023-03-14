@@ -1,11 +1,13 @@
-import { Node, BlockParser, NodeTypeDefinition } from 'commonmark';
+import { BlockParser, NodeTypeDefinition } from 'commonmark';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ResponseError } from '../../base/common';
 import { ExtendedNodeType } from './base/common';
 
-import { compileTemplate, TemplateParams, TemplateParamsType } from './base/template';
-import { filterStringChildren, ExtendedSyntaxOptions } from './common';
+import { compileTemplate, TemplateParams } from './base/template';
+import { delay, ExtendedSyntaxOptions } from './common';
 import { ReactRenderingOptions, render } from './node-renderer';
+
 
 
 export type MarkdownTemplateProps = {
@@ -18,7 +20,9 @@ const MarkdownTemplate = (props: MarkdownTemplateProps) => {
 
   const [resource, setResource] = useState<string | Error | undefined>(undefined);
   const [md, setMd] = useState<string>('*NO TEMPLATE FILE*');
-  const [ast, setAst] = useState<Node<ExtendedNodeType> | undefined>();
+  // const [ast, setAst] = useState<Node<ExtendedNodeType> | undefined>();
+  const [rnd, setRnd] = useState<JSX.Element | undefined>();
+  const { hash } = useParams();
 
   const { name, args, kwargs } = props.template;
   if (name === undefined)
@@ -51,12 +55,23 @@ const MarkdownTemplate = (props: MarkdownTemplateProps) => {
   useEffect(() => {
     const parser = new BlockParser(ExtendedSyntaxOptions);
     const ast = parser.parse(md);
-    setAst(ast);
+
+    setRnd(
+      ast !== undefined ? 
+        render(ast, props.options, props.definiton) : 
+        undefined
+    );
   }, [md]);
-  
+
+  useEffect(() => {
+    delay(10).then(() => {
+      const element = document.querySelector(location.hash || '#null'); 
+      element?.scrollIntoView({ block: 'start' });
+    }).catch(console.error);
+  }, [rnd, resource, md]);
 
   return <>
-    { ast && render(ast, props.options, props.definiton) }
+    { rnd }
   </>;
 };
 
