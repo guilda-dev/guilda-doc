@@ -1,6 +1,7 @@
 import { Node, BlockParsingOptions, compileMaybeSpecialRegExp, HtmlRenderingOptions } from 'commonmark';
 import React, { PropsWithChildren } from 'react';
 import { ExtendedNodeType, ExtendedNodeDefinition } from './base/common';
+import { parseInlineEmoji } from './base/emoji';
 import { MathHandler, MathTrigger, parseInlineMathFence } from './base/math';
 import { TableHandler, TableHeadHandler, TableRowHandler, TableCellHandler, TableTrigger } from './base/table';
 import { parseInlineTemplate } from './base/template';
@@ -25,6 +26,7 @@ export const ExtendedSyntaxOptions: BlockParsingOptions<ExtendedNodeType> = {
   inlineHandlers: [
     ['$', parseInlineMathFence], 
     ['@', parseInlineTemplate],
+    [':', parseInlineEmoji],
   ]
 };
 

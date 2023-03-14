@@ -15,7 +15,11 @@ import { NavHashLink } from 'react-router-hash-link';
 import { NavNode } from '@/base/nav';
 import { RightSideFrame } from '../page/PageFrame';
 import NavTree from '../nav/NavTree';
-
+/*
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { IconName } from '@fortawesome/free-regular-svg-icons';
+*/
 
 type P = React.PropsWithChildren<{
   node: Node<ExtendedNodeType>;
@@ -278,6 +282,16 @@ export class ReactRenderer implements RendererRecord {
     if (template !== undefined)
       return <MarkdownTemplate template={template} options={this.options} definiton={ExtendedNodeDefinition} />;
     return <></>;
+  }
+
+  emoji({ node }: P) {
+    const emoji = node.literal ?? '';
+    /*
+    if (emoji.startsWith('fontawesome')) {
+      return <FontAwesomeIcon icon={regular(emoji.replace(/^fontawesome[-_], '') as IconName)} />;
+    }
+    */
+    return <>{ emoji }</>;
   }
 
 }

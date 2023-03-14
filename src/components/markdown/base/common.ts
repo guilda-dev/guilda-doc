@@ -4,6 +4,7 @@ export type ExtendedNodeType = GeneralNodeType
   | 'table' | 'table_row' | 'table_head' | 'table_cell' 
   | 'html_paragraph' | 'html_paragraph_text' 
   | 'math_block' | 'math_inline'
+  | 'emoji'
   | 'template'
   ;
 
