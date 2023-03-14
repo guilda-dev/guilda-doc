@@ -6,6 +6,10 @@
   transition-timing-function: ease-out;
 }
 
+li {
+  list-style-type: none;
+}
+
 :root, #root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

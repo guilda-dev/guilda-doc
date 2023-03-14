@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
 import styled from 'styled-components';
 import { useGlobalSetting } from '../common/GlobalSetting';
 
 import reactLogo from '@/assets/react.svg';
 import viteLogo from '@/assets/vite.svg';
-
-import './PageFooter.module.css';
 
 const PageFooterBase = styled.div`
   background-color: var(--footer-background-color);

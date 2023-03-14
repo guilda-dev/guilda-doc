@@ -9,13 +9,17 @@ const _codeSpan = styled.code`
   background-color: var(--color-bg2);
 `;
 
-const _codeBlock = styled.p`
+const _codeBlock = styled.div`
   
 `;
 
 export type CodeSpanProps = {
   lang?: string;
-}
+};
+
+export type CodeBlockProps = CodeSpanProps & {
+  editable?: boolean;
+};
 
 export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
   const code = filterStringChildren(props.children);
@@ -24,10 +28,10 @@ export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
   </_codeSpan>;
 };
 
-export const CodeBlock = (props: PropsWithChildren<CodeSpanProps>) => {
-  return <_codeBlock><pre>
-    <CodeSpan>
+export const CodeBlock = (props: PropsWithChildren<CodeBlockProps>) => {
+  return <_codeBlock>
+    <pre>
       { props.children }
-    </CodeSpan></pre>
+    </pre>
   </_codeBlock>;
 };
