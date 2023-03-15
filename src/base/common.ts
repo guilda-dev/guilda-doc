@@ -1,9 +1,9 @@
 export class ResponseError extends Error {
 
-  readonly response: Response;
+  readonly response?: Response;
 
-  constructor(response: Response) {
-    super(`HTTP ERROR ${response.status}`);
+  constructor(response?: Response) {
+    super(`HTTP ERROR ${response?.status ?? 404}`);
     this.response = response;
   }
 }

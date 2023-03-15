@@ -1,7 +1,9 @@
-import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
+import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type GlobalSettingDefinition = {
   darkMode: boolean;
+  language: string;
 }
 
 export type GlobalSettingSetter = (value: Partial<GlobalSettingDefinition>) => void;
@@ -12,6 +14,7 @@ export type GlobalSettingContextScheme = GlobalSettingDefinition & {
 
 const getDefaultDefinition = (): GlobalSettingDefinition => ({
   darkMode: false,
+  language: window.navigator?.language ?? 'ja'
 });
 
 const getDefaultScheme = (): GlobalSettingContextScheme => ({
@@ -42,8 +45,10 @@ const getFromLocalStorage = (prefix?: string) => {
     const valueStr = localStorage.getItem(key);
     if (valueStr === null)
       continue;
-    else 
-      ret[k as keyof GlobalSettingDefinition] = JSON.parse(valueStr);
+    else {
+      const val = JSON.parse(valueStr);
+      ret[k] = val as never;
+    }
   }
   return ret;
 };
@@ -57,6 +62,10 @@ export const GlobalSettingProvider = (props: PropsWithChildren<object>) => {
     putToLocalStorage(newSetting, SETTING_PREFIX);
     _s(newSetting);
   };
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage(s.language);
+  }, [s.language]);
   return <_context.Provider value={{
     ...s,
     setSetting: updater, 

@@ -54,6 +54,34 @@ export const deepFilterStringChildren = (node: JSX.Element): string => {
   return deepFilterStringChildren(node.props?.children);
 };
 
+export const handleHtmlElementLink = (elem: JSX.Element, parser?: (s: string) => string) => {
+  if (parser === undefined)
+    return elem;
+  if (
+    elem.type === 'img' ||
+    elem.type === 'audio' ||
+    elem.type === 'video' ||
+    elem.type === 'source'
+  ) {
+    return <elem.type {...{
+      ...elem.props,
+      src: parser(elem.props.src) ?? ''
+    }} />;
+  } else if (
+    elem.type === 'a' ||
+    elem.type === 'link'
+  ) {
+    return <elem.type {...{
+      ...elem.props,
+      isActive: undefined,
+      isactive: elem.props.isactive ?? elem.props.isActive,
+      // href: parser(elem.props.href) ?? ''
+    }} />;
+  }
+  return elem;
+};
+
+
 export const isVoidElement = (element: JSX.Element) => {
   const elementType = element.type;
   if (typeof elementType === 'string') {

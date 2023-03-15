@@ -1,7 +1,7 @@
 import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
 import React from 'react';
 import { CodeBlock, CodeSpan } from './CodeBlock';
-import { deepFilterStringChildren, potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
+import { deepFilterStringChildren, handleHtmlElementLink, potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
 import MathBlock, { MathSpan } from './MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
@@ -40,9 +40,39 @@ export type HierarchicalNavNode = NavNode & {
 };
 
 
-const TitleAnchor = styled.a`
-  
+const _titleAnchor = styled.div`
+  position: relative;
+  & > * {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  & > * > svg {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 `;
+
+const _titleId = styled.span`
+  position: absolute;
+  top: -100px;
+`;
+
+const TitleAnchor = (props: { to: string, id: string }) => {
+  const { to, id } = props;
+
+  return <_titleAnchor>
+    <div>
+
+      <_titleId id={id}></_titleId>
+      <a href={to}>
+        <svg viewBox="0 0 16 16" version="1.1" fill="currentColor" width="16" height="16" aria-hidden="true" data-v-f4cc3f5d=""><path fillRule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z" data-v-f4cc3f5d=""></path></svg>
+      </a>
+    </div>
+
+  </_titleAnchor>;
+};
 
 const HEADER_PREFIX = 'md-';
 
@@ -195,15 +225,13 @@ export class ReactRenderer implements RendererRecord {
       .push(thisNode);
     this.context.nodeStack.push(thisNode);
 
-    return <HeadingTag id={HEADER_PREFIX + headingHash} style={
+    return <HeadingTag style={
       shouldAlignCenter ?
         { textAlign: 'center' } :
         undefined
-    }>
+    }><TitleAnchor to={href} id={HEADER_PREFIX + headingHash} />
       {children}
-      <TitleAnchor href={href}>
-        <svg viewBox="0 0 16 16" version="1.1" fill="currentColor" width="16" height="16" aria-hidden="true" data-v-f4cc3f5d=""><path fillRule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z" data-v-f4cc3f5d=""></path></svg>
-      </TitleAnchor>
+
     </HeadingTag>;
   }
 
@@ -290,38 +318,10 @@ export class ReactRenderer implements RendererRecord {
       return <FontAwesomeIcon icon={regular(emoji.replace(/^fontawesome[-_], '') as IconName)} />;
     }
     */
-    return <>{ emoji }</>;
+    return <>{emoji}</>;
   }
 
 }
-
-const handleHtmlElementLink = (elem: JSX.Element, parser?: (s: string) => string) => {
-  if (parser === undefined)
-    return elem;
-  if (
-    elem.type === 'img' ||
-    elem.type === 'audio' ||
-    elem.type === 'video' ||
-    elem.type === 'source'
-  ) {
-    return <elem.type {...{
-      ...elem.props,
-      src: parser(elem.props.src) ?? ''
-    }} />;
-  } else if (
-    elem.type === 'a' ||
-    elem.type === 'link'
-  ) {
-    return <elem.type {...{
-      ...elem.props,
-      isActive: undefined,
-      isactive: elem.props.isactive ?? elem.props.isActive,
-      // href: parser(elem.props.href) ?? ''
-    }} />;
-  }
-  return elem;
-};
-
 
 export const render = (
   ast: Node<ExtendedNodeType>,

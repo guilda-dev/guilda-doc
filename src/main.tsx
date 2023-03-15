@@ -13,8 +13,8 @@ i18n
     resources: {
       en: { translation: langEn }
     },
-    lng: 'en',
-    fallbackLng: 'en',
+    lng: 'ja',
+    fallbackLng: 'ja',
 
     interpolation: {
       escapeValue: false

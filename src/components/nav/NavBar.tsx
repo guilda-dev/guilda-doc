@@ -18,6 +18,11 @@ const NavContainer = styled.div`
   width: 100%;
   max-width: var(--navbar-max-width);
   align-items: left;
+
+  & ul {
+    width: min-content;
+    display: inline-flex;
+  }
 `;
 
 import './nav.css';
@@ -29,7 +34,7 @@ const NavBar = () => {
   const [activeLink, setActiveLink] = useState('');
   const { darkMode } = useGlobalSetting();
 
-  const { t } = useTranslation();
+  const setting = useGlobalSetting();
   const links = [
     { name: 'Home', url: '/' },
     { name: 'Profile', url: '/profile' },
@@ -55,6 +60,11 @@ const NavBar = () => {
             </li>
           ))}
         </ul>
+        <span>
+          <button onClick={() => {
+            setting.setSetting({ language: setting.language === 'en' ? 'ja' : 'en' });
+          }}> {setting.language} </button>
+        </span>
       </NavContainer>
     </NavBase>
   );

@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import { LeftSideFrame } from '@/components/page/PageFrame';
-import { ResponseError } from '@/base/common';
 import { SiteNavTree } from '@/common/config';
+import { getStaticResource, ResourceMeta } from '@/common/io';
+import path from 'path-browserify';
+import { useGlobalSetting } from '@/components/common/GlobalSetting';
 
 const DOC_PREFIX = '/md';
-const DOC_SUFFIX = '.md';
 
 
 const ErrorPage = (props: { error?: Error }) => {
@@ -20,25 +21,27 @@ const ErrorPage = (props: { error?: Error }) => {
 
 const DocumentReader = () => {
   const [resource, setResource] = useState<string | Error | undefined>(undefined);
+  const [, setMeta] = useState<ResourceMeta | undefined>(undefined);
+
   const location = useLocation();
   const id = location.pathname;
+  const setting = useGlobalSetting();
 
   useEffect(() => {
-    fetch(DOC_PREFIX + id + DOC_SUFFIX)
-      .then(response => {
-        if (!response.ok) {
-          throw new ResponseError(response);
-        }
-        return response.text();
-      })
-      .then(data => {
+    getStaticResource(
+      path.join(DOC_PREFIX, id),
+      { format: ['md', 'html'] },
+      setting.language
+    ).then(([data, err, meta]) => {
+      if (err)
+        setResource(err);
+      else {
         setResource(data);
-      })
-      .catch(error => {
-        console.error(error);
-        setResource(error);
-      });
-  }, [id]);
+      }
+      setMeta(meta);
+    }).catch((err => setResource(err)));
+    
+  }, [id, setting.language]);
   return <>
     <LeftSideFrame>
       <NavTree rootNode={SiteNavTree} />
