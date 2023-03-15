@@ -46,12 +46,16 @@ const _titleAnchor = styled.div`
   & > * {
     position: absolute;
     left: 0;
+    width: 0;
     top: 0;
   }
-  & > * > svg {
+  & a {
     position: absolute;
     right: 0;
     top: 0;
+  }
+  .dark-mode & img {
+    filter: invert(1);
   }
 `;
 

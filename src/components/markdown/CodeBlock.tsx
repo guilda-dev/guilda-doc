@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import { filterStringChildren } from './common';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 const _codeSpan = styled.code`
   padding: 3px 5px;
@@ -29,9 +30,10 @@ export const CodeSpan = (props: PropsWithChildren<CodeSpanProps>) => {
 };
 
 export const CodeBlock = (props: PropsWithChildren<CodeBlockProps>) => {
+  const code = filterStringChildren(props.children);
   return <_codeBlock>
-    <pre>
-      { props.children }
-    </pre>
+    <SyntaxHighlighter language={props.lang} >
+      { code }
+    </SyntaxHighlighter>
   </_codeBlock>;
 };

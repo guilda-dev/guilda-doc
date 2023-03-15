@@ -64,6 +64,9 @@ const NavBar = () => {
           <button onClick={() => {
             setting.setSetting({ language: setting.language === 'en' ? 'ja' : 'en' });
           }}> {setting.language} </button>
+          <button onClick={() => {
+            setting.setSetting({ darkMode: !setting.darkMode });
+          }}> deep Dark Fantasy </button>
         </span>
       </NavContainer>
     </NavBase>
