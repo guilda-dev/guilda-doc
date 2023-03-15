@@ -1,5 +1,6 @@
 
 <!-- h2: align-center$set -->
+<!-- heading: no-link -->
 # 　
 
 This site is the official documentation site of GUILDA.

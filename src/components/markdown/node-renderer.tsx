@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { NavNode } from '@/base/nav';
 import { RightSideFrame } from '../page/PageFrame';
 import NavTree from '../nav/NavTree';
+import linkIcon from '@/assets/icons/link.svg';
 /*
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro';
@@ -59,16 +60,25 @@ const _titleId = styled.span`
   top: -100px;
 `;
 
-const TitleAnchor = (props: { to: string, id: string }) => {
-  const { to, id } = props;
+type TitleAnchorProps = { 
+  to: string, 
+  id: string,
+  noClick?: boolean,
+};
+
+const TitleAnchor = (props: TitleAnchorProps) => {
+  const { to, id, noClick } = props;
 
   return <_titleAnchor>
     <div>
 
       <_titleId id={id}></_titleId>
-      <a href={to}>
-        <svg viewBox="0 0 16 16" version="1.1" fill="currentColor" width="16" height="16" aria-hidden="true" data-v-f4cc3f5d=""><path fillRule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z" data-v-f4cc3f5d=""></path></svg>
-      </a>
+      {
+        !noClick && 
+        <a href={to}>
+          <img src={linkIcon} />
+        </a>
+      }
     </div>
 
   </_titleAnchor>;
@@ -229,7 +239,10 @@ export class ReactRenderer implements RendererRecord {
       shouldAlignCenter ?
         { textAlign: 'center' } :
         undefined
-    }><TitleAnchor to={href} id={HEADER_PREFIX + headingHash} />
+    }><TitleAnchor to={href} id={HEADER_PREFIX + headingHash} noClick={
+        !!(this.context.macroStore.check(HeadingTag, 'no-link') ??
+          this.context.macroStore.check('heading', 'no-link'))
+      } />
       {children}
 
     </HeadingTag>;

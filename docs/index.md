@@ -1,5 +1,6 @@
 
 <!-- h2: align-center$set -->
+<!-- heading: no-link -->
 # 　
 
 本サイトはGUILDA の公式ドキュメントです.

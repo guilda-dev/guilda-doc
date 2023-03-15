@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useGlobalSetting } from '../common/GlobalSetting';
 
-import reactLogo from '@/assets/react.svg';
-import viteLogo from '@/assets/vite.svg';
+import reactLogo from '@/assets/icons/react.svg';
+import viteLogo from '@/assets/icons/vite.svg';
 
 const PageFooterBase = styled.div`
   background-color: var(--footer-background-color);
