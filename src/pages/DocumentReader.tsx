@@ -29,7 +29,7 @@ const DocumentReader = () => {
 
   useEffect(() => {
     getStaticResource(
-      path.join(DOC_PREFIX, id),
+      id,
       { format: ['md', 'html'] },
       setting.language
     ).then(([data, err, meta]) => {

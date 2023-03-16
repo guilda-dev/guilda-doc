@@ -12,6 +12,7 @@ import PageFooter from './components/page/PageFooter';
 import { PageFrame } from './components/page/PageFrame';
 import MainPage from './pages/MainPage';
 
+
 const AppContext = (props: PropsWithChildren<object>) => {
   return (
     <CurrentPathProvider>
@@ -60,7 +61,6 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-
   return <AppContext>
     <NavBar />
     <StateMaintainer>

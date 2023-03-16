@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import styled from 'styled-components';
-import { filterStringChildren } from './common';
+import { filterStringChildren } from '../html-renderer';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 
 const _codeSpan = styled.code`

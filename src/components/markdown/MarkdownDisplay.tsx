@@ -1,8 +1,9 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
-import { ExtendedNodeDefinition } from './base/common';
-import { delay, ExtendedSyntaxOptions, filterStringChildren } from './common';
+import { ExtendedNodeDefinition, ExtendedSyntaxOptions } from './base/common';
+import { filterStringChildren } from './common';
 import { ReactRenderingOptions, render } from './node-renderer';
 import { BlockParser, common } from 'commonmark';
+import { delay } from '@/base/common';
 
 export type MarkdownDisplayProps = {
   content?: string;

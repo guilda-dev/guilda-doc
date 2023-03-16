@@ -17,3 +17,7 @@ export const deepFreeze = <T extends object = object>(obj: T) => {
   });
   return Object.freeze(obj);
 };
+
+export function delay(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}

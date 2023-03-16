@@ -2,6 +2,7 @@
 import { ResponseError } from '@/base/common';
 import path from 'path-browserify';
 import { SiteConfig } from './config';
+import { Documents } from './res';
 
 export type ResourceSuffix = {
   lang?: string,
@@ -86,6 +87,8 @@ const putCachedResource = (fp: string, val: string, meta: ResourceMeta) => {
   resMap.set(fpObj, [val, meta]);
 };
 
+const DOCS_PREFIX = '/docs';
+// const DEFS_PREFIX = '/defs';
 
 export const getStaticResource = async (path: string, descriptor?: ResourceSuffix, currentLang?: string, timeRefresh?: number)
   : Promise<[undefined, ResponseError, ResourceMeta] | [string, undefined, ResourceMeta]> => {
@@ -97,24 +100,20 @@ export const getStaticResource = async (path: string, descriptor?: ResourceSuffi
 
   const metas = compileSuffix(descriptor ?? {}, currentLang);
 
-  let lastErr: ResponseError | undefined = undefined;
   let lastMeta: ResourceMeta | undefined = undefined;
   for (const meta of metas) {
-    const resPath = path + concatWithDot(meta.lang, meta.type, meta.format);
-    const response = await fetch(resPath);
-    if (response.ok) {
-      const txt = await response.text();
-      putCachedResource(fp, txt, meta);
-      return [txt, undefined, meta];
-    } else if (response.status === 404) {
-      lastErr = new ResponseError(response);
+    const resPath = DOCS_PREFIX + path + concatWithDot(meta.lang, meta.type, meta.format);
+    const resImporter = Documents[resPath];
+    if (resImporter === undefined) {
       lastMeta = meta;
       continue;
     } else {
-      return [undefined, new ResponseError(response), meta];
-    }
+      const txt = await resImporter();
+      putCachedResource(fp, txt, meta);
+      return [txt, undefined, meta];
+    } 
   }
-  return [undefined, lastErr ?? new ResponseError(undefined), lastMeta ?? { lang: '', format: '', time: Date.now() }];
+  return [undefined, new ResponseError(undefined), lastMeta ?? { lang: '', format: '', time: Date.now() }];
 };
 
 

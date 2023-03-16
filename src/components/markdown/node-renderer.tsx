@@ -1,25 +1,32 @@
 import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
-import React from 'react';
-import { CodeBlock, CodeSpan } from './CodeBlock';
-import { deepFilterStringChildren, handleHtmlElementLink, potentiallyUnsafe, RendererRecord, RenderFunction, replaceChildren } from './common';
-import MathBlock, { MathSpan } from './MathBlock';
+import React, { PropsWithChildren } from 'react';
+import { CodeBlock, CodeSpan } from './node/CodeBlock';
+import { handleHtmlElementLink, potentiallyUnsafe, replaceChildren } from './html-renderer';
+import MathBlock, { MathSpan } from './node/MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
 import { TableCellContent } from './base/table';
 import { generateAnchorFromTitle, HtmlParagraphDefinition, isHtmlRecordNode, mergeHtmlNodes } from './base/html';
 import { TemplateParams } from './base/template';
 import { MacroStateMaintainer, parseMacro } from './macro';
-import MarkdownTemplate from './MarkdownTemplate';
+import MarkdownTemplate from './node/TemplateNode';
 import styled from 'styled-components';
 import { NavNode } from '@/base/nav';
 import { RightSideFrame } from '../page/PageFrame';
 import NavTree from '../nav/NavTree';
 import linkIcon from '@/assets/icons/link.svg';
+import { deepFilterStringChildren } from './common';
 /*
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { IconName } from '@fortawesome/free-regular-svg-icons';
 */
+
+
+export type RenderFunction = (props: PropsWithChildren<{ node: Node<ExtendedNodeType> }>) => React.ReactNode;
+
+export type RendererRecord = Record<ExtendedNodeType, RenderFunction>;
+
 
 type P = React.PropsWithChildren<{
   node: Node<ExtendedNodeType>;
@@ -324,7 +331,7 @@ export class ReactRenderer implements RendererRecord {
   template({ node }: P) {
     const template = node.customData as TemplateParams;
     if (template !== undefined)
-      return <MarkdownTemplate template={template} options={this.options} definiton={ExtendedNodeDefinition} />;
+      return <MarkdownTemplate template={template} options={this.options} definition={ExtendedNodeDefinition} />;
     return <></>;
   }
 
@@ -339,6 +346,7 @@ export class ReactRenderer implements RendererRecord {
   }
 
 }
+
 
 export const render = (
   ast: Node<ExtendedNodeType>,
