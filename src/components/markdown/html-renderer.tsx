@@ -1,10 +1,6 @@
 import { ResourceSuffix } from '@/common/io';
-import { Node } from 'commonmark';
 import React, { PropsWithChildren } from 'react';
-import { ExtendedNodeType } from './base/common';
-import { deepFilterStringChildren } from './common';
 import { useResourceStore } from './node/ResourceNode';
-
 
 
 const reUnsafeProtocol = /^javascript:|vbscript:|file:|data:/i;
@@ -75,13 +71,12 @@ const HtmlNodeWithResource = (props: PropsWithChildren<{
   const [data] = useResourceStore({
     link: link,
     descriptor: descriptor,
-    getResource: 'static',
   });
 
   const filteredProps = {
     ...elemProps,
     children: children ?? elemProps.children as React.ReactNode,
-    src: data !== undefined ? data : link,
+    src: data// !== undefined ? data : link,
   };
 
   if (VoidElementSet.has(TagType))
@@ -127,5 +122,5 @@ export const deepFilterHtmlNode = (elem: E): E => {
     (<React.Fragment key={`heml_node_${i}`}>{deepFilterHtmlNode(c)}</React.Fragment>)
   );
   const newProps = { ...elem.props, children: newChildren };
-  return filterHtmlNode(elem);
+  return filterHtmlNode(<elem.type {...newProps} />);
 };

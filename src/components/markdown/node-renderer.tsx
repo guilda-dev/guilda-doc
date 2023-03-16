@@ -167,7 +167,7 @@ export class ReactRenderer implements RendererRecord {
     macros.forEach(([, macro]) => this.context.macroStore.merge(macro));
     if (this.options.safe)
       return <>[ERROR: RAW HTML OMITTED]</>;
-    return parse(node.literal ?? '');
+    return deepFilterHtmlNode(parse(node.literal ?? ''));
   }
 
   html_block({ node, children }: P) {
