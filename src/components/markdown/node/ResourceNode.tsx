@@ -8,6 +8,7 @@ export type ResourceStoreProps = {
   link: string,
   descriptor?: ResourceSuffix,
   lang?: string,
+  getResource?: 'static' | 'http' | 'both'
 };
 
 
@@ -22,7 +23,7 @@ export const useResourceStore = (props: ResourceStoreProps): ResourceStore => {
 
   const setting = useGlobalSetting();
 
-  const { link, descriptor, lang } = props;
+  const { link, descriptor, lang, getResource } = props;
 
   const getResHttp = async () => {
     let ret = false;
@@ -55,13 +56,17 @@ export const useResourceStore = (props: ResourceStoreProps): ResourceStore => {
   };
 
   useEffect(() => {
-    const f = async () => {
-      const retStatic = getResStatic();
-      if (!retStatic)
-        getResHttp();
-    };
+    const f = ( getResource === undefined || getResource === 'both' ) ? 
+      async () => {
+        const retStatic = getResStatic();
+        if (!retStatic)
+          getResHttp();
+      } : 
+      getResource === 'static' ? 
+        getResStatic : 
+        getResHttp;
     f().catch((err => setResource(err)));
-  }, [link, descriptor, lang, setting.language]);
+  }, [link, descriptor, lang, setting.language, getResource]);
 
   return [resource, error, meta];
 };

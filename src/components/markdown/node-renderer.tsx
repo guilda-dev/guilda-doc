@@ -1,7 +1,7 @@
 import { HtmlRenderingOptions, Node, NodeTypeDefinition, NodeWalker, NodeWalkerEvent } from 'commonmark';
 import React, { PropsWithChildren } from 'react';
 import { CodeBlock, CodeSpan } from './node/CodeBlock';
-import { handleHtmlElementLink, potentiallyUnsafe, replaceChildren } from './html-renderer';
+import { deepFilterHtmlNode, handleHtmlElementLink, potentiallyUnsafe, replaceChildren } from './html-renderer';
 import MathBlock, { MathSpan } from './node/MathBlock';
 import parse from 'html-react-parser';
 import { ExtendedNodeDefinition, ExtendedNodeType } from './base/common';
@@ -305,9 +305,9 @@ export class ReactRenderer implements RendererRecord {
     if (!isValidNode)
       return <>{children}</>;
     const htmlString = (startTag ?? '') + (endTag ?? '');
-    const htmlBlock = parse(htmlString !== '' ? htmlString : (
+    const htmlBlock = deepFilterHtmlNode(parse(htmlString !== '' ? htmlString : (
       (tagName ?? '') !== '' ? `<${tagName}>` : ''
-    ));
+    )));
     if (typeof htmlBlock !== 'string') {
       if (htmlBlock instanceof Array) {
         if (htmlBlock.length === 0)

@@ -2,7 +2,7 @@
 import { ResponseError } from '@/base/common';
 import path from 'path-browserify';
 import { SiteConfig } from './config';
-import { Documents } from './res';
+import { Documents, Gallery } from './res';
 
 export type ResourceSuffix = {
   lang?: string,
@@ -90,6 +90,12 @@ const putCachedResource = (fp: string, val: string, meta: ResourceMeta) => {
 const DOCS_PREFIX = '/docs';
 // const DEFS_PREFIX = '/defs';
 
+const tryGetImporter = (link: string): string | (() => Promise<string>) | undefined => {
+  if (/\.(?:png|jpg|jpeg|bmp|gif|svg|webp)/i.test(link))
+    return Gallery[link];
+  return Documents[link];
+};
+
 export const getStaticResource = async (path: string, descriptor?: ResourceSuffix, currentLang?: string, timeRefresh?: number)
   : Promise<[undefined, ResponseError, ResourceMeta] | [string, undefined, ResourceMeta]> => {
   const fp = getFingerprint(path, descriptor, currentLang);
@@ -98,22 +104,38 @@ export const getStaticResource = async (path: string, descriptor?: ResourceSuffi
     return [cache[0], undefined, cache[1]];
   }
 
-  const metas = compileSuffix(descriptor ?? {}, currentLang);
+  const defaultMeta = { lang: '', format: '', time: Date.now() };
+  const withSuffix = /\.\w{1,8}$/.test(path);
+  if (withSuffix) {
+    const resPath = DOCS_PREFIX + path;
+    const resImporter = tryGetImporter(resPath);
+    if (resImporter === undefined) {
+      return [undefined, new ResponseError(undefined), defaultMeta];
+    } else {
+      if (typeof resImporter === 'string')
+        return [resImporter, undefined, { ...defaultMeta, format: 'url' }];
+      const txt = await resImporter();
+      putCachedResource(fp, txt, defaultMeta);
+      return [txt, undefined, defaultMeta];
+    } 
+  }
 
   let lastMeta: ResourceMeta | undefined = undefined;
-  for (const meta of metas) {
+  for (const meta of compileSuffix(descriptor ?? {}, currentLang)) {
     const resPath = DOCS_PREFIX + path + concatWithDot(meta.lang, meta.type, meta.format);
-    const resImporter = Documents[resPath];
+    const resImporter = tryGetImporter(resPath);
     if (resImporter === undefined) {
       lastMeta = meta;
       continue;
     } else {
+      if (typeof resImporter === 'string')
+        return [resImporter, undefined, { ...defaultMeta, format: 'url' }];
       const txt = await resImporter();
       putCachedResource(fp, txt, meta);
       return [txt, undefined, meta];
     } 
   }
-  return [undefined, new ResponseError(undefined), lastMeta ?? { lang: '', format: '', time: Date.now() }];
+  return [undefined, new ResponseError(undefined), lastMeta ?? defaultMeta];
 };
 
 

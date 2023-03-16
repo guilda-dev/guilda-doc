@@ -1,6 +1,6 @@
 import { MathComponent } from 'mathjax-react';
 import React, { PropsWithChildren } from 'react';
-import { filterStringChildren } from '../html-renderer';
+import { filterStringChildren } from '../common';
 
 export const MathSpan = (props: PropsWithChildren<object>) => {
   const tex = filterStringChildren(props.children);
