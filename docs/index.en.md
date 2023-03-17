@@ -11,7 +11,10 @@ This site is the official documentation site of GUILDA.
 @[imgCentered](src="/Figures/GUILDAicon.png", width="70%")
 
 GUILDA is a smart energy management algebraic simulator developed by Ishizaki Lab. and Assist. Prof. Kawaguchi, Gunma Univ.
-システム制御分野の学生や研究者に対して、最小限の電力システムの知識だけで利用可能な先端的な数値シミュレーション環境を提供することを目的としています。関連知識をシステム制御分野のことばで解説した教科書（2022年にコロナ社から刊行予定）とも密に連携させることで、数学的な基礎と数値シミュレーション環境の構築を並行して学習できるように工夫しています。このような活動を通して、電力システムを身近なベンチマークモデルの1つとしてシステム制御分野に定着させることにより、本分野の技術や知見が電力システム改革を推進する一助となることを目指しています。
+It aims to provide an algebraic simulation environment that only requires minimum amount of E&E knowledge for the students and researchers in system & control area.
+With the dense connection to the textbook (published early 2023, Corona-Sha), it is made possible to learning mathematical fundaments and simulation environment's usage in parallel.
+
+このような活動を通して、電力システムを身近なベンチマークモデルの1つとしてシステム制御分野に定着させることにより、本分野の技術や知見が電力システム改革を推進する一助となることを目指しています。
 
 ## Models of GUILDA
 
