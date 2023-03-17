@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useGlobalSetting } from '../common/GlobalSetting';
 
 import reactLogo from '@/assets/icons/react.svg';
 import viteLogo from '@/assets/icons/vite.svg';
@@ -103,9 +102,8 @@ const ReactLogoImg = styled(LogoImg)`
 
 
 const PageFooter = () => {
-  const { darkMode } = useGlobalSetting();
 
-  return <PageFooterBase className={darkMode ? 'dark-mode' : ''}>
+  return <PageFooterBase>
     <FooterContainer>
       <ContentDiv>
         <p>

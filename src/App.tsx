@@ -7,7 +7,7 @@ import { CurrentPathProvider } from '@/components/common/CurrentPath';
 import DocumentReader from './pages/DocumentReader';
 
 import styled from 'styled-components';
-import { GlobalSettingProvider, useGlobalSetting } from './components/common/GlobalSetting';
+import { GlobalSettingProvider } from './components/common/GlobalSetting';
 import PageFooter from './components/page/PageFooter';
 import { PageFrame } from './components/page/PageFrame';
 import MainPage from './pages/MainPage';
@@ -41,13 +41,6 @@ const MainContainer = styled.div`
   }
 `;
 
-const StateMaintainer = (props: PropsWithChildren<object>) => {
-  const { darkMode } = useGlobalSetting();
-  return <MainContainer className={(darkMode ? 'dark-mode' : '')}>
-    {props.children}
-  </MainContainer>;
-};
-
 
 const router = createBrowserRouter([
   {
@@ -63,11 +56,11 @@ const router = createBrowserRouter([
 const App = () => {
   return <AppContext>
     <NavBar />
-    <StateMaintainer>
+    <MainContainer>
       <PageFrame>
         <RouterProvider router={router} />
       </PageFrame>
-    </StateMaintainer>
+    </MainContainer>
     <PageFooter />
   </AppContext>;
 };

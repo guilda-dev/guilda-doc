@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useGlobalSetting } from '../common/GlobalSetting';
 
@@ -32,7 +31,6 @@ import './nav.css';
 
 const NavBar = () => {
   const [activeLink, setActiveLink] = useState('');
-  const { darkMode } = useGlobalSetting();
 
   const setting = useGlobalSetting();
   const links = [
@@ -49,7 +47,7 @@ const NavBar = () => {
   }, [links]);
 
   return (
-    <NavBase className={darkMode ? 'dark-mode' : ''}>
+    <NavBase>
       <NavContainer>
         <ul>
           {links.map(link => (

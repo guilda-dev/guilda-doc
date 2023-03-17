@@ -62,10 +62,23 @@ export const GlobalSettingProvider = (props: PropsWithChildren<object>) => {
     putToLocalStorage(newSetting, SETTING_PREFIX);
     _s(newSetting);
   };
+
   const { i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(s.language);
   }, [s.language]);
+
+  useEffect(() => {
+    if (s.darkMode){
+      document.getElementById('root')?.classList?.add('dark-mode');
+      document.body.classList.add('dark-mode');
+    }
+    else {
+      document.getElementById('root')?.classList?.remove('dark-mode');
+      document.body.classList.remove('dark-mode');
+    }
+  }, [s.darkMode]);
+
   return <_context.Provider value={{
     ...s,
     setSetting: updater, 

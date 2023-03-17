@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import NavTree from '../components/nav/NavTree';
 
-import { useGlobalSetting } from '../components/common/GlobalSetting';
 import { LeftSideFrame } from '../components/page/PageFrame';
 import { SiteNavTree } from '../common/config';
 import MarkdownDisplay from '@/components/markdown/MarkdownDisplay';
 import { useResourceStore } from '@/components/markdown/node/ResourceNode';
 
 const MainPage = () => {
-  
+
   const [resource] = useResourceStore({
-    link: '/index', 
+    link: '/index',
     descriptor: { format: ['md', 'html'] }
   });
 
@@ -19,7 +18,7 @@ const MainPage = () => {
     <LeftSideFrame>
       <NavTree rootNode={SiteNavTree} />
     </LeftSideFrame><div className="App">
-      <MarkdownDisplay>{ resource }</MarkdownDisplay>
+      <MarkdownDisplay>{resource}</MarkdownDisplay>
     </div></>;
 };
 
