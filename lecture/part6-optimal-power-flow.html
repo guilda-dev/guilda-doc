@@ -259,7 +259,7 @@
           </ul>
           <p lang="en">The examples of this page use the costs of the MATPOWER case (H<sub>P</sub> and f<sub>P</sub> of G1, G2, G3, in $/h with P in pu) and the voltage limits written at the top of the page. To reproduce them, load IEEE 9-bus, set these parameters, and run the calculations one after another: the economic dispatch, the AC OPF with its binding constraints and LMPs, the limit on line 7–8 (branch EL008) with the AC OPF again, and, after removing the limit and initializing the network, the stability-constrained OPF (about 20 s) with its outer iterations.</p>
           <p lang="ja">このページの例は、ページの初めに書いた MATPOWER のケースの費用（G1、G2、G3 の H<sub>P</sub> と f<sub>P</sub>。P は単位法、単位は $/h）と電圧の上下限を使っています。GUILDA で確かめるときは、IEEE 9 母線系統を読み込んでこれらのパラメータを与え、続けて計算します。経済負荷配分、AC OPF とその効いている制約・LMP、線路 7–8（ブランチ EL008）の制限と AC OPF、そして制限を戻して系統を初期化したあとの安定度制約付き OPF（20 秒ほどかかります）とその外側の反復です。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 HP = [1100, 850, 1225];
 fP = [500, 120, 100];
 for k = 1:3, gen = net.a_Bus{k}.a_Component{1}; gen.tab_parameter.OPF.HP = HP(k); gen.tab_parameter.OPF.fP = fP(k); end

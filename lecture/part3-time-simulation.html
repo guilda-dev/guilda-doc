@@ -277,7 +277,7 @@
 
           <p lang="en">To run case (a) in GUILDA, load the system, make a scenario with the fault, simulate it and draw the rotor angles:</p>
           <p lang="ja">GUILDA で (a) を確かめるときは、系統を読み込み、地絡を入れたシナリオを作ってシミュレーションし、回転子の角度を図にします。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 sc = net.add_scenario("fault", Time=[0, 4]);
 sc.add_fault("B007", [1, 1.15]);
 result = net.simulate("fault");

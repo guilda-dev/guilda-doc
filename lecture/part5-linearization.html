@@ -338,9 +338,10 @@ res = net.simulate("push");</code></pre>
                   <marker id="p5-arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
                 </defs>
                 <rect class="f-card" x="10" y="60" width="140" height="70" rx="5"/>
-                <text lang="en" class="t-strong t-mid" x="80" y="90">network model</text>
-                <text lang="ja" class="t-strong t-mid" x="80" y="90">系統モデル</text>
-                <text class="t-muted t-small t-mid" x="80" y="112">network.IEEE9bus()</text>
+                <text lang="en" class="t-strong t-mid" x="80" y="84">network model</text>
+                <text lang="ja" class="t-strong t-mid" x="80" y="84">系統モデル</text>
+                <text class="t-muted t-small t-mid" x="80" y="104">network.IEEE9bus(</text>
+                <text class="t-muted t-small t-mid" x="80" y="119">LocalController=true)</text>
                 <line class="s-ink" x1="150" y1="95" x2="173" y2="95" marker-end="url(#p5-arrow3)"/>
                 <rect class="f-c3" x="175" y="60" width="130" height="70" rx="5"/>
                 <text lang="en" class="t-strong t-mid" x="240" y="90">operating point</text>
@@ -371,7 +372,7 @@ res = net.simulate("push");</code></pre>
 
           <p lang="en">The commands below linearize IEEE 9-bus at its equilibrium. get_sys returns a ResultLIN object that holds the matrices A, B, C, D and E with the names of the states and inputs; plot_eigenvalue draws its eigenvalues in the complex plane (unstable ones in red); eig gives the eigenvalues used on this page; and get_ss gives the model as a state-space object of MATLAB's Control System Toolbox for controller design.</p>
           <p lang="ja">GUILDA で確かめるときは、次のコマンドで IEEE 9 母線系統を平衡点のまわりで線形化します。get_sys は、行列 A、B、C、D、E と状態・入力の名前を持つ ResultLIN オブジェクトを返します。plot_eigenvalue は固有値を複素平面に描き（不安定なものは赤）、eig はこのページで使った固有値を求め、get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 net.initialize();
 sys = net.get_sys();
 sys.plot_eigenvalue();
