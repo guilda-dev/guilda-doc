@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 2: 潮流計算">GUILDA Lecture Notes - Part 2: Power flow</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec2- ; shared lecture CSS (lec-*) is in style.css. -->
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 2 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 2</p>
+      <h1><span lang="en">Power flow</span><span lang="ja">潮流計算</span></h1>
+      <p class="lec-lead" lang="en">The power flow as a snapshot of the operating state: what each bus fixes and what is solved, how active and reactive power flow, and Newton&#x27;s method in pictures.</p>
+      <p class="lec-lead" lang="ja">運転状態の「写真」としての潮流、母線ごとに決める量と求める量、有効電力と無効電力の流れ方、ニュートン法を図で説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#snapshot"><span lang="en">Power flow as a snapshot</span><span lang="ja">運転状態の「写真」</span></a></li>
+          <li><a href="#bus-types"><span lang="en">Fixed and solved values</span><span lang="ja">決める量と求める量</span></a></li>
+          <li><a href="#pq-flow"><span lang="en">How P and Q flow</span><span lang="ja">有効電力と無効電力の流れ</span></a></li>
+          <li><a href="#newton"><span lang="en">Newton's method</span><span lang="ja">ニュートン法を図で</span></a></li>
+          <li><a href="#no-convergence"><span lang="en">When it does not converge</span><span lang="ja">収束しないとき</span></a></li>
+          <li><a href="#reading"><span lang="en">Reading the result</span><span lang="ja">結果の読み方</span></a></li>
+          <li><a href="#starting-point"><span lang="en">Start of a simulation</span><span lang="ja">時間シミュレーションの出発点</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">What a power flow calculation finds: one steady operating state, like a photograph of the system.</span><span lang="ja">潮流計算が求めるもの。系統のある瞬間の、変わらない運転状態（運転状態の「写真」）。</span></li>
+            <li><span lang="en">Which two quantities are fixed and which two are solved at each kind of bus (slack, PV, PQ).</span><span lang="ja">母線の種類（slack・PV・PQ）ごとに、決めておく 2 つの量と、計算で求める 2 つの量。</span></li>
+            <li><span lang="en">Why active power flows with the angle difference and reactive power with the voltage difference.</span><span lang="ja">有効電力は位相の差で、無効電力は電圧の大きさの差で流れる理由。</span></li>
+            <li><span lang="en">How Newton's method solves the power-flow equations, and why it sometimes fails.</span><span lang="ja">ニュートン法で電力方程式を解く仕組みと、解けないことがある理由。</span></li>
+            <li><span lang="en">How to read the result, using the IEEE 9-bus system, and why it is the starting point of a time-domain simulation.</span><span lang="ja">IEEE 9 母線系統を例にした結果の読み方と、それが時間シミュレーションの出発点になる理由。</span></li>
+          </ul>
+        </section>
+
+        <!-- ============================== SNAPSHOT ============================== -->
+        <section id="snapshot">
+          <h2><span lang="en">The power flow: a photograph of the operating state</span><span lang="ja">潮流は運転状態の「写真」</span></h2>
+          <p lang="en">Demand changes through the day, and the generators follow it. Over a few minutes, however, the demand and the output of each generator hardly change, and the system stays in a steady state. The <strong>power flow</strong> (load flow) is this steady state: the voltage at every bus and the power on every line. A power flow calculation computes it for one given condition of demand and generation, like taking a photograph of the system at one moment.</p>
+          <p lang="ja">需要は一日の中で変わり、発電機の出力もそれに合わせて変わります。しかし数分程度の間なら、需要も各発電機の出力もほとんど変わらず、系統は落ち着いた状態にあります。この落ち着いた状態での、各母線の電圧と各送電線を流れる電力の分布を<strong>潮流</strong>といいます。潮流計算は、ある需要と発電の条件のもとでの潮流を求める計算です。系統のある瞬間の「写真」を撮るようなものです。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/snapshot.png" alt="A schematic daily demand curve, relative to its peak, from 0 to 24 h, with the moment 14:00 marked" width="1166" height="476">
+            </div>
+            <figcaption lang="en">Demand changes slowly through the day (the curve is a schematic, relative to the daily peak). The power flow is the steady state for the demand and generation of one moment, here 14:00: the voltage at every bus, the power on every line and the losses.</figcaption>
+            <figcaption lang="ja">需要は一日の中でゆっくり変わります（曲線は模式的なもので、一日のピークを 1 としています）。潮流は、ある時刻（ここでは 14:00）の需要と発電に対する落ち着いた状態で、各母線の電圧、各送電線を流れる電力、損失からなります。</figcaption>
+          </figure>
+
+          <p lang="en">The photograph tells us whether the operation planned for that moment is acceptable: whether the voltages stay within their range and whether any line carries more than it can. Operators repeat this check for many conditions, such as the peak of the day, the night, or a line taken out of service.</p>
+          <p lang="ja">この「写真」を見ると、その時刻に計画した運転で問題がないか、つまり電圧が範囲内に収まっているか、容量を超えて電力が流れる送電線がないかが分かります。一日のピーク、夜間、送電線を 1 本止めたときなど、いろいろな条件でこの確認を繰り返します。</p>
+          <p lang="en">A photograph shows no motion. The power flow does not tell what happens when the condition changes suddenly, for example at a fault; that is the job of the time-domain simulation. The last section explains how the two are connected.</p>
+          <p lang="ja">写真には動きが写りません。事故のように条件が急に変わったときに何が起きるかは、潮流計算では分からず、時間シミュレーションで調べます。二つのつながりは最後の節で説明します。</p>
+        </section>
+
+        <!-- ============================== BUS TYPES ============================== -->
+        <section id="bus-types">
+          <h2><span lang="en">What is fixed and what is solved at each bus</span><span lang="ja">母線ごとに決める量と求める量</span></h2>
+          <p lang="en">In AC, the voltage at a bus has a <strong>magnitude</strong> <span class="lec-math-inline" data-tex="V"></span> and a <strong>phase angle</strong> <span class="lec-math-inline" data-tex="\theta"></span> (how far its wave is ahead of or behind a reference). The power injected into the network at the bus has an <strong>active power</strong> <span class="lec-math-inline" data-tex="P"></span> and a <strong>reactive power</strong> <span class="lec-math-inline" data-tex="Q"></span>. Each bus thus has four quantities. The network gives two equations per bus (one for <span class="lec-math-inline" data-tex="P"></span> and one for <span class="lec-math-inline" data-tex="Q"></span>), so two of the four must be fixed in advance and the other two are solved.</p>
+          <p lang="ja">交流では、母線の電圧に<strong>大きさ</strong> <span class="lec-math-inline" data-tex="V"></span> と<strong>位相角</strong> <span class="lec-math-inline" data-tex="\theta"></span>（基準に対して波がどれだけ進んでいるか、遅れているか）があります。母線からネットワークに注入する電力には、<strong>有効電力</strong> <span class="lec-math-inline" data-tex="P"></span> と<strong>無効電力</strong> <span class="lec-math-inline" data-tex="Q"></span> があります。つまり母線ごとに 4 つの量があります。ネットワークからは母線ごとに 2 本の式（<span class="lec-math-inline" data-tex="P"></span> の式と <span class="lec-math-inline" data-tex="Q"></span> の式）が得られるので、4 つのうち 2 つを先に決めておき、残りの 2 つを計算で求めます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 740 260" role="img" aria-label="Slack bus fixes V and theta, PV bus fixes P and V, PQ bus fixes P and Q; the other two are solved">
+                <!-- column heads -->
+                <text class="t-strong t-mid" x="370" y="34">V</text>
+                <text class="t-strong t-mid" x="460" y="34">θ</text>
+                <text class="t-strong t-mid" x="550" y="34">P</text>
+                <text class="t-strong t-mid" x="640" y="34">Q</text>
+                <text lang="en" class="t-muted t-mid" x="370" y="52">magnitude</text>
+                <text lang="ja" class="t-muted t-mid" x="370" y="52">電圧の大きさ</text>
+                <text lang="en" class="t-muted t-mid" x="460" y="52">angle</text>
+                <text lang="ja" class="t-muted t-mid" x="460" y="52">位相角</text>
+                <text lang="en" class="t-muted t-mid" x="550" y="52">active</text>
+                <text lang="ja" class="t-muted t-mid" x="550" y="52">有効電力</text>
+                <text lang="en" class="t-muted t-mid" x="640" y="52">reactive</text>
+                <text lang="ja" class="t-muted t-mid" x="640" y="52">無効電力</text>
+                <!-- row: slack -->
+                <text class="t-strong" x="24" y="86">Slack</text>
+                <text lang="en" class="t-muted" x="24" y="104">one generator, the reference</text>
+                <text lang="ja" class="t-muted" x="24" y="104">基準にする発電機の母線（1 つ）</text>
+                <rect class="f-brand" x="330" y="72" width="80" height="34" rx="5"/>
+                <rect class="f-brand" x="420" y="72" width="80" height="34" rx="5"/>
+                <rect class="f-c3 is-dashed" x="510" y="72" width="80" height="34" rx="5"/>
+                <rect class="f-c3 is-dashed" x="600" y="72" width="80" height="34" rx="5"/>
+                <!-- row: PV -->
+                <text class="t-strong" x="24" y="146">PV</text>
+                <text lang="en" class="t-muted" x="24" y="164">generator buses</text>
+                <text lang="ja" class="t-muted" x="24" y="164">発電機の母線</text>
+                <rect class="f-brand" x="330" y="132" width="80" height="34" rx="5"/>
+                <rect class="f-c3 is-dashed" x="420" y="132" width="80" height="34" rx="5"/>
+                <rect class="f-brand" x="510" y="132" width="80" height="34" rx="5"/>
+                <rect class="f-c3 is-dashed" x="600" y="132" width="80" height="34" rx="5"/>
+                <!-- row: PQ -->
+                <text class="t-strong" x="24" y="206">PQ</text>
+                <text lang="en" class="t-muted" x="24" y="224">load buses, buses without equipment</text>
+                <text lang="ja" class="t-muted" x="24" y="224">負荷の母線、機器のない母線</text>
+                <rect class="f-c3 is-dashed" x="330" y="192" width="80" height="34" rx="5"/>
+                <rect class="f-c3 is-dashed" x="420" y="192" width="80" height="34" rx="5"/>
+                <rect class="f-brand" x="510" y="192" width="80" height="34" rx="5"/>
+                <rect class="f-brand" x="600" y="192" width="80" height="34" rx="5"/>
+                <!-- cell labels -->
+                <g class="t-small t-mid">
+                  <text lang="en" class="t-brand t-small t-mid" x="370" y="94">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="370" y="94">決める</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="460" y="94">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="460" y="94">決める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="550" y="94">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="550" y="94">求める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="640" y="94">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="640" y="94">求める</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="370" y="154">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="370" y="154">決める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="460" y="154">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="460" y="154">求める</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="550" y="154">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="550" y="154">決める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="640" y="154">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="640" y="154">求める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="370" y="214">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="370" y="214">求める</text>
+                  <text lang="en" class="t-c3 t-small t-mid" x="460" y="214">solved</text><text lang="ja" class="t-c3 t-small t-mid" x="460" y="214">求める</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="550" y="214">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="550" y="214">決める</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="640" y="214">fixed</text><text lang="ja" class="t-brand t-small t-mid" x="640" y="214">決める</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption lang="en">The three kinds of bus. Each fixes two of the four quantities (blue) and leaves the other two to the calculation (orange, dashed).</figcaption>
+            <figcaption lang="ja">母線の 3 つの種類です。4 つの量のうち 2 つを決めておき（青）、残りの 2 つを計算で求めます（橙・破線）。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">PQ bus</span><span lang="ja">PQ 母線</span></dt>
+            <dd><span lang="en">A load consumes a known amount of power, so <i>P</i> and <i>Q</i> are fixed (negative, because power is taken out of the network). A bus with no equipment is also a PQ bus with <i>P</i> = <i>Q</i> = 0. Its voltage is the result.</span><span lang="ja">負荷が使う電力は分かっているので、<i>P</i> と <i>Q</i> を決めます（ネットワークから電力を取り出すので負の値です）。機器のない母線も、<i>P</i> = <i>Q</i> = 0 の PQ 母線です。電圧は計算の結果として決まります。</span></dd>
+            <dt><span lang="en">PV bus</span><span lang="ja">PV 母線</span></dt>
+            <dd><span lang="en">A generator is told how much active power to produce, and its voltage controller (AVR) holds the voltage magnitude. The generator supplies whatever reactive power is needed for that, so <i>Q</i> is solved.</span><span lang="ja">発電機には出す有効電力が指示され、電圧の調整装置（AVR）が電圧の大きさを一定に保ちます。そのために必要な無効電力は発電機が自然に出すので、<i>Q</i> は計算で求めます。</span></dd>
+            <dt><span lang="en">Slack bus</span><span lang="ja">slack 母線</span></dt>
+            <dd><span lang="en">The losses are not known before the calculation, so no one can fix the active power of every generator in advance. One generator bus takes up the remainder: its <i>P</i> and <i>Q</i> are solved. Its angle is set to 0 and becomes the reference for all other angles.</span><span lang="ja">損失は計算してみるまで分からないので、すべての発電機の有効電力を先に決めることはできません。そこで 1 つの発電機の母線が残りを引き受け、その <i>P</i> と <i>Q</i> を計算で求めます。この母線の位相角を 0 とし、ほかの母線の位相角の基準にします。</span></dd>
+          </dl>
+          <div class="lec-callout">
+            <p lang="en">In GUILDA, the user chooses the slack bus; GUILDA never picks one. The other buses get their type from the equipment connected to them: a bus with a generator, which leaves its reactive power open, is a PV bus, and the other buses are PQ buses. To see the table of types and fixed values that the calculation uses, for the IEEE 9-bus system:</p>
+            <p lang="ja">GUILDA では、slack 母線は利用者が選びます。GUILDA が自動で選ぶことはありません。ほかの母線の種類は、つながっている機器で決まります。無効電力を決めずにおく発電機がある母線は PV 母線、それ以外は PQ 母線です。計算に使う種類と指定値の表は、IEEE 9 母線系統なら次のように確かめられます。</p>
+            <pre class="lec-cmd"><code>net = network.IEEE9bus();
+net.get_pf_condition()</code></pre>
+          </div>
+        </section>
+
+        <!-- ============================== P AND Q ============================== -->
+        <section id="pq-flow">
+          <h2><span lang="en">Active power follows the angle, reactive power the voltage</span><span lang="ja">有効電力は位相差で、無効電力は電圧差で流れる</span></h2>
+          <p lang="en">Take two buses joined by a line. Transmission lines are mostly inductive, so we keep only the reactance <span class="lec-math-inline" data-tex="X"></span> of the line and ignore its resistance. With the voltage magnitudes <span class="lec-math-inline" data-tex="V_1"></span>, <span class="lec-math-inline" data-tex="V_2"></span> and the angles <span class="lec-math-inline" data-tex="\theta_1"></span>, <span class="lec-math-inline" data-tex="\theta_2"></span> of the two buses, the active power sent from bus 1 to bus 2 is then</p>
+          <p lang="ja">2 つの母線を 1 本の送電線でつないだ場合を考えます。送電線はほとんどがインダクタンスの性質を持つので、抵抗を無視し、リアクタンス <span class="lec-math-inline" data-tex="X"></span> だけを考えます。2 つの母線の電圧の大きさを <span class="lec-math-inline" data-tex="V_1"></span>、<span class="lec-math-inline" data-tex="V_2"></span>、位相角を <span class="lec-math-inline" data-tex="\theta_1"></span>、<span class="lec-math-inline" data-tex="\theta_2"></span> とすると、母線 1 から母線 2 に送られる有効電力は次の式になります（抵抗がないので損失はなく、母線 2 に届く有効電力も同じです）。</p>
+          <div class="lec-math" data-tex="P = \frac{V_1 V_2}{X}\,\sin\delta, \qquad \delta = \theta_1 - \theta_2"></div>
+          <p lang="en">Active power flows from the bus whose angle is <strong>ahead</strong> to the bus whose angle is <strong>behind</strong>, and the larger the angle difference <span class="lec-math-inline" data-tex="\delta"></span>, the more power flows. The voltage magnitudes stay close to 1 pu in normal operation, so it is mainly the angle that moves the active power.</p>
+          <p lang="ja">有効電力は、位相が<strong>進んだ</strong>母線から<strong>遅れた</strong>母線に流れ、位相差 <span class="lec-math-inline" data-tex="\delta"></span> が大きいほど多く流れます。ふだんの運転では電圧の大きさはどこも 1 pu に近いので、有効電力を動かすのは主に位相差です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/power-angle.png" alt="Left: active power against the angle difference from 0 to 180 degrees for V1 = V2 = 1 pu and X = 0.5 pu; it is a sine with the maximum 2 pu at 90 degrees, and the range 0 to 30 degrees is shaded. Right: reactive power arriving at bus 2 against V1 from 0.9 to 1.1 pu for angle differences of 0, 10 and 20 degrees; it rises with V1 and is zero near V1 = V2 when the angle difference is small" width="1306" height="498">
+            </div>
+            <figcaption lang="en">Two buses joined by <span class="lec-math-inline" data-tex="X = 0.5"></span> pu, with <span class="lec-math-inline" data-tex="V_2 = 1"></span> pu, from the formulas in this section. Left: the active power grows with the angle difference only up to 90° (here <span class="lec-math-inline" data-tex="V_1 = 1"></span> pu); normal operation uses a small angle difference (shaded). Right: the reactive power that arrives at bus 2 is set mainly by the voltage difference <span class="lec-math-inline" data-tex="V_1 - V_2"></span>.</figcaption>
+            <figcaption lang="ja">リアクタンス <span class="lec-math-inline" data-tex="X = 0.5"></span> pu でつないだ 2 母線（<span class="lec-math-inline" data-tex="V_2 = 1"></span> pu）について、この節の式から求めたものです。左: 有効電力が位相差とともに増えるのは 90° までです（ここでは <span class="lec-math-inline" data-tex="V_1 = 1"></span> pu）。ふだんの運転は、位相差の小さい範囲（色の付いた帯）で行います。右: 母線 2 に届く無効電力は、主に電圧の差 <span class="lec-math-inline" data-tex="V_1 - V_2"></span> で決まります。</figcaption>
+          </figure>
+
+          <p lang="en">The curve also shows a limit: a line cannot carry more active power than <span class="lec-math-inline" data-tex="V_1V_2/X"></span>, however large the angle difference becomes. Long lines (large <span class="lec-math-inline" data-tex="X"></span>) and low voltages make this limit smaller.</p>
+          <p lang="ja">曲線からは限界も読み取れます。位相差をいくら大きくしても、送電線は <span class="lec-math-inline" data-tex="V_1V_2/X"></span> より多くの有効電力を送れません。送電線が長い（<span class="lec-math-inline" data-tex="X"></span> が大きい）ほど、また電圧が低いほど、この限界は小さくなります。</p>
+          <p lang="en">For the same line, the reactive power that arrives at bus 2 is</p>
+          <p lang="ja">同じ送電線で、母線 2 に届く無効電力は次の式になります。</p>
+          <div class="lec-math" data-tex="Q_2 = \frac{V_1 V_2 \cos\delta - V_2^2}{X}"></div>
+          <p lang="en">When the angle difference is small, <span class="lec-math-inline" data-tex="\cos\delta"></span> is close to 1 (above 0.98 for <span class="lec-math-inline" data-tex="|\delta| \le 10^\circ"></span>), and the formula becomes approximately</p>
+          <p lang="ja">位相差が小さいときは <span class="lec-math-inline" data-tex="\cos\delta"></span> がほぼ 1 なので（<span class="lec-math-inline" data-tex="|\delta| \le 10^\circ"></span> なら 0.98 以上）、近似的に次の式になります。</p>
+          <div class="lec-math" data-tex="Q_2 \approx \frac{V_2}{X}\,(V_1 - V_2) \qquad (\cos\delta \approx 1)"></div>
+          <p lang="en">Reactive power flows from the higher voltage to the lower voltage. Turned around, a bus that draws a lot of reactive power pulls its own voltage down. This is why voltage is kept up by supplying reactive power near where it is needed, and why the voltage, unlike the frequency, differs from bus to bus.</p>
+          <p lang="ja">無効電力は、電圧の高い母線から低い母線に流れます。逆にいえば、無効電力を多く使う母線では、その母線の電圧が下がります。電圧を保つには必要な場所の近くで無効電力を供給すること、そして周波数と違い電圧が母線ごとに異なることは、この性質から来ています。</p>
+          <div class="lec-callout is-key">
+            <p lang="en">Rule of thumb on transmission networks: <strong>P ↔ angle difference</strong>, <strong>Q ↔ voltage difference</strong>. It holds because the lines are mostly reactive and the angle differences are small; on distribution lines with a large resistance it holds less well.</p>
+            <p lang="ja">送電網での目安: <strong>P は位相差</strong>、<strong>Q は電圧差</strong>で流れます。送電線がほぼリアクタンスだけで、位相差が小さいから成り立つ関係です。抵抗の大きい配電線では、あまり当てはまりません。</p>
+          </div>
+        </section>
+
+        <!-- ============================== NEWTON ============================== -->
+        <section id="newton">
+          <h2><span lang="en">Newton's method in pictures</span><span lang="ja">ニュートン法を図で</span></h2>
+          <p lang="en">For a network of <span class="lec-math-inline" data-tex="n"></span> buses, the power that flows from bus <span class="lec-math-inline" data-tex="i"></span> into the network follows from the voltages of all buses and the elements <span class="lec-math-inline" data-tex="Y_{im} = G_{im} + jB_{im}"></span> of the bus admittance matrix (the matrix that gives the bus currents from the bus voltages, <span class="lec-math-inline" data-tex="I = YV"></span>). These are the <strong>power equations</strong>:</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> 母線の系統で、母線 <span class="lec-math-inline" data-tex="i"></span> からネットワークに流れ出す電力は、すべての母線の電圧と、母線アドミタンス行列（母線電圧から母線電流を与える行列、<span class="lec-math-inline" data-tex="I = YV"></span>）の要素 <span class="lec-math-inline" data-tex="Y_{im} = G_{im} + jB_{im}"></span> で決まります。これが<strong>電力方程式</strong>です。</p>
+          <div class="lec-math" data-tex="\begin{aligned} P_i(V, \theta) &amp;= \sum_{m=1}^{n} V_i V_m \left( G_{im} \cos\theta_{im} + B_{im} \sin\theta_{im} \right) \\ Q_i(V, \theta) &amp;= \sum_{m=1}^{n} V_i V_m \left( G_{im} \sin\theta_{im} - B_{im} \cos\theta_{im} \right) \end{aligned} \qquad \theta_{im} = \theta_i - \theta_m"></div>
+          <p lang="en">At the solution, these must equal the powers <span class="lec-math-inline" data-tex="P_i^\mathrm{spec}"></span>, <span class="lec-math-inline" data-tex="Q_i^\mathrm{spec}"></span> fixed at each bus. The differences are called the <strong>mismatches</strong>:</p>
+          <p lang="ja">解では、これが各母線で決めた電力 <span class="lec-math-inline" data-tex="P_i^\mathrm{spec}"></span>、<span class="lec-math-inline" data-tex="Q_i^\mathrm{spec}"></span> に等しくなければなりません。その差を<strong>不平衡量</strong>（ミスマッチ）といいます。</p>
+          <div class="lec-math" data-tex="\Delta P_i = P_i^\mathrm{spec} - P_i(V, \theta), \qquad \Delta Q_i = Q_i^\mathrm{spec} - Q_i(V, \theta)"></div>
+          <p lang="en">The unknowns are the angles of all buses except the slack bus and the voltage magnitudes of the PQ buses; the equations are <span class="lec-math-inline" data-tex="\Delta P_i = 0"></span> at the same buses and <span class="lec-math-inline" data-tex="\Delta Q_i = 0"></span> at the PQ buses, as many as the unknowns. They are nonlinear (products of voltages and sines and cosines of angles), so they cannot be solved in one step. The calculation guesses the voltages, measures the mismatches, corrects the guess, and repeats.</p>
+          <p lang="ja">未知数は、slack 母線以外のすべての母線の位相角と、PQ 母線の電圧の大きさです。式は、同じ母線の <span class="lec-math-inline" data-tex="\Delta P_i = 0"></span> と PQ 母線の <span class="lec-math-inline" data-tex="\Delta Q_i = 0"></span> で、未知数と同じ数だけあります。電圧どうしの積や位相角の sin・cos を含む非線形の式なので、一度では解けません。電圧を仮に決め、不平衡量を測り、仮の値を直す、という手順を繰り返して解きます。</p>
+          <p lang="en"><strong>Newton's method</strong> (the Newton–Raphson method) is the standard way to correct the guess. Think of one unknown <span class="lec-math-inline" data-tex="x"></span> and a mismatch <span class="lec-math-inline" data-tex="f(x)"></span> that should become 0. At the current guess, draw the tangent of the curve and move to where the tangent crosses zero:</p>
+          <p lang="ja">仮の値の直し方として標準的なのが<strong>ニュートン法</strong>（ニュートン・ラフソン法）です。未知数が 1 つ <span class="lec-math-inline" data-tex="x"></span> で、0 にしたい不平衡量が <span class="lec-math-inline" data-tex="f(x)"></span> だとします。今の仮の値で曲線の接線を引き、接線が 0 になる点に移ります。</p>
+          <div class="lec-math" data-tex="x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}"></div>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/newton-tangent.png" alt="Newton's method on the two-bus mismatch f(delta) = 2 sin(delta) - 1.2: from delta0 = 60 degrees the tangent leads to delta1 = 29.5 degrees, then to delta2 = 36.6 degrees, next to the solution 36.87 degrees" width="1169" height="476">
+            </div>
+            <figcaption lang="en">Newton's method on the two-bus line of the previous section (<span class="lec-math-inline" data-tex="V_1 = V_2 = 1"></span> pu, <span class="lec-math-inline" data-tex="X = 0.5"></span> pu) with the unknown <span class="lec-math-inline" data-tex="x = \delta"></span> and <span class="lec-math-inline" data-tex="f(\delta) = (V_1V_2/X)\sin\delta - P^\mathrm{spec}"></span>, <span class="lec-math-inline" data-tex="P^\mathrm{spec} = 1.2"></span> pu. Starting from the guess δ₀ = 60°, the tangent leads to δ₁, then to δ₂, which is already within 0.3° of the solution.</figcaption>
+            <figcaption lang="ja">前の節の 2 母線の送電線（<span class="lec-math-inline" data-tex="V_1 = V_2 = 1"></span> pu、<span class="lec-math-inline" data-tex="X = 0.5"></span> pu）で、未知数を <span class="lec-math-inline" data-tex="x = \delta"></span>、<span class="lec-math-inline" data-tex="f(\delta) = (V_1V_2/X)\sin\delta - P^\mathrm{spec}"></span>（<span class="lec-math-inline" data-tex="P^\mathrm{spec} = 1.2"></span> pu）としてニュートン法を使ったものです。仮の値 δ₀ = 60° から接線をたどると δ₁ に、次に δ₂ に進みます。δ₂ はもう、解との差が 0.3° 以内です。</figcaption>
+          </figure>
+
+          <p lang="en">In a real network the unknowns are the angles and voltage magnitudes above, and the slope <span class="lec-math-inline" data-tex="f'"></span> becomes a matrix, the <strong>Jacobian</strong> <span class="lec-math-inline" data-tex="J"></span>. It says how much each power changes when each voltage or angle changes a little. Each step solves one linear system with this matrix, evaluated at the current guess, and adds the result:</p>
+          <p lang="ja">実際の系統では、未知数は上の位相角と電圧の大きさで、傾き <span class="lec-math-inline" data-tex="f'"></span> は<strong>ヤコビ行列</strong>（ヤコビアン）<span class="lec-math-inline" data-tex="J"></span> という行列になります。電圧や位相角を少し変えたとき、各母線の電力がどれだけ変わるかを並べた行列です。1 回の反復ごとに、今の仮の値で計算したこの行列を使って連立一次方程式を 1 つ解き、その解を足します。</p>
+          <div class="lec-math" data-tex="\underbrace{\begin{bmatrix} \partial P / \partial \theta &amp; \partial P / \partial V \\ \partial Q / \partial \theta &amp; \partial Q / \partial V \end{bmatrix}}_{J(\theta_k, V_k)} \begin{bmatrix} \Delta\theta \\ \Delta V \end{bmatrix} = \begin{bmatrix} \Delta P(\theta_k, V_k) \\ \Delta Q(\theta_k, V_k) \end{bmatrix}, \qquad \begin{bmatrix} \theta_{k+1} \\ V_{k+1} \end{bmatrix} = \begin{bmatrix} \theta_k \\ V_k \end{bmatrix} + \begin{bmatrix} \Delta\theta \\ \Delta V \end{bmatrix}"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="\theta"></span>, <span class="lec-math-inline" data-tex="V"></span>, <span class="lec-math-inline" data-tex="\Delta P"></span> and <span class="lec-math-inline" data-tex="\Delta Q"></span> are the vectors of the unknowns and the mismatches, and <span class="lec-math-inline" data-tex="k"></span> counts the iterations. With one unknown and one equation it is the tangent step above, since <span class="lec-math-inline" data-tex="\Delta P = -f"></span>. Near the solution the error roughly squares at every step, so the number of correct digits about doubles. The usual first guess is the <strong>flat start</strong>: all angles 0 and all magnitudes 1 pu (the fixed values where they are given).</p>
+          <p lang="ja">ここで <span class="lec-math-inline" data-tex="\theta"></span>、<span class="lec-math-inline" data-tex="V"></span>、<span class="lec-math-inline" data-tex="\Delta P"></span>、<span class="lec-math-inline" data-tex="\Delta Q"></span> は未知数と不平衡量を並べたベクトル、<span class="lec-math-inline" data-tex="k"></span> は反復の回数です。未知数と式が 1 つずつなら、<span class="lec-math-inline" data-tex="\Delta P = -f"></span> なので上の接線の一歩と同じです。解の近くでは誤差が反復ごとにおよそ 2 乗になるので、正しい桁数がほぼ倍に増えていきます。最初の仮の値には、すべての位相角を 0、電圧の大きさを 1 pu（指定のある母線はその値）とする<strong>フラットスタート</strong>がよく使われます。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/convergence.png" alt="Largest mismatch of the IEEE 9-bus system at each Newton iteration from the flat start, on a log scale: 1.6, 0.11, 1.3e-3, 2.0e-7 and 5.8e-15 pu at iterations 0 to 4; the tolerance 1e-8 is passed at iteration 4" width="857" height="532">
+            </div>
+            <figcaption lang="en">The largest mismatch <span class="lec-math-inline" data-tex="\max(|\Delta P_i|, |\Delta Q_i|)"></span> of the IEEE 9-bus system at each Newton iteration <span class="lec-math-inline" data-tex="k"></span> from the flat start, computed and drawn with GUILDA (<code>plot_convergence</code>, log scale). It drops below the tolerance 10⁻⁸ pu (dashed) after four iterations.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統をフラットスタートからニュートン法で解いたときの、反復 <span class="lec-math-inline" data-tex="k"></span> ごとの不平衡量の最大値 <span class="lec-math-inline" data-tex="\max(|\Delta P_i|, |\Delta Q_i|)"></span> です（GUILDA の <code>plot_convergence</code> で描画、対数目盛）。4 回の反復で許容値 10⁻⁸ pu（破線）を下回ります。</figcaption>
+          </figure>
+          <p lang="en">GUILDA's power flow calculation uses Newton's method by default and stops when the largest mismatch is below the tolerance. Other methods can be chosen as an option; their details are left to the Live Script. To solve the IEEE 9-bus system from the flat start and draw the mismatch at each iteration:</p>
+          <p lang="ja">GUILDA の潮流計算は、既定ではニュートン法を使い、不平衡量の最大値が許容値を下回ったところで止まります。オプションでほかの計算方法も選べますが、詳しくはライブスクリプトで扱います。IEEE 9 母線系統をフラットスタートから解き、反復ごとの不平衡量を図にするには次のようにします。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+result = net.calculate_powerflow(WarmStart=false);
+result.plot_convergence();</code></pre>
+        </section>
+
+        <!-- ============================== NO CONVERGENCE ============================== -->
+        <section id="no-convergence">
+          <h2><span lang="en">When the calculation does not converge</span><span lang="ja">収束しないとき</span></h2>
+          <p lang="en">Newton's method does not always reach a solution. The most important reason is that <strong>no solution exists</strong>: if the loads ask for more power than the network can deliver, no set of voltages satisfies the equations. As the loads grow, the voltages fall faster and faster, and beyond some point the calculation fails.</p>
+          <p lang="ja">ニュートン法がいつも解にたどり着くとは限りません。いちばん大切な理由は、<strong>解がそもそも存在しない</strong>ことです。ネットワークが送れる以上の電力を負荷が求めると、電力方程式を満たす電圧はありません。負荷を増やしていくと電圧は加速度的に下がり、ある所から先では計算が失敗します。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/load-scaling.png" alt="Lowest bus voltage of the IEEE 9-bus system as all loads are multiplied by lambda from 1 to 2.37: it falls from about 1.00 to 0.69 pu, faster and faster; from lambda = 2.38 no solution is found (shaded)" width="795" height="509">
+            </div>
+            <figcaption lang="en">IEEE 9-bus system, all loads (P and Q) multiplied by the same factor <span class="lec-math-inline" data-tex="\lambda"></span>, each case solved with GUILDA from the flat start; the curve is the lowest bus voltage. Up to <span class="lec-math-inline" data-tex="\lambda = 2.37"></span> a solution is found; from 2.38 (shaded) it is not.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統で、すべての負荷（P と Q）を同じ倍率 <span class="lec-math-inline" data-tex="\lambda"></span> で増やし、それぞれフラットスタートから GUILDA で解いた結果です。曲線は最も低い母線電圧です。<span class="lec-math-inline" data-tex="\lambda = 2.37"></span> までは解が求まり、2.38 から（色の付いた範囲）は求まりません。</figcaption>
+          </figure>
+          <p lang="en">The curve bends down sharply just before the edge. Near this edge the Jacobian approaches a singular matrix, the tangent in the picture above becomes flat, and Newton's steps become unreliable. Following this curve to its end, the "nose", is the subject of the continuation power flow (Part 7).</p>
+          <p lang="ja">曲線は、端の手前で急に折れ曲がります。この端の近くではヤコビ行列が特異（逆行列がない状態）に近づき、上の図の接線が水平に近くなって、ニュートン法の一歩が当てにならなくなります。この曲線を先端（ノーズ点）までたどるのが、連続潮流計算（Part 7）です。</p>
+          <p lang="en">Other common causes are mistakes in the data, such as a wrong sign of a load or a line reactance that is far too large; a part of the network cut off from the slack bus; and a first guess that is too far from the solution. When the calculation fails, it is worth checking the data and the loads first.</p>
+          <p lang="ja">ほかによくある原因は、負荷の符号の間違いや桁違いに大きなリアクタンスといったデータの誤り、slack 母線から切り離されたネットワークの一部、解から遠すぎる最初の仮の値などです。計算が失敗したときは、まずデータと負荷の大きさを確かめるとよいでしょう。</p>
+          <div class="lec-callout">
+            <p lang="en">GUILDA reports the outcome in the second output <code>flag</code> of the power flow calculation: 1 when it converged, 0 when it reached the iteration limit, and −2 when no solution was found. By default a failure also gives a warning, so a failed result is not used without notice.</p>
+            <p lang="ja">GUILDA は、潮流計算の 2 番目の出力 <code>flag</code> で結果を知らせます。収束したときは 1、反復回数の上限に達したときは 0、解が見つからなかったときは −2 です。既定では失敗したときに警告も出るので、失敗した結果を知らずに使うことはありません。</p>
+            <pre class="lec-cmd"><code>[result, flag] = net.calculate_powerflow();</code></pre>
+          </div>
+        </section>
+
+        <!-- ============================== READING ============================== -->
+        <section id="reading">
+          <h2><span lang="en">Reading the result: the IEEE 9-bus system</span><span lang="ja">結果の読み方: IEEE 9 母線系統</span></h2>
+          <p lang="en">The IEEE 9-bus system (also known as the WSCC 9-bus system) is a small benchmark with three generators and three loads. Bus 1 is the slack bus; buses 2 and 3 are PV buses; the loads are at buses 5, 6 and 8; buses 4, 7 and 9 have no equipment. The figure shows its power flow computed with GUILDA.</p>
+          <p lang="ja">IEEE 9 母線系統（WSCC 9 母線系統とも呼ばれます）は、発電機 3 台と負荷 3 つからなる小さなベンチマーク系統です。母線 1 が slack 母線、母線 2 と 3 が PV 母線で、負荷は母線 5、6、8 にあり、母線 4、7、9 には機器がありません。図は、GUILDA で計算したこの系統の潮流です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part2/ieee9-flow.png" alt="Power flow of the IEEE 9-bus system drawn by GUILDA: the buses B001 to B009 coloured by voltage magnitude, highest at B001 (1.04 pu) and lowest at B005 (about 0.996 pu), and the branches as arrows in the direction of the active power, widest from B002 to B007" width="1140" height="737">
+            </div>
+            <figcaption lang="en">Power flow of the IEEE 9-bus system computed and drawn with GUILDA (<code>plot_network</code>). The colour of each bus is its voltage magnitude <span class="lec-math-inline" data-tex="|V|"></span> (pu). Each arrow points in the direction of the active power, and a wider arrow carries more. The values below are those of <code>result.tab_bus</code> and <code>result.tab_branch</code>; every arrow goes from the larger angle to the smaller one.</figcaption>
+            <figcaption lang="ja">GUILDA で計算し、GUILDA の <code>plot_network</code> で描いた IEEE 9 母線系統の潮流です。母線の色は電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span>（pu）です。矢印は有効電力の向きで、太いほど多く流れています。下の値は <code>result.tab_bus</code> と <code>result.tab_branch</code> のものです。どの矢印も、位相角の大きい母線から小さい母線へ向いています。</figcaption>
+          </figure>
+
+          <p lang="en">Some points to read from the picture:</p>
+          <p lang="ja">図から次のことが読み取れます。</p>
+          <ul>
+            <li><span lang="en"><strong>Voltages.</strong> All magnitudes lie between 0.996 and 1.040 pu. The lowest is at bus 5, which has the largest load.</span><span lang="ja"><strong>電圧</strong>: 大きさはすべて 0.996〜1.040 pu の間にあります。最も低いのは、負荷が最も大きい母線 5 です。</span></li>
+            <li><span lang="en"><strong>Angles and flows.</strong> Bus 2, whose generator produces the most, has the largest angle (9.28°); the load buses 5 and 6 have negative angles (−3.99° and −3.69°), and bus 2 sends 1.63 pu to bus 7. The active power runs downhill in angle, as in the two-bus example.</span><span lang="ja"><strong>位相角と潮流</strong>: 出力の最も大きい発電機がある母線 2 の位相角が最も大きく（9.28°）、負荷のある母線 5 と 6 は負の位相角（−3.99° と −3.69°）です。母線 2 から母線 7 へは 1.63 pu が流れます。2 母線の例のとおり、有効電力は位相角の「坂」を下る向きに流れます。</span></li>
+            <li><span lang="en"><strong>The slack bus.</strong> Generators 2 and 3 produce the fixed 1.63 and 0.85 pu. Generator 1 produces what is left, 0.72 pu, which covers the loads (1.25 + 0.90 + 1.00 = 3.15 pu at buses 5, 6 and 8) and the losses.</span><span lang="ja"><strong>slack 母線</strong>: 発電機 2 と 3 は決めた 1.63 pu と 0.85 pu を出します。発電機 1 は残りの 0.72 pu を出し、負荷（母線 5・6・8 の 1.25 + 0.90 + 1.00 = 3.15 pu）と損失をまかないます。</span></li>
+            <li><span lang="en"><strong>Losses.</strong> The total generation is 3.196 pu, so the active losses are 0.046 pu, about 1.5 % of the load. On each line with resistance, the power at the receiving end is a little smaller than at the sending end.</span><span lang="ja"><strong>損失</strong>: 発電の合計は 3.196 pu なので、有効電力の損失は 0.046 pu で、負荷の約 1.5 % です。抵抗のある送電線では、受け取る側の端の電力が、送り出す側よりわずかに小さくなります。</span></li>
+          </ul>
+          <div class="lec-callout">
+            <p lang="en">In GUILDA, the power flow calculation returns a result object. Its <code>disp_summary</code> prints the outcome, the totals of generation, load and losses, and the range of voltages; <code>result.tab_bus</code> and <code>result.tab_branch</code> hold the values of each bus and branch; <code>plot_voltage</code> and <code>plot_network</code> draw them. The power flow does not change the model.</p>
+            <p lang="ja">GUILDA では、潮流計算が結果のオブジェクトを返します。その <code>disp_summary</code> は計算の結果、発電・負荷・損失の合計、電圧の範囲を表示します。母線ごと、ブランチごとの値は <code>result.tab_bus</code> と <code>result.tab_branch</code> にあり、<code>plot_voltage</code> や <code>plot_network</code> で図にできます。潮流計算はモデルを書き換えません。</p>
+            <pre class="lec-cmd"><code>net = network.IEEE9bus();
+result = net.calculate_powerflow();
+result.disp_summary();
+result.plot_voltage();
+result.plot_network();</code></pre>
+          </div>
+        </section>
+
+        <!-- ============================== STARTING POINT ============================== -->
+        <section id="starting-point">
+          <h2><span lang="en">The starting point of a time-domain simulation</span><span lang="ja">時間シミュレーションの出発点</span></h2>
+          <p lang="en">A time-domain simulation computes how the system moves after a disturbance such as a fault. It needs a state to start from, and the natural choice is the steady state before the disturbance. The power flow provides it: from the voltage and current at each generator bus, the internal quantities of the generator (rotor angle, internal voltage, mechanical input) are computed so that nothing moves as long as nothing happens. This state is the <strong>equilibrium</strong>.</p>
+          <p lang="ja">時間シミュレーションは、事故などの外乱の後に系統がどう動くかを計算します。そのためには出発点の状態が必要で、自然な選び方は外乱が起きる前の落ち着いた状態です。それを与えるのが潮流計算です。各発電機の母線の電圧と電流から、発電機の内部の量（回転子の角度、内部の電圧、機械入力）を、何も起きなければ何も動かないように計算します。この状態が<strong>平衡点</strong>です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 230" role="img" aria-label="Power flow, then the equilibrium of every component, then the time-domain simulation; the state stays flat until a disturbance and then oscillates">
+                <defs>
+                  <marker id="p2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-brand" x="20" y="20" width="210" height="76" rx="6"/>
+                <rect class="f-card" x="285" y="20" width="210" height="76" rx="6"/>
+                <rect class="f-c2" x="550" y="20" width="210" height="76" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="125" y="50">Power flow</text>
+                <text lang="ja" class="t-strong t-mid" x="125" y="50">潮流計算</text>
+                <text lang="en" class="t-muted t-mid" x="125" y="74">V, θ, P, Q of every bus</text>
+                <text lang="ja" class="t-muted t-mid" x="125" y="74">各母線の V・θ・P・Q</text>
+                <text lang="en" class="t-strong t-mid" x="390" y="50">Equilibrium</text>
+                <text lang="ja" class="t-strong t-mid" x="390" y="50">平衡点</text>
+                <text lang="en" class="t-muted t-mid" x="390" y="74">internal states of machines</text>
+                <text lang="ja" class="t-muted t-mid" x="390" y="74">機器の内部の状態</text>
+                <text lang="en" class="t-strong t-mid" x="655" y="50">Time-domain simulation</text>
+                <text lang="ja" class="t-strong t-mid" x="655" y="50">時間シミュレーション</text>
+                <text lang="en" class="t-muted t-mid" x="655" y="74">response to a disturbance</text>
+                <text lang="ja" class="t-muted t-mid" x="655" y="74">外乱への応答</text>
+                <line class="s-ink" x1="232" y1="58" x2="281" y2="58" marker-end="url(#p2-arrow)"/>
+                <line class="s-ink" x1="497" y1="58" x2="546" y2="58" marker-end="url(#p2-arrow)"/>
+                <!-- response sketch -->
+                <line class="s-line" x1="60" y1="210" x2="760" y2="210" marker-end="url(#p2-arrow)"/>
+                <text lang="en" class="t-muted t-end" x="760" y="226">time</text>
+                <text lang="ja" class="t-muted t-end" x="760" y="226">時間</text>
+                <line class="s-brand" x1="60" y1="170" x2="400" y2="170"/>
+                <path class="s-c2" d="M400 170.0 L405 158.5 L410 149.1 L415 142.6 L420 139.5 L425 139.8 L430 143.0 L435 148.7 L440 156.1 L445 164.2 L450 172.2 L455 179.3 L460 184.8 L465 188.4 L470 189.8 L475 189.0 L480 186.4 L485 182.4 L490 177.5 L495 172.2 L500 167.2 L505 162.9 L510 159.7 L515 157.8 L520 157.3 L525 158.1 L530 160.1 L535 162.9 L540 166.2 L545 169.5 L550 172.7 L555 175.2 L560 177.1 L565 178.0 L570 178.1 L575 177.3 L580 175.9 L585 174.0 L590 171.8 L595 169.7 L600 167.8 L605 166.2 L610 165.2 L615 164.8 L620 164.9 L625 165.5 L630 166.5 L635 167.8 L640 169.2 L645 170.6 L650 171.7 L655 172.6 L660 173.2 L665 173.4 L670 173.2 L675 172.7 L680 172.0 L685 171.2 L690 170.3 L695 169.4 L700 168.7 L705 168.2 L710 167.9 L715 167.8 L720 168.0 L725 168.4 L730 168.9 L735 169.4 L740 170.0"/>
+                <line class="s-c3 is-dashed" x1="400" y1="126" x2="400" y2="210"/>
+                <text lang="en" class="t-c3 t-small t-mid" x="400" y="120">disturbance</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="400" y="120">外乱</text>
+                <text lang="en" class="t-brand t-small" x="70" y="160">at the equilibrium, nothing moves</text>
+                <text lang="ja" class="t-brand t-small" x="70" y="160">平衡点では何も動かない</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The power flow gives the equilibrium, where the simulation stays still until a disturbance is applied (the response is a schematic).</figcaption>
+            <figcaption lang="ja">潮流計算から平衡点が決まり、シミュレーションは外乱を加えるまでその状態にとどまります（応答の形は模式的なものです）。</figcaption>
+          </figure>
+          <p lang="en">If the simulation started from a state that is not an equilibrium, the system would move even without any disturbance, and we could not tell the response to the fault from this artificial motion. The same equilibrium is also the point around which the model is linearized (Part 5).</p>
+          <p lang="ja">平衡点でない状態から始めると、外乱がなくても系統が動き出してしまい、事故への応答とこの見かけの動きを区別できません。同じ平衡点は、モデルを近似線形化するときの基準の点にもなります（Part 5）。</p>
+          <p lang="en">In GUILDA, <code>initialize</code> solves the power flow and sets the equilibrium of every component and controller from it. A time-domain simulation starts from this initialized state.</p>
+          <p lang="ja">GUILDA では、<code>initialize</code> が潮流計算を解き、その結果からすべての機器と制御器の平衡点を設定します。時間シミュレーションは、この初期化した状態から始まります。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+net.initialize();</code></pre>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li><span lang="en">The power flow is the steady operating state for one condition of demand and generation: the voltage at every bus and the power on every line.</span><span lang="ja">潮流は、ある需要と発電の条件での落ち着いた運転状態で、各母線の電圧と各送電線の電力の分布です。</span></li>
+            <li><span lang="en">Each bus has four quantities (V, θ, P, Q); two are fixed and two are solved. Slack: V, θ fixed. PV: P, V fixed. PQ: P, Q fixed.</span><span lang="ja">母線ごとの 4 つの量（V・θ・P・Q）のうち 2 つを決め、2 つを求めます。slack は V と θ、PV は P と V、PQ は P と Q を決めます。</span></li>
+            <li><span lang="en">On transmission networks, active power flows with the angle difference and reactive power with the voltage difference.</span><span lang="ja">送電網では、有効電力は位相差で、無効電力は電圧の大きさの差で流れます。</span></li>
+            <li><span lang="en">The power equations give P and Q of each bus from the voltages and the admittance matrix; the power flow makes their mismatches zero.</span><span lang="ja">電力方程式は、電圧とアドミタンス行列から各母線の P と Q を与えます。潮流計算は、その不平衡量を 0 にする計算です。</span></li>
+            <li><span lang="en">Newton's method follows the tangent (the Jacobian) to correct the guess and converges in a few iterations; it fails when no solution exists, for example when the loads are too large.</span><span lang="ja">ニュートン法は接線（ヤコビ行列）をたどって仮の値を直し、数回の反復で収束します。負荷が大きすぎるなど、解が存在しないときは失敗します。</span></li>
+            <li><span lang="en">The power flow gives the equilibrium from which a time-domain simulation starts.</span><span lang="ja">潮流計算の結果から平衡点が決まり、時間シミュレーションはそこから始まります。</span></li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card" href="part1-network-components.html"><small>Part 1</small><b><span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></b></a></li>
+          <li><a class="lec-card" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b></a></li>
+          <li><a class="lec-card" href="part4-spring-mass-model.html"><small>Part 4</small><b><span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b></a></li>
+          <li><a class="lec-card" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b></a></li>
+          <li><a class="lec-card" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><span lang="en"><code>_GUILDAtutorial/Part2_PowerFlow.mlx</code>: after starting GUILDA, open it with <code>open Part2_PowerFlow.mlx</code>. The graphs on this page can be drawn by running this Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part2_PowerFlow.mlx</code> です。GUILDA を起動してから、<code>open Part2_PowerFlow.mlx</code> で開きます。このページのグラフは、Part 2 のライブスクリプトを実行すると描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; it explains power system models in the language of systems and control.</span><span lang="ja">GUILDA の基になった教科書です。電力系統のモデルをシステム制御の言葉で説明しています。</span></span></li>
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">Power transfer over a line, the relation of active power to angle and of reactive power to voltage, and power-flow analysis.</span><span lang="ja">送電線による電力の伝送、有効電力と位相角・無効電力と電圧の関係、潮流計算を扱っています。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">The steady-state model of the network, the bus types, and the Newton–Raphson power flow.</span><span lang="ja">ネットワークの定常状態のモデル、母線の種類、ニュートン・ラフソン法による潮流計算を扱っています。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part1-network-components.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 1: <span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></b></a>
+      <a class="is-next" href="part3-time-simulation.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 3: <span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

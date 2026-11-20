@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 0: 導入">GUILDA Lecture Notes - Part 0: Introduction</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec0- ; shared lecture CSS (lec-*) is in style.css. -->
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 0 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 0</p>
+      <h1><span lang="en">Introduction</span><span lang="ja">導入</span></h1>
+      <p class="lec-lead" lang="en">What a power system does, why supply and demand must match at every moment, and which analysis each Part covers.</p>
+      <p class="lec-lead" lang="ja">電力系統の役割、需要と供給を常に一致させる理由、各 Part で扱う解析の地図を説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#chain"><span lang="en">Plants to consumers</span><span lang="ja">発電所から需要家まで</span></a></li>
+          <li><a href="#balance"><span lang="en">Supply must match demand</span><span lang="ja">需要と供給の一致</span></a></li>
+          <li><a href="#timescales"><span lang="en">Phenomena and time scales</span><span lang="ja">現象と時間スケール</span></a></li>
+          <li><a href="#analyses"><span lang="en">Analyses and the Part map</span><span lang="ja">解析の種類と講義ノートの地図</span></a></li>
+          <li><a href="#renewables"><span lang="en">More renewable energy</span><span lang="ja">再生可能エネルギーの影響</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">How electricity travels from power plants to homes and factories.</span><span lang="ja">電気が発電所から家庭や工場まで、どのように届くか。</span></li>
+            <li><span lang="en">Why supply and demand must match at every moment, and what the frequency and the voltage tell us.</span><span lang="ja">需要と供給を常に一致させる必要がある理由と、周波数と電圧が表すもの。</span></li>
+            <li><span lang="en">Which phenomena happen in a power system, and on which time scales.</span><span lang="ja">電力系統で起きる現象と、その時間の長さ。</span></li>
+            <li><span lang="en">Which analysis answers which question, and which Part of these lecture notes covers it.</span><span lang="ja">どの解析がどの問いに答えるか、それを講義ノートのどの Part で扱うか。</span></li>
+            <li><span lang="en">What changes when more renewable energy is connected.</span><span lang="ja">再生可能エネルギーが増えると何が変わるか。</span></li>
+          </ul>
+        </section>
+
+        <!-- ============================== CHAIN ============================== -->
+        <section id="chain">
+          <h2><span lang="en">From power plants to consumers</span><span lang="ja">発電所から需要家まで</span></h2>
+          <p lang="en">A power system is the whole set of equipment that generates electricity and delivers it to consumers. It has four stages: <strong>generation</strong> in power plants, <strong>transmission</strong> over long distances at high voltage, <strong>distribution</strong> in towns at lower voltage, and <strong>demand</strong>, the homes, offices and factories that use the electricity.</p>
+          <p lang="ja">電力系統は、電気をつくって需要家に届けるための設備全体です。発電所で電気をつくる<strong>発電</strong>、高い電圧で遠くまで運ぶ<strong>送電</strong>、町の中で低い電圧にして配る<strong>配電</strong>、そして電気を使う家庭・事務所・工場などの<strong>需要</strong>の 4 つの段階からなります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 248" role="img" aria-label="Generation, transmission, distribution and demand, connected from left to right">
+                <defs>
+                  <marker id="p0-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- generation -->
+                <circle class="f-brand" cx="95" cy="68" r="38"/>
+                <path class="s-brand" d="M67 68 C 76 48, 86 48, 95 68 S 114 88, 123 68"/>
+                <!-- transmission tower -->
+                <path class="s-ink" d="M276 112 L286 28 L294 28 L304 112 M262 42 L318 42 M268 64 L312 64 M281 64 L299 112 M299 64 L281 112"/>
+                <!-- distribution pole with pole transformer -->
+                <path class="s-ink" d="M490 26 V112 M466 38 H514"/>
+                <rect class="f-c2" x="496" y="52" width="18" height="24" rx="3"/>
+                <!-- demand: house and factory -->
+                <path class="s-ink" d="M650 112 V74 L675 52 L700 74 V112 Z M668 112 V92 H682 V112"/>
+                <path class="s-ink" d="M708 112 V84 L722 74 V84 L736 74 V84 L750 74 V112 Z M740 74 V46 H748 V78"/>
+                <!-- flow arrows between the stages -->
+                <line class="s-ink" x1="146" y1="70" x2="232" y2="70" marker-end="url(#p0-arrow)"/>
+                <line class="s-ink" x1="342" y1="70" x2="448" y2="70" marker-end="url(#p0-arrow)"/>
+                <line class="s-ink" x1="532" y1="70" x2="636" y2="70" marker-end="url(#p0-arrow)"/>
+                <text lang="en" class="t-muted t-mid" x="189" y="94">step up</text>
+                <text lang="ja" class="t-muted t-mid" x="189" y="94">変電所で昇圧</text>
+                <text lang="en" class="t-muted t-mid" x="395" y="94">step down</text>
+                <text lang="ja" class="t-muted t-mid" x="395" y="94">変電所で降圧</text>
+                <text lang="en" class="t-muted t-mid" x="584" y="94">step down</text>
+                <text lang="ja" class="t-muted t-mid" x="584" y="94">柱上変圧器で降圧</text>
+                <!-- stage names -->
+                <g class="t-mid">
+                  <text lang="en" class="t-strong t-mid" x="95" y="145">Generation</text>
+                  <text lang="ja" class="t-strong t-mid" x="95" y="145">発電</text>
+                  <text lang="en" class="t-strong t-mid" x="290" y="145">Transmission</text>
+                  <text lang="ja" class="t-strong t-mid" x="290" y="145">送電</text>
+                  <text lang="en" class="t-strong t-mid" x="490" y="145">Distribution</text>
+                  <text lang="ja" class="t-strong t-mid" x="490" y="145">配電</text>
+                  <text lang="en" class="t-strong t-mid" x="700" y="145">Demand</text>
+                  <text lang="ja" class="t-strong t-mid" x="700" y="145">需要</text>
+                  <text lang="en" class="t-muted t-mid" x="95" y="167">power plants</text>
+                  <text lang="ja" class="t-muted t-mid" x="95" y="167">発電所</text>
+                  <text lang="en" class="t-muted t-mid" x="290" y="167">lines, substations</text>
+                  <text lang="ja" class="t-muted t-mid" x="290" y="167">送電線・変電所</text>
+                  <text lang="en" class="t-muted t-mid" x="490" y="167">distribution lines</text>
+                  <text lang="ja" class="t-muted t-mid" x="490" y="167">配電線</text>
+                  <text lang="en" class="t-muted t-mid" x="700" y="167">homes, factories</text>
+                  <text lang="ja" class="t-muted t-mid" x="700" y="167">家庭・工場</text>
+                  <text class="t-brand t-small t-mid" x="95" y="190">10–25 kV</text>
+                  <text lang="en" class="t-brand t-small t-mid" x="290" y="190">500 kV, 275 kV, …</text>
+                  <text lang="ja" class="t-brand t-small t-mid" x="290" y="190">500 kV・275 kV など</text>
+                  <text class="t-brand t-small t-mid" x="490" y="190">6.6 kV</text>
+                  <text class="t-brand t-small t-mid" x="700" y="190">100 / 200 V</text>
+                </g>
+                <line class="s-line" x1="40" y1="236" x2="740" y2="236" marker-end="url(#p0-arrow)"/>
+                <text lang="en" class="t-muted" x="44" y="228">flow of power</text>
+                <text lang="ja" class="t-muted" x="44" y="228">電力の流れ</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The four stages of a power system. The voltages are typical values in Japan; they differ between countries and companies.</figcaption>
+            <figcaption lang="ja">電力系統の 4 つの段階です。電圧は日本での代表的な値で、国や電力会社によって異なります。</figcaption>
+          </figure>
+
+          <p lang="en">Power is sent at high voltage because, for the same power, a higher voltage needs a smaller current, and the losses in the wires grow with the square of the current. Transformers in substations raise the voltage after the generators and lower it step by step towards the consumers.</p>
+          <p lang="ja">高い電圧で送るのは、同じ電力なら電圧が高いほど電流が小さくて済み、電線で失われる電力（損失）が電流の 2 乗に比例して増えるからです。発電機の後で変電所の変圧器が電圧を上げ、需要家に近づくにつれて段階的に下げていきます。</p>
+          <p lang="en">The lines do not form a single chain: many power plants and substations are connected in a mesh, so that power can take another route when one line is out. Electricity is alternating current; in Japan the frequency is 50 Hz in the east and 60 Hz in the west. In analysis, this mesh is drawn as <strong>buses</strong> (connection points) joined by <strong>branches</strong> (lines and transformers), with generators and loads attached to the buses. Part 1 builds such a model.</p>
+          <p lang="ja">送電線は一本の鎖ではありません。多くの発電所と変電所が網の目のようにつながっていて、どこかの送電線が使えなくなっても別の経路で電力が流れます。電気は交流で、日本の周波数は東日本で 50 Hz、西日本で 60 Hz です。解析では、この網の目を<strong>母線</strong>（接続点）と、それらを結ぶ<strong>ブランチ</strong>（送電線や変圧器）で表し、発電機や負荷を母線につなぎます。このモデルの作り方は Part 1 で扱います。</p>
+          <p lang="en">To see such a mesh in GUILDA, load the bundled IEEE 68-bus system and draw its buses and branches:</p>
+          <p lang="ja">GUILDA で確かめるときは、同梱の IEEE 68 母線系統を読み込み、母線とブランチを図にします。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE68bus();
+net.plot_diagram();</code></pre>
+        </section>
+
+        <!-- ============================== BALANCE ============================== -->
+        <section id="balance">
+          <h2><span lang="en">Supply must match demand at every moment</span><span lang="ja">需要と供給を常に一致させる</span></h2>
+          <p lang="en">The network itself stores almost no electrical energy. The power that generators produce therefore has to equal the power that consumers use, plus the losses, at every moment. This is called the balance of supply and demand (in Japanese, <em>dōji dōryō</em>, "same amount at the same time").</p>
+          <p lang="ja">送電網そのものは、電気エネルギーをほとんど蓄えられません。そのため、発電機がつくる電力は、需要家が使う電力と損失の合計に、いつの瞬間も等しくなければなりません。これを<strong>同時同量</strong>といいます。</p>
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 440px;">
+            <div class="lec-scroll">
+            <svg class="lec-svg" viewBox="0 0 560 270" role="img" aria-label="A balance with supply on the left and demand on the right; a frequency gauge on top shows whether they match">
+              <!-- gauge -->
+              <path class="s-line" d="M250 58 A 34 34 0 0 1 310 58"/>
+              <text class="t-muted t-mid" x="242" y="76">−</text>
+              <text class="t-muted t-mid" x="318" y="76">+</text>
+              <line class="s-brand" x1="280" y1="76" x2="280" y2="46"/>
+              <circle class="f-brand-solid" cx="280" cy="76" r="4"/>
+              <text lang="en" class="t-brand t-mid" x="280" y="24">frequency f₀</text>
+              <text lang="ja" class="t-brand t-mid" x="280" y="24">周波数 f₀</text>
+              <!-- beam and post -->
+              <line class="s-ink" x1="120" y1="118" x2="440" y2="118"/>
+              <line class="s-ink" x1="280" y1="84" x2="280" y2="206"/>
+              <path class="f-ink" d="M280 196 L258 232 H302 Z"/>
+              <!-- pans -->
+              <path class="s-line" d="M130 118 L86 150 M130 118 L174 150 M430 118 L386 150 M430 118 L474 150"/>
+              <rect class="f-brand" x="66" y="150" width="128" height="48" rx="4"/>
+              <rect class="f-c3" x="366" y="150" width="128" height="48" rx="4"/>
+              <text lang="en" class="t-strong t-mid" x="130" y="172">Supply</text>
+              <text lang="ja" class="t-strong t-mid" x="130" y="172">供給</text>
+              <text lang="en" class="t-muted t-mid" x="130" y="190">generation</text>
+              <text lang="ja" class="t-muted t-mid" x="130" y="190">発電</text>
+              <text lang="en" class="t-strong t-mid" x="430" y="172">Demand</text>
+              <text lang="ja" class="t-strong t-mid" x="430" y="172">需要</text>
+              <text lang="en" class="t-muted t-mid" x="430" y="190">consumption + losses</text>
+              <text lang="ja" class="t-muted t-mid" x="430" y="190">消費 ＋ 損失</text>
+              <!-- what happens on each side -->
+              <text lang="en" class="t-small t-mid" x="130" y="232">supply &gt; demand</text>
+              <text lang="ja" class="t-small t-mid" x="130" y="232">供給が多い</text>
+              <text lang="en" class="t-c2 t-small t-mid" x="130" y="252">frequency rises</text>
+              <text lang="ja" class="t-c2 t-small t-mid" x="130" y="252">周波数が上がる</text>
+              <text lang="en" class="t-small t-mid" x="430" y="232">demand &gt; supply</text>
+              <text lang="ja" class="t-small t-mid" x="430" y="232">需要が多い</text>
+              <text lang="en" class="t-c3 t-small t-mid" x="430" y="252">frequency falls</text>
+              <text lang="ja" class="t-c3 t-small t-mid" x="430" y="252">周波数が下がる</text>
+            </svg>
+            </div>
+            <figcaption lang="en">The frequency works like the pointer of a balance between supply and demand.</figcaption>
+            <figcaption lang="ja">周波数は、需要と供給をのせた天びんの針のような役割を持ちます。</figcaption>
+          </figure>
+          <p lang="en">What absorbs a mismatch for the first few seconds is the rotation of the large generators. Their heavy rotors spin in step with the AC frequency and hold kinetic energy. When demand exceeds supply, the difference is drawn from this kinetic energy, the rotors slow down, and the <strong>frequency falls</strong>. When supply exceeds demand, the rotors speed up and the <strong>frequency rises</strong>.</p>
+          <p lang="ja">ずれを最初の数秒間受け止めるのは、大きな発電機の回転です。重い回転子は交流の周波数に合わせて回っていて、運動エネルギーを持っています。需要が供給より多いと、その差がこの運動エネルギーから取り出されて回転が遅くなり、<strong>周波数が下がります</strong>。供給が需要より多いと回転が速くなり、<strong>周波数が上がります</strong>。</p>
+          <p lang="en">Written as an equation for the whole system, without control and without the change of the loads with the frequency, this is approximately</p>
+          <p lang="ja">系統全体についての式にすると、制御と、周波数による負荷の変化を除いて、近似的に次のようになります。</p>
+          <div class="lec-math" data-tex="\frac{2H}{f_0}\,\frac{\mathrm{d}f}{\mathrm{d}t} = P_\mathrm{G} - P_\mathrm{D}"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="f"></span> is the frequency and <span class="lec-math-inline" data-tex="f_0"></span> its rated value (50 or 60 Hz); <span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> is the generation and <span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> the demand including the losses, both in per unit of the rated power of the system; <span class="lec-math-inline" data-tex="H"></span> is the inertia constant, the kinetic energy of all the rotors divided by that rated power, in seconds. The frequency changes at a rate set by the mismatch, and the larger the inertia, the slower it changes.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="f"></span> は周波数、<span class="lec-math-inline" data-tex="f_0"></span> はその定格値（50 Hz または 60 Hz）です。<span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> は発電、<span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> は損失を含む需要で、どちらも系統の定格容量を基準にした単位法の値です。<span class="lec-math-inline" data-tex="H"></span> は慣性定数で、すべての回転子の運動エネルギーをその定格容量で割った値（単位は秒）です。周波数は需給のずれに応じた速さで変わり、慣性が大きいほどゆっくり変わります。</p>
+
+          <p lang="en">The frequency is thus a measure of the balance of the whole system, the same everywhere in one synchronous system. Operators keep it close to its rated value by adjusting the output of generators.</p>
+          <p lang="ja">このように、周波数は系統全体の需給のつり合いを表す目盛りで、同じ交流でつながった系統の中ではどこでも同じ値になります。発電機の出力を調整して、周波数を定格の値の近くに保ちます。</p>
+
+          <p lang="en">The <strong>voltage</strong> must also stay within a range. Unlike the frequency, the voltage differs from bus to bus. It depends mainly on the balance of <strong>reactive power</strong>, a part of AC power that does no net work but is needed to keep up the voltage; generators, capacitors and other equipment supply it near where it is needed.</p>
+          <p lang="ja"><strong>電圧</strong>も、決められた範囲に保つ必要があります。周波数と違い、電圧は母線ごとに異なる値になります。電圧は主に<strong>無効電力</strong>のつり合いで決まります。無効電力は交流の電力のうち、正味の仕事はしないものの電圧を保つのに必要な成分で、発電機やコンデンサなどの設備が、必要な場所の近くで供給します。</p>
+          <div class="lec-callout is-key">
+            <p lang="en">Why keep them within range? Motors, electronics and the generators themselves are designed for the rated frequency and voltage. Large deviations can damage equipment or make protection relays disconnect generators and loads, which can enlarge the disturbance and, in the worst case, lead to a blackout.</p>
+            <p lang="ja">なぜ範囲内に保つのでしょうか。モーターや電子機器、発電機そのものが、定格の周波数と電圧で動くように作られているからです。大きくずれると機器が傷んだり、保護装置が発電機や負荷を切り離したりします。それが外乱をさらに大きくし、最悪の場合は大停電につながります。</p>
+          </div>
+        </section>
+
+        <!-- ============================== TIME SCALES ============================== -->
+        <section id="timescales">
+          <h2><span lang="en">Phenomena and their time scales</span><span lang="ja">系統で起きる現象と時間スケール</span></h2>
+          <p lang="en">Many things happen in a power system at once, but on very different time scales: from surges that last microseconds to plans that cover a whole day. One analysis cannot cover them all, so each analysis looks at one range and treats the faster and slower parts in a simplified way.</p>
+          <p lang="ja">電力系統では多くの現象が同時に起きていますが、その時間の長さは大きく異なります。マイクロ秒で終わるサージから、一日全体を見通す計画まであります。一つの解析ですべてを扱うことはできないため、解析ごとに注目する範囲を決め、それより速い現象や遅い現象は簡単化して扱います。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part0/time-scales.en.png" alt="Time scales from 1 microsecond to one day: electromagnetic transients, rotor swings, primary and secondary frequency control, and scheduling; the shaded band from 10 ms to 10 minutes is the main range of the time-domain simulation" width="1281" height="517">
+              <img lang="ja" src="../images/lecture/part0/time-scales.ja.png" alt="1 マイクロ秒から 1 日までの時間スケール。電磁過渡現象、発電機の動揺、一次・二次周波数制御、運転計画。10 ミリ秒から 10 分の帯が時間シミュレーションの主な範囲" width="1265" height="518">
+            </div>
+            <figcaption lang="en">Approximate time scales of the phenomena (logarithmic axis). The shaded band is the main range of the time-domain simulation. The ranges overlap and depend on the system.</figcaption>
+            <figcaption lang="ja">現象のおおよその時間スケールです（横軸は対数目盛り）。色の付いた帯は、時間シミュレーションで主に扱う範囲です。範囲は重なり合い、系統によっても変わります。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">Electromagnetic transients</span><span lang="ja">電磁過渡現象</span></dt>
+            <dd><span lang="en">Surges from lightning or switching travel along the lines within microseconds to milliseconds. They matter for insulation design.</span><span lang="ja">雷や遮断器の開閉で生じるサージが、マイクロ秒からミリ秒のうちに送電線を伝わります。絶縁の設計で重要になります。</span></dd>
+            <dt><span lang="en">Rotor swings</span><span lang="ja">発電機の動揺</span></dt>
+            <dd><span lang="en">After a fault, the rotors of the generators swing against each other for about 0.1 s to 10 s. Whether they return to step is the question of stability (Parts 3 and 5).</span><span lang="ja">事故の後、発電機の回転子どうしが 0.1 秒から 10 秒ほど揺れ合います。元の歩調に戻れるかどうかが安定度の問題です（Part 3 と Part 5）。</span></dd>
+            <dt><span lang="en">Frequency control</span><span lang="ja">周波数制御</span></dt>
+            <dd><span lang="en">Governors change the output of generators within seconds to stop a frequency change; automatic generation control (AGC) brings the frequency back over tens of seconds to minutes (Part 8).</span><span lang="ja">ガバナが数秒のうちに発電機の出力を変えて周波数の変化を止め、自動発電制御（AGC）が数十秒から数分かけて周波数を元に戻します（Part 8）。</span></dd>
+            <dt><span lang="en">Scheduling</span><span lang="ja">運転計画</span></dt>
+            <dd><span lang="en">Which generators run and how much each produces is planned from minutes to a day ahead, so that the cost is low and the limits are kept (Part 6).</span><span lang="ja">どの発電機をどれだけ動かすかを、数分先から一日先まで計画します。費用を抑え、設備の限界を守るためです（Part 6）。</span></dd>
+          </dl>
+          <p lang="en">The time-domain simulation of GUILDA represents voltages and currents by the amplitude and phase of the AC waves (phasors). It therefore does not resolve electromagnetic transients, and looks at the rotor swings and the controls that follow them. The power flow, the optimal power flow and the continuation power flow have no time axis at all: they compute the operating state at one moment.</p>
+          <p lang="ja">GUILDA の時間シミュレーションは、電圧や電流を交流の振幅と位相（フェーザ）で表します。そのため電磁過渡現象は扱わず、発電機の動揺とそれに続く制御の動きを調べます。潮流計算、最適潮流計算、連続潮流計算には時間の軸がなく、ある瞬間の運転状態を求めます。</p>
+        </section>
+
+        <!-- ============================== ANALYSES ============================== -->
+        <section id="analyses">
+          <h2><span lang="en">Kinds of analysis and the map of the lecture notes</span><span lang="ja">解析の種類と講義ノートの地図</span></h2>
+          <p lang="en">Every analysis starts from a model of the network (Part 1). The power flow (Part 2) then finds the steady operating state, which is the starting point for the other analyses: some stay at one moment and ask about cost or limits, others follow the swings in time.</p>
+          <p lang="ja">どの解析も、系統のモデル（Part 1）から始まります。次に潮流計算（Part 2）で定常的な運転状態を求めます。これがほかの解析の出発点です。その先には、ある瞬間の状態のまま費用や限界を調べる解析と、時間とともに変わる揺れを追う解析があります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 400" role="img" aria-label="Map of the Parts: model, then power flow, then static analyses (OPF, continuation power flow) and dynamic analyses (time-domain simulation, linearization), with controllers and visualization">
+                <defs>
+                  <marker id="p0-arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- groups -->
+                <rect class="f-group" x="362" y="8" width="206" height="160" rx="6"/>
+                <rect class="f-group" x="362" y="180" width="206" height="160" rx="6"/>
+                <text lang="en" class="t-muted t-small" x="372" y="27">one moment (static)</text>
+                <text lang="ja" class="t-muted t-small" x="372" y="27">ある瞬間を調べる（静的）</text>
+                <text lang="en" class="t-muted t-small" x="372" y="199">change in time (dynamic)</text>
+                <text lang="ja" class="t-muted t-small" x="372" y="199">時間の変化を調べる（動的）</text>
+                <!-- boxes -->
+                <rect class="f-card" x="10" y="144" width="140" height="62" rx="5"/>
+                <text class="t-brand t-small" x="22" y="166">Part 1</text>
+                <text lang="en" class="t-strong" x="22" y="190">Network model</text>
+                <text lang="ja" class="t-strong" x="22" y="190">系統モデル</text>
+
+                <rect class="f-brand" x="190" y="144" width="140" height="62" rx="5"/>
+                <text class="t-brand t-small" x="202" y="166">Part 2</text>
+                <text lang="en" class="t-strong" x="202" y="190">Power flow</text>
+                <text lang="ja" class="t-strong" x="202" y="190">潮流計算</text>
+
+                <rect class="f-c3" x="376" y="38" width="178" height="56" rx="5"/>
+                <text class="t-c3 t-small" x="388" y="58">Part 6</text>
+                <text lang="en" class="t-strong" x="388" y="82">Optimal power flow</text>
+                <text lang="ja" class="t-strong" x="388" y="82">最適潮流計算</text>
+
+                <rect class="f-c3" x="376" y="102" width="178" height="56" rx="5"/>
+                <text class="t-c3 t-small" x="388" y="122">Part 7</text>
+                <text lang="en" class="t-strong" x="388" y="146">Continuation PF</text>
+                <text lang="ja" class="t-strong" x="388" y="146">連続潮流計算</text>
+
+                <rect class="f-c2" x="376" y="210" width="178" height="56" rx="5"/>
+                <text class="t-c2 t-small" x="388" y="230">Part 3</text>
+                <text lang="en" class="t-strong" x="388" y="254">Time simulation</text>
+                <text lang="ja" class="t-strong" x="388" y="254">時間シミュレーション</text>
+
+                <rect class="f-c2" x="376" y="274" width="178" height="56" rx="5"/>
+                <text class="t-c2 t-small" x="388" y="294">Part 5</text>
+                <text lang="en" class="t-strong" x="388" y="318">Linearization</text>
+                <text lang="ja" class="t-strong" x="388" y="318">近似線形化</text>
+
+                <rect class="f-c4" x="610" y="242" width="160" height="62" rx="5"/>
+                <text class="t-c4 t-small" x="622" y="264">Part 8</text>
+                <text lang="en" class="t-strong" x="622" y="288">Controllers</text>
+                <text lang="ja" class="t-strong" x="622" y="288">制御器の設計</text>
+
+                <rect class="f-card" x="190" y="356" width="378" height="36" rx="5"/>
+                <text class="t-brand t-small" x="202" y="379">Part 4</text>
+                <text lang="en" x="256" y="379">Visualization: see both as springs and masses</text>
+                <text lang="ja" x="256" y="379">可視化: どちらもばね質点モデルの図で見る</text>
+                <!-- arrows -->
+                <line class="s-ink" x1="150" y1="175" x2="186" y2="175" marker-end="url(#p0-arrow2)"/>
+                <path class="s-ink" d="M330 168 C 346 168, 346 88, 358 88" marker-end="url(#p0-arrow2)"/>
+                <path class="s-ink" d="M330 182 C 346 182, 346 260, 358 260" marker-end="url(#p0-arrow2)"/>
+                <line class="s-ink" x1="606" y1="273" x2="572" y2="273" marker-start="url(#p0-arrow2)" marker-end="url(#p0-arrow2)"/>
+                <path class="s-line is-dashed" d="M260 206 V352 M465 340 V352"/>
+                <text lang="en" class="t-muted t-small" x="586" y="232">design and test</text>
+                <text lang="ja" class="t-muted t-small" x="586" y="232">設計して確かめる</text>
+                <text lang="en" class="t-muted t-small" x="200" y="134">operating point</text>
+                <text lang="ja" class="t-muted t-small" x="200" y="134">運転状態（平衡点）</text>
+              </svg>
+            </div>
+            <figcaption lang="en">How the Parts of the lecture notes build on each other. Every Part can also be read on its own, starting from a bundled network.</figcaption>
+            <figcaption lang="ja">講義ノートの各 Part のつながりです。どの Part も、同梱の系統モデルから始めるので、単独で読めます。</figcaption>
+          </figure>
+
+          <p lang="en">Each analysis answers a different question:</p>
+          <p lang="ja">それぞれの解析は、次のような問いに答えます。</p>
+          <dl class="lec-terms">
+            <dt><a href="part2-power-flow.html"><span lang="en">Power flow</span><span lang="ja">潮流計算</span></a></dt>
+            <dd><span lang="en">For given generation and loads, what are the voltage of each bus and the power on each line?</span><span lang="ja">発電と負荷を決めたとき、各母線の電圧と各送電線を流れる電力はどうなるか。</span></dd>
+            <dt><a href="part3-time-simulation.html"><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></a></dt>
+            <dd><span lang="en">After a fault or a sudden change, how do the generators swing, and do they come back to a steady state?</span><span lang="ja">事故や急な変化の後、発電機はどう揺れ、定常な状態に戻るか。</span></dd>
+            <dt><a href="part5-linearization.html"><span lang="en">Linear analysis</span><span lang="ja">線形解析</span></a></dt>
+            <dd><span lang="en">Do small swings die out, and how fast? Which generators take part in each swing?</span><span lang="ja">小さな揺れは収まるか、どのくらい速く収まるか。どの発電機がどの揺れに関わっているか。</span></dd>
+            <dt><a href="part6-optimal-power-flow.html"><span lang="en">Optimal power flow</span><span lang="ja">最適潮流計算</span></a></dt>
+            <dd><span lang="en">Which way of sharing the generation is cheapest while keeping every limit?</span><span lang="ja">すべての制約を守りながら、どの発電の分け方がいちばん安いか。</span></dd>
+            <dt><a href="part7-continuation-power-flow.html"><span lang="en">Continuation power flow</span><span lang="ja">連続潮流計算</span></a></dt>
+            <dd><span lang="en">How far can the load grow before the voltage can no longer be maintained?</span><span lang="ja">負荷をどこまで増やすと、電圧を保てなくなるか。</span></dd>
+            <dt><a href="part8-controller-design.html"><span lang="en">Control</span><span lang="ja">制御</span></a></dt>
+            <dd><span lang="en">How can we measure the system and act on it so that the swings die out quickly?</span><span lang="ja">系統をどう測り、どう働きかければ、揺れを早く収められるか。</span></dd>
+          </dl>
+          <p lang="en">Part 4 does not add a new analysis. It shows the results of the power flow and the time-domain simulation as a picture of masses connected by springs, so that the numbers become something you can see.</p>
+          <p lang="ja">Part 4 は新しい解析を加えるのではなく、潮流計算と時間シミュレーションの結果を、ばねでつながった質点の図として見せます。数値の結果を、目で見て分かる形にするためです。</p>
+        </section>
+
+        <!-- ============================== RENEWABLES ============================== -->
+        <section id="renewables">
+          <h2><span lang="en">What changes with more renewable energy</span><span lang="ja">再生可能エネルギーが増えると何が変わるか</span></h2>
+          <p lang="en">Solar panels and most wind turbines connect to the network through inverters, power electronic converters, instead of a large rotor that turns in step with the grid. When they replace conventional power plants, the system changes in several ways:</p>
+          <p lang="ja">太陽光発電や多くの風力発電は、系統と同じ速さで回る大きな回転子ではなく、<strong>インバータ</strong>（パワーエレクトロニクスの変換器）を通して系統につながります。これらが従来の発電所に置き換わると、系統はいくつかの点で変わります。</p>
+          <ul>
+            <li><span lang="en"><strong>Lower inertia.</strong> Fewer heavy rotors means less stored kinetic energy. After a large generator trips, the frequency falls faster and lower before the governors can respond.</span><span lang="ja"><strong>慣性が小さくなる。</strong>重い回転子が減ると、蓄えられた運動エネルギーも減ります。大きな発電機が脱落したとき、ガバナが働くまでの間に、周波数がより速く、より深く下がります。</span></li>
+            <li><span lang="en"><strong>Output that follows the weather.</strong> The output changes with sunlight and wind, so the other generators and storage have to adjust more often to keep the balance.</span><span lang="ja"><strong>出力が天候で変わる。</strong>日射や風によって出力が変わるため、需給のつり合いを保つために、ほかの発電機や蓄電池がより頻繁に調整します。</span></li>
+            <li><span lang="en"><strong>Behaviour set by control.</strong> How an inverter reacts to a disturbance is decided by its control design, not by physics alone, so the dynamics of the whole system depend more on controllers.</span><span lang="ja"><strong>ふるまいを制御が決める。</strong>インバータが外乱にどう応えるかは、物理だけでなく制御の設計で決まります。そのため、系統全体の動きが制御器に左右される度合いが大きくなります。</span></li>
+          </ul>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part0/frequency-after-trip.png" alt="Frequency deviation omega of the three generators of the IEEE 9-bus system after the mechanical power of generator 2 falls by 0.1 pu at t = 1 s, with governors and AGC: with the inertia as bundled it falls to about -2e-3 pu; with a third of the inertia it falls faster, to about -3.3e-3 pu; in both cases it returns to 0" width="1294" height="528">
+            </div>
+            <figcaption lang="en">GUILDA's time-domain simulation of the IEEE 9-bus system with a governor on each generator and AGC: at <span class="lec-math-inline" data-tex="t = 1"></span> s the mechanical power of generator 2 falls by 0.1 pu, as when part of its output is lost. Left: the inertia <span class="lec-math-inline" data-tex="M"></span> of the generators as bundled. Right: <span class="lec-math-inline" data-tex="M"></span> divided by 3, as when inverter-based sources replace part of the rotating machines. The vertical axis is the frequency deviation of each generator in per unit. With less inertia the first drop is faster and deeper; the governors stop the fall and AGC brings the frequency back.</figcaption>
+            <figcaption lang="ja">GUILDA の時間シミュレーションで、各発電機にガバナ、全体に AGC を付けた IEEE 9 母線系統を計算しました。<span class="lec-math-inline" data-tex="t = 1"></span> 秒で発電機 2 の機械入力が 0.1 pu 減ります（出力の一部が失われた場合に相当）。左は発電機の慣性 <span class="lec-math-inline" data-tex="M"></span> が同梱のままの場合、右は <span class="lec-math-inline" data-tex="M"></span> を 3 分の 1 にした場合（回転機の一部がインバータの電源に置き換わった場合に相当）です。縦軸は各発電機の周波数のずれ（単位法）です。慣性が小さいと、最初の低下が速く、深くなります。ガバナが低下を止め、AGC が周波数を元に戻します。</figcaption>
+          </figure>
+          <p lang="en">To keep such systems stable, inverters that imitate the response of inertia, batteries and new control methods are being studied and introduced. The analyses in this lecture, especially the time-domain simulation, linearization and controller design, are the tools for checking such ideas.</p>
+          <p lang="ja">このような系統を安定に保つために、慣性のようにふるまうインバータの制御や蓄電池、新しい制御方式が研究され、導入されています。この講義で扱う解析、特に時間シミュレーション、近似線形化、制御器の設計は、こうした考えを確かめるための道具です。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li><span lang="en">A power system generates, transmits and distributes electricity to consumers; the network is a mesh of buses and branches.</span><span lang="ja">電力系統は、電気をつくり（発電）、運び（送電）、配って（配電）需要家に届けます。送電網は母線とブランチの網の目です。</span></li>
+            <li><span lang="en">Supply and demand must match at every moment. The frequency shows the balance of active power for the whole system; the voltage depends on reactive power and differs from bus to bus.</span><span lang="ja">需要と供給は常に一致させる必要があります。周波数は系統全体の有効電力のつり合いを表し、電圧は無効電力に左右されて母線ごとに異なります。</span></li>
+            <li><span lang="en">Phenomena range from microseconds to a day. Each analysis looks at one range.</span><span lang="ja">現象の時間スケールはマイクロ秒から一日まで広がっていて、解析ごとに注目する範囲が異なります。</span></li>
+            <li><span lang="en">The power flow finds the operating state, which is the starting point of the time-domain simulation, linearization, optimal power flow and continuation power flow.</span><span lang="ja">潮流計算で求めた運転状態が、時間シミュレーション、近似線形化、最適潮流計算、連続潮流計算の出発点になります。</span></li>
+            <li><span lang="en">With more inverter-based renewable energy, the inertia falls and controllers matter more.</span><span lang="ja">インバータでつながる再生可能エネルギーが増えると、慣性が小さくなり、制御器の役割が大きくなります。</span></li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">The other Parts</span><span lang="ja">ほかの Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card" href="part1-network-components.html"><small>Part 1</small><b><span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></b></a></li>
+          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b></a></li>
+          <li><a class="lec-card" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b></a></li>
+          <li><a class="lec-card" href="part4-spring-mass-model.html"><small>Part 4</small><b><span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b></a></li>
+          <li><a class="lec-card" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b></a></li>
+          <li><a class="lec-card" href="part6-optimal-power-flow.html"><small>Part 6</small><b><span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b></a></li>
+          <li><a class="lec-card" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b></a></li>
+          <li><a class="lec-card" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><span lang="en"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> (in Japanese). With GUILDA on the path, open it in MATLAB with <code>open Part0_Introduction.mlx</code>. The graphs on this page can be drawn by running this Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> です。GUILDA をパスに追加した状態で、MATLAB で <code>open Part0_Introduction.mlx</code> を実行すると開きます。このページのグラフは、Part 0 のライブスクリプトを実行すると描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; it explains power systems in the language of systems and control.</span><span lang="ja">GUILDA の基になった教科書です。電力系統をシステム制御の言葉で説明しています。</span></span></li>
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">A standard reference on power system stability, its phenomena and models.</span><span lang="ja">電力系統の安定度と、その現象・モデルについての標準的な参考書です。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">Power system dynamics and control, including the effect of renewable energy on inertia.</span><span lang="ja">電力系統の動特性と制御の教科書です。再生可能エネルギーが慣性に与える影響も扱っています。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-next" href="part1-network-components.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 1: <span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 7: 連続潮流計算と電力方程式のヤコビアン">GUILDA Lecture Notes - Part 7: Continuation power flow and the power-flow Jacobian</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <style>
+    .lec-svg .lec7-hollow { fill: var(--surface); stroke: var(--brand); stroke-width: 2; }
+  </style>
+  <!-- Page-only CSS goes here with the prefix lec7- ; shared lecture CSS (lec-*) is in style.css. -->
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 7 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 7</p>
+      <h1><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></h1>
+      <p class="lec-lead" lang="en">PV curves and the nose point, why reactive power matters for voltage, and the Jacobian as a sensitivity that becomes singular at the nose.</p>
+      <p class="lec-lead" lang="ja">PV カーブとノーズ点、電圧にとって無効電力が大切な理由、ノーズ点で特異になる感度としてのヤコビアンを説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#pv-curve"><span lang="en">PV curve and the nose</span><span lang="ja">PV カーブとノーズ点</span></a></li>
+          <li><a href="#collapse"><span lang="en">A voltage collapse</span><span lang="ja">電圧崩壊の実例</span></a></li>
+          <li><a href="#reactive"><span lang="en">Why reactive power matters</span><span lang="ja">無効電力が大切な理由</span></a></li>
+          <li><a href="#cpf"><span lang="en">Continuation power flow</span><span lang="ja">連続潮流計算</span></a></li>
+          <li><a href="#q-limits"><span lang="en">Reactive power limits</span><span lang="ja">無効電力の限界</span></a></li>
+          <li><a href="#jacobian"><span lang="en">Jacobian as sensitivity</span><span lang="ja">ヤコビアンは感度</span></a></li>
+          <li><a href="#nose-singular"><span lang="en">Singular at the nose</span><span lang="ja">ノーズ点で特異になる</span></a></li>
+          <li><a href="#countermeasures"><span lang="en">Keeping the voltage up</span><span lang="ja">電圧を支える対策</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">What a PV curve is, and why every system has a largest load it can supply: the nose point.</span><span lang="ja">PV カーブとは何か。どの系統にも供給できる負荷の上限（ノーズ点）がある理由。</span></li>
+            <li><span lang="en">What a voltage collapse looks like, with the 1987 blackout in the Tokyo area as an example.</span><span lang="ja">電圧崩壊とはどんな現象か。1987 年の首都圏の大停電を例に。</span></li>
+            <li><span lang="en">Why reactive power decides how far the voltage can be held, and how the reactive power limits of generators bend the curve.</span><span lang="ja">電圧を保てるかどうかを無効電力が決める理由と、発電機の無効電力の限界でカーブが変わること。</span></li>
+            <li><span lang="en">How the continuation power flow traces the curve past the nose.</span><span lang="ja">連続潮流計算が、ノーズ点の先までカーブをたどる仕組み。</span></li>
+            <li><span lang="en">Why the Jacobian of the power flow equations is a sensitivity, why it becomes singular at the nose, and what is done to keep the voltage up.</span><span lang="ja">電力方程式のヤコビアンが感度であり、ノーズ点で特異になる理由と、電圧を支えるための対策。</span></li>
+          </ul>
+        </section>
+
+        <!-- ============================== PV CURVE ============================== -->
+        <section id="pv-curve">
+          <h2><span lang="en">The PV curve and the nose point</span><span lang="ja">PV カーブとノーズ点</span></h2>
+          <p lang="en">Take the simplest system: a generator that holds its voltage at 1 pu sends power through one line to a load. As the load grows, more current flows through the line, and the voltage at the load end falls. Plotting the load voltage <span class="lec-math-inline" data-tex="V"></span> against the load power <span class="lec-math-inline" data-tex="P"></span> gives the <strong>PV curve</strong>. Because of its shape it is also called the nose curve.</p>
+          <p lang="ja">いちばん簡単な系統を考えます。電圧を 1 pu に保つ発電機が、1 本の送電線を通して負荷に電力を送ります。負荷が増えると送電線を流れる電流が増え、負荷の側の電圧が下がります。負荷の電力 <span class="lec-math-inline" data-tex="P"></span> を横軸に、負荷の電圧 <span class="lec-math-inline" data-tex="V"></span> を縦軸にとって描いた曲線を <strong>PV カーブ</strong>といいます。形から、ノーズカーブとも呼ばれます。</p>
+          <p lang="en">To compute it, let the generator hold the voltage <span class="lec-math-inline" data-tex="E"></span> at the sending end, let the line be a pure reactance <span class="lec-math-inline" data-tex="X"></span> (its resistance and charging are neglected), and let the load take a constant power <span class="lec-math-inline" data-tex="P + jQ"></span> at the voltage <span class="lec-math-inline" data-tex="V"></span>, whose angle lags the sending end by <span class="lec-math-inline" data-tex="\delta"></span> (all in pu). The power that arrives at the load is</p>
+          <p lang="ja">計算するために、発電機が送電端の電圧を <span class="lec-math-inline" data-tex="E"></span> に保ち、送電線は純粋なリアクタンス <span class="lec-math-inline" data-tex="X"></span>（抵抗と充電容量は無視）、負荷は電圧 <span class="lec-math-inline" data-tex="V"></span> で一定の電力 <span class="lec-math-inline" data-tex="P + jQ"></span> を使うとします。負荷の電圧の位相は、送電端より <span class="lec-math-inline" data-tex="\delta"></span> だけ遅れています（量はすべて単位法）。負荷に届く電力は次のとおりです。</p>
+          <div class="lec-math" data-tex="P = \frac{EV}{X}\sin\delta, \qquad Q = \frac{EV\cos\delta - V^2}{X}"></div>
+          <p lang="en">Eliminating <span class="lec-math-inline" data-tex="\delta"></span> with <span class="lec-math-inline" data-tex="\sin^2\delta + \cos^2\delta = 1"></span> gives the load voltage for a given load:</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="\sin^2\delta + \cos^2\delta = 1"></span> を使って <span class="lec-math-inline" data-tex="\delta"></span> を消すと、負荷を決めたときの負荷の電圧が求まります。</p>
+          <div class="lec-math" data-tex="V^2 = \frac{E^2}{2} - QX \pm \sqrt{\frac{E^4}{4} - X^2P^2 - E^2XQ}"></div>
+          <p lang="en">For a load of fixed power factor, <span class="lec-math-inline" data-tex="Q = P\tan\varphi"></span>, this traces the PV curve as <span class="lec-math-inline" data-tex="P"></span> grows: the sign + gives the upper branch, the sign − the lower branch.</p>
+          <p lang="ja">力率が一定の負荷（<span class="lec-math-inline" data-tex="Q = P\tan\varphi"></span>）で <span class="lec-math-inline" data-tex="P"></span> を大きくしていくと、この式が PV カーブを描きます。符号 + が上側の枝、符号 − が下側の枝です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="A generator feeding a load over one line, and the PV curve of the load voltage: the voltage falls as the load grows, up to the nose point; below it is a second, low-voltage solution">
+                <defs>
+                  <marker id="p7-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- circuit -->
+                <circle class="f-card" cx="50" cy="130" r="24"/>
+                <path class="s-ink" d="M36 130 q7 -12 14 0 t14 0"/>
+                <line class="s-ink" x1="74" y1="130" x2="100" y2="130"/>
+                <line class="s-ink" x1="100" y1="95" x2="100" y2="165" style="stroke-width: 5"/>
+                <line class="s-ink" x1="100" y1="130" x2="150" y2="130"/>
+                <rect class="f-card" x="150" y="116" width="80" height="28" rx="4"/>
+                <text class="t-strong t-mid" x="190" y="135">X</text>
+                <line class="s-ink" x1="230" y1="130" x2="300" y2="130"/>
+                <line class="s-ink" x1="300" y1="95" x2="300" y2="165" style="stroke-width: 5"/>
+                <line class="s-ink" x1="300" y1="150" x2="330" y2="150"/>
+                <line class="s-ink" x1="330" y1="150" x2="330" y2="200" marker-end="url(#p7-arrow)"/>
+                <text class="t-mid" x="100" y="84">1.0 pu</text>
+                <text lang="en" class="t-muted t-small t-mid" x="100" y="186">held by the AVR</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="100" y="186">AVR で一定</text>
+                <text class="t-brand t-mid" x="300" y="84">V</text>
+                <text lang="en" class="t-small t-mid" x="330" y="220">load</text>
+                <text lang="ja" class="t-small t-mid" x="330" y="220">負荷</text>
+                <text class="t-small t-mid" x="330" y="238">P + jQ</text>
+                <!-- plot -->
+                <line class="s-line" x1="430" y1="240" x2="765" y2="240" marker-end="url(#p7-arrow)"/>
+                <line class="s-line" x1="430" y1="240" x2="430" y2="26" marker-end="url(#p7-arrow)"/>
+                <text class="t-muted t-end" x="424" y="62">1.0</text>
+                <text class="t-muted t-end" x="424" y="153">0.5</text>
+                <line class="s-line is-dashed" x1="430" y1="58.2" x2="750" y2="58.2" style="stroke-width: 0.75"/>
+                <text lang="en" class="t-muted" x="438" y="30">load voltage V [pu]</text>
+                <text lang="ja" class="t-muted" x="438" y="30">負荷の電圧 V [pu]</text>
+                <text lang="en" class="t-muted t-end" x="765" y="262">load power P</text>
+                <text lang="ja" class="t-muted t-end" x="765" y="262">負荷の電力 P</text>
+                <polyline class="s-brand" points="430.0,58.2 444.8,59.5 459.3,60.8 473.6,62.3 487.7,63.8 501.4,65.4 514.8,67.1 527.8,68.9 540.4,70.7 552.7,72.6 564.5,74.6 575.9,76.6 586.8,78.8 597.3,81.0 607.2,83.2 616.7,85.5 625.6,87.9 633.9,90.4 641.7,92.9 648.9,95.5 655.6,98.2 661.6,100.9 667.0,103.7 671.8,106.6 676.0,109.5 679.5,112.4 682.4,115.4 684.6,118.5 686.2,121.6 687.1,124.8 687.4,127.6"/>
+                <polyline class="s-brand is-dashed" points="687.4,127.6 687.1,130.9 686.1,134.2 684.5,137.6 682.3,141.0 679.4,144.4 675.8,147.9 671.6,151.5 666.8,155.0 661.4,158.6 655.3,162.3 648.7,166.0 641.4,169.7 633.6,173.4 625.3,177.2 616.3,181.0 606.9,184.8 596.9,188.7 586.4,192.5 575.5,196.4 564.1,200.4 552.2,204.3 540.0,208.2 527.3,212.2 514.3,216.2 500.9,220.1 487.1,224.1 473.1,228.1 458.8,232.1 444.2,236.1 431.3,239.6"/>
+                <!-- margin -->
+                <line class="s-line is-dashed" x1="571.8" y1="75.9" x2="571.8" y2="240"/>
+                <line class="s-c3 is-dashed" x1="687.4" y1="127.8" x2="687.4" y2="240"/>
+                <line class="s-c3" x1="575" y1="226" x2="684" y2="226" marker-start="url(#p7-arrow)" marker-end="url(#p7-arrow)"/>
+                <text lang="en" class="t-c3 t-small t-mid" x="629.6" y="218">margin</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="629.6" y="218">余裕</text>
+                <circle class="f-brand-solid" cx="571.8" cy="75.9" r="5"/>
+                <text lang="en" class="t-brand t-small t-end" x="564" y="98">operating point</text>
+                <text lang="ja" class="t-brand t-small t-end" x="564" y="98">運転点</text>
+                <circle class="f-c3" cx="687.4" cy="127.8" r="6"/>
+                <text lang="en" class="t-c3 t-small" x="697" y="124">nose point</text>
+                <text lang="ja" class="t-c3 t-small" x="697" y="124">ノーズ点</text>
+                <circle class="lec7-hollow" cx="572" cy="197.7" r="4.5"/>
+                <text lang="en" class="t-muted t-small" x="470" y="182">low-voltage solution</text>
+                <text lang="ja" class="t-muted t-small" x="470" y="182">電圧の低い解</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Left: the two-bus system. Right: its PV curve from the equation above, for <span class="lec-math-inline" data-tex="E = 1"></span> pu, a line reactance of 0.5 pu and a load of power factor 0.95 (lagging). Normal operation is on the upper branch (solid). The nose is the largest load the line can supply.</figcaption>
+            <figcaption lang="ja">左: 2 母線の系統です。右: その PV カーブで、上の式から <span class="lec-math-inline" data-tex="E = 1"></span> pu、送電線のリアクタンス 0.5 pu、力率 0.95（遅れ）の負荷として計算しました。ふだんの運転は上側の枝（実線）の上にあります。ノーズ点が、この送電線で供給できる最大の負荷です。</figcaption>
+          </figure>
+
+          <p lang="en">The curve shows three things.</p>
+          <p lang="ja">この曲線から、3 つのことが分かります。</p>
+          <ul>
+            <li lang="en">The voltage falls slowly at first and then faster and faster. A fall of the voltage that seems small can therefore be close to the limit.</li>
+            <li lang="ja">電圧は、はじめはゆっくり、やがて急に下がります。そのため、電圧の下がり方が小さく見えても、限界の近くにいることがあります。</li>
+            <li lang="en">The load cannot exceed the tip of the curve, the <strong>nose point</strong> (the maximum loading point). There the expression under the square root is 0; beyond it the expression is negative, and the power flow equations have no real solution. The distance from the operating point to the nose is the <strong>margin</strong> against voltage collapse.</li>
+            <li lang="ja">負荷は、曲線の先端である<strong>ノーズ点</strong>（最大負荷点）を超えられません。ノーズ点では平方根の中が 0 になり、その先では負になって、電力方程式に実数の解がありません。運転点からノーズ点までの距離が、電圧崩壊に対する<strong>余裕</strong>です。</li>
+            <li lang="en">For the same load there are two solutions: a high voltage with a small current (upper branch) and a low voltage with a large current (lower branch). The two meet at the nose. Systems are operated on the upper branch.</li>
+            <li lang="ja">同じ負荷に対して解が 2 つあります。電圧が高く電流の小さい解（上側の枝）と、電圧が低く電流の大きい解（下側の枝）です。2 つの解はノーズ点で 1 つになります。系統は上側の枝で運転します。</li>
+          </ul>
+          <p lang="en">Why is there a limit? The power is voltage times current. Raising the load raises the current, but the larger current also lowers the voltage through the line. Near the nose, the gain from the larger current and the loss from the lower voltage cancel out, and no more power can be delivered.</p>
+          <p lang="ja">なぜ限界があるのでしょうか。電力は電圧と電流の積です。負荷を増やすと電流は増えますが、増えた電流が送電線で電圧を下げます。ノーズ点では、電流が増える効果と電圧が下がる効果がちょうど打ち消し合い、それ以上の電力を送れなくなります。</p>
+        </section>
+
+        <!-- ============================== COLLAPSE ============================== -->
+        <section id="collapse">
+          <h2><span lang="en">Voltage collapse: the Tokyo blackout of 1987</span><span lang="ja">電圧崩壊: 1987 年の首都圏の大停電</span></h2>
+          <p lang="en">When the operating point reaches the nose, or the nose moves back to the operating point because a line or generator is lost, the voltage cannot be held and falls rapidly over a wide area. This is a <strong>voltage collapse</strong>. It can happen while the frequency and the rotor angles of the generators look normal, which makes it different from the loss of synchronism of Part 3.</p>
+          <p lang="ja">運転点がノーズ点に達すると、あるいは送電線や発電機が止まってノーズ点が運転点まで下がってくると、電圧を保てなくなり、広い範囲で電圧が急に下がります。これを<strong>電圧崩壊</strong>といいます。周波数や発電機の回転子の角度にはおかしなところがないまま起き得る点で、Part 3 の脱調とは違う現象です。</p>
+          <p lang="en">A well-known example happened on 23 July 1987 in the service area of the Tokyo Electric Power Company. On a very hot day, the demand was unusually high, and in the afternoon it rose faster than ever experienced before. The voltages of the bulk network kept falling, and in the early afternoon about 2.8 million customers lost power. The report of the event names three causes: the high demand, its unusually fast rise, and the air conditioners in wide use, which draw more current when the voltage falls [6].</p>
+          <p lang="ja">よく知られた例が、1987 年 7 月 23 日に東京電力の供給区域で起きた停電です。猛暑の日で需要がふだんより大きく、午後には、それまでに経験したことのない速さで需要が増えました。基幹系統の電圧は下がり続け、午後の早い時刻に約 280 万戸が停電しました。この事故の報告は、原因として 3 つを挙げています。需要が大きかったこと、需要の増え方が異常に速かったこと、そして広く使われていた冷房機が、電圧が下がると電流を多く使う性質を持っていたことです [6]。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 250" role="img" aria-label="The vicious circle of a voltage collapse: demand rises, voltage falls, air conditioners draw more current, more reactive power is lost in the lines, and the voltage falls further">
+                <defs>
+                  <marker id="p7-arrow-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path style="fill: var(--lec-c3)" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-card" x="16" y="97" width="180" height="60" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="106" y="122">Demand rises fast</text>
+                <text lang="ja" class="t-strong t-mid" x="106" y="122">需要が急に増える</text>
+                <text lang="en" class="t-muted t-small t-mid" x="106" y="142">hot afternoon</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="106" y="142">猛暑の午後</text>
+                <line class="s-ink" x1="196" y1="118" x2="262" y2="70" marker-end="url(#p7-arrow)"/>
+                <rect class="f-c3" x="266" y="30" width="230" height="60" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="381" y="56">Voltage falls</text>
+                <text lang="ja" class="t-strong t-mid" x="381" y="56">電圧が下がる</text>
+                <text lang="en" class="t-muted t-small t-mid" x="381" y="76">toward the nose</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="381" y="76">ノーズ点に近づく</text>
+                <path class="s-c3" d="M496 60 C560 60 600 80 612 104" marker-end="url(#p7-arrow-c)"/>
+                <rect class="f-c3" x="530" y="108" width="236" height="60" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="648" y="133">Air conditioners draw</text>
+                <text lang="en" class="t-strong t-mid" x="648" y="153">more current</text>
+                <text lang="ja" class="t-strong t-mid" x="648" y="134">冷房機が使う電流が増える</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="648" y="154">同じ電力を低い電圧で使う</text>
+                <path class="s-c3" d="M612 168 C600 196 560 214 500 214" marker-end="url(#p7-arrow-c)"/>
+                <rect class="f-c3" x="266" y="184" width="230" height="60" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="381" y="209">More reactive power</text>
+                <text lang="en" class="t-strong t-mid" x="381" y="229">lost in the lines</text>
+                <text lang="ja" class="t-strong t-mid" x="381" y="210">送電線で失う</text>
+                <text lang="ja" class="t-strong t-mid" x="381" y="230">無効電力が増える</text>
+                <line class="s-c3" x1="381" y1="184" x2="381" y2="94" marker-end="url(#p7-arrow-c)"/>
+                <text lang="en" class="t-c3 t-small" x="390" y="143">repeats and speeds up</text>
+                <text lang="ja" class="t-c3 t-small" x="390" y="143">繰り返して加速する</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The vicious circle behind a voltage collapse. A larger current increases the reactive power consumed by the line reactances (proportional to the square of the current), which pulls the voltage down further.</figcaption>
+            <figcaption lang="ja">電圧崩壊の悪循環です。電流が増えると、送電線のリアクタンスで消費される無効電力（電流の 2 乗に比例）が増え、電圧がさらに下がります。</figcaption>
+          </figure>
+          <p lang="en">The rest of this page explains the tools used to study voltage collapse: the PV curve, the continuation power flow that draws it, and the Jacobian that tells how close the nose is.</p>
+          <p lang="ja">このページの残りでは、電圧崩壊を調べる道具を説明します。PV カーブ、それを描く連続潮流計算、そしてノーズ点がどれだけ近いかを教えてくれるヤコビアンです。</p>
+        </section>
+
+        <!-- ============================== REACTIVE ============================== -->
+        <section id="reactive">
+          <h2><span lang="en">Why reactive power matters for the voltage</span><span lang="ja">電圧にとって無効電力が大切な理由</span></h2>
+          <p lang="en">On transmission lines, which are mostly reactive, active power flows with the angle difference and reactive power with the voltage difference. In the two-bus system above, when the angle difference is small (<span class="lec-math-inline" data-tex="\cos\delta \approx 1"></span>), the reactive power that reaches the load becomes</p>
+          <p lang="ja">ほぼリアクタンスだけでできている送電線では、有効電力は位相差で、無効電力は電圧の大きさの差で流れます。上の 2 母線の系統で位相差が小さいとき（<span class="lec-math-inline" data-tex="\cos\delta \approx 1"></span>）、負荷に届く無効電力は次のようになります。</p>
+          <div class="lec-math" data-tex="Q \approx \frac{V}{X}\,(E - V)"></div>
+          <p lang="en">To deliver reactive power to a load, the voltage at the load must be lower than at the sending end. The more reactive power the load takes, the lower its voltage. Reactive power is also hard to send far: the line itself consumes reactive power in its reactance, and this loss grows with the square of the current. Reactive power is therefore best supplied close to where it is used.</p>
+          <p lang="ja">負荷に無効電力を届けるには、負荷の電圧が送電端より低くなければなりません。負荷が使う無効電力が多いほど、その電圧は下がります。さらに、無効電力は遠くへ送りにくい電力です。送電線そのものがリアクタンスで無効電力を消費し、その量は電流の 2 乗で増えるからです。そのため、無効電力は使う場所の近くで供給するのがよいとされます。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/power-factor.png" alt="PV curves of the two-bus system for three load power factors: the nose is at P = 0.63 pu for 0.9 lagging, 1.00 pu for unity and 1.38 pu for 0.95 leading" width="807" height="564">
+            </div>
+            <figcaption lang="en">PV curves of the two-bus system above, from the same equation, for three load power factors. A load that consumes reactive power (<span class="lec-math-inline" data-tex="\cos\varphi = 0.9"></span> lagging, <span class="lec-math-inline" data-tex="Q \gt 0"></span>) lowers the voltage and the nose; a load that supplies some reactive power (0.95 leading, <span class="lec-math-inline" data-tex="Q \lt 0"></span>) raises both. Solid: upper branches; dashed: lower branches; the dots are the noses at 0.63, 1.00 and 1.38 pu.</figcaption>
+            <figcaption lang="ja">上の 2 母線の系統で、負荷の力率を 3 通りに変えた PV カーブです（同じ式から計算）。無効電力を使う負荷（<span class="lec-math-inline" data-tex="\cos\varphi = 0.9"></span> 遅れ、<span class="lec-math-inline" data-tex="Q \gt 0"></span>）では電圧もノーズ点も下がり、無効電力を少し出す負荷（0.95 進み、<span class="lec-math-inline" data-tex="Q \lt 0"></span>）では両方とも上がります。実線が上側の枝、破線が下側の枝で、点がノーズ点（0.63、1.00、1.38 pu）です。</figcaption>
+          </figure>
+          <p lang="en">The same line can supply more than twice as much active power when the reactive power is supplied locally (the leading case) as when the load also draws reactive power over the line (the 0.9 lagging case). The nose is decided largely by the reactive power. This is why the margin to voltage collapse is often called a reactive power problem, and why the reactive power that generators and other equipment can still supply, the <strong>reactive power reserve</strong>, is watched in operation.</p>
+          <p lang="ja">同じ送電線でも、無効電力をその場で補うとき（進みの場合）は、負荷が無効電力も送電線から受け取るとき（0.9 遅れの場合）の 2 倍以上の有効電力を供給できます。ノーズ点の位置は、無効電力で大きく変わるのです。電圧崩壊に対する余裕が無効電力の問題といわれ、運転では発電機などがあとどれだけ無効電力を出せるか（<strong>無効電力の予備力</strong>）を見ているのはこのためです。</p>
+        </section>
+
+        <!-- ============================== CPF ============================== -->
+        <section id="cpf">
+          <h2><span lang="en">The continuation power flow</span><span lang="ja">連続潮流計算</span></h2>
+          <p lang="en">A PV curve can be drawn by solving the power flow again and again with a larger load each time. Near the nose this fails. An ordinary power flow fixes the load and solves for the voltages, and close to the nose the slope that Newton's method follows (the Jacobian) is nearly flat in one direction, so the steps become unreliable. Beyond the nose there is no solution at all, and the lower branch cannot be reached.</p>
+          <p lang="ja">PV カーブは、負荷を少しずつ増やしながら潮流計算を何度も解けば描けそうです。しかし、ノーズ点の近くではうまくいきません。ふつうの潮流計算は負荷を決めて電圧を求めますが、ノーズ点の近くでは、ニュートン法がたどる傾き（ヤコビアン）がある向きにほとんど平らになり、一歩一歩が当てにならなくなります。ノーズ点の先には解がそもそもないので、下側の枝にはたどり着けません。</p>
+          <p lang="en">The <strong>continuation power flow</strong> (CPF) avoids this. It scales the chosen loads with one parameter <span class="lec-math-inline" data-tex="\lambda"></span>: for each chosen load bus <span class="lec-math-inline" data-tex="i"></span>, with the loads <span class="lec-math-inline" data-tex="P_{\mathrm{L}i}^0"></span>, <span class="lec-math-inline" data-tex="Q_{\mathrm{L}i}^0"></span> of the starting point (<span class="lec-math-inline" data-tex="\lambda = 0"></span>),</p>
+          <p lang="ja"><strong>連続潮流計算</strong>（CPF）は、これを避ける方法です。選んだ負荷を 1 つのパラメータ <span class="lec-math-inline" data-tex="\lambda"></span> で大きくしていきます。選んだ負荷母線 <span class="lec-math-inline" data-tex="i"></span> の出発点（<span class="lec-math-inline" data-tex="\lambda = 0"></span>）の負荷を <span class="lec-math-inline" data-tex="P_{\mathrm{L}i}^0"></span>、<span class="lec-math-inline" data-tex="Q_{\mathrm{L}i}^0"></span> として、次のようにします。</p>
+          <div class="lec-math" data-tex="P_{\mathrm{L}i}(\lambda) = (1+\lambda)\,P_{\mathrm{L}i}^0, \qquad Q_{\mathrm{L}i}(\lambda) = (1+\lambda)\,Q_{\mathrm{L}i}^0"></div>
+          <p lang="en">and treats <span class="lec-math-inline" data-tex="\lambda"></span> as one more unknown. The power flow equations <span class="lec-math-inline" data-tex="f(\theta, V, \lambda) = 0"></span> then have one unknown more than equations, so their solutions form a curve, the path. Each step along it has two parts:</p>
+          <p lang="ja">そして <span class="lec-math-inline" data-tex="\lambda"></span> も未知数の 1 つとして扱います。すると電力方程式 <span class="lec-math-inline" data-tex="f(\theta, V, \lambda) = 0"></span> は式より未知数が 1 つ多くなり、その解は 1 本の曲線（経路）になります。経路に沿った 1 歩は 2 つの段階からなります。</p>
+          <ul>
+            <li lang="en"><strong>Predictor</strong>: guess the next point by moving along the direction of the curve from the current point.</li>
+            <li lang="ja"><strong>予測子</strong>: 今の点から曲線の向きに進んで、次の点を見積もります。</li>
+            <li lang="en"><strong>Corrector</strong>: bring the guess back onto the curve with Newton's method, looking for the point at a fixed distance from the current point instead of the point with a fixed load. This condition gives a unique answer even at the nose, so the trace can turn around and continue down the lower branch.</li>
+            <li lang="ja"><strong>修正子</strong>: 見積もった点を、ニュートン法で曲線の上に戻します。このとき、負荷を決めた点ではなく、今の点から決まった距離にある点を探します。この条件ならノーズ点でも答えが 1 つに決まるので、先端で向きを変えて下側の枝へ進めます。</li>
+          </ul>
+          <p lang="en">With <span class="lec-math-inline" data-tex="x = (\theta, V, \lambda)"></span> collecting all the unknowns, <span class="lec-math-inline" data-tex="x_k"></span> the current point and <span class="lec-math-inline" data-tex="h"></span> the step length, the corrector solves</p>
+          <p lang="ja">未知数をまとめて <span class="lec-math-inline" data-tex="x = (\theta, V, \lambda)"></span>、今の点を <span class="lec-math-inline" data-tex="x_k"></span>、歩幅を <span class="lec-math-inline" data-tex="h"></span> とすると、修正子が解く式は次のとおりです。</p>
+          <div class="lec-math" data-tex="f(x) = 0, \qquad \lVert x - x_k \rVert^2 = h^2"></div>
+          <p lang="en">The second equation (the arc-length condition) replaces "the load is fixed". GUILDA's continuation power flow uses this condition in its corrector.</p>
+          <p lang="ja">2 つ目の式（弧長の条件）が、「負荷を決める」条件の代わりです。GUILDA の連続潮流計算も、修正子でこの条件を使っています。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 480px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 640 290" role="img" aria-label="The continuation power flow traces points along the PV curve and past the nose: at each step a predictor moves along the curve direction, and a corrector brings the point back onto the curve">
+                <defs>
+                  <marker id="p7-arrow-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--lec-c3)" d="M0 0 L10 5 L0 10 Z"/></marker>
+                  <marker id="p7-arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--lec-c2)" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-c3" x="551" y="30" width="64" height="210" style="stroke: none"/>
+                <text lang="en" class="t-c3 t-small t-mid" x="583" y="200">no</text>
+                <text lang="en" class="t-c3 t-small t-mid" x="583" y="216">solution</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="583" y="200">解が</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="583" y="216">ない</text>
+                <line class="s-line" x1="80" y1="240" x2="625" y2="240" marker-end="url(#p7-arrow)"/>
+                <line class="s-line" x1="80" y1="240" x2="80" y2="26" marker-end="url(#p7-arrow)"/>
+                <text class="t-muted" x="88" y="30">V</text>
+                <text lang="en" class="t-muted t-end" x="625" y="262">load parameter λ</text>
+                <text lang="ja" class="t-muted t-end" x="625" y="262">負荷のパラメータ λ</text>
+                <polyline class="s-line" points="80.0,58.2 100.3,59.1 120.4,60.1 140.2,61.2 159.8,62.3 179.1,63.4 198.0,64.6 216.6,65.8 234.9,67.1 252.9,68.4 270.4,69.8 287.5,71.2 304.3,72.6 320.6,74.1 336.4,75.6 351.8,77.2 366.7,78.8 381.1,80.4 395.0,82.1 408.4,83.8 421.3,85.5 433.6,87.3 445.3,89.2 456.5,91.0 467.1,92.9 477.0,94.9 486.4,96.9 495.2,98.9 503.4,100.9 510.9,103.0 517.8,105.1 524.0,107.3 529.6,109.5 534.6,111.7 538.9,113.9 542.5,116.2 545.5,118.5 547.7,120.8 549.4,123.2 550.3,125.6 550.6,128.0 550.2,130.5 549.1,133.0 547.3,135.5 544.9,138.0 541.8,140.6 538.0,143.1 533.6,145.7 528.5,148.4 522.7,151.0 516.4,153.7 509.3,156.4 501.7,159.1 493.4,161.8 484.5,164.6 474.9,167.4 464.8,170.2 454.1,173.0 442.8,175.8 430.9,178.6 418.5,181.5 405.6,184.3 392.1,187.2 378.0,190.1 363.5,193.0 348.5,196.0 333.0,198.9 317.1,201.8 300.7,204.8 283.9,207.7 266.6,210.7 249.0,213.7 231.0,216.7 212.6,219.6 193.9,222.6 174.9,225.6 155.6,228.6 136.0,231.6 116.1,234.6 95.9,237.6 80.7,239.9"/>
+                <circle class="f-brand-solid" cx="80.0" cy="58.2" r="4"/><circle class="f-brand-solid" cx="142.2" cy="61.3" r="4"/><circle class="f-brand-solid" cx="203.6" cy="65.0" r="4"/><circle class="f-brand-solid" cx="266.1" cy="69.4" r="4"/><circle class="f-brand-solid" cx="327.8" cy="74.8" r="4"/><circle class="f-brand-solid" cx="388.8" cy="81.3" r="4"/><circle class="f-brand-solid" cx="450.4" cy="90.0" r="4"/><circle class="f-brand-solid" cx="510.9" cy="103.0" r="4"/><circle class="f-brand-solid" cx="544.0" cy="138.8" r="4"/><circle class="f-brand-solid" cx="487.6" cy="163.6" r="4"/><circle class="f-brand-solid" cx="427.9" cy="179.3" r="4"/><circle class="f-brand-solid" cx="367.2" cy="192.3" r="4"/><circle class="f-brand-solid" cx="306.5" cy="203.7" r="4"/><circle class="f-brand-solid" cx="245.4" cy="214.3" r="4"/><circle class="f-brand-solid" cx="183.5" cy="224.3" r="4"/><circle class="f-brand-solid" cx="123.1" cy="233.6" r="4"/>
+                <!-- predictor / corrector at one step -->
+                <line class="s-c3 is-dashed" x1="511" y1="103" x2="562" y2="114.3" marker-end="url(#p7-arrow-o)"/>
+                <circle class="f-c3" cx="565" cy="115" r="4"/>
+                <line class="s-c2" x1="563" y1="118" x2="547" y2="135" marker-end="url(#p7-arrow-g)"/>
+                <text lang="en" class="t-c3 t-small" x="470" y="80">predictor</text>
+                <text lang="ja" class="t-c3 t-small" x="470" y="80">予測子</text>
+                <text lang="en" class="t-c2 t-small t-end" x="538" y="136">corrector</text>
+                <text lang="ja" class="t-c2 t-small t-end" x="538" y="136">修正子</text>
+                <text lang="en" class="t-brand t-small" x="110" y="150">the trace turns at the nose and comes back</text>
+                <text lang="ja" class="t-brand t-small" x="110" y="150">ノーズ点で向きを変えて戻ってくる</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Schematic of the predictor–corrector method. The predictor can land beyond the nose, where no power-flow solution exists for that λ; the corrector, which looks for a point at a fixed distance, still finds the curve.</figcaption>
+            <figcaption lang="ja">予測子・修正子法の模式図です。予測子は、その λ に対する潮流の解がないノーズ点の先に出ることもあります。それでも修正子は決まった距離にある点を探すので、曲線の上の点が見つかります。</figcaption>
+          </figure>
+
+          <h3><span lang="en">The PV curves of the IEEE 9-bus system</span><span lang="ja">IEEE 9 母線系統の PV カーブ</span></h3>
+          <p lang="en">In GUILDA, <code>net.calculate_continuation_powerflow()</code> starts from the equilibrium found by <code>net.initialize()</code>, scales the power of the components on the buses given in <code>LoadBus</code> by <span class="lec-math-inline" data-tex="(1+\lambda)"></span>, and traces the path with the predictor–corrector method past the nose. The result is a <code>ResultCPF</code> object: <code>r_lambdaMax</code> is the largest λ (the nose), and <code>plot_pvcurve</code> draws the PV curves. For the IEEE 9-bus system with the loads of buses 5, 6 and 8 scaled together, <code>result.r_lambdaMax</code> is 1.374: the loads can grow to 2.374 times.</p>
+          <p lang="ja">GUILDA では、<code>net.calculate_continuation_powerflow()</code> が <code>net.initialize()</code> で求めた平衡点から出発し、<code>LoadBus</code> で指定した母線にある機器の電力を <span class="lec-math-inline" data-tex="(1+\lambda)"></span> 倍しながら、予測子・修正子法でノーズ点の先まで経路をたどります。結果は <code>ResultCPF</code> オブジェクトで、<code>r_lambdaMax</code> が λ の最大値（ノーズ点）、<code>plot_pvcurve</code> が PV カーブを描きます。IEEE 9 母線系統で母線 5・6・8 の負荷を同じ倍率で増やすと、<code>result.r_lambdaMax</code> は 1.374 で、負荷は 2.374 倍まで増やせます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+net.initialize();
+result = net.calculate_continuation_powerflow(LoadBus=["B005","B006","B008"]);
+result.r_lambdaMax
+result.plot_pvcurve();</code></pre>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/ieee9-pv-curves.png" alt="PV curves of buses 5, 6 and 8 of the IEEE 9-bus system drawn by GUILDA's plot_pvcurve: all reach the nose at lambda = 1.374, bus 5 falls the most" width="791" height="551">
+            </div>
+            <figcaption lang="en">PV curves of the three load buses of the IEEE 9-bus system, drawn by <code>result.plot_pvcurve()</code> after the commands above (the loads of buses 5, 6 and 8 scaled together; the generators have no reactive power limits). The horizontal axis is the load parameter <span class="lec-math-inline" data-tex="\lambda"></span>; the dashed line is the nose <span class="lec-math-inline" data-tex="\lambda_\mathrm{max} = 1.374"></span>. Each curve goes up to the nose and back along the lower branch.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の 3 つの負荷母線の PV カーブです。上のコマンドのあと、<code>result.plot_pvcurve()</code> で描きました（母線 5・6・8 の負荷を同じ倍率で増加。発電機には無効電力の上限なし）。横軸は負荷のパラメータ <span class="lec-math-inline" data-tex="\lambda"></span> で、破線がノーズ点 <span class="lec-math-inline" data-tex="\lambda_\mathrm{max} = 1.374"></span> です。どの曲線もノーズ点まで進み、下側の枝を戻ってきます。</figcaption>
+          </figure>
+          <p lang="en">All loads can grow to 2.374 times their original size. This agrees with ordinary power flows solved for one load level at a time, which find a solution up to about 2.37 times and none beyond. The continuation power flow, however, also tells where the edge is and what lies past it. Bus 5, the largest load, falls the most; it is the weakest point of this system.</p>
+          <p lang="ja">負荷は元の 2.374 倍まで増やせます。負荷の大きさを 1 つずつ決めてふつうの潮流計算を解くと、2.37 倍までは解が求まり、それより先は求まりません。結果は一致していますが、連続潮流計算では、限界の位置とその先の様子まで分かります。電圧がいちばん大きく下がるのは、負荷の最も大きい母線 5 で、この系統の弱い所です。</p>
+        </section>
+
+        <!-- ============================== Q LIMITS ============================== -->
+        <section id="q-limits">
+          <h2><span lang="en">Reactive power limits change the curve</span><span lang="ja">無効電力の限界でカーブが変わる</span></h2>
+          <p lang="en">A generator holds its terminal voltage by supplying whatever reactive power is needed, so its bus is a PV bus in the power flow. But a generator can supply only a limited amount of reactive power, set by the heating of its field and armature windings. When it reaches the limit, it can no longer hold the voltage: its reactive power stays at the limit, and the bus becomes a PQ bus. From that moment the voltages fall faster, and the nose comes earlier.</p>
+          <p lang="ja">発電機は、必要なだけ無効電力を出して端子の電圧を一定に保ちます。そのため、潮流計算ではその母線を PV 母線として扱います。しかし、発電機が出せる無効電力には、界磁や電機子の巻線の発熱で決まる限界があります。限界に達すると電圧を保てなくなり、無効電力は限界の値のままになって、その母線は PQ 母線に変わります。そこから先は電圧が速く下がり、ノーズ点も手前に来ます。</p>
+
+          <p lang="en">To see this in GUILDA, continue from the commands of the previous section: give the generators at buses 2 and 3 an upper limit of 0.6 pu on their reactive power, and run the continuation power flow again with the option <code>Limits="Q"</code>.</p>
+          <p lang="ja">GUILDA で確かめるときは、前の節のコマンドに続けて、母線 2 と 3 の発電機の無効電力に上限 0.6 pu を設け、オプション <code>Limits="Q"</code> を付けて連続潮流計算をやり直します。</p>
+          <pre class="lec-cmd"><code>net.a_Bus{2}.a_Component{1}.tab_parameter.operation.Qmax = 0.6;
+net.a_Bus{3}.a_Component{1}.tab_parameter.operation.Qmax = 0.6;
+result_Q = net.calculate_continuation_powerflow(LoadBus=["B005","B006","B008"], Limits="Q");
+result_Q.tab_switch</code></pre>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/q-limits.png" alt="PV curves of the load buses of the IEEE 9-bus system drawn by GUILDA's plot_pvcurve, (a) without and (b) with reactive power limits of 0.6 pu on the generators of buses 2 and 3: with the limits the curves bend where B002 and B003 switch to PQ, and the nose falls from lambda = 1.374 to 0.928" width="1294" height="523">
+            </div>
+            <figcaption lang="en">PV curves of the load buses of the IEEE 9-bus system, each panel drawn by <code>plot_pvcurve</code>: (a) without limits, (b) with the reactive power of the generators at buses 2 and 3 limited to 0.6 pu (an assumed value for this example; the slack generator at bus 1 is not limited). At the dots B002 and B003 on the curve of bus 5, the generator reaches its limit and its bus switches from PV to PQ (<code>result_Q.tab_switch</code>); the curves bend there, and the nose moves from <span class="lec-math-inline" data-tex="\lambda = 1.374"></span> (2.374 times the load) to <span class="lec-math-inline" data-tex="\lambda = 0.928"></span> (1.928 times).</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の負荷母線の PV カーブで、各パネルを <code>plot_pvcurve</code> で描きました。(a) は上限なし、(b) は母線 2 と 3 の発電機の無効電力に上限 0.6 pu を設けた場合です（この例のために仮に決めた値です。母線 1 の slack の発電機には上限を設けていません）。母線 5 の曲線の上の点 B002・B003 で発電機が上限に達し、その母線が PV から PQ に変わります（<code>result_Q.tab_switch</code>）。曲線はそこで折れ曲がり、ノーズ点は <span class="lec-math-inline" data-tex="\lambda = 1.374"></span>（負荷 2.374 倍）から <span class="lec-math-inline" data-tex="\lambda = 0.928"></span>（1.928 倍）に下がります。</figcaption>
+          </figure>
+          <p lang="en">The curve with limits follows the one without limits up to the first switch, and the difference is invisible until then. A PV curve that ignores the reactive power limits therefore overestimates the margin. In GUILDA, the option <code>Limits="Q"</code> of the continuation power flow applies the limits <code>Qmin</code> and <code>Qmax</code> set in the operating limits of the generators, and <code>tab_switch</code> of the result lists where each PV bus switched to PQ.</p>
+          <p lang="ja">上限のある曲線は、最初に切り替わる点までは上限のない曲線と重なっていて、それまでは違いが見えません。無効電力の限界を考えない PV カーブは、余裕を大きく見積もってしまうのです。GUILDA では、連続潮流計算のオプション <code>Limits="Q"</code> を指定すると、発電機の運転制約に設定した <code>Qmin</code>・<code>Qmax</code> を守りながら経路をたどり、結果の <code>tab_switch</code> に PV 母線が PQ 母線に切り替わった点の一覧が入ります。</p>
+          <p lang="en">The reactive power of each generator along the path is drawn by <code>plot_generator</code>: each line is the Q of one generator against <span class="lec-math-inline" data-tex="\lambda"></span>, and dotted lines mark the switches of <code>result_Q.tab_switch</code>. With <code>Quantity="Qmargin"</code> it draws the distance to the nearer limit, which reaches 0 at the switch. The samples of these plots are the steps of the path, so when a network diagram of the same result is linked to the PV curves, the marker on the curves moves with the diagram.</p>
+          <p lang="ja">経路に沿った各発電機の無効電力は <code>plot_generator</code> で描けます。1 本の線が 1 台の発電機の Q を <span class="lec-math-inline" data-tex="\lambda"></span> に対して表し、<code>result_Q.tab_switch</code> の切り替えを点線で示します。<code>Quantity="Qmargin"</code> では近い方の上限・下限までの距離を描き、切り替わる点で 0 になります。これらの図の標本は経路のステップなので、同じ結果のネットワーク図を PV カーブとリンクすると、曲線の上のマーカーが図と一緒に動きます。</p>
+          <pre class="lec-cmd"><code>result_Q.plot_generator(Quantity="Q");
+G = result_Q.plot_pvcurve();
+D = result_Q.plot_diagram(ColorMode="Q");
+G.link(D);
+D.animate();         % one frame per step</code></pre>
+        </section>
+
+        <!-- ============================== JACOBIAN ============================== -->
+        <section id="jacobian">
+          <h2><span lang="en">The Jacobian is a sensitivity</span><span lang="ja">ヤコビアンは感度</span></h2>
+          <p lang="en">Newton's method for the power flow uses the <strong>Jacobian</strong> of the power flow equations: a matrix of slopes that tells how much the active and reactive power at each bus change when each angle and voltage magnitude changes a little.</p>
+          <p lang="ja">潮流計算のニュートン法は、電力方程式の<strong>ヤコビアン</strong>（ヤコビ行列）を使います。各母線の位相角や電圧の大きさを少し変えたとき、各母線の有効電力と無効電力がどれだけ変わるかを並べた、傾きの行列です。</p>
+          <div class="lec-math" data-tex="\begin{bmatrix}\Delta P\\ \Delta Q\end{bmatrix} = J \begin{bmatrix}\Delta \theta\\ \Delta V\end{bmatrix}, \qquad J = \begin{bmatrix} J_{P\theta} &amp; J_{PV}\\ J_{Q\theta} &amp; J_{QV}\end{bmatrix} = \begin{bmatrix} \partial P/\partial\theta &amp; \partial P/\partial V\\ \partial Q/\partial\theta &amp; \partial Q/\partial V\end{bmatrix}"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="\Delta P"></span> and <span class="lec-math-inline" data-tex="\Delta Q"></span> are small changes of the active power injected at every bus but the slack and of the reactive power injected at the PQ buses, and <span class="lec-math-inline" data-tex="\Delta\theta"></span> and <span class="lec-math-inline" data-tex="\Delta V"></span> the changes of the voltage angles and magnitudes of the same buses. The relation is exact only for small changes (the first-order terms of a Taylor expansion). When <span class="lec-math-inline" data-tex="J"></span> is invertible, it can be read the other way round:</p>
+          <p lang="ja">ここで <span class="lec-math-inline" data-tex="\Delta P"></span> は slack 以外の各母線に注入される有効電力の、<span class="lec-math-inline" data-tex="\Delta Q"></span> は PQ 母線に注入される無効電力の小さな変化、<span class="lec-math-inline" data-tex="\Delta\theta"></span> と <span class="lec-math-inline" data-tex="\Delta V"></span> は同じ母線の電圧の位相角と大きさの変化です。この関係が成り立つのは変化が小さいときだけです（テイラー展開の 1 次の項）。<span class="lec-math-inline" data-tex="J"></span> に逆行列があれば、逆向きにも読めます。</p>
+          <div class="lec-math" data-tex="\begin{bmatrix}\Delta \theta\\ \Delta V\end{bmatrix} = J^{-1} \begin{bmatrix}\Delta P\\ \Delta Q\end{bmatrix}"></div>
+          <p lang="en">Read this way, the inverse <span class="lec-math-inline" data-tex="J^{-1}"></span> is a <strong>sensitivity</strong>: it tells how much the voltages change when the load changes a little. On a PV curve this is the slope of the curve. Far from the nose the curve is flat and the voltage hardly moves; toward the nose it becomes steeper, and at the nose it is vertical: an arbitrarily small increase of the load would need an infinite change of the voltage.</p>
+          <p lang="ja">こう読むと、逆行列 <span class="lec-math-inline" data-tex="J^{-1}"></span> は<strong>感度</strong>を表します。負荷を少し変えたとき、電圧がどれだけ変わるかです。PV カーブの上では、これは曲線の傾きです。ノーズ点から遠い所では曲線は平らで、電圧はほとんど動きません。ノーズ点に近づくほど傾きは急になり、ノーズ点では垂直になります。負荷をほんの少し増やすだけで、電圧が限りなく大きく変わらなければならない、ということです。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/slope.png" alt="Tangents to the two-bus PV curve: the slope dV/dP is -0.29 at P = 0.3 pu, -0.55 at 0.55 pu, -1.75 at 0.7 pu, and the tangent is vertical at the nose" width="807" height="557">
+            </div>
+            <figcaption lang="en">Tangents to the PV curve of the two-bus example (cos φ = 0.95 lagging; the vertical axis starts at 0.4 pu). The slope <span class="lec-math-inline" data-tex="\mathrm{d}V/\mathrm{d}P"></span>, computed from the equation for <span class="lec-math-inline" data-tex="V^2"></span>, is the sensitivity of the voltage to the load: −0.29 at <span class="lec-math-inline" data-tex="P = 0.3"></span> pu, −0.55 at 0.55 pu, −1.75 at 0.7 pu, and the tangent is vertical at the nose.</figcaption>
+            <figcaption lang="ja">2 母線の例（力率 0.95 遅れ）の PV カーブの接線です（縦軸は 0.4 pu から）。<span class="lec-math-inline" data-tex="V^2"></span> の式から求めた傾き <span class="lec-math-inline" data-tex="\mathrm{d}V/\mathrm{d}P"></span> が、負荷に対する電圧の感度です。<span class="lec-math-inline" data-tex="P = 0.3"></span> pu で −0.29、0.55 pu で −0.55、0.7 pu で −1.75 で、ノーズ点では接線が垂直になります。</figcaption>
+          </figure>
+          <p lang="en">In a large system the same information is in the Jacobian. For voltage, the active powers are often kept fixed (<span class="lec-math-inline" data-tex="\Delta P = 0"></span>). The first block row then gives <span class="lec-math-inline" data-tex="\Delta\theta = -J_{P\theta}^{-1}J_{PV}\,\Delta V"></span> (when <span class="lec-math-inline" data-tex="J_{P\theta}"></span> is invertible), and eliminating <span class="lec-math-inline" data-tex="\Delta\theta"></span> leaves a smaller matrix between <span class="lec-math-inline" data-tex="\Delta Q"></span> and <span class="lec-math-inline" data-tex="\Delta V"></span>, the <strong>reduced Jacobian</strong> <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span>:</p>
+          <p lang="ja">大きな系統では、同じ情報がヤコビアンに入っています。電圧を調べるときは、有効電力を変えない（<span class="lec-math-inline" data-tex="\Delta P = 0"></span>）とすることがよくあります。すると 1 行目のブロックから <span class="lec-math-inline" data-tex="\Delta\theta = -J_{P\theta}^{-1}J_{PV}\,\Delta V"></span> となり（<span class="lec-math-inline" data-tex="J_{P\theta}"></span> に逆行列があるとき）、<span class="lec-math-inline" data-tex="\Delta\theta"></span> を消すと、<span class="lec-math-inline" data-tex="\Delta Q"></span> と <span class="lec-math-inline" data-tex="\Delta V"></span> の間の小さな行列が残ります。これを<strong>縮約したヤコビアン</strong> <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> といいます。</p>
+          <div class="lec-math" data-tex="\Delta Q = J_\mathrm{R}\,\Delta V, \qquad J_\mathrm{R} = J_{QV} - J_{Q\theta}\,J_{P\theta}^{-1}\,J_{PV}"></div>
+          <p lang="en">The diagonal element of <span class="lec-math-inline" data-tex="J_\mathrm{R}^{-1}"></span> for a bus is the change of the voltage at that bus for a change of the reactive power at that bus (the V–Q sensitivity). For bus 5 of the IEEE 9-bus system it is about 0.09 pu of voltage per pu of reactive power at the original load, 0.13 at twice the load, 0.37 at 2.35 times, and it grows without bound at the nose. The same reactive power disturbance moves the voltage four times as much close to the limit.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="J_\mathrm{R}^{-1}"></span> の対角要素は、ある母線の無効電力を変えたときの、その母線の電圧の変化を表します（V–Q 感度）。IEEE 9 母線系統の母線 5 では、無効電力 1 pu あたりの電圧の変化は、元の負荷で約 0.09 pu、負荷 2 倍で 0.13 pu、2.35 倍で 0.37 pu で、ノーズ点で限りなく大きくなります。限界の近くでは、同じ無効電力の乱れで、電圧が 4 倍も動くのです。</p>
+        </section>
+
+        <!-- ============================== SINGULAR ============================== -->
+        <section id="nose-singular">
+          <h2><span lang="en">The Jacobian becomes singular at the nose</span><span lang="ja">ヤコビアンはノーズ点で特異になる</span></h2>
+          <p lang="en">A sensitivity that becomes infinite means that <span class="lec-math-inline" data-tex="J^{-1}"></span> does not exist: the Jacobian is <strong>singular</strong> at the nose. This is the same fact as "the tangent becomes flat" in Newton's method, seen from the other side, and it is why an ordinary power flow fails there.</p>
+          <p lang="ja">感度が無限大になるということは、<span class="lec-math-inline" data-tex="J^{-1}"></span> が存在しない、つまりヤコビアンがノーズ点で<strong>特異</strong>（逆行列がない状態）になるということです。ニュートン法で「接線が平らになる」といったことを、反対側から見たものです。ふつうの潮流計算がノーズ点で失敗するのも、このためです。</p>
+          <p lang="en">How close a matrix is to being singular can be measured by its <strong>eigenvalues</strong>. An eigenvalue tells how much the matrix stretches the vector in one special direction (its eigenvector); a matrix with an eigenvalue of 0 squeezes that direction to nothing and has no inverse. For voltage stability, the reduced Jacobian <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> of the previous section is used. As long as <span class="lec-math-inline" data-tex="J_{P\theta}"></span> is invertible, the determinants and the eigenvalues <span class="lec-math-inline" data-tex="\mu_i"></span> of <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> are related by</p>
+          <p lang="ja">行列が特異にどれだけ近いかは、<strong>固有値</strong>で測れます。固有値は、ある特別な向き（固有ベクトル）のベクトルを、その行列が何倍に伸ばすかを表します。固有値 0 を持つ行列はその向きをつぶしてしまい、逆行列を持ちません。電圧安定性では、前の節の縮約したヤコビアン <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> を使います。<span class="lec-math-inline" data-tex="J_{P\theta}"></span> に逆行列がある限り、行列式と <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> の固有値 <span class="lec-math-inline" data-tex="\mu_i"></span> の間には次の関係があります。</p>
+          <div class="lec-math" data-tex="\det J = \det J_{P\theta}\cdot\det J_\mathrm{R}, \qquad \det J_\mathrm{R} = \prod_i \mu_i"></div>
+          <p lang="en">so <span class="lec-math-inline" data-tex="J"></span> is singular exactly when an eigenvalue of <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> is 0. The smallest eigenvalue <span class="lec-math-inline" data-tex="\mu_\mathrm{min}"></span> is positive on the upper branch, decreases as the load grows, is 0 at the nose, and is negative on the lower branch. Its eigenvector shows which buses take part most in the approach to collapse [5].</p>
+          <p lang="ja">つまり、<span class="lec-math-inline" data-tex="J"></span> が特異になるのは、<span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> の固有値のどれかが 0 になるときです。最小の固有値 <span class="lec-math-inline" data-tex="\mu_\mathrm{min}"></span> は、上側の枝では正で、負荷が増えるにつれて小さくなり、ノーズ点で 0 になり、下側の枝では負になります。固有ベクトルからは、電圧崩壊に近づくときにどの母線が大きく関わっているかが分かります [5]。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/jacobian-eigenvalue.png" alt="Smallest eigenvalue of the reduced Jacobian along the continuation power flow paths of the IEEE 9-bus system: it falls from about 6 to 0 at the nose and becomes negative on the lower branch; with reactive power limits it drops suddenly at the two switches and reaches 0 at 1.928 times the load" width="797" height="558">
+            </div>
+            <figcaption lang="en">The smallest eigenvalue <span class="lec-math-inline" data-tex="\mu_\mathrm{min}"></span> of the reduced Jacobian <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> along the paths of the two previous figures (IEEE 9-bus system), against <span class="lec-math-inline" data-tex="\lambda"></span>. It reaches 0 exactly at the nose (dotted lines) and is negative on the lower branch. With the reactive power limits it drops suddenly at each PV-to-PQ switch. This is not a GUILDA function: it was computed for this page in MATLAB from the bus voltages at each point of GUILDA's <code>ResultCPF</code>, by forming <span class="lec-math-inline" data-tex="J"></span> from the admittance matrix with the bus types along the path, reducing it to <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> as above, and taking its eigenvalues with <code>eig</code>.</figcaption>
+            <figcaption lang="ja">前の 2 つの図の経路（IEEE 9 母線系統）に沿った、縮約したヤコビアン <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> の最小固有値 <span class="lec-math-inline" data-tex="\mu_\mathrm{min}"></span> を、<span class="lec-math-inline" data-tex="\lambda"></span> に対して描きました。ちょうどノーズ点（点線）で 0 になり、下側の枝では負になります。無効電力の上限がある場合は、PV から PQ に切り替わるたびに急に下がります。これは GUILDA の機能ではなく、このページのために MATLAB で計算したものです。GUILDA の <code>ResultCPF</code> の各点の母線電圧から、経路上の母線の種類に合わせてアドミタンス行列から <span class="lec-math-inline" data-tex="J"></span> を作り、上の式で <span class="lec-math-inline" data-tex="J_\mathrm{R}"></span> に縮約して、<code>eig</code> で固有値を求めています。</figcaption>
+          </figure>
+          <p lang="en">These eigenvalues are not the eigenvalues of Part 5. There, the eigenvalues of the matrix A of a linear dynamic model tell the types of swing in time. Here, the matrix is the Jacobian of the static power flow equations, and its eigenvalues tell how stiffly the voltages resist a change of reactive power. Both use the same mathematics on different matrices. The smallest eigenvalue is a useful index because it falls steadily as the nose approaches, whereas the voltage itself may still look acceptable.</p>
+          <p lang="ja">ここでの固有値は、Part 5 の固有値とは別のものです。Part 5 では、線形化した動的なモデルの行列 A の固有値が、時間の中での揺れの型を表していました。ここでの行列は静的な電力方程式のヤコビアンで、その固有値は、無効電力の変化に対して電圧がどれだけ踏みとどまるか（硬さ）を表します。同じ数学を、違う行列に当てはめているのです。最小固有値は、電圧そのものがまだ問題なく見える間も、ノーズ点に近づくにつれて着実に小さくなっていくので、余裕の指標として役に立ちます。</p>
+          <div class="lec-callout is-key">
+            <p lang="en">The nose point, the largest load, the point where the ordinary power flow fails, and the point where the Jacobian becomes singular are one and the same.</p>
+            <p lang="ja">ノーズ点、最大の負荷、ふつうの潮流計算が解けなくなる点、ヤコビアンが特異になる点は、すべて同じ 1 つの点です。</p>
+          </div>
+          <p lang="en">GUILDA stores a related index at every step: <code>result.rv_sigmaMin</code> is the smallest singular value of the whole power flow Jacobian <span class="lec-math-inline" data-tex="J"></span>, which also goes to 0 at the nose. <code>result.plot_stability_index()</code> draws it against <span class="lec-math-inline" data-tex="\lambda"></span>, and below it the buses that take part most in that direction at the nose (<code>result.tab_weakbus</code>): the buses where the voltage collapses first.</p>
+          <p lang="ja">GUILDA は関連する指標を各ステップで保存しています。<code>result.rv_sigmaMin</code> は潮流のヤコビアン <span class="lec-math-inline" data-tex="J"></span> 全体の最小特異値で、これもノーズ点で 0 になります。<code>result.plot_stability_index()</code> はこれを <span class="lec-math-inline" data-tex="\lambda"></span> に対して描き、その下にノーズ点でその向きに最も大きく関わる母線（<code>result.tab_weakbus</code>）を示します。電圧が最初に崩れる母線です。</p>
+        </section>
+
+        <!-- ============================== COUNTERMEASURES ============================== -->
+        <section id="countermeasures">
+          <h2><span lang="en">Keeping the voltage up</span><span lang="ja">電圧を支える対策</span></h2>
+          <p lang="en">Since the nose is decided largely by reactive power, the main countermeasure is to supply reactive power close to the loads. Equipment for this is called <strong>reactive power compensation</strong> equipment (調相設備 in Japanese). The simplest is a shunt capacitor of susceptance <span class="lec-math-inline" data-tex="B_\mathrm{C}"></span> at the load bus, which supplies the reactive power</p>
+          <p lang="ja">ノーズ点の位置は無効電力で大きく決まるので、いちばんの対策は、負荷の近くで無効電力を供給することです。そのための設備を<strong>調相設備</strong>といいます。いちばん簡単なのは、負荷の母線に付けるサセプタンス <span class="lec-math-inline" data-tex="B_\mathrm{C}"></span> の電力用コンデンサで、次の無効電力を供給します。</p>
+          <div class="lec-math" data-tex="Q_\mathrm{C} = B_\mathrm{C}V^2"></div>
+          <p lang="en">so the line has to carry only <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span> of the reactive power of the load.</p>
+          <p lang="ja">そのため、送電線が運ぶ無効電力は、負荷の無効電力のうち <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span> だけになります。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part7/shunt-capacitor.png" alt="PV curves of the two-bus system without and with a shunt capacitor of 0.3 pu at the load: the capacitor raises the curve and moves the nose from 0.72 to 0.85 pu, but raises the voltage above 1 pu at light load" width="793" height="557">
+            </div>
+            <figcaption lang="en">The two-bus example (power factor 0.95 lagging) without and with a shunt capacitor of <span class="lec-math-inline" data-tex="B_\mathrm{C} = 0.3"></span> pu at the load bus, computed with the line carrying <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span>. The capacitor supplies reactive power locally and moves the nose from 0.72 to 0.85 pu, but at light load it raises the voltage above 1 pu (dotted line), so capacitors are switched in and out with the load.</figcaption>
+            <figcaption lang="ja">2 母線の例（力率 0.95 遅れ）で、負荷の母線に <span class="lec-math-inline" data-tex="B_\mathrm{C} = 0.3"></span> pu の電力用コンデンサを付けた場合と付けない場合です。送電線が運ぶ無効電力を <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span> として計算しました。コンデンサがその場で無効電力を供給し、ノーズ点は 0.72 pu から 0.85 pu に移ります。ただし軽負荷では電圧が 1 pu（点線）を超えるので、コンデンサは負荷に合わせて入れたり切ったりします。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">Shunt capacitor</span><span lang="ja">電力用コンデンサ</span></dt>
+            <dd><span lang="en">Simple and cheap, switched in steps. Its reactive power is proportional to the square of the voltage, so it gives less help exactly when the voltage falls.</span><span lang="ja">簡単で安価な設備で、段階的に入り切りします。出す無効電力が電圧の 2 乗に比例するので、電圧が下がったときほど助けが小さくなります。</span></dd>
+            <dt><span lang="en">Shunt reactor</span><span lang="ja">分路リアクトル</span></dt>
+            <dd><span lang="en">The opposite: it consumes reactive power and keeps the voltage from rising at light load, for example at night or on long cables.</span><span lang="ja">コンデンサの逆で、無効電力を消費します。夜間や長いケーブルなど、軽負荷で電圧が上がりすぎるのを抑えます。</span></dd>
+            <dt><span lang="en">SVC and STATCOM</span><span lang="ja">SVC・STATCOM</span></dt>
+            <dd><span lang="en">Static compensators controlled by power electronics, which change their reactive power continuously and fast. A STATCOM can keep its current up when the voltage is low, so it helps more than a capacitor near the nose.</span><span lang="ja">パワーエレクトロニクスで制御する静止形の調相設備で、無効電力を連続的に速く変えられます。STATCOM は電圧が低くても電流を保てるので、ノーズ点の近くではコンデンサより大きな助けになります。</span></dd>
+            <dt><span lang="en">Synchronous condenser</span><span lang="ja">同期調相機</span></dt>
+            <dd><span lang="en">A synchronous machine without a turbine that only supplies or absorbs reactive power. It also adds inertia to the system.</span><span lang="ja">タービンを持たず、無効電力の供給と吸収だけを行う同期機です。系統に慣性も加えます。</span></dd>
+            <dt><span lang="en">Generators and load shedding</span><span lang="ja">発電機と負荷遮断</span></dt>
+            <dd><span lang="en">Keeping a reactive power reserve in the generators near the load centres, and, as a last resort, disconnecting part of the load when the voltage stays low (under-voltage load shedding), which moves the operating point back from the nose.</span><span lang="ja">負荷の中心に近い発電機に無効電力の予備力を残しておくこと。そして最後の手段として、電圧が低いままのときに負荷の一部を切り離すこと（不足電圧負荷遮断）で、運転点をノーズ点から引き戻します。</span></dd>
+          </dl>
+          <p lang="en">The continuation power flow is the tool for checking these measures: it shows how far the nose moves when equipment is added, and how much it falls when a line or generator is lost.</p>
+          <p lang="ja">連続潮流計算は、これらの対策を確かめる道具です。設備を加えたときにノーズ点がどれだけ遠くなるか、送電線や発電機が止まったときにどれだけ近くなるかが分かります。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li><span lang="en">The PV curve shows how the load voltage falls as the load grows. Its tip, the nose point, is the largest load that can be supplied; beyond it the power flow has no solution.</span><span lang="ja">PV カーブは、負荷が増えるにつれて負荷の電圧がどう下がるかを表します。先端のノーズ点が供給できる最大の負荷で、その先では潮流に解がありません。</span></li>
+            <li><span lang="en">A voltage collapse happens when the operating point reaches the nose. The Tokyo blackout of 23 July 1987 followed a fast rise of demand on a hot day.</span><span lang="ja">運転点がノーズ点に達すると電圧崩壊が起きます。1987 年 7 月 23 日の首都圏の大停電は、猛暑の日の需要の急増の中で起きました。</span></li>
+            <li><span lang="en">The nose is decided largely by reactive power; when generators reach their reactive power limits, PV buses become PQ buses and the nose comes earlier.</span><span lang="ja">ノーズ点の位置は無効電力で大きく決まります。発電機が無効電力の限界に達すると PV 母線が PQ 母線に変わり、ノーズ点が手前に来ます。</span></li>
+            <li><span lang="en">The continuation power flow treats the load parameter λ as an unknown and uses a predictor and a corrector to trace the curve past the nose. In GUILDA: <code>net.calculate_continuation_powerflow</code>.</span><span lang="ja">連続潮流計算は、負荷のパラメータ λ も未知数にして、予測子と修正子でノーズ点の先までカーブをたどります。GUILDA では <code>net.calculate_continuation_powerflow</code> です。</span></li>
+            <li><span lang="en">The inverse of the Jacobian is the sensitivity of the voltages to the loads. At the nose the Jacobian is singular, and the smallest eigenvalue of the reduced Jacobian reaches 0.</span><span lang="ja">ヤコビアンの逆行列は、負荷に対する電圧の感度です。ノーズ点ではヤコビアンが特異になり、縮約したヤコビアンの最小固有値が 0 になります。</span></li>
+            <li><span lang="en">Reactive power compensation near the loads (capacitors, SVC, STATCOM, synchronous condensers) moves the nose away.</span><span lang="ja">負荷の近くでの調相設備（コンデンサ、SVC、STATCOM、同期調相機）は、ノーズ点を遠ざけます。</span></li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b><span><span lang="en">Bus types, Newton's method and the Jacobian</span><span lang="ja">母線の種類、ニュートン法とヤコビアン</span></span></a></li>
+          <li><a class="lec-card is-c2" href="part4-spring-mass-model.html"><small>Part 4</small><b><span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b><span><span lang="en">Voltage drop and collapse seen in 3D</span><span lang="ja">電圧の低下と崩壊を 3D で見る</span></span></a></li>
+          <li><a class="lec-card is-c3" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b><span><span lang="en">Eigenvalues of a dynamic model</span><span lang="ja">動的なモデルの固有値</span></span></a></li>
+          <li><a class="lec-card is-c4" href="part6-optimal-power-flow.html"><small>Part 6</small><b><span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b><span><span lang="en">Voltage and reactive power limits in operation</span><span lang="ja">運転での電圧と無効電力の制約</span></span></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><span lang="en"><code>_GUILDAtutorial/Part7_ContinuationPowerFlow.mlx</code>: open it in MATLAB with <code>open Part7_ContinuationPowerFlow.mlx</code> (after GUILDA has been added to the path). It derives the PV curve of the two-bus system, runs the continuation power flow of the IEEE 9-bus system, compares the curves with and without the reactive power limits of the generators, and computes the reduced Jacobian along the path. The figures on this page can be drawn with this Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part7_ContinuationPowerFlow.mlx</code>: GUILDA をパスに追加したあと、MATLAB で <code>open Part7_ContinuationPowerFlow.mlx</code> と入力すると開きます。2 母線の系統の PV カーブを式から求め、IEEE 9 母線系統で連続潮流計算を行い、発電機の無効電力の上限がある場合とない場合でカーブを比べ、経路に沿って縮約したヤコビアンを計算します。このページの図は Part 7 のライブスクリプトで描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">Voltage stability: PV and QV curves, the effect of reactive power and generator limits, V–Q sensitivity, modal analysis, and the means of voltage control.</span><span lang="ja">電圧安定性（PV カーブと QV カーブ、無効電力と発電機の限界の影響、V–Q 感度、モード解析）と、電圧の制御の手段を扱っています。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">Voltage stability of a network, the nose curve, and the role of the generator reactive power limits.</span><span lang="ja">系統の電圧安定性、ノーズカーブ、発電機の無効電力の限界の役割を扱っています。</span></span></li>
+            <li>T. Van Cutsem and C. Vournas, <cite>Voltage Stability of Electric Power Systems</cite>, Springer, 1998.
+              <span class="lec-ref-note"><span lang="en">A whole book on voltage stability: loadability limits, sensitivities and bifurcations, instability mechanisms and countermeasures.</span><span lang="ja">電圧安定性だけを扱った本です。負荷の限界、感度と分岐、不安定化の仕組みと対策を説明しています。</span></span></li>
+            <li>V. Ajjarapu and C. Christy, "The continuation power flow: a tool for steady state voltage stability analysis," <cite>IEEE Transactions on Power Systems</cite>, vol. 7, no. 1, pp. 416–423, 1992.
+              <span class="lec-ref-note"><span lang="en">The paper that introduced the continuation power flow with a predictor and a corrector.</span><span lang="ja">予測子と修正子による連続潮流計算を示した論文です。</span></span></li>
+            <li>B. Gao, G. K. Morison and P. Kundur, "Voltage stability evaluation using modal analysis," <cite>IEEE Transactions on Power Systems</cite>, vol. 7, no. 4, pp. 1529–1542, 1992.
+              <span class="lec-ref-note"><span lang="en">The smallest eigenvalues of the reduced Jacobian and their eigenvectors as indices of voltage stability.</span><span lang="ja">縮約したヤコビアンの最小の固有値と固有ベクトルを、電圧安定性の指標として使う方法の論文です。</span></span></li>
+            <li>A. Kurita and T. Sakurai, "The power system failure on July 23, 1987 in Tokyo," <cite>Proceedings of the 27th IEEE Conference on Decision and Control</cite>, vol. 3, pp. 2093–2097, 1988.
+              <span class="lec-ref-note"><span lang="en">The report of the 1987 Tokyo blackout used in the section on voltage collapse.</span><span lang="ja">電圧崩壊の節で取り上げた、1987 年の首都圏の大停電の報告です。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part6-optimal-power-flow.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 6: <span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b></a>
+      <a class="is-next" href="part8-controller-design.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 8: <span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

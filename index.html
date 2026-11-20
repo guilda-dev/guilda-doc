@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
+  <script src="doc-lang.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
+    a.tab-button.tab-link { text-decoration: none; }
+    a.tab-button.tab-link::after { content: " \2197"; font-weight: 400; }
+    /* About sections whose bullets wrap too much beside a figure: text above, figure below */
+    .about-section.index-stacked { grid-template-columns: minmax(0, 1fr); }
+    .about-section.index-stacked .about-text { max-width: 760px; }
+    .about-section.index-stacked .about-figure { max-width: 720px; }
+    .about-cite { font-size: 0.85rem; white-space: pre-wrap; }
+    /* Tutorial tab: the two audience cards at the top (lecture notes / how to use GUILDA) */
+    .tutorial-audience { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 28px; }
+    .tutorial-audience-card { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); border-left: 3px solid var(--brand); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; }
+    .tutorial-audience-card:hover, .tutorial-audience-card:focus-visible { border-color: var(--brand); background: var(--brand-tint); color: var(--ink); }
+    .tutorial-audience-label { color: var(--brand); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; }
+    .tutorial-audience-title { font-size: 1rem; font-weight: 700; line-height: 1.4; word-break: auto-phrase; }
+    .tutorial-audience-text { color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+    .tutorial-audience-text code { font-size: 0.82rem; }
+    .tutorial-audience-nowrap { white-space: nowrap; }
+    .tutorial-audience-more { margin-top: auto; padding-top: 4px; color: var(--brand); font-size: 0.88rem; font-weight: 600; }
+    @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
+  </style>
+  
+  <script src="./database/list_Tutorials.js"></script>
+  <script src="./database/list_Lectures.js"></script>
+</head>
+<body class="home-layout">
+
+  <header>
+    <div class="header-content">
+      <img src="./images/GUILDAicon.png" alt="GUILDA Logo" class="header-logo">
+      
+      <div class="tabs">
+        <button class="tab-button active" onclick="openTab('tab-home')"><span lang="en">Home</span><span lang="ja">ホーム</span></button>
+        <button class="tab-button" onclick="openTab('tab-about')"><span lang="en">About</span><span lang="ja">概要</span></button>
+        <button class="tab-button" onclick="openTab('tab-getting-started')"><span lang="en">Getting Started</span><span lang="ja">はじめに</span></button>
+        <button class="tab-button" onclick="openTab('tab-tutorial')"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></button>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-reference"><span lang="en">Reference</span><span lang="ja">リファレンス</span></a>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-developer"><span lang="en">For Developer</span><span lang="ja">開発者向け</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="tab-home" class="tab-content active">
+      <div class="hero">
+        <div class="hero-text">
+          <h1 class="hero-title"><span lang="en">GUILDA Documentation</span><span lang="ja">GUILDA ドキュメント</span></h1>
+          <p class="hero-subtitle">Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</p>
+        </div>
+        <div class="hero-mark" aria-hidden="true"><img src="./images/GUILDA-logo-square.png" alt="" width="128" height="128"></div>
+      </div>
+
+      <p class="home-intro" lang="en">A MATLAB power-system simulator for students and researchers in systems and control. Combine blocks into models, then analyse and share them.</p>
+      <p class="home-intro" lang="ja">システム制御を学ぶ学生や研究者に向けた、MATLAB で動く電力系統シミュレータです。部品を組み合わせてモデルを作り、解析したり共有したりできます。</p>
+      <div class="home-actions">
+        <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
+        <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
+      </div>
+
+      <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
+      <ol class="analysis-list">
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path class="ai-axis" d="M6 40 H44 M10 44 V6"/>
+            <path class="ai-ink is-dashed" d="M24 40 A14 14 0 0 0 20.4 30.6"/>
+            <path class="ai-brand" d="M10 40 L36 14 M36 14 L29 15.6 M36 14 L34.4 21"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">RMS phasor models</span><span lang="ja">実効値フェーザモデル</span></h3>
+            <p lang="en">Three-phase balanced networks in the RMS phasor representation: voltages and currents are complex phasors of their RMS values at the fundamental frequency, the network is a set of algebraic equations, and the dynamics are those of the generators, loads and controllers.</p>
+            <p lang="ja">三相平衡の電力系統を、実効値（RMS）のフェーザで表します。電圧と電流は基本周波数の複素フェーザとして扱い、送電網は代数方程式で表します。動的な振る舞いは、発電機、負荷、制御器のモデルが受け持ちます。</p>
+            <p lang="en">Load a standard model, such as the IEEE 9-, 14-, 39- and 68-bus test systems or the IEEJ EAST10, EAST30, WEST10 and WEST30 standard models, or build a network of your own configuration from buses, branches and components.</p>
+            <p lang="ja">IEEE 9 母線系統、14 母線系統、39 母線系統、68 母線系統や、電気学会の EAST10/EAST30/WEST10/WEST30 系統モデルを、すぐに読み込めます。母線、ブランチ、機器を自分で組み合わせて、独自の構成の系統を作ることもできます。</p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step1_BuildNetwork.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path class="ai-axis" d="M4 26 H44 M6 6 V44"/>
+            <path class="ai-axis is-dashed" d="M14 8 V42"/>
+            <path class="ai-brand" d="M6 26 H14 C17 26 17 10 21 10 C25 10 25 38 29 38 C32 38 32 18 35 18 C38 18 38 31 40.5 31 C42.5 31 43 26 44 26"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Time-domain simulation</span><span lang="ja">時間応答シミュレーション</span></h3>
+            <p><span lang="en">Responses to faults, load and input changes, and initial-value perturbations.</span><span lang="ja">地絡や負荷・入力の変化、初期値の摂動に対して、系統がどう応答するかを計算します。</span></p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step5_SimulationScenario.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path class="ai-axis" d="M6 42 H44 M8 44 V6"/>
+            <path class="ai-ink" d="M8 38 C18 37 24 31 28 24 C32 17 37 11 44 9"/>
+            <path class="ai-brand" d="M14 39 L42 10"/>
+            <circle class="ai-dot" cx="28" cy="24" r="1.8"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Linear analysis</span><span lang="ja">線形解析</span></h3>
+            <p lang="en">Linearize the network around an operating point into <span class="nowrap">Eẋ = Ax + Bu</span>, <span class="nowrap">y = Cx + Du</span>, and analyse small-signal stability from its eigenvalues. The matrices A, B, C, D and E come with the names of the states, inputs and outputs, so they can be used for further linear analyses such as kernel analysis.</p>
+            <p lang="ja">動作点のまわりで系統を近似線形化し、<span class="nowrap">Eẋ = Ax + Bu</span>、<span class="nowrap">y = Cx + Du</span> の形のモデルを得ます。固有値を調べれば、定態安定性を評価できます。行列 A、B、C、D、E には状態・入力・出力の変数名が付いているので、カーネル解析など、ほかの線形解析にもそのまま使えます。</p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step8_Linearization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path class="ai-axis" d="M6 42 H44 M8 44 V6"/>
+            <path class="ai-brand is-dashed" d="M37 27 V42"/>
+            <path class="ai-ink" d="M8 11 C21 12 31 17 37 27"/>
+            <path class="ai-ink is-dashed" d="M37 27 C38.5 33 31 38 18 40"/>
+            <circle class="ai-brand-dot" cx="37" cy="27" r="2.4"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Continuation power flow</span><span lang="ja">連続潮流計算</span></h3>
+            <p lang="en">Raise the loads of chosen buses step by step and trace the power-flow solution to draw the nose (PV) curve, then find the maximum loading point to assess voltage stability.</p>
+            <p lang="ja">連続潮流計算で PV カーブ（ノーズカーブ）を描けます。選んだ母線の負荷を少しずつ増やしながら潮流解をたどるので、最大負荷点がわかり、電圧安定性の評価に使えます。</p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step10_ContinuationPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <ellipse class="ai-axis" cx="22" cy="26" rx="17" ry="12"/>
+            <ellipse class="ai-axis" cx="22" cy="26" rx="10.5" ry="7"/>
+            <ellipse class="ai-axis" cx="22" cy="26" rx="4" ry="2.6"/>
+            <path class="ai-ink" d="M30 4 L42 44"/>
+            <path class="ai-ink is-hatch" d="M33 14 L36.5 12.5 M35.4 22 L38.9 20.5 M37.8 30 L41.3 28.5"/>
+            <circle class="ai-brand-dot" cx="33" cy="26" r="2.6"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Optimal power flow</span><span lang="ja">最適潮流計算</span></h3>
+            <p><span lang="en">General formulations of OPF problems on the same network.</span><span lang="ja">同じ系統モデルを使って、一般的な形で定式化した最適潮流計算問題を解けます。</span></p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step9_OptimalPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <rect class="ai-ink" x="17" y="7" width="15" height="11" rx="1.5"/>
+            <rect class="ai-brand" x="17" y="30" width="15" height="11" rx="1.5"/>
+            <path class="ai-axis" d="M4 12.5 H17 M32 12.5 H44 M39 12.5 V35.5 H32 M17 35.5 H10 V12.5"/>
+            <path class="ai-axis" d="M14 10.5 L17 12.5 L14 14.5 M35 33.5 L32 35.5 L35 37.5"/>
+            <circle class="ai-dot" cx="10" cy="12.5" r="1.8"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Controller design from scripts</span><span lang="ja">スクリプトによる制御器設計</span></h3>
+            <p lang="en">Design controllers in MATLAB scripts, for example an LQR gain from the linear model, attach them as local or global controllers, then simulate or linearize the network to evaluate them.</p>
+            <p lang="ja">制御器は MATLAB のスクリプトで設計できます。たとえば線形モデルから LQR のゲインを求め、ローカル制御器やグローバル制御器として系統に取り付けます。そのうえでシミュレーションや近似線形化を行い、効果を確かめます。</p>
+          </div>
+          <a class="analysis-link" data-tutorial="Part8_ControllerDesign.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="analysis-item">
+          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path class="ai-axis" d="M6 38 L18 44 L32 36 L42 41 M18 44 L22 33 M32 36 L22 33 M6 38 L22 33"/>
+            <path class="ai-ink" d="M6 38 V24 M18 44 V30 M32 36 V26 M42 41 V31"/>
+            <path class="ai-brand" d="M22 33 V8"/>
+            <circle class="ai-dot" cx="6" cy="24" r="1.8"/><circle class="ai-dot" cx="18" cy="30" r="1.8"/><circle class="ai-dot" cx="32" cy="26" r="1.8"/><circle class="ai-dot" cx="42" cy="31" r="1.8"/>
+            <circle class="ai-brand-dot" cx="22" cy="8" r="2.2"/>
+          </svg>
+          <div class="analysis-body">
+            <h3><span lang="en">Graph &amp; animation</span><span lang="ja">グラフとアニメーション</span></h3>
+            <p><span lang="en">Network graphs whose node heights and colours follow the response.</span><span lang="ja">応答に合わせてノードの高さと色が変わる、系統のグラフを描けます。</span></p>
+          </div>
+          <a class="analysis-link" data-tutorial="Step7_Visualization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
+        </li>
+      </ol>
+
+      <h2><span lang="en">License</span><span lang="ja">ライセンス</span></h2>
+      <p lang="en">GUILDA is released under the MIT License. Details: the <a href="https://github.com/guilda-dev/guilda/blob/main/LICENSE" target="_blank"><code>LICENSE</code></a> file at the repository root.</p>
+      <p lang="ja">GUILDA は MIT ライセンスで公開しています。詳細はリポジトリのルートにある <a href="https://github.com/guilda-dev/guilda/blob/main/LICENSE" target="_blank"><code>LICENSE</code></a> ファイルを参照してください。</p>
+
+      <h2><span lang="en">Developers</span><span lang="ja">開発者</span></h2>
+      <p lang="en">GUILDA is developed by the <a href="https://lim.ishizaki-lab.jp" target="_blank">Ishizaki Laboratory</a>, Institute of Science Tokyo. It continues power_simulator, developed by Takahiro Kawaguchi (Gunma University).</p>
+      <p lang="ja">東京科学大学 <a href="https://lim.ishizaki-lab.jp" target="_blank">石崎研究室</a>が開発しています。前身は川口貴弘先生（群馬大学）が開発した power_simulator で、GUILDA はこれを引き継いでいます。</p>
+
+      <section id="home-books">
+        <h2><span lang="en">Books and articles</span><span lang="ja">書籍・記事</span></h2>
+        <ul>
+          <li>
+            <span lang="en">T. Ishizaki, T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸・川口貴弘・河辺賢一 著、</span>
+            <a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –」</a><span lang="en">, Corona Publishing (in Japanese).
+            The textbook explains power systems in the language of systems and control and uses GUILDA for its numerical examples.</span><span lang="ja">、コロナ社。
+            電力系統をシステム制御の言葉で解説した教科書です。数値例の計算に GUILDA を使っています。</span>
+          </li>
+          <li>
+            T. Nishino, T. Kawaguchi and T. Ishizaki,
+            <a href="https://www.jstage.jst.go.jp/article/sicejl/62/9/62_559/_article/-char/ja" target="_blank">「GUILDA：エネルギーナレッジマネジメントのはじめの一歩」</a>,
+            <em>計測と制御</em>, Vol. 62, No. 9, pp. 559–563, 2023<span lang="en"> (in Japanese)</span>.
+          </li>
+          <li>
+            <a href="https://www.jstage.jst.go.jp/article/sicejl/62/10/62_640/_pdf/-char/ja" target="_blank"><span lang="en">Introductory article</span><span lang="ja">紹介記事</span></a>,
+            <em>計測と制御</em>, Vol. 62, No. 10 (<span lang="en">in Japanese, </span>PDF).
+          </li>
+        </ul>
+        <h2><span lang="en">How to cite</span><span lang="ja">引用方法</span></h2>
+        <p lang="en">To cite GUILDA in published work, give the GitHub repository with the version or commit you used and the date you accessed it, for example:</p>
+        <p lang="ja">GUILDA を用いた成果を発表するときは、GitHub リポジトリを、使用したバージョンまたはコミットとアクセスした日付を添えて引用してください。たとえば次のように記載します。</p>
+<pre class="about-cite"><code>GUILDA: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer, https://github.com/guilda-dev/guilda (version/commit, accessed YYYY-MM-DD).</code></pre>
+      </section>
+
+    </div>
+
+    <div id="tab-about" class="tab-content">
+      <style>
+        /* About tab: layout and figures drawn with the page tokens */
+        .ab-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 32px; align-items: center; margin: 18px 0 12px; }
+        .ab-row > * { min-width: 0; }
+        .ab-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 16px 0; }
+        .ab-cards.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .ab-card { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+        .ab-card.is-accent { border-color: var(--brand); background: var(--brand-tint); }
+        .ab-card h3 { margin: 4px 0 8px; font-size: 1rem; }
+        .ab-card p, .ab-card ol, .ab-card ul { margin: 0; font-size: 0.92rem; }
+        .ab-card ol, .ab-card ul { padding-left: 1.2em; }
+        .ab-card li + li { margin-top: 4px; }
+        .ab-glyph { display: block; width: 40px; height: 40px; }
+        .ab-glyph .g { fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linejoin: round; }
+        .ab-glyph .gf { fill: var(--brand); }
+        .ab-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 16px 0; }
+        .ab-gallery figure { margin: 0; }
+        .ab-gallery img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
+        .ab-gallery figcaption { margin-top: 6px; color: var(--muted); font-size: 0.85rem; }
+        .ab-row pre { margin: 0; }
+        .ab-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; max-width: 760px; margin: 16px 0; }
+        .ab-figs figure { margin: 0; }
+        .ab-figs img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
+        .ab-figs figcaption { margin-top: 6px; color: var(--muted); font-size: 0.85rem; }
+        .ab-refs { padding-left: 1.6em; color: var(--muted); font-size: 0.88rem; }
+        .about-fig { margin: 0; }
+        .ab-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+        .about-fig.is-vision { max-width: 680px; margin: 18px auto 12px; }
+        .about-fig .plat { fill: var(--brand-tint); stroke: var(--brand); stroke-width: 1.5; }
+        .about-fig .blk { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+        .about-fig .blk.is-ctrl { stroke: var(--brand); stroke-width: 1.8; }
+        .about-fig .ppl { fill: var(--surface-subtle); stroke: var(--ink); stroke-width: 1.5; }
+        .about-fig .ppl.is-b { fill: var(--brand-tint); }
+        .about-fig .curve { fill: none; stroke: var(--brand); stroke-width: 2; }
+        .about-fig .curve.is-before { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 3 3; }
+        .about-fig .nd { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+        .about-fig text.sm { font-size: 12px; }
+        .about-fig .hl { fill: var(--brand-tint); stroke: none; }
+        .about-fig .bx.is-ctrl { stroke: var(--brand); }
+        .ab-card .about-fig { margin: 0 0 10px; }
+        .ab-card .about-fig text.mono { font-size: 11px; }
+        .about-fig.is-single { max-width: 560px; margin: 18px 0 12px; }
+        .about-fig svg { display: block; width: 100%; height: auto; }
+        .about-fig .ln { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+        .about-fig .bus { fill: none; stroke: var(--ink); stroke-width: 3; }
+        .about-fig .bx { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+        .about-fig .grp { fill: none; stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 5 4; }
+        .about-fig .hd { fill: var(--ink); }
+        .about-fig text { fill: var(--ink); font-family: var(--font-sans); font-size: 14px; }
+        .about-fig text.nm { font-weight: 600; font-size: 15px; }
+        .about-fig text.mu { fill: var(--muted); font-size: 12.5px; }
+        .about-fig text.br { fill: var(--brand); font-weight: 600; }
+        .about-fig text.mono { font-family: var(--font-mono); font-size: 13px; }
+        .about-fig .sym { font-family: "Times New Roman", Times, serif; font-style: italic; font-size: 20px; }
+        .about-fig figcaption { margin-top: 8px; color: var(--muted); font-size: 0.88rem; }
+        @media (max-width: 760px) {
+          .ab-row, .ab-cards, .ab-cards.is-two { grid-template-columns: minmax(0, 1fr); }
+          .ab-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 480px) {
+          .ab-gallery, .ab-figs { grid-template-columns: minmax(0, 1fr); }
+              .about-fig text.nm { font-size: 17px; }
+          .about-fig text.mu { font-size: 14px; }
+          .about-fig .sym { font-size: 22px; }
+          .about-fig.is-vision text { font-size: 16px; }
+          .about-fig.is-vision text.sm { font-size: 12px; }
+          .about-fig.is-vision text.nm { font-size: 17px; }
+        }
+      </style>
+
+      <svg class="ab-sprite" width="0" height="0" aria-hidden="true" focusable="false">
+        <symbol id="ab-ic-plant" viewBox="0 0 60 50"><rect x="10" y="3" width="8" height="20" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="24" y="9" width="8" height="14" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="2" y="22" width="56" height="26" style="fill:var(--brand-tint);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><path d="M10 33 H18 M26 33 H34 M42 33 H50" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-tower" viewBox="0 0 40 70"><path d="M20 2 L8 68 M20 2 L32 68 M3 14 H37 M7 27 H33 M12 40 L28 54 M28 40 L12 54" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-factory" viewBox="0 0 60 44"><path d="M2 42 V18 L16 26 V18 L30 26 V18 L44 26 V5 H54 V42 Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="8" y="31" width="9" height="11" style="fill:var(--brand-tint);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><path d="M24 34 H36" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-house" viewBox="0 0 40 36"><path d="M3 17 L20 3 L37 17 V34 H3 Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="16" y="22" width="8" height="12" style="fill:var(--brand-tint);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-pvhouse" viewBox="0 0 40 36"><path d="M3 17 L20 3 L37 17 V34 H3 Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><path d="M8 14 L17 6.6 L21 10 L12 17.4 Z" style="fill:var(--brand);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="24" y="22" width="8" height="12" style="fill:var(--brand-tint);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-wind" viewBox="0 0 40 60"><path d="M20 24 V58 M14 58 H26" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><path d="M20 22 L20 2 M20 22 L37 32 M20 22 L3 32" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round"/><circle cx="20" cy="22" r="3.5" style="fill:var(--brand);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+        <symbol id="ab-ic-buildings" viewBox="0 0 44 56"><rect x="3" y="16" width="18" height="38" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><rect x="22" y="3" width="18" height="51" style="fill:var(--brand-tint);stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/><path d="M8 24 H16 M8 32 H16 M8 40 H16 M27 12 H35 M27 20 H35 M27 28 H35 M27 36 H35 M27 44 H35" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round"/></symbol>
+      </svg>
+
+      <h1><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></h1>
+      <p lang="en">GUILDA (Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer) is a power-system simulator for MATLAB, developed for students and researchers in systems and control.</p>
+      <p lang="ja">GUILDA（Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer）は、システム制御を専門とする学生や研究者に向けて開発した、MATLAB で動く電力系統シミュレータです。</p>
+      <p lang="en">GUILDA is developed together with the textbook <a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a> (<em>Systems Control Engineering of Power Systems</em>, Corona Publishing, 2022), which explains power systems from the viewpoint of control and uses GUILDA for its numerical examples. The whole grid is written as differential-algebraic equations with named states and inputs, so the methods of systems and control can be applied to it as they are.</p>
+      <p lang="ja">GUILDA は、教科書<a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a>（コロナ社、2022 年）と一緒に開発しています。この教科書は電力系統を制御の視点から解説しており、数値例の計算に GUILDA を使っています。系統全体は、状態と入力に名前の付いた微分代数方程式として書かれているので、システム制御の手法をそのまま適用できます。</p>
+
+      <h2 id="about-background"><span lang="en">Background</span><span lang="ja">開発の背景</span></h2>
+      <div class="ab-row">
+        <figure class="about-fig">
+          <svg viewBox="0 0 340 190" role="img" aria-labelledby="about-past-cap">
+            <defs>
+              <marker id="about-bg-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+            </defs>
+            <use href="#ab-ic-plant" x="0" y="48" width="100" height="72"/>
+            <use href="#ab-ic-tower" x="124" y="30" width="36" height="100"/>
+            <use href="#ab-ic-factory" x="205" y="8" width="110" height="70"/>
+            <use href="#ab-ic-house" x="205" y="117" width="38" height="34"/><use href="#ab-ic-house" x="246" y="117" width="38" height="34"/><use href="#ab-ic-house" x="288" y="117" width="38" height="34"/>
+            <path class="ln" d="M102 84 H120" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M164 64 L200 46" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M164 104 L200 128" marker-end="url(#about-bg-arr)"/>
+            <text class="mu" lang="en" x="50" y="140" text-anchor="middle">Thermal plant</text>
+            <text class="mu" lang="ja" x="50" y="140" text-anchor="middle">火力発電所</text>
+            <text class="mu" lang="en" x="142" y="148" text-anchor="middle">Transmission</text>
+            <text class="mu" lang="ja" x="142" y="148" text-anchor="middle">送電</text>
+            <text class="mu" lang="en" x="260" y="94" text-anchor="middle">Factories</text>
+            <text class="mu" lang="ja" x="260" y="94" text-anchor="middle">工場</text>
+            <text class="mu" lang="en" x="265" y="174" text-anchor="middle">Homes</text>
+            <text class="mu" lang="ja" x="265" y="174" text-anchor="middle">住宅</text>
+          </svg>
+          <figcaption id="about-past-cap"><span lang="en">Conventional grid. Power flows one way, from power plants to consumers.</span><span lang="ja">これまでの電力系統。電力は発電所から需要家へ一方向に流れます。</span></figcaption>
+        </figure>
+        <figure class="about-fig">
+          <svg viewBox="0 0 340 222" role="img" aria-labelledby="about-future-cap">
+            <text class="mu" lang="en" x="52" y="14" text-anchor="middle">Thermal plant</text>
+            <text class="mu" lang="ja" x="52" y="14" text-anchor="middle">火力発電所</text>
+            <text class="mu" lang="en" x="165" y="14" text-anchor="middle">Wind</text>
+            <text class="mu" lang="ja" x="165" y="14" text-anchor="middle">風力発電</text>
+            <text class="mu" lang="en" x="282" y="14" text-anchor="middle">Home with PV</text>
+            <text class="mu" lang="ja" x="282" y="14" text-anchor="middle">太陽光付き住宅</text>
+            <use href="#ab-ic-plant" x="17" y="26" width="70" height="50"/>
+            <use href="#ab-ic-wind" x="137" y="22" width="56" height="56"/>
+            <use href="#ab-ic-pvhouse" x="255" y="24" width="56" height="50"/>
+            <path class="bus" d="M10 108 H330"/>
+            <path class="ln" d="M52 80 V104" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M165 84 V104" marker-start="url(#about-bg-arr)" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M282 80 V104" marker-start="url(#about-bg-arr)" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M52 112 V134" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M160 112 V140" marker-end="url(#about-bg-arr)"/>
+            <path class="ln" d="M282 112 V130" marker-start="url(#about-bg-arr)" marker-end="url(#about-bg-arr)"/>
+            <use href="#ab-ic-buildings" x="27" y="138" width="50" height="57"/>
+            <use href="#ab-ic-house" x="112" y="150" width="30" height="27"/><use href="#ab-ic-house" x="145" y="150" width="30" height="27"/><use href="#ab-ic-house" x="178" y="150" width="30" height="27"/>
+            <rect class="grp" x="236" y="134" width="94" height="62" rx="6"/>
+            <use href="#ab-ic-house" x="246" y="150" width="34" height="30"/>
+            <use href="#ab-ic-house" x="288" y="150" width="34" height="30"/>
+            <text class="mu" lang="en" x="52" y="214" text-anchor="middle">Buildings</text>
+            <text class="mu" lang="ja" x="52" y="214" text-anchor="middle">ビル</text>
+            <text class="mu" lang="en" x="160" y="214" text-anchor="middle">Homes</text>
+            <text class="mu" lang="ja" x="160" y="214" text-anchor="middle">住宅</text>
+            <text class="mu" lang="en" x="283" y="214" text-anchor="middle">Microgrid</text>
+            <text class="mu" lang="ja" x="283" y="214" text-anchor="middle">マイクログリッド</text>
+          </svg>
+          <figcaption id="about-future-cap"><span lang="en">Future grid. Renewable plants and prosumers join, and power flows both ways.</span><span lang="ja">これからの電力系統。再生可能エネルギーの発電所やプロシューマが加わり、電力は双方向に流れます。</span></figcaption>
+        </figure>
+      </div>
+      <p lang="en">Wind and solar plants, homes with rooftop PV, batteries and microgrids are now connected to the grid, and many of them can be controlled. A stable supply with these participants requires controlling the power flow, and control engineering can contribute here.</p>
+      <p lang="ja">風力発電所や太陽光発電所、屋根に太陽光パネルを載せた住宅、蓄電池、マイクログリッドなどが系統につながるようになり、その多くは制御できます。こうした設備がつながった系統で電力を安定して供給するには電力の流れを制御する必要があり、制御工学の知見を活かせます。</p>
+      <p lang="en">The two fields, however, expect different things from a simulator.</p>
+      <p lang="ja">ただし、二つの分野ではシミュレータに求めるものが異なります。</p>
+      <div class="ab-cards is-two">
+        <div class="ab-card">
+          <h3><span lang="en">Power-system and power-electronics tools</span><span lang="ja">電力系統・パワーエレクトロニクスの解析ツール</span></h3>
+          <ul lang="en">
+            <li>Models are detailed.</li>
+            <li>Computation is fast.</li>
+            <li>Real events are reproduced faithfully.</li>
+            <li>Each piece of equipment is one module, which keeps the tool easy to use.</li>
+          </ul>
+          <ul lang="ja">
+            <li>モデルを精緻にします。</li>
+            <li>解析を高速に処理します。</li>
+            <li>現実の事象を忠実に再現します。</li>
+            <li>電気設備ごとにモジュールを分け、使いやすくします。</li>
+          </ul>
+        </div>
+        <div class="ab-card is-accent">
+          <h3><span lang="en">Control engineering</span><span lang="ja">制御工学</span></h3>
+          <ul lang="en">
+            <li>Models keep only the essential dynamics of the physical system.</li>
+            <li>Principles are derived from the mathematical models.</li>
+          </ul>
+          <ul lang="ja">
+            <li>物理システムの本質的な動特性だけを取り出したモデルを作ります。</li>
+            <li>数理モデルに基づいて原理原則を導きます。</li>
+          </ul>
+        </div>
+      </div>
+      <p lang="en">A control researcher who turns to power systems therefore spends a long time learning the power domain first.</p>
+      <p lang="ja">そのため、制御の研究者が電力系統を研究しようとすると、まず電力分野の知識を身につけるのに多くの時間がかかります。</p>
+
+      <h2 id="about-work"><span lang="en">Work that GUILDA takes over</span><span lang="ja">GUILDA が引き受ける作業</span></h2>
+      <div class="ab-cards is-two">
+        <div class="ab-card">
+          <h3><span lang="en">Simulating a grid from scratch</span><span lang="ja">一から実装する場合</span></h3>
+          <ol lang="en">
+            <li>Look up the model of each device and write it as code.</li>
+            <li>Connect the devices and derive the admittance matrix.</li>
+            <li>Write the differential-algebraic equations of the whole system as functions.</li>
+            <li>Find the operating point of each device.</li>
+          </ol>
+          <ol lang="ja">
+            <li>各設備のモデルを調べ、コードに書き直します。</li>
+            <li>機器を接続し、アドミタンス行列を導出します。</li>
+            <li>システム全体の微分代数方程式を関数として実装します。</li>
+            <li>各機器の動作点を決めます。</li>
+          </ol>
+        </div>
+        <div class="ab-card is-accent">
+          <h3><span lang="en">With GUILDA</span><span lang="ja">GUILDA を使う場合</span></h3>
+          <p lang="en">Add buses, branches and components to a network object. GUILDA derives the admittance matrix, the equations of the whole system and the operating point, taking the electrical constraints and the interactions between devices into account.</p>
+          <p lang="ja">母線、ブランチ、機器をネットワークのオブジェクトに追加します。アドミタンス行列、システム全体の方程式、動作点は、電気的な制約や機器間の相互作用を考慮して GUILDA が求めます。</p>
+        </div>
+      </div>
+
+      <h2 id="about-features"><span lang="en">Main features</span><span lang="ja">主な特長</span></h2>
+      <div class="ab-cards">
+        <div class="ab-card">
+          <figure class="about-fig">
+            <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p1-cap">
+              <rect class="bx" x="120" y="14" width="110" height="110"/>
+              <rect class="bx" x="230" y="14" width="56" height="110"/>
+              <rect class="bx" x="120" y="124" width="110" height="52"/>
+              <rect class="bx" x="230" y="124" width="56" height="52"/>
+              <rect class="hl" x="120" y="34" width="166" height="28"/>
+              <path class="ln" d="M120 34 H286 M120 62 H286"/>
+              <text class="sym" x="175" y="103" text-anchor="middle">A</text>
+              <text class="sym" x="258" y="103" text-anchor="middle">B</text>
+              <text class="sym" x="175" y="157" text-anchor="middle">C</text>
+              <text class="sym" x="258" y="157" text-anchor="middle">D</text>
+              <text class="mono mu" x="114" y="29" text-anchor="end">⋮</text>
+              <text class="mono" x="114" y="45" text-anchor="end">delta_B001SG1</text>
+              <text class="mono" x="114" y="59" text-anchor="end">omega_B001SG1</text>
+              <text class="mono mu" x="114" y="76" text-anchor="end">⋮</text>
+              <text class="mono mu" x="114" y="145" text-anchor="end">outputs</text>
+              <text class="mu" lang="en" x="203" y="188" text-anchor="middle">rows of B001SG1</text>
+              <text class="mu" lang="ja" x="203" y="188" text-anchor="middle">B001SG1 の行</text>
+            </svg>
+            <figcaption id="about-p1-cap" hidden><span lang="en">Named state-space matrices with the rows of one generator highlighted</span><span lang="ja">名前の付いた状態空間行列と、一台の発電機の行</span></figcaption>
+          </figure>
+          <h3><span lang="en">A linear model taken apart by element</span><span lang="ja">要素ごとに分解できる線形モデル</span></h3>
+          <p lang="en">Many tools output state matrices for eigenvalue analysis. GUILDA also shows which element owns which entry. <code>net.get_sys()</code> returns a linear model (<code>ResultLIN</code>) whose states, inputs and outputs have names, and three methods take it apart.</p>
+          <p lang="ja">固有値解析のために状態空間行列を出力するツールは多くあります。GUILDA では、さらに行列のどの要素がどの機器に由来するかまで確かめられます。<code>net.get_sys()</code> は状態、入力、出力に名前の付いた線形モデル（<code>ResultLIN</code>）を返し、次の三つのメソッドでその中身を分解できます。</p>
+          <ul lang="en">
+            <li><code>get_contribution</code> splits the matrices of the DAE into the additive parts of each generator, controller, branch and bus.</li>
+            <li><code>get_kernel</code> returns the kernel of the DAE Jacobian, the common rotation of all phases, one for each island.</li>
+            <li><code>get_reduced_matrix</code> eliminates the variables of chosen elements by the Schur complement, for example to see the grid from its buses only.</li>
+          </ul>
+          <ul lang="ja">
+            <li><code>get_contribution</code> は、DAE の行列を発電機、制御器、ブランチ、母線ごとの和に分けます。</li>
+            <li><code>get_kernel</code> は、DAE のヤコビ行列の核を求めます。核はすべての位相が一様に回転する方向を表し、つながった部分系統（アイランド）ごとに一つずつ得られます。</li>
+            <li><code>get_reduced_matrix</code> は、指定した機器の変数をシューア補元で消去します。たとえば母線だけから見た系統の行列を求められます。</li>
+          </ul>
+        </div>
+        <div class="ab-card">
+          <figure class="about-fig">
+            <svg viewBox="0 0 300 180" role="img" aria-labelledby="about-p2-cap">
+              <defs>
+                <marker id="about-p2-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+              </defs>
+              <rect class="bx is-ctrl" x="90" y="8" width="120" height="30" rx="3"/>
+              <text x="150" y="28" text-anchor="middle">AGC</text>
+              <path class="ln" d="M120 38 L70 62" marker-end="url(#about-p2-arr)"/>
+              <path class="ln" d="M180 38 L230 62" marker-end="url(#about-p2-arr)"/>
+              <rect class="bx" x="10" y="64" width="130" height="112" rx="4"/>
+              <rect class="bx" x="160" y="64" width="130" height="112" rx="4"/>
+              <text lang="en" x="75" y="84" text-anchor="middle">Generator</text>
+              <text lang="ja" x="75" y="84" text-anchor="middle">発電機</text>
+              <text lang="en" x="225" y="84" text-anchor="middle">Generator</text>
+              <text lang="ja" x="225" y="84" text-anchor="middle">発電機</text>
+              <rect class="blk is-ctrl" x="22" y="94" width="106" height="24" rx="3"/>
+              <rect class="blk is-ctrl" x="36" y="122" width="92" height="22" rx="3"/>
+              <rect class="blk is-ctrl" x="22" y="148" width="106" height="22" rx="3"/>
+              <text class="sm" x="75" y="111" text-anchor="middle">AVR</text>
+              <text class="sm" x="82" y="138" text-anchor="middle">PSS</text>
+              <text class="sm" lang="en" x="75" y="164" text-anchor="middle">Governor</text>
+              <text class="sm" lang="ja" x="75" y="164" text-anchor="middle">ガバナ</text>
+              <rect class="blk is-ctrl" x="172" y="94" width="106" height="24" rx="3"/>
+              <text class="sm" x="225" y="111" text-anchor="middle">AVR</text>
+            </svg>
+            <figcaption id="about-p2-cap" hidden><span lang="en">A global AGC over two generators, each with its own local controllers</span><span lang="ja">2 台の発電機にまたがる AGC と、各発電機のローカル制御器</span></figcaption>
+          </figure>
+          <h3><span lang="en">Controllers in the same network</span><span lang="ja">制御器もネットワークの一部</span></h3>
+          <p lang="en">Local controllers such as AVRs, PSSs and governors are attached to a component with <code>add_local_controller</code>, and global controllers such as AGC to the network with <code>add_global_controller</code>. Each controller is a class, and time simulation and linearization include it.</p>
+          <p lang="ja">AVR、PSS、ガバナなどのローカル制御器は <code>add_local_controller</code> で機器に、AGC などのグローバル制御器は <code>add_global_controller</code> でネットワークに追加します。制御器はそれぞれクラスとして実装されており、時間応答シミュレーションと近似線形化に含まれます。</p>
+        </div>
+        <div class="ab-card">
+          <figure class="about-fig">
+            <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p3-cap">
+              <defs>
+                <marker id="about-p3-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+              </defs>
+              <rect class="plat" x="8" y="70" width="64" height="44" rx="6"/>
+              <text class="mono" x="40" y="97" text-anchor="middle">net</text>
+              <path class="ln" d="M72 92 L118 21" marker-end="url(#about-p3-arr)"/>
+              <path class="ln" d="M72 92 L118 57" marker-end="url(#about-p3-arr)"/>
+              <path class="ln" d="M72 92 H118" marker-end="url(#about-p3-arr)"/>
+              <path class="ln" d="M72 92 L118 127" marker-end="url(#about-p3-arr)"/>
+              <path class="ln" d="M72 92 L118 163" marker-end="url(#about-p3-arr)"/>
+              <rect class="bx" x="120" y="6" width="172" height="30" rx="3"/>
+              <rect class="bx" x="120" y="42" width="172" height="30" rx="3"/>
+              <rect class="bx" x="120" y="78" width="172" height="30" rx="3"/>
+              <rect class="bx" x="120" y="114" width="172" height="30" rx="3"/>
+              <rect class="bx" x="120" y="150" width="172" height="30" rx="3"/>
+              <g lang="en">
+                <text class="sm" x="128" y="26">Power flow</text>
+                <text class="sm" x="128" y="62">Time simulation</text>
+                <text class="sm" x="128" y="98">Linearization</text>
+                <text class="sm" x="128" y="134">Continuation PF</text>
+                <text class="sm" x="128" y="170">Optimal PF</text>
+              </g>
+              <g lang="ja">
+                <text class="sm" x="128" y="26">潮流計算</text>
+                <text class="sm" x="128" y="62">時間応答</text>
+                <text class="sm" x="128" y="98">近似線形化</text>
+                <text class="sm" x="128" y="134">連続潮流計算</text>
+                <text class="sm" x="128" y="170">最適潮流計算</text>
+              </g>
+              <text class="mu mono" x="286" y="26" text-anchor="end">ResultPF</text>
+              <text class="mu mono" x="286" y="62" text-anchor="end">ResultODE</text>
+              <text class="mu mono" x="286" y="98" text-anchor="end">ResultLIN</text>
+              <text class="mu mono" x="286" y="134" text-anchor="end">ResultCPF</text>
+              <text class="mu mono" x="286" y="170" text-anchor="end">ResultOPF</text>
+            </svg>
+            <figcaption id="about-p3-cap" hidden><span lang="en">One network object and the result of each analysis</span><span lang="ja">一つのネットワークのオブジェクトと各解析の結果</span></figcaption>
+          </figure>
+          <h3><span lang="en">One model from optimization to stability</span><span lang="ja">最適化と安定性を一つのモデルで</span></h3>
+          <p lang="en">The same <code>net</code> runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object. The admittance matrix, the operating point and the equations are derived by GUILDA.</p>
+          <p lang="ja">同じ <code>net</code> で潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。アドミタンス行列、動作点、方程式は GUILDA が導出します。</p>
+          <ul lang="en">
+            <li><code>net.initialize(Method="OPF")</code> sets the AC OPF solution as the operating point, and <code>simulate</code> and <code>get_sys</code> start from it with no data conversion.</li>
+            <li><code>calculate_optimal_powerflow</code> can add small-signal stability limits on the dynamic model of the same network, such as a lowest damping ratio (<code>MinDampingRatio</code>) or a largest real part of the eigenvalues (<code>MaxRealPart</code>).</li>
+          </ul>
+          <ul lang="ja">
+            <li><code>net.initialize(Method="OPF")</code> を使うと AC 最適潮流計算の解が動作点になり、<code>simulate</code> や <code>get_sys</code> はデータを変換せずにその点から計算できます。</li>
+            <li><code>calculate_optimal_powerflow</code> では、同じネットワークの動的モデルに対する小信号安定度の条件を制約に加えられます。たとえば減衰比の下限（<code>MinDampingRatio</code>）や固有値の実部の上限（<code>MaxRealPart</code>）を指定します。</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 id="about-model"><span lang="en">Building a model</span><span lang="ja">モデルの構成</span></h2>
+      <p lang="en">Buses, branches, generators, loads and controllers are each a class. A model is built by adding these objects to a <code>PowerNetwork</code>, which then runs the analyses.</p>
+      <p lang="ja">母線、ブランチ、発電機、負荷、制御器はそれぞれクラスになっています。これらのオブジェクトを <code>PowerNetwork</code> に追加してモデルを組み立て、そのまま解析を実行します。</p>
+      <div class="ab-row">
+        <figure class="about-fig">
+          <svg viewBox="0 0 360 290" role="img" aria-labelledby="about-oop-cap">
+            <defs>
+              <marker id="about-oop-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+            </defs>
+            <rect class="bx" x="10" y="10" width="120" height="34"/>
+            <rect class="bx" x="10" y="56" width="120" height="34"/>
+            <rect class="bx" x="10" y="102" width="120" height="34"/>
+            <rect class="bx" x="10" y="148" width="120" height="34"/>
+            <rect class="bx" x="10" y="194" width="120" height="34"/>
+            <text lang="en" x="70" y="32" text-anchor="middle">Bus</text>
+            <text lang="ja" x="70" y="32" text-anchor="middle">母線</text>
+            <text lang="en" x="70" y="78" text-anchor="middle">Branch</text>
+            <text lang="ja" x="70" y="78" text-anchor="middle">ブランチ</text>
+            <text lang="en" x="70" y="124" text-anchor="middle">Generator</text>
+            <text lang="ja" x="70" y="124" text-anchor="middle">発電機</text>
+            <text lang="en" x="70" y="170" text-anchor="middle">Load</text>
+            <text lang="ja" x="70" y="170" text-anchor="middle">負荷</text>
+            <text lang="en" x="70" y="216" text-anchor="middle">Controller</text>
+            <text lang="ja" x="70" y="216" text-anchor="middle">制御器</text>
+            <path class="ln" d="M130 27 L198 100" marker-end="url(#about-oop-arr)"/>
+            <path class="ln" d="M130 73 L198 108" marker-end="url(#about-oop-arr)"/>
+            <path class="ln" d="M130 119 H198" marker-end="url(#about-oop-arr)"/>
+            <path class="ln" d="M130 165 L198 130" marker-end="url(#about-oop-arr)"/>
+            <path class="ln" d="M130 211 L198 138" marker-end="url(#about-oop-arr)"/>
+            <text class="mu mono" x="160" y="40">add_*</text>
+            <rect class="bx" x="200" y="84" width="150" height="70"/>
+            <text class="mono" x="275" y="112" text-anchor="middle">net</text>
+            <text class="mu" x="275" y="136" text-anchor="middle">PowerNetwork</text>
+            <path class="ln" d="M275 154 V206" marker-end="url(#about-oop-arr)"/>
+            <text class="mu mono" x="282" y="178">simulate</text>
+            <text class="mu mono" x="282" y="194">get_sys</text>
+            <rect class="bx" x="200" y="208" width="150" height="56"/>
+            <text lang="en" x="275" y="232" text-anchor="middle">Results</text>
+            <text lang="ja" x="275" y="232" text-anchor="middle">解析結果</text>
+            <text class="mu" x="275" y="252" text-anchor="middle">ResultODE, ResultLIN</text>
+          </svg>
+          <figcaption id="about-oop-cap"><span lang="en">Objects added to a network, then analysed.</span><span lang="ja">オブジェクトをネットワークに追加し、解析する流れ</span></figcaption>
+        </figure>
+<pre><code>% Build a two-bus network
+net = PowerNetwork("TestSystem");
+net.add_bus();
+net.add_bus();
+net.add_branch("pi", [1, 2]);
+net.a_Bus{1}.add_component("gen-park");
+net.a_Bus{2}.add_component("load-power");
+net.a_Bus{1}.l_isSlack = true;
+
+% Use the bundled IEEE 14-bus network
+net = network.IEEE14bus;
+sc = net.add_scenario("fault", Time=[0, 10]);
+sc.add_fault("B008", [1, 1.05]);
+res = net.simulate("fault");   % time response
+sys = net.get_sys();           % linearized model</code></pre>
+      </div>
+
+      <h2 id="about-output"><span lang="en">Output of GUILDA</span><span lang="ja">GUILDA の出力例</span></h2>
+      <p lang="en">These figures come from the IEEE 14-bus example above: a short fault at bus B008 from 1 s to 1.05 s.</p>
+      <p lang="ja">上のコードの IEEE 14 母線系統の例で出力した図です。母線 B008 で 1 秒から 1.05 秒まで事故が起きています。</p>
+      <div class="ab-gallery">
+        <figure>
+          <img src="./images/about/output-frequency.png" alt="Frequency deviation omega of five generators oscillating after the fault and settling within 10 s" data-alt-ja="事故後に振動し、10 秒以内に落ち着く 5 台の発電機の周波数偏差 omega" width="720" height="462" loading="lazy">
+          <figcaption><span lang="en">Frequency deviation of the generators</span><span lang="ja">発電機の周波数偏差</span> (<code>res.plot_trajectory(Quantity="omega")</code>)</figcaption>
+        </figure>
+        <figure>
+          <img src="./images/about/output-voltage.png" alt="Voltage magnitudes of the 14 buses over time" data-alt-ja="14 母線の電圧の大きさの時間変化" width="720" height="457" loading="lazy">
+          <figcaption><span lang="en">Bus voltage magnitudes</span><span lang="ja">母線電圧の大きさ</span> (<code>res.plot_trajectory()</code>)</figcaption>
+        </figure>
+        <figure>
+          <img src="./images/about/output-network-diagram.png" alt="Network diagram of the IEEE 14-bus system at t = 1.02 s, branches colored by current" data-alt-ja="t = 1.02 秒の IEEE 14 母線系統のネットワーク図。ブランチは電流の大きさで色分けされています。" width="720" height="540" loading="lazy">
+          <figcaption><span lang="en">Network diagram during the fault</span><span lang="ja">事故中のネットワーク図</span> (<code>res.plot_diagram()</code>)</figcaption>
+        </figure>
+        <figure>
+          <img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="720" height="459" loading="lazy">
+          <figcaption><span lang="en">Eigenvalues of the linearized model</span><span lang="ja">近似線形化モデルの固有値</span> (<code>sys.plot_eigenvalue()</code>)</figcaption>
+        </figure>
+        <figure>
+          <img src="./images/about/output-model-gui.png" alt="Model GUI of the network with the list of buses and the parameter tab" data-alt-ja="母線の一覧とパラメータのタブを表示したネットワークのモデル GUI" width="720" height="460" loading="lazy">
+          <figcaption><span lang="en">Model GUI</span><span lang="ja">モデルの GUI</span> (<code>net.launch_gui()</code>)</figcaption>
+        </figure>
+      </div>
+      <p lang="en">Each analysis result has plots for viewing it, for example:</p>
+      <p lang="ja">どの解析結果にも、結果を確かめるための描画メソッドがあります。たとえば次のものです。</p>
+      <ul lang="en">
+        <li>The network diagram, in 2D or 3D, with an animation of the power flow in 2D (<code>plot_diagram</code>).</li>
+        <li>Trajectories of a time simulation (<code>plot_trajectory</code>).</li>
+        <li>Eigenvalues of a linear model (<code>plot_eigenvalue</code>).</li>
+        <li>PV curves of a continuation power flow (<code>plot_pvcurve</code>).</li>
+        <li>The dispatch of an optimal power flow as bar charts (<code>plot_dispatch</code>), and its locational marginal prices on the network diagram (<code>plot_lmp</code>).</li>
+        <li>The spring-mass model described below (<code>plot_spring_model</code>).</li>
+      </ul>
+      <ul lang="ja">
+        <li><code>plot_diagram</code> は、ネットワーク図を 2D または 3D で描きます。2D では電力の流れをアニメーションで示せます。</li>
+        <li><code>plot_trajectory</code> は、時間応答シミュレーションの軌道を描きます。</li>
+        <li><code>plot_eigenvalue</code> は、線形モデルの固有値を描きます。</li>
+        <li><code>plot_pvcurve</code> は、連続潮流計算の PV 曲線を描きます。</li>
+        <li><code>plot_dispatch</code> は最適潮流計算の出力配分を棒グラフで描き、<code>plot_lmp</code> は地点別限界価格をネットワーク図の上に描きます。</li>
+        <li><code>plot_spring_model</code> は、次の節で紹介するばねと質点のモデルを描きます。</li>
+      </ul>
+      <p lang="en">Every <code>plot_*</code> method returns a graph object (<code>GraphBase</code>). A graph with several time samples plays with <code>animate</code>, and graphs joined with <code>link</code> share one time cursor (<code>set_time</code>).</p>
+      <p lang="ja"><code>plot_*</code> メソッドはどれもグラフのオブジェクト（<code>GraphBase</code>）を返します。複数の時刻を持つグラフは <code>animate</code> で再生でき、<code>link</code> でつないだグラフは同じ時刻（<code>set_time</code>）に合わせて一緒に動きます。</p>
+
+      <h2 id="about-spring"><span lang="en">The grid as masses and springs</span><span lang="ja">ばねと質点で見る電力系統</span></h2>
+      <p lang="en">Picturing a power system as masses joined by springs is a known idea: Gronquist and co-authors animated a multi-machine system on the phasor plane in this way [<a href="#about-ref-1">1</a>]. GUILDA draws this picture from its own results with <code>plot_spring_model</code> (<code>GraphSpring2D</code> and <code>GraphSpring3D</code>).</p>
+      <p lang="ja">電力系統を、ばねでつながった質点として思い描く考え方は以前からあります。Gronquist らは、多数の発電機を含む系統をフェーザの平面上でこのように動かして見せました [<a href="#about-ref-1">1</a>]。GUILDA では、解析結果からこの図を <code>plot_spring_model</code>（<code>GraphSpring2D</code> と <code>GraphSpring3D</code>）で描けます。</p>
+      <ul lang="en">
+        <li>The nodes are voltage phasors: every bus, and the internal voltage of each generator. They are drawn over a polar grid in 2D, or on the surface z = log|V| in 3D.</li>
+        <li>The branches and the machine reactances are drawn as coil springs, and arrows show the active power P and the reactive current Iq.</li>
+        <li>Results of power flow, time simulation and continuation power flow can be animated and saved as videos (<code>export_video</code>).</li>
+      </ul>
+      <ul lang="ja">
+        <li>節点は電圧のフェーザで、すべての母線と各発電機の内部電圧を表します。2D では極座標の格子の上に、3D では曲面 z = log|V| の上に描きます。</li>
+        <li>ブランチと発電機のリアクタンスはコイルばねとして描き、有効電力 P と無効電流 Iq を矢印で示します。</li>
+        <li>潮流計算、時間応答シミュレーション、連続潮流計算の結果をアニメーションにでき、動画として保存することもできます（<code>export_video</code>）。</li>
+      </ul>
+      <div class="ab-figs">
+        <figure>
+          <img src="./images/lecture/part4/power-flow-ieee9.png" alt="Spring-mass picture of the IEEE 9-bus system at its equilibrium: three generator nodes joined by springs to a cluster of nine bus nodes near the real axis" data-alt-ja="IEEE 9 母線系統の平衡点をばねと質点で描いた図。3 台の発電機の節点が、実軸の近くに集まった 9 つの母線とばねでつながっています。" width="932" height="859" loading="lazy">
+          <figcaption><span lang="en">Equilibrium of the IEEE 9-bus system on the phasor plane</span><span lang="ja">フェーザの平面に描いた IEEE 9 母線系統の平衡点</span> (<code>net.plot_spring_model()</code>)</figcaption>
+        </figure>
+        <figure>
+          <img src="./images/lecture/part4/swing-voltage-collapse-3d.gif" alt="Animation of a voltage collapse in the 6-bus system Tutorial6bus: as a constant-power load at bus 4 grows, the nodes move down the funnel surface z = log|V| until the balance is lost" data-alt-ja="6 母線系統 Tutorial6bus の電圧崩壊のアニメーション。母線 4 の定電力負荷が増えるにつれて、節点が曲面 z = log|V| の漏斗を下り、やがてつり合いを失います。" width="448" height="464" loading="lazy">
+          <figcaption><span lang="en">Voltage collapse of the 6-bus system on the surface z = log|V|</span><span lang="ja">曲面 z = log|V| の上の 6 母線系統の電圧崩壊</span> (<code>res.plot_spring_model(Dimension=3)</code>)</figcaption>
+        </figure>
+      </div>
+      <p lang="en">The lecture <a href="./lecture/part4-spring-mass-model.html">Part 4 (Visualization: the spring-mass model)</a> explains how to read the picture.</p>
+      <p lang="ja">図の読み方は、講義の <a href="./lecture/part4-spring-mass-model.html">Part 4「可視化機能：ばね質点モデル」</a>で解説しています。</p>
+
+      <h2 id="about-knowledge"><span lang="en">Sharing research knowledge</span><span lang="ja">研究の知識の共有</span></h2>
+      <p lang="en">Research know-how often stays with one person and is lost when that person leaves. GUILDA aims to share the tacit knowledge gained in research as explicit knowledge in the form of programs, and to keep each person's knowledge organized on the platform so that others can build on it.</p>
+      <p lang="ja">研究のノウハウは一人の研究者の中にとどまりやすく、その人がいなくなると失われがちです。GUILDA は、研究で得た暗黙知をプログラムという形式知にして共有し、各自の知識をプラットフォーム上で体系的に整理することを目指しています。そうすれば、ほかの人がその上に研究を積み重ねられます。</p>
+      <figure class="about-fig is-vision">
+        <svg viewBox="0 0 440 470" role="img" aria-labelledby="about-vision-cap">
+          <defs>
+            <marker id="about-vs-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+          </defs>
+          <!-- shared platform with the accumulated classes -->
+          <rect class="plat" x="100" y="150" width="240" height="150" rx="12"/>
+          <text class="nm br" lang="en" x="220" y="174" text-anchor="middle">GUILDA platform</text>
+          <text class="nm br" lang="ja" x="220" y="174" text-anchor="middle">GUILDA プラットフォーム</text>
+          <rect class="blk" x="114" y="186" width="66" height="24" rx="3"/>
+          <rect class="blk" x="187" y="186" width="66" height="24" rx="3"/>
+          <rect class="blk" x="260" y="186" width="66" height="24" rx="3"/>
+          <rect class="blk" x="114" y="216" width="66" height="24" rx="3"/>
+          <rect class="blk" x="187" y="216" width="66" height="24" rx="3"/>
+          <rect class="blk" x="260" y="216" width="66" height="24" rx="3"/>
+          <rect class="blk is-ctrl" x="114" y="250" width="102" height="26" rx="3"/>
+          <rect class="blk is-ctrl" x="224" y="250" width="102" height="26" rx="3"/>
+          <g lang="en">
+            <text class="sm" x="147" y="203" text-anchor="middle">Line</text>
+            <text class="sm" x="220" y="203" text-anchor="middle">Generator</text>
+            <text class="sm" x="293" y="203" text-anchor="middle">Load</text>
+            <text class="sm" x="147" y="233" text-anchor="middle">Line</text>
+            <text class="sm" x="220" y="233" text-anchor="middle">Generator</text>
+            <text class="sm" x="293" y="233" text-anchor="middle">Load</text>
+            <text class="sm" x="165" y="268" text-anchor="middle">Controller A</text>
+            <text class="sm" x="275" y="268" text-anchor="middle">Controller B</text>
+          </g>
+          <g lang="ja">
+            <text class="sm" x="147" y="203" text-anchor="middle">送電線</text>
+            <text class="sm" x="220" y="203" text-anchor="middle">発電機</text>
+            <text class="sm" x="293" y="203" text-anchor="middle">負荷</text>
+            <text class="sm" x="147" y="233" text-anchor="middle">送電線</text>
+            <text class="sm" x="220" y="233" text-anchor="middle">発電機</text>
+            <text class="sm" x="293" y="233" text-anchor="middle">負荷</text>
+            <text class="sm" x="165" y="268" text-anchor="middle">制御器 A</text>
+            <text class="sm" x="275" y="268" text-anchor="middle">制御器 B</text>
+          </g>
+
+          <!-- top left: implements a new model -->
+          <circle class="ppl is-b" cx="34" cy="30" r="13"/>
+          <path class="ppl is-b" d="M14 78 Q14 50 34 50 Q54 50 54 78 Z"/>
+          <text lang="en" x="62" y="28">Implements</text>
+          <text lang="en" x="62" y="46">a new model</text>
+          <text lang="ja" x="62" y="28">新しいモデルを</text>
+          <text lang="ja" x="62" y="46">実装する</text>
+          <rect class="blk" x="40" y="94" width="66" height="24" rx="3"/>
+          <text class="sm" lang="en" x="73" y="111" text-anchor="middle">Generator</text>
+          <text class="sm" lang="ja" x="73" y="111" text-anchor="middle">発電機</text>
+          <path class="ln" d="M90 120 L130 146" marker-end="url(#about-vs-arr)"/>
+
+          <!-- top right: applies controller A, the response improves -->
+          <circle class="ppl" cx="406" cy="30" r="13"/>
+          <path class="ppl" d="M386 78 Q386 50 406 50 Q426 50 426 78 Z"/>
+          <text lang="en" x="378" y="28" text-anchor="end">Applies controller A;</text>
+          <text lang="en" x="378" y="46" text-anchor="end">the response improves</text>
+          <text lang="ja" x="378" y="28" text-anchor="end">制御器 A を適用すると</text>
+          <text lang="ja" x="378" y="46" text-anchor="end">応答が向上する</text>
+          <path class="ln" d="M262 64 V128 H372"/>
+          <path class="curve is-before" d="M262 96 C268 70 274 70 280 96 S292 122 298 96 S310 72 316 96 S328 118 334 96 S346 76 352 96 S362 112 370 96"/>
+          <path class="curve" d="M262 96 C268 76 274 78 280 98 S292 108 298 97 S310 92 316 96 S330 98 370 96"/>
+          <text class="mu" x="376" y="132">t</text>
+          <path class="ln" d="M338 148 L398 94" marker-end="url(#about-vs-arr)"/>
+
+          <!-- bottom left: combines models and analyses them -->
+          <circle class="ppl" cx="34" cy="372" r="13"/>
+          <path class="ppl" d="M14 420 Q14 392 34 392 Q54 392 54 420 Z"/>
+          <text lang="en" x="62" y="368">Combines models</text>
+          <text lang="en" x="62" y="386">into a grid and</text>
+          <text lang="en" x="62" y="404">analyses it with</text>
+          <text lang="en" x="62" y="422">control theory</text>
+          <text lang="ja" x="62" y="368">モデルを組み合わせて</text>
+          <text lang="ja" x="62" y="386">系統を作り、制御工学の</text>
+          <text lang="ja" x="62" y="404">手法で解析する</text>
+          <path class="ln" d="M150 302 L110 340" marker-end="url(#about-vs-arr)"/>
+          <path class="ln" d="M84 446 L112 436 L140 450 L170 438 M112 436 L126 458"/>
+          <circle class="nd" cx="84" cy="446" r="4"/>
+          <circle class="nd" cx="112" cy="436" r="4"/>
+          <circle class="nd" cx="140" cy="450" r="4"/>
+          <circle class="nd" cx="170" cy="438" r="4"/>
+          <circle class="nd" cx="126" cy="458" r="4"/>
+
+          <!-- bottom right: reproduces a prior study, then tries controller B -->
+          <circle class="ppl is-b" cx="406" cy="372" r="13"/>
+          <path class="ppl is-b" d="M386 420 Q386 392 406 392 Q426 392 426 420 Z"/>
+          <text lang="en" x="378" y="368" text-anchor="end">Reproduces a prior</text>
+          <text lang="en" x="378" y="386" text-anchor="end">study, then tries</text>
+          <text lang="en" x="378" y="404" text-anchor="end">controller B</text>
+          <text lang="ja" x="378" y="368" text-anchor="end">先行研究の結果を</text>
+          <text lang="ja" x="378" y="386" text-anchor="end">再現してから、</text>
+          <text lang="ja" x="378" y="404" text-anchor="end">制御器 B を試す</text>
+          <path class="ln" d="M290 302 L330 340" marker-end="url(#about-vs-arr)"/>
+        </svg>
+        <figcaption id="about-vision-cap"><span lang="en">The platform is meant to let each person add models that others combine, analyse and extend.</span><span lang="ja">各自が追加したモデルを、ほかの人が組み合わせ、解析し、発展させられるプラットフォームを目指しています。</span></figcaption>
+      </figure>
+      <p lang="en">This follows the SECI model of knowledge creation by Ikujiro Nonaka, in which tacit and explicit knowledge are converted into each other in four steps.</p>
+      <p lang="ja">この考え方は、野中郁次郎の SECI モデルに基づいています。SECI モデルでは、暗黙知と形式知が四つの段階を経て相互に変換されます。</p>
+      <div class="ab-row">
+        <figure class="about-fig">
+          <svg viewBox="0 0 440 250" role="img" aria-labelledby="about-seci-cap">
+            <defs>
+              <marker id="about-seci-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+            </defs>
+            <rect class="bx" x="30" y="20" width="160" height="76"/>
+            <rect class="bx" x="250" y="20" width="160" height="76"/>
+            <rect class="bx" x="250" y="154" width="160" height="76"/>
+            <rect class="bx" x="30" y="154" width="160" height="76"/>
+            <text class="nm" lang="en" x="110" y="52" text-anchor="middle">Socialization</text>
+            <text class="nm" lang="ja" x="110" y="52" text-anchor="middle">共同化</text>
+            <text class="mu" lang="en" x="110" y="76" text-anchor="middle">tacit → tacit</text>
+            <text class="mu" lang="ja" x="110" y="76" text-anchor="middle">暗黙知 → 暗黙知</text>
+            <text class="nm" lang="en" x="330" y="52" text-anchor="middle">Externalization</text>
+            <text class="nm" lang="ja" x="330" y="52" text-anchor="middle">表出化</text>
+            <text class="mu" lang="en" x="330" y="76" text-anchor="middle">tacit → explicit</text>
+            <text class="mu" lang="ja" x="330" y="76" text-anchor="middle">暗黙知 → 形式知</text>
+            <text class="nm" lang="en" x="330" y="186" text-anchor="middle">Combination</text>
+            <text class="nm" lang="ja" x="330" y="186" text-anchor="middle">連結化</text>
+            <text class="mu" lang="en" x="330" y="210" text-anchor="middle">explicit → explicit</text>
+            <text class="mu" lang="ja" x="330" y="210" text-anchor="middle">形式知 → 形式知</text>
+            <text class="nm" lang="en" x="110" y="186" text-anchor="middle">Internalization</text>
+            <text class="nm" lang="ja" x="110" y="186" text-anchor="middle">内面化</text>
+            <text class="mu" lang="en" x="110" y="210" text-anchor="middle">explicit → tacit</text>
+            <text class="mu" lang="ja" x="110" y="210" text-anchor="middle">形式知 → 暗黙知</text>
+            <path class="ln" d="M190 58 H249" marker-end="url(#about-seci-arr)"/>
+            <path class="ln" d="M330 96 V153" marker-end="url(#about-seci-arr)"/>
+            <path class="ln" d="M250 192 H191" marker-end="url(#about-seci-arr)"/>
+            <path class="ln" d="M110 154 V97" marker-end="url(#about-seci-arr)"/>
+            <image href="./images/GUILDA-logo-square.png" x="196" y="101" width="48" height="48"/>
+          </svg>
+          <figcaption id="about-seci-cap"><span lang="en">The SECI model (I. Nonaka) with GUILDA at the centre of the cycle.</span><span lang="ja">SECI モデル（野中郁次郎）のサイクルと、その中心にある GUILDA</span></figcaption>
+        </figure>
+        <div>
+          <ul lang="en">
+            <li>In socialization, members share their experience and progress in meetings and discussions.</li>
+            <li>In externalization, what they have learned is written as models and analyses with clear interfaces.</li>
+            <li>In combination, these objects are connected on the platform to build new analyses.</li>
+            <li>In internalization, researchers use the platform in their own work and gain new insight.</li>
+          </ul>
+          <ul lang="ja">
+            <li>共同化では、ミーティングや議論を通して経験や研究の進み具合を共有します。</li>
+            <li>表出化では、学んだことを、インタフェースの明確なモデルや解析として記述します。</li>
+            <li>連結化では、プラットフォーム上でそれらのオブジェクトを組み合わせ、新しい解析を作ります。</li>
+            <li>内面化では、プラットフォームを自分の研究に使い、新しい知見を得ます。</li>
+          </ul>
+        </div>
+      </div>
+      <p lang="en">The aim is that each cycle leaves models and analyses that others can reuse, so that the knowledge does not depend on particular people. The name GUILDA comes from <em>guild</em>, a group of researchers and engineers who learn from one another and build things together.</p>
+      <p lang="ja">このサイクルを回すたびに、ほかの人が再利用できるモデルや解析が残り、知識が特定の個人に依存しなくなることを目指しています。GUILDA という名前は、互いに学び合いながら一緒にものを作る研究者や技術者の集まりを<em>ギルド</em>になぞらえたものです。</p>
+
+      <h2 id="about-compare"><span lang="en">Comparison with other tools</span><span lang="ja">他のツールとの比較</span></h2>
+      <div class="compare-scroll">
+        <table class="compare-table">
+          <thead>
+            <tr><th><span lang="en">Analysis</span><span lang="ja">解析の種類</span></th><th><span lang="en">Typical analysis package</span><span lang="ja">一般的な解析パッケージ</span></th><th>GUILDA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span lang="en">Power flow</span><span lang="ja">潮流計算</span></td><td><span class="mark-yes">✓</span></td><td><span class="mark-yes">✓</span></td></tr>
+            <tr><td><span lang="en">Small-signal stability via linearization</span><span lang="ja">近似線形化による小信号安定度</span></td><td><span class="mark-yes">✓</span></td><td><span class="mark-yes">✓</span></td></tr>
+            <tr><td><span lang="en">Time-domain (transient) response</span><span lang="ja">時間応答（過渡応答）</span></td><td><span class="mark-yes">✓</span></td><td><span class="mark-yes">✓</span></td></tr>
+            <tr><td><span lang="en">Interfaces for control engineering</span><span lang="ja">制御工学向けのインタフェース</span></td><td><span class="mark-part"><span lang="en">Limited</span><span lang="ja">限定的</span></span></td><td><span class="mark-core"><span lang="en">Core focus</span><span lang="ja">中心的な目標</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note" lang="en">The table follows Table 1 of an article listed under <a href="#home-books" onclick="openTab('tab-home', 'home-books'); return false;">Books and articles</a> on the Home tab, which compares GUILDA with CPAT, a power-system analysis package widely used in Japan. CPAT also provides fault and harmonic calculations, which GUILDA does not cover.</p>
+      <p class="compare-note" lang="ja">表は、ホームタブの<a href="#home-books" onclick="openTab('tab-home', 'home-books'); return false;">書籍・記事</a>に掲載している記事の表 1 をもとにしています。この表では、国内で広く使われている電力系統解析パッケージ CPAT と GUILDA を比較しています。CPAT は故障計算や高調波計算にも対応していますが、GUILDA はこれらを扱いません。</p>
+
+      <h2 id="about-references"><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+      <ol class="ab-refs">
+        <li id="about-ref-1">J. Gronquist, W. Sethares, F. Alvarado and R. Lasseter, “Animated vectors for visualization of power system phenomena,” <cite>IEEE Transactions on Power Systems</cite>, vol. 11, no. 1, pp. 267–273, 1996. <a href="https://doi.org/10.1109/59.486105" target="_blank">doi:10.1109/59.486105</a></li>
+      </ol>
+
+    </div>
+
+    <div id="tab-getting-started" class="tab-content">
+      <h1><span lang="en">Getting Started</span><span lang="ja">はじめに</span></h1>
+
+      <h2><span lang="en">Install GUILDA</span><span lang="ja">GUILDA のインストール</span></h2>
+      <p lang="en">Clone or download the repository from GitHub, or open it directly in MATLAB Online.</p>
+      <p lang="ja">GitHub からリポジトリをクローンするか、ダウンロードしてください。MATLAB Online で直接開くこともできます。</p>
+      <div class="install-buttons">
+        <a href="https://github.com/guilda-dev/guilda" target="_blank" class="btn-github"><svg class="gh-mark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg><span><span lang="en">From GitHub</span><span lang="ja">GitHub から入手</span></span></a>
+        <a href="https://matlab.mathworks.com/open/github/v1?repo=guilda-dev/guilda&project=./GUILDA.prj" target="_blank" class="btn-badge"><img src="https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg" alt="Open in MATLAB Online" onerror="this.parentNode.classList.add('is-offline')"><span class="btn-badge-fallback"><span lang="en">Open in MATLAB Online</span><span lang="ja">MATLAB Online で開く</span></span></a>
+      </div>
+
+      <h2><span lang="en">Requirements</span><span lang="ja">動作環境</span></h2>
+      <p lang="en">GUILDA runs on MATLAB alone; each toolbox is needed only by the features marked below.</p>
+      <p lang="ja">GUILDA は MATLAB だけで動きます。Toolbox が必要になるのは、下の表で印の付いた機能を使うときだけです。</p>
+      <div class="req-scroll">
+        <table class="req-table">
+          <thead>
+            <tr>
+              <th scope="col"><span lang="en">Feature</span><span lang="ja">機能</span></th>
+              <th scope="col">MATLAB<span class="req-sub"><span lang="en">R2025a or later</span><span lang="ja">R2025a 以降</span></span></th>
+              <th scope="col">Optimization Toolbox</th>
+              <th scope="col">Control System Toolbox</th>
+              <th scope="col">Symbolic Math Toolbox</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="req-cat"><th colspan="5" scope="rowgroup"><span class="req-cat-label"><span lang="en">Power flow</span><span lang="ja">潮流計算</span><span class="req-desc"><span lang="en">Steady-state voltages and power flows</span><span lang="ja">定常状態の電圧・電力潮流</span></span><span class="req-sub"><code>net.<wbr>calculate_<wbr>powerflow(<wbr>Solver=…)</code></span></span></th></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Newton-Raphson method (default)</span><span lang="ja">ニュートン・ラフソン法（既定）</span><span class="req-sub"><code>Solver="newton"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Gradient method</span><span lang="ja">勾配法</span><span class="req-sub"><code>Solver="gradient"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Levenberg-Marquardt method</span><span lang="ja">レーベンバーグ・マーカート法</span><span class="req-sub"><code>Solver=<wbr>"levenberg-marquardt"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Virtual bus dynamics (time integration)</span><span lang="ja">仮想母線ダイナミクス（時間積分）</span><span class="req-sub"><code>Solver="dynamic"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">MATLAB fsolve</span><span lang="ja">MATLAB の fsolve</span><span class="req-sub"><code>Solver="fsolve"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th scope="row"><span lang="en">Continuation power flow (CPF)</span><span lang="ja">連続潮流計算（CPF）</span><span class="req-desc"><span lang="en">Voltage stability: the nose (PV) curve</span><span lang="ja">電圧安定性・PV 曲線</span></span><span class="req-sub"><code>net.<wbr>calculate_<wbr>continuation_<wbr>powerflow</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th scope="row"><span lang="en">Optimal power flow (OPF)</span><span lang="ja">最適潮流計算（OPF）</span><span class="req-desc"><span lang="en">Generation dispatch that minimizes cost under constraints</span><span lang="ja">制約下でコスト最小の発電配分</span></span><span class="req-sub"><code>net.<wbr>calculate_<wbr>optimal_<wbr>powerflow</code>, <code>net.initialize(<wbr>Method="OPF")</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th scope="row"><span lang="en">Time simulation</span><span lang="ja">時間応答シミュレーション</span><span class="req-desc"><span lang="en">Response to faults and disturbances</span><span lang="ja">事故・外乱に対する時間応答</span></span><span class="req-sub"><code>net.simulate</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th colspan="5" scope="rowgroup"><span class="req-cat-label"><span lang="en">Linearization</span><span lang="ja">近似線形化</span><span class="req-desc"><span lang="en">Linear model around an operating point (eigenvalues, controller design)</span><span lang="ja">動作点まわりの線形モデル（固有値解析・制御器設計）</span></span><span class="req-sub"><code>net.<wbr>get_sys(<wbr>Format=…)</code>, <code>ResultLIN.<wbr>get_ss(<wbr>Format=…)</code></span></span></th></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Result object with system matrices (default)</span><span lang="ja">システム行列を持つ結果オブジェクト（既定）</span><span class="req-sub"><code>Format="GUILDAorigin"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Plain MATLAB struct of matrices</span><span lang="ja">行列の構造体</span><span class="req-sub"><code>Format="struct"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td class="req-no">–</td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Control System Toolbox state-space model (ss)</span><span lang="ja">Control System Toolbox の状態空間モデル（ss）</span><span class="req-sub"><code>Format="ss"</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th colspan="5" scope="rowgroup"><span class="req-cat-label"><span lang="en">Controllers</span><span lang="ja">制御器</span><span class="req-desc"><span lang="en">Controllers bundled with GUILDA</span><span lang="ja">GUILDA 同梱の制御器</span></span></span></th></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">LQR (optimal state-feedback) controllers</span><span lang="ja">LQR（最適状態フィードバック）制御器</span><span class="req-sub"><code>controller.<wbr>local_LQR</code>, <code>controller.<wbr>pss.<wbr>Retrofit</code></span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td></tr>
+            <tr class="req-cat"><th colspan="5" scope="rowgroup"><span class="req-cat-label"><span lang="en">Developer tools</span><span lang="ja">開発者向け</span><span class="req-desc"><span lang="en">For writing and checking models</span><span lang="ja">モデルの作成・検証用</span></span></span></th></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Symbolic equations in the Newton-Raphson solver</span><span lang="ja">ニュートン・ラフソン法ソルバーでの記号式</span><span class="req-sub"><code>Method<wbr>NewtonRaphson</code> (<code>Fcn</code>)</span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td></tr>
+            <tr class="req-opt"><th scope="row"><span lang="en">Validation scripts for hand-written Jacobians</span><span lang="ja">手書きのヤコビ行列の検証スクリプト</span><span class="req-sub"><code>validate.m</code> (<code>+component/<wbr>+load</code>, <code>+controller</code>)</span></th><td><span class="mark-yes" role="img" aria-label="required">✓</span></td><td class="req-no">–</td><td class="req-no">–</td><td><span class="mark-yes" role="img" aria-label="required">✓</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="req-legend" lang="en">
+        <li><span class="mark-yes">✓</span> required, – not needed.</li>
+        <li><code>GUILDA</code> prints the same check at startup from <code>@GUILDA/config/ListToolbox.json</code>: <code>ok</code> or the features unavailable without each toolbox.</li>
+      </ul>
+      <ul class="req-legend" lang="ja">
+        <li><span class="mark-yes">✓</span> は必要、– は不要を表します。</li>
+        <li><code>GUILDA</code> を起動したときにも、<code>@GUILDA/config/ListToolbox.json</code> をもとに同じ確認を行います。Toolbox ごとに、<code>ok</code> か、その Toolbox がないと使えない機能を表示します。</li>
+      </ul>
+
+      <h2><span lang="en">Start GUILDA</span><span lang="ja">GUILDA の起動</span></h2>
+      <p lang="en">Open the GUILDA repository folder in MATLAB and run the constructor at the start of each session.</p>
+      <p lang="ja">MATLAB で GUILDA のリポジトリフォルダを開き、セッションの最初にコンストラクタを実行します。</p>
+<pre><code>&gt;&gt; cd path/to/guilda
+&gt;&gt; GUILDA;</code></pre>
+      <figure class="gs-demo">
+        <img src="./images/getting-started/start-guilda.gif" alt="MATLAB: cd into the GUILDA folder, run GUILDA, the startup output, and the tutorial Live Script opening" data-alt-ja="MATLAB で GUILDA のフォルダへ移動して GUILDA を実行すると、起動時の出力が表示され、チュートリアルの Live Script が開きます。" loading="lazy" onerror="this.closest('figure').hidden = true;">
+      </figure>
+      <p lang="en">Startup tasks, as configured in <a href="#gs-startup-settings" onclick="openTab('tab-getting-started', 'gs-startup-settings'); return false;">Startup Settings</a>:</p>
+      <p lang="ja">起動すると、<a href="#gs-startup-settings" onclick="openTab('tab-getting-started', 'gs-startup-settings'); return false;">起動時の設定</a>に従って次の処理を行います。</p>
+      <ul>
+        <li><span lang="en">Print the GUILDA logo.</span><span lang="ja">GUILDA のロゴを表示します。</span></li>
+        <li><span lang="en">Add the required GUILDA folders to the MATLAB path (always performed).</span><span lang="ja">必要な GUILDA のフォルダを MATLAB のパスに追加します。この処理は常に行います。</span></li>
+        <li><span lang="en">Check the MATLAB version and the toolboxes in the table above.</span><span lang="ja">MATLAB のバージョンと上表の Toolbox を確認します。</span></li>
+        <li><span lang="en">Update the generated documentation database and class signature map when enabled.</span><span lang="ja">有効にしている場合は、自動生成するドキュメントのデータベースと、クラスのシグネチャマップを更新します。</span></li>
+        <li><span lang="en">Display the update log and open the tutorial when enabled.</span><span lang="ja">有効にしている場合は、更新履歴を表示し、チュートリアルを開きます。</span></li>
+      </ul>
+
+      <h2 id="gs-next"><span lang="en">Next Step: the Tutorial</span><span lang="ja">次のステップ: チュートリアル</span></h2>
+      <p lang="en">Continue from the tutorial Live Script that just opened (<code>Main.mlx</code>, Step 0): it is the table of contents of the Live Scripts in <code>_GUILDAtutorial</code>, with the usage manual (Steps 1–12) and the texts on the analyses (Parts 0–8). If you are new to GUILDA, start with Step 1. Close it by mistake? <code>GUILDA.tutorial()</code> opens it again. The Tutorial tab introduces what you can analyze with the Live Script of each Part, gives the basic workflow as plain code and lists Steps 1–12.</p>
+      <p lang="ja">続きは、起動時に開いたチュートリアルの Live Script（<code>Main.mlx</code>、Step 0）から進めます。これは <code>_GUILDAtutorial</code> にある Live Script の目次で、使い方のマニュアル（Step 1〜12）と、解析を学ぶテキスト（<span class="tutorial-audience-nowrap">Part 0〜8</span>）を並べています。初めて使う人は Step 1 から読んでください。閉じてしまったときは <code>GUILDA.tutorial()</code> でもう一度開けます。チュートリアルタブでは、解析できることを Part ごとの Live Script とあわせて紹介し、基本的な流れのコードと、Step 1〜12 の一覧を見られます。</p>
+      <div class="home-actions">
+        <a class="btn btn-primary" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><span lang="en">Go to the Tutorial</span><span lang="ja">チュートリアルへ</span> <span aria-hidden="true">→</span></a>
+      </div>
+
+      <h2 id="gs-options"><span lang="en">Options</span><span lang="ja">オプション</span></h2>
+      <p lang="en">Not needed for a first run.</p>
+      <p lang="ja">初めて使うときは設定しなくてかまいません。</p>
+
+      <h3 id="gs-startup-settings"><span lang="en">Startup Settings</span><span lang="ja">起動時の設定</span></h3>
+      <p lang="en">Change how GUILDA behaves at startup: the settings window turns the optional startup tasks above on or off. Path setup is required to use GUILDA and cannot be turned off.</p>
+      <p lang="ja">GUILDA の起動時の動作は変更できます。設定ウィンドウで、上に挙げた起動時の処理をそれぞれ有効または無効にします。ただし、パスの設定は GUILDA を使うために欠かせないので、無効にはできません。</p>
+<pre><code>&gt;&gt; GUILDA.setting();</code></pre>
+      <p lang="en">The window lists the sections in this order: Startup, Message, PowerSystemModel, then the analyses (PowerFlowCalculation, OptimalPowerFlow, ContinuationPowerFlow, TimeSimulation, ApproximateLinearization).</p>
+      <p lang="ja">ウィンドウには、Startup、Message、PowerSystemModel、各解析（PowerFlowCalculation、OptimalPowerFlow、ContinuationPowerFlow、TimeSimulation、ApproximateLinearization）の順にセクションが並びます。</p>
+      <img src="./images/setting_startup.png" data-alt-ja="GUILDA の設定ウィンドウ（Startup セクション）" alt="GUILDA settings window (Startup section)" class="gs-settings-img">
+
+      <h3 id="gs-setting-command"><span lang="en">Changing Settings by Command</span><span lang="ja">コマンドによる設定の変更</span></h3>
+      <p lang="en">Give a category and Name-Value arguments to change settings without opening the window. The change is saved as with Apply in the window and stays after MATLAB restarts. <code>GUILDA.config</code> reads a setting.</p>
+      <p lang="ja">カテゴリと Name-Value 引数を渡せば、ウィンドウを開かずに設定を変えられます。変更はウィンドウで Apply を押したときと同じように保存され、MATLAB を再起動しても残ります。設定の値は <code>GUILDA.config</code> で読み出せます。</p>
+<pre><code>&gt;&gt; GUILDA.setting("PowerFlowCalculation", Tolerance=1e-10, WhenFailed="ERROR")
+&gt;&gt; GUILDA.config("PowerFlowCalculation", "Tolerance")</code></pre>
+      <ul lang="en">
+        <li>An unknown category or setting, or a value of the wrong type or not among the choices, stops with an error and changes nothing.</li>
+        <li>A new version of GUILDA may reset the settings of a category to the defaults, also the values you changed. GUILDA then prints <code>INFO:</code> with the category at startup.</li>
+      </ul>
+      <ul lang="ja">
+        <li>存在しないカテゴリや設定を指定したり、型の違う値や選択肢にない値を渡したりすると、エラーで止まります。設定は何も変わりません。</li>
+        <li>GUILDA を新しい版にすると、カテゴリの設定が既定値に戻ることがあります。自分で変えた値も戻ります。そのときは、起動時にカテゴリ名を添えた <code>INFO:</code> を表示します。</li>
+      </ul>
+
+      <h3 id="gs-messages"><span lang="en">Warnings and INFO Messages</span><span lang="ja">警告と INFO メッセージ</span></h3>
+      <p lang="en">The <code>Message</code> category of <code>GUILDA.setting()</code> shows or hides the messages of GUILDA. Errors are always shown.</p>
+      <p lang="ja">GUILDA のメッセージを表示するかどうかは、<code>GUILDA.setting()</code> の <code>Message</code> カテゴリで切り替えます。エラーは常に表示します。</p>
+      <table>
+        <thead><tr><th><span lang="en">Setting</span><span lang="ja">設定</span></th><th><span lang="en">Default</span><span lang="ja">既定値</span></th><th><span lang="en">Shows</span><span lang="ja">表示するもの</span></th></tr></thead>
+        <tbody>
+          <tr><td><code>ShowWarning</code></td><td><code>true</code></td><td><span lang="en">The warnings of GUILDA (identifier <code>GUILDA:&lt;Object&gt;:&lt;Key&gt;</code>)</span><span lang="ja">GUILDA の警告（識別子 <code>GUILDA:&lt;Object&gt;:&lt;Key&gt;</code>）</span></td></tr>
+          <tr><td><code>ShowInfo</code></td><td><code>true</code></td><td><span lang="en">The lines that start with <code>INFO:</code>, e.g. the component that takes the remaining power when a slack bus is set</span><span lang="ja"><code>INFO:</code> で始まる行（例: スラック母線を設定したとき、残りの電力を受け持つ機器）</span></td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="gs-utility"><span lang="en">Utility Functions</span><span lang="ja">ユーティリティ関数</span></h3>
+<pre><code>&gt;&gt; GUILDA.pwd()         % Get the GUILDA repository path
+&gt;&gt; GUILDA.rmpath()      % Remove GUILDA folders from the MATLAB path
+&gt;&gt; GUILDA.addpath()     % Add the required folders again
+&gt;&gt; GUILDA.setting()     % Open environment and startup settings
+&gt;&gt; GUILDA.tutorial()    % Open the tutorial
+&gt;&gt; GUILDA.doc()         % Open the class reference of your copy, with your own classes
+&gt;&gt; GUILDA.dictionary()  % Search the implemented class hierarchy
+&gt;&gt; GUILDA.newclass()    % Open the class creation tool (under development)</code></pre>
+    </div>
+
+    <div id="tab-tutorial" class="tab-content">
+      <nav class="tutorial-toc" aria-label="Tutorial tab">
+        <a href="#what-you-can-analyze" onclick="openTab('tab-tutorial', 'what-you-can-analyze'); return false;"><span lang="en">Lecture notes</span><span lang="ja">講義ノート</span></a>
+        <a href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;"><span lang="en">How to use GUILDA</span><span lang="ja">GUILDA の使い方</span></a>
+        <a href="#basic-workflow" onclick="openTab('tab-tutorial', 'basic-workflow'); return false;"><span lang="en">Basic workflow</span><span lang="ja">基本的な流れ</span></a>
+        <a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;"><span lang="en">Hands-on tutorials</span><span lang="ja">ハンズオンチュートリアル</span></a>
+        <a href="#tutorial-references" onclick="openTab('tab-tutorial', 'tutorial-references'); return false;"><span lang="en">Reference material</span><span lang="ja">参考資料</span></a>
+      </nav>
+
+      <div class="tutorial-audience">
+        <a class="tutorial-audience-card" href="#what-you-can-analyze" onclick="openTab('tab-tutorial', 'what-you-can-analyze'); return false;">
+          <span class="tutorial-audience-label"><span lang="en">To learn power system engineering</span><span lang="ja">電力系統工学を学びたい人へ</span></span>
+          <span class="tutorial-audience-title"><span lang="en">Lecture notes (<span class="tutorial-audience-nowrap">Part 0–8</span>)</span><span lang="ja">講義ノート（<span class="tutorial-audience-nowrap">Part 0〜8</span>）</span></span>
+          <span class="tutorial-audience-text" lang="en">The basics of power system engineering. Each Part explains one kind of analysis with figures and comes with a Live Script that computes it in GUILDA. No prior knowledge of power systems is assumed.</span>
+          <span class="tutorial-audience-text" lang="ja">電力系統工学の基礎を学べます。各 Part で解析を図で説明し、その内容を GUILDA で計算する Live Script も付いています。電力系統の予備知識は前提にしていません。</span>
+          <span class="tutorial-audience-more"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span> <span aria-hidden="true">→</span></span>
+        </a>
+        <a class="tutorial-audience-card" href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;">
+          <span class="tutorial-audience-label"><span lang="en">To learn to use GUILDA</span><span lang="ja">GUILDA の使い方を学びたい人へ</span></span>
+          <span class="tutorial-audience-title"><span lang="en">How to use GUILDA (hands-on <span class="tutorial-audience-nowrap">Step 1–12</span>)</span><span lang="ja">GUILDA の使い方（ハンズオン <span class="tutorial-audience-nowrap">Step 1〜12</span>）</span></span>
+          <span class="tutorial-audience-text" lang="en">The usage manual: Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step. The basic workflow, the hands-on Steps and reference material to look things up.</span>
+          <span class="tutorial-audience-text" lang="ja">使い方のマニュアルです。<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います。基本的な流れ、ハンズオンの Step、調べものに使う参考資料があります。</span>
+          <span class="tutorial-audience-more"><span lang="en">Go to how to use GUILDA</span><span lang="ja">GUILDA の使い方へ</span> <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+
+      <h1 id="what-you-can-analyze"><span lang="en">Lecture notes: power system basics</span><span lang="ja">講義ノート：電力系統工学の基礎</span></h1>
+      <p lang="en">For readers who want to learn the basics of power system engineering; no prior knowledge of power systems is assumed. The analyses of power systems, one field per card, each tied to the power system engineering behind it. Each card opens a lecture-note page that explains the field with figures, one page per Part. Each card also gives the command that opens the Live Script of the Part, which computes what the page explains with GUILDA.</p>
+      <p lang="ja">電力系統工学の基礎を学びたい人向けで、電力系統の予備知識は前提にしていません。電力系統の解析を分野ごとに、背景にある電力系統工学の知識と結びつけて紹介します。各カードから、その分野を図で説明する講義ノートのページを開けます。ページは Part ごとに 1 つです。各カードには、ページの内容を GUILDA で計算して確かめる、その Part の Live Script を開くコマンドもあります。</p>
+      <ol id="lecture-list" class="analysis-cards"></ol>
+
+      <hr class="tutorial-divider">
+
+      <h1 id="how-to-use"><span lang="en">How to use GUILDA</span><span lang="ja">GUILDA の使い方</span></h1>
+      <p lang="en">For readers who want to learn to use GUILDA. The basic workflow comes first, then the hands-on Steps (Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step) and reference material to look things up.</p>
+      <p lang="ja">GUILDA の使い方を学びたい人向けです。基本的な流れを示したあと、ハンズオンの Step（<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います）と、調べものに使う参考資料を並べています。</p>
+
+      <h2 id="basic-workflow"><span lang="en">Basic Workflow</span><span lang="ja">基本的な流れ</span></h2>
+      <p lang="en">A typical analysis: build the network → initialize the operating point → simulate, linearize or evaluate controllers. The examples below follow the verification flow in <code>+DebugScript</code> and assume GUILDA has been started as in <a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">Getting Started</a>.</p>
+      <p lang="ja">典型的な解析では、系統モデルを作り、動作点を初期化してから、時間応答シミュレーション、近似線形化、制御器の評価に進みます。以下の例は <code>+DebugScript</code> の検証手順に沿っています。<a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">はじめに</a>のとおりに GUILDA を起動してあるものとします。</p>
+      <p lang="en">To learn hands-on, see the <a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;" style="font-weight: bold;">Hands-on Tutorial</a> below.</p>
+      <p lang="ja">手を動かしながら学びたい場合は、下の<a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;" style="font-weight: bold;">ハンズオンチュートリアル</a>に進んでください。</p>
+      <figure class="tutorial-flow">
+        <img lang="ja" src="./images/tutorial/basic-workflow.ja.svg" alt="GUILDA での作業の流れです。系統モデルを定義して制御器を付け、シミュレーションするか、状態空間表現を求めます。" onerror="this.style.display = 'none';">
+        <img lang="en" src="./images/tutorial/basic-workflow.en.svg" alt="GUILDA workflow: define the network model, add controllers, then simulate or obtain a state-space model" onerror="this.style.display = 'none';">
+      </figure>
+
+      <h3><span lang="en">1. Build or Load a Network</span><span lang="ja">1. 系統モデルの構築・読み込み</span></h3>
+      <p lang="en">For a quick analysis, load a packaged network. To build a model by hand, create a <code>PowerNetwork</code> and add buses, branches and components in that order.</p>
+      <p lang="ja">手早く解析したいときは、同梱の系統モデルを読み込みます。自分で作るときは、<code>PowerNetwork</code> を作成してから、母線、ブランチ、機器の順に追加します。</p>
+<pre><code>% Load a packaged test network (IEEE 14-bus, MATPOWER case14 data)
+net = network.IEEE14bus;
+% Same network with every transformer tap set to 1
+net = network.IEEE14bus_NoTap;
+
+% Minimal structure of a manually assembled network
+net = PowerNetwork("TestSystem");
+bus1 = net.add_bus();
+bus2 = net.add_bus();
+net.add_branch("pi", [1, 2]);
+bus1.add_component("gen-park");
+bus2.add_component("load-power");</code></pre>
+
+      <h3><span lang="en">2. Set and Initialize the Operating Point</span><span lang="ja">2. 動作点の設定と初期化</span></h3>
+      <p lang="en">Set the power-flow parameters on buses and components and choose the slack bus (<code>l_isSlack = true</code>; GUILDA never selects one, and the power flow stops with <code>GUILDA:PowerNetwork:NoSlackBus</code> without it), check the power-flow solution if needed, then initialize the model. Initialization gives each object its equilibrium voltage, current, active power and reactive power.</p>
+      <p lang="ja">まず母線と機器に潮流計算のパラメーターを設定し、スラック母線を指定します（<code>l_isSlack = true</code>。GUILDA はスラック母線を選ばず、指定がないと潮流計算は <code>GUILDA:PowerNetwork:NoSlackBus</code> で停止します）。必要なら潮流計算の解を確かめてから、モデルを初期化します。初期化すると、各オブジェクトに平衡点の電圧、電流、有効電力、無効電力が設定されます。</p>
+<pre><code>% Example power-flow settings
+bus1.tab_parameter.powerflow{:, ["V", "Varg"]} = [1.05, 0.00];
+bus1.a_Component{1}.tab_parameter.powerflow{:, ["P", "Q"]} = [nan, nan];
+bus1.l_isSlack = true;   % the slack bus: GUILDA never selects one
+
+powerflow = net.calculate_powerflow();
+net.initialize();</code></pre>
+
+      <h3 id="tutorial-simulation"><span lang="en">3. Run a Time-Domain Simulation</span><span lang="ja">3. 時間応答シミュレーションの実行</span></h3>
+      <p lang="en">Disturbances go in a <code>Scenario</code>: timed state offsets, input changes, bus faults, unit trips and branch openings. Create the scenario on the network with a tag, then simulate it by that tag.</p>
+      <p lang="ja">外乱は <code>Scenario</code> に書きます。状態のオフセット、入力の変化、母線の地絡、機器の解列、ブランチの開放を、それぞれ時刻を指定して加えられます。シナリオはタグを付けてネットワークに作り、そのタグを指定してシミュレーションを実行します。</p>
+<pre><code>net = network.IEEE14bus;
+sc = net.add_scenario("fault", Time=[0, 50]);
+sc.add_fault("B008", [3, 3.1]);           % ground fault from 3 s to 3.1 s
+sc.add_open_branch("EL013", 3.1);   % then a line opened until the end
+
+sol = net.simulate("fault");              % the Time of the scenario
+verdict = sol.judge_out_of_step();        % "stable", "out-of-step" or "incomplete"
+xsol = sol.odeResults;
+
+figure;
+hold on;
+arrayfun(@(i) plot(xsol.t, xsol.Bus(i).Component(1).X.omega), [1, 2, 3, 6, 8]);</code></pre>
+
+      <h3 id="tutorial-linear-model"><span lang="en">4. Obtain a Linear Model</span><span lang="ja">4. 線形モデルの導出</span></h3>
+      <p lang="en">After initialization, get the linearized interconnected model. Buses without dynamic units are detected automatically.</p>
+      <p lang="ja">初期化が済んだら、近似線形化した相互結合モデルを求めます。動的な機器のない母線は自動で見つけます。</p>
+<pre><code>net = network.IEEE14bus;
+net.initialize();
+
+sys = net.get_sys();
+eig(sys.A)</code></pre>
+
+      <h3><span lang="en">5. Add and Evaluate Controllers</span><span lang="ja">5. 制御器の追加と評価</span></h3>
+      <p lang="en">Local controllers attach to components; global controllers attach to the network. After changing the controller structure, reinitialize the network, then repeat the simulation or linearization.</p>
+      <p lang="ja">ローカル制御器は機器に、グローバル制御器はネットワークに取り付けます。制御器の構成を変えたら、ネットワークを初期化し直してから、シミュレーションや近似線形化をやり直します。</p>
+<pre><code>gen = net.a_Bus{1}.a_Component{1};
+gen.add_local_controller("avr-ST1");
+gen.add_local_controller("pss-PSS1");
+net.initialize();
+
+sc = net.add_scenario("fault", Time=[0, 50]);
+sc.add_fault("B008", [3, 3.01]);
+sol = net.simulate("fault");</code></pre>
+
+
+      <h2 id="hands-on-tutorial"><span lang="en">Hands-on Tutorial</span><span lang="ja">ハンズオンチュートリアル</span></h2>
+      <p lang="en">The usage manual: Live Scripts in the <code>_GUILDAtutorial</code> folder that cover the features of GUILDA, one Step per feature, in reading order. If you are new to GUILDA, start with Step 1. Each one builds or loads its own network first, so any of them can be opened on its own. Run the command beside each one in MATLAB with the GUILDA folder as the current folder (<code>cd(GUILDA.pwd)</code>).</p>
+      <p lang="ja">使い方のマニュアルです。<code>_GUILDAtutorial</code> フォルダにある Live Script で、GUILDA の機能を 1 つの Step に 1 つずつ、読む順に並べました。初めて使う人は Step 1 から読んでください。どれも系統モデルを作るか読み込むところから始まるので、1 本だけ開いても進められます。MATLAB で、GUILDA のフォルダを現在のフォルダーにして（<code>cd(GUILDA.pwd)</code>）、各項目のコマンドを実行すると開きます。</p>
+      <div id="tutorial-index" class="handson-index"></div>
+      <ol id="tutorial-list" class="handson-list"></ol>
+
+      <h2 id="tutorial-references"><span lang="en">Reference Material</span><span lang="ja">参考資料</span></h2>
+      <p lang="en">Live Scripts in <code>_GUILDAtutorial</code> to look things up while you work.</p>
+      <p lang="ja">作業しながら調べるときに使う、<code>_GUILDAtutorial</code> の Live Script です。</p>
+      <ul id="tutorial-reference-list" class="tutorial-ref-list"></ul>
+    </div>
+
+  </main>
+
+  <script>
+    // Fixed UI text in both languages; style.css shows the one of <html data-lang>.
+    function bilingual(en, ja) {
+      return `<span lang="en">${en}</span><span lang="ja">${ja}</span>`;
+    }
+
+    // Attributes cannot hold both languages: data-placeholder-ja, data-aria-label-ja and
+    // data-alt-ja give the Japanese text, and the original English is kept in data-*-en.
+    function applyLanguageAttributes() {
+      const ja = window.GUILDA_LANG?.get() === 'ja';
+      [['placeholder', 'placeholder'], ['aria-label', 'ariaLabel'], ['alt', 'alt']].forEach(([attr, key]) => {
+        const jaKey = `${key}Ja`;
+        const enKey = `${key}En`;
+        document.querySelectorAll(`[data-${attr}-ja]`).forEach(el => {
+          if (el.dataset[enKey] === undefined) el.dataset[enKey] = el.getAttribute(attr) || '';
+          el.setAttribute(attr, ja ? el.dataset[jaKey] : el.dataset[enKey]);
+        });
+      });
+    }
+
+    // Switch tabs without reloading. With targetId, scroll to that element inside the tab.
+    function openTab(tabId, targetId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      const btn = document.querySelector(`button[onclick="openTab('${tabId}')"]`);
+      if(btn) btn.classList.add('active');
+      // Keep the open tab in the fragment (and ?lang= in the query) so a reload on Back reopens it
+      if (location.hash !== `#${tabId}`) {
+        try { history.replaceState(history.state, '', `${location.pathname}${location.search}#${tabId}`); } catch (e) {}
+      }
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (target) target.scrollIntoView({ block: 'start' });
+      else window.scrollTo(0, 0);
+    }
+
+    // Open the tab named by the fragment, or the tab that holds the element it names
+    // (#tab-about, #about-references, #step1_buildnetwork_mlx, ...), and scroll to that element.
+    function openFragment() {
+      const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      if (target.classList.contains('tab-content')) { openTab(id); return; }
+      const tab = target.closest('.tab-content');
+      if (!tab) return;
+      openTab(tab.id, id);
+      // Images above the element load later and push it down: scroll again once they are in.
+      if (document.readyState !== 'complete') {
+        window.addEventListener('load', () => target.scrollIntoView({ block: 'start' }), { once: true });
+      }
+    }
+
+    // Same id rule as the hands-on tutorial rows in renderTutorials()
+    function tutorialAnchorId(filename) {
+      return (filename || 'unknown').replace(/[^a-zA-Z0-9]/g,'_').toLowerCase();
+    }
+
+    // Supported Analyses rows link to a tutorial entry (data-tutorial) or a Basic Workflow step (data-section).
+    // A link whose target does not exist is removed.
+    function wireAnalysisLinks() {
+      document.querySelectorAll('.analysis-link').forEach(link => {
+        const targetId = link.dataset.tutorial ? tutorialAnchorId(link.dataset.tutorial) : link.dataset.section;
+        if (!targetId || !document.getElementById(targetId)) { link.remove(); return; }
+        link.href = `#${targetId}`;
+        link.addEventListener('click', (e) => { e.preventDefault(); openTab('tab-tutorial', targetId); });
+      });
+    }
+
+    // The command that opens a Live Script, with a copy button (wired by wireCopyButtons()).
+    function commandBlock(command) {
+      return `
+        <div class="handson-cmd">
+          <pre><code>${escapeHtml(command)}</code></pre>
+          <button type="button" class="handson-copy" data-copy="${escapeHtml(command)}">${bilingual('Copy', 'コピー')}</button>
+        </div>`;
+    }
+
+    function wireCopyButtons(root) {
+      root.querySelectorAll('.handson-copy').forEach(btn => btn.addEventListener('click', () => copyCommand(btn)));
+    }
+
+    // Step 0 (tutorialIndex) above the list, then one compact row per Step (tutorialData, both in
+    // database/list_Tutorials.js): the Step, title, summary and the command that opens the Live Script.
+    // Step 0 carries the one GIF of the list, Main.mlx scrolled from top to bottom
+    // (images/tutorial/main.gif, a click opens it full size); a frame with a note stands in if it is missing.
+    function renderTutorials() {
+      const index = document.getElementById('tutorial-index');
+      if (index) {
+        const t = typeof tutorialIndex !== 'undefined' ? tutorialIndex : null;
+        if (!t) {
+          index.remove();
+        } else {
+          index.id = tutorialAnchorId(t.file);
+          index.innerHTML = `
+            <div class="handson-index-text">
+              <div class="handson-head">
+                <span class="tutorial-step" aria-hidden="true">${escapeHtml(t.step)}</span>
+                <h3 class="tutorial-title"><span class="handson-part">Step ${escapeHtml(t.step)}</span> ${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))} <code>${escapeHtml(t.file)}</code></h3>
+              </div>
+              <p class="tutorial-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
+              ${commandBlock('GUILDA.tutorial()')}
+            </div>
+            <figure class="handson-media">
+              <a href="./images/tutorial/main.gif" target="_blank" rel="noopener"><img src="./images/tutorial/main.gif" alt="${escapeHtml(t.file)} scrolled from top to bottom in the Live Editor" data-alt-ja="Live Editor で ${escapeHtml(t.file)} を上から下へスクロールしている様子" onerror="this.closest('.handson-media').classList.add('is-missing');"></a>
+              <figcaption class="handson-placeholder">${bilingual('Image of Main.mlx in preparation', 'Main.mlx の画像は準備中です')}</figcaption>
+            </figure>`;
+          wireCopyButtons(index);
+        }
+      }
+
+      const list = document.getElementById('tutorial-list');
+      if (list) {
+        const data = typeof tutorialData !== 'undefined' && Array.isArray(tutorialData) ? tutorialData : [];
+        if (!data.length) {
+          list.outerHTML = `<p style="color: var(--muted);">${bilingual('No tutorial data found.', 'チュートリアルのデータがありません。')}</p>`;
+        } else {
+          list.innerHTML = data.map(t => `
+              <li class="handson-row" id="${tutorialAnchorId(t.file)}">
+                <span class="tutorial-step" aria-hidden="true">${escapeHtml(t.step)}</span>
+                <div class="handson-text">
+                  <h3 class="tutorial-title"><span class="handson-part">Step ${escapeHtml(t.step)}</span> ${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</h3>
+                  <p class="tutorial-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
+                </div>
+                ${commandBlock(`open _GUILDAtutorial/${t.file}`)}
+              </li>`).join('');
+          wireCopyButtons(list);
+        }
+      }
+
+      const refs = document.getElementById('tutorial-reference-list');
+      if (refs) {
+        const data = typeof tutorialReferenceData !== 'undefined' && Array.isArray(tutorialReferenceData) ? tutorialReferenceData : [];
+        refs.innerHTML = data.map(t => `
+          <li id="${tutorialAnchorId(t.file)}">
+            <span class="tutorial-ref-title">${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</span>
+            <code>_GUILDAtutorial/${escapeHtml(t.file)}</code>
+            <span class="tutorial-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</span>
+          </li>`).join('');
+      }
+    }
+
+    // Copy the command of a hands-on row; the button says "Copied" for a moment.
+    function copyCommand(btn) {
+      const text = btn.dataset.copy || '';
+      const flash = () => {
+        btn.classList.add('is-copied');
+        btn.innerHTML = bilingual('Copied', 'コピーしました');
+        setTimeout(() => { btn.classList.remove('is-copied'); btn.innerHTML = bilingual('Copy', 'コピー'); }, 1500);
+      };
+      const fallback = () => {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        try { document.execCommand('copy'); } catch (e) { /* copy unavailable */ }
+        area.remove();
+        flash();
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(flash, fallback);
+      else fallback();
+    }
+
+    // One card per lecture Part (database/list_Lectures.js) under "What you can analyze with GUILDA",
+    // in one column: the field, the title and what the analysis shows, linking to the lecture page. A Part whose
+    // page is not written yet (ready: false) has no link and is marked "In preparation".
+    // Beside the link, the command that opens the Live Script of the Part (file).
+    function renderLectures() {
+      const list = document.getElementById('lecture-list');
+      if (!list) return;
+      const data = typeof lectureData !== 'undefined' && Array.isArray(lectureData) ? lectureData : [];
+      if (!data.length) {
+        list.outerHTML = `<p style="color: var(--muted);">${bilingual('No lecture data found.', '講義ノートのデータがありません。')}</p>`;
+        return;
+      }
+      list.innerHTML = data.map(t => {
+        const inner = `
+            <span class="analysis-card-head">
+              <span class="tutorial-step" aria-hidden="true">${escapeHtml(t.part)}</span>
+              <span class="analysis-card-field">${bilingual(escapeHtml(t.field || ''), escapeHtml(t.field_ja || t.field || ''))}</span>
+            </span>
+            <h3 class="analysis-card-title">${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</h3>
+            <p class="analysis-card-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
+            ${t.ready
+              ? `<span class="analysis-card-more">${bilingual('Read the page', 'ページを読む')} <span aria-hidden="true">→</span></span>`
+              : `<span class="lec-pending">${bilingual('In preparation', '準備中')}</span>`}`;
+        const script = t.file ? `
+            <div class="analysis-card-script">
+              <span class="analysis-card-script-label">Live Script</span>
+              ${commandBlock(`open _GUILDAtutorial/${t.file}`)}
+            </div>` : '';
+        return `
+          <li class="analysis-card${t.ready ? '' : ' is-pending'}"${t.file ? ` id="${tutorialAnchorId(t.file)}"` : ''}>
+            ${t.ready ? `<a class="analysis-card-link" href="${escapeHtml(t.link)}">${inner}</a>` : `<div class="analysis-card-link">${inner}</div>`}${script}
+          </li>`;
+      }).join('');
+      wireCopyButtons(list);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTutorials();
+      renderLectures();
+      wireAnalysisLinks();
+      openFragment();
+      applyLanguageAttributes();
+      document.addEventListener('guilda-langchange', applyLanguageAttributes);
+
+      window.addEventListener('hashchange', openFragment);
+    });
+  </script>
+</body>
+</html>

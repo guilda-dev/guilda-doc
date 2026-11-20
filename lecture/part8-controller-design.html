@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 8: 制御器の設計と自作の方法">GUILDA Lecture Notes - Part 8: Designing and writing controllers</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec8- ; shared lecture CSS (lec-*) is in style.css. -->
+  <style>
+    .lec8-tablewrap { margin: 16px 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .lec8-tablewrap table { display: table; min-width: 640px; margin: 0; font-size: 0.9rem; }
+    .lec8-tablewrap th { min-width: 0; white-space: nowrap; }
+    .lec8-tablewrap th, .lec8-tablewrap td { padding: 8px 10px; vertical-align: top; }
+    .lec8-tablewrap code { white-space: nowrap; overflow-wrap: normal; }
+  </style>
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 8 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 8</p>
+      <h1><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></h1>
+      <p class="lec-lead" lang="en">Feedback basics, AVR, PSS and governor, the hierarchy of frequency control, global controllers and Retrofit control, and how to write your own controller.</p>
+      <p class="lec-lead" lang="ja">フィードバックの基本、AVR・PSS・ガバナ、周波数制御の階層、グローバル制御器と Retrofit 制御、制御器を自作するときの考え方を説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#feedback"><span lang="en">The basics of feedback</span><span lang="ja">フィードバックの基本</span></a></li>
+          <li><a href="#generator-control"><span lang="en">AVR, PSS and governor</span><span lang="ja">AVR・PSS・ガバナ</span></a></li>
+          <li><a href="#frequency-control"><span lang="en">Frequency control layers</span><span lang="ja">周波数制御の階層</span></a></li>
+          <li><a href="#global"><span lang="en">Global controllers and LQR</span><span lang="ja">グローバル制御器と LQR</span></a></li>
+          <li><a href="#retrofit"><span lang="en">Retrofit control</span><span lang="ja">Retrofit 制御</span></a></li>
+          <li><a href="#own-controller"><span lang="en">Writing your own controller</span><span lang="ja">自作するときの考え方</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">What feedback is: measure, compare with a target, and act, and why a strong feedback can also make the system swing.</span><span lang="ja">フィードバックとは何か（測る、目標と比べる、働きかける）と、強すぎるフィードバックが揺れを生むこともある理由。</span></li>
+            <li><span lang="en">What the AVR, the PSS and the governor of a generator observe and which input each drives, and how a PSS damps a swing, with IEEE 9-bus as the example.</span><span lang="ja">発電機の AVR・PSS・ガバナがそれぞれ何を観測し、どの入力を動かすかと、PSS が揺れを抑える仕組み。IEEE 9 母線系統を例にします。</span></li>
+            <li><span lang="en">The hierarchy of frequency control: primary (governors), secondary (AGC) and tertiary control.</span><span lang="ja">周波数制御の階層（一次制御（ガバナ）・二次制御（AGC）・三次制御）。</span></li>
+            <li><span lang="en">The ideas of global controllers and of the LQR, and of Retrofit control, which adds a controller using only a local model.</span><span lang="ja">グローバル制御器と LQR の考え方、部分のモデルだけで制御器を後付けする Retrofit 制御の考え方。</span></li>
+            <li><span lang="en">How to think about your own controller: observe, compute, drive an input, and which GUILDA class plays each role.</span><span lang="ja">制御器を自作するときの考え方（観測 → 計算 → 入力）と、GUILDA でそれぞれがどのクラスに当たるか。</span></li>
+          </ul>
+        </section>
+
+        <section id="feedback">
+          <h2><span lang="en">The basics of feedback</span><span lang="ja">フィードバックの基本</span></h2>
+          <p lang="en">The loads of a power system change all the time, and faults and trips happen without warning. A generator left alone cannot keep its voltage and its speed steady against them. A <b>controller</b> does it in a loop: it measures a quantity, compares it with the target, and changes an input of the generator so that the difference becomes small. Because the measured result is fed back to decide the next action, this is called <b>feedback</b>.</p>
+          <p lang="ja">電力系統の負荷はいつも変わり、事故や解列も予告なしに起こります。発電機だけでは、これらに対して電圧や回転の速さを一定に保てません。それを行うのが<b>制御器</b>で、ループの形で働きます。ある量を測り、目標の値と比べ、その差が小さくなるように発電機の入力を変えます。測った結果を戻して次の動きを決めるので、これを<b>フィードバック</b>といいます。</p>
+          <p lang="en">In its simplest form, with the target <span class="lec-math-inline" data-tex="r"></span>, the measured output <span class="lec-math-inline" data-tex="y"></span> and a gain <span class="lec-math-inline" data-tex="K"></span> (a proportional controller), the controller computes the error <span class="lec-math-inline" data-tex="e"></span> and the input <span class="lec-math-inline" data-tex="u"></span> as</p>
+          <p lang="ja">いちばん簡単な形（比例制御）では、目標値を <span class="lec-math-inline" data-tex="r"></span>、測った出力を <span class="lec-math-inline" data-tex="y"></span>、ゲインを <span class="lec-math-inline" data-tex="K"></span> として、制御器はずれ <span class="lec-math-inline" data-tex="e"></span> と入力 <span class="lec-math-inline" data-tex="u"></span> を次のように計算します。</p>
+          <div class="lec-math" data-tex="e(t) = r - y(t), \qquad u(t) = K\,e(t)"></div>
+          <p lang="en">Real controllers add filters and states of their own (for example the integral of <span class="lec-math-inline" data-tex="e"></span>), but they keep this loop.</p>
+          <p lang="ja">実際の制御器はフィルタや自分の状態（たとえば <span class="lec-math-inline" data-tex="e"></span> の積分）を加えますが、このループの形は同じです。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 250" role="img" aria-label="Feedback loop: the target is compared with the measured output, the controller computes an input, the generator responds to the input and to disturbances, and the output is measured again">
+                <defs>
+                  <marker id="p8-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-card" x="16" y="80" width="104" height="50" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="68" y="110">target</text>
+                <text lang="ja" class="t-strong t-mid" x="68" y="110">目標値</text>
+                <line class="s-ink" x1="120" y1="105" x2="155" y2="105" marker-end="url(#p8-arrow)"/>
+                <circle class="f-card" cx="170" cy="105" r="14"/>
+                <text class="t-mid" x="170" y="110">−</text>
+                <line class="s-ink" x1="184" y1="105" x2="228" y2="105" marker-end="url(#p8-arrow)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="205" y="92">error</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="205" y="92">ずれ</text>
+                <rect class="f-c4" x="230" y="75" width="150" height="60" rx="5"/>
+                <text lang="en" class="t-c4 t-mid" x="305" y="102">controller</text>
+                <text lang="ja" class="t-c4 t-mid" x="305" y="102">制御器</text>
+                <text lang="en" class="t-muted t-small t-mid" x="305" y="122">computes</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="305" y="122">計算する</text>
+                <line class="s-ink" x1="380" y1="105" x2="448" y2="105" marker-end="url(#p8-arrow)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="414" y="92">input u</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="414" y="92">入力 u</text>
+                <rect class="f-c2" x="450" y="75" width="170" height="60" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="535" y="102">generator</text>
+                <text lang="ja" class="t-strong t-mid" x="535" y="102">発電機</text>
+                <text lang="en" class="t-muted t-small t-mid" x="535" y="122">and the network</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="535" y="122">と系統</text>
+                <line class="s-c3" x1="535" y1="22" x2="535" y2="73" marker-end="url(#p8-arrow)"/>
+                <text lang="en" class="t-c3 t-small" x="545" y="36">disturbance (load change, fault)</text>
+                <text lang="ja" class="t-c3 t-small" x="545" y="36">外乱（負荷の変化、事故）</text>
+                <line class="s-ink" x1="620" y1="105" x2="740" y2="105" marker-end="url(#p8-arrow)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="690" y="92">output y</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="690" y="92">出力 y</text>
+                <path class="s-ink" d="M680 105 V200 H500" marker-end="url(#p8-arrow)"/>
+                <rect class="f-card" x="340" y="178" width="160" height="44" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="420" y="205">measure (observe)</text>
+                <text lang="ja" class="t-strong t-mid" x="420" y="205">測る（観測）</text>
+                <path class="s-ink" d="M340 200 H170 V121" marker-end="url(#p8-arrow)"/>
+                <text lang="en" class="t-muted t-small" x="180" y="192">fed back</text>
+                <text lang="ja" class="t-muted t-small" x="180" y="192">戻す</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A feedback loop. The controller sees only the measured output and the target; it does not need to know what the disturbance was.</figcaption>
+            <figcaption lang="ja">フィードバックのループです。制御器が見るのは測った出力と目標値だけで、外乱が何だったかを知らなくても働きます。</figcaption>
+          </figure>
+
+          <p lang="en">The strength of the reaction is set by a <b>gain</b>. A small gain reacts slowly and leaves a larger error. A large gain reacts quickly, but the signal goes around the loop with some delay, so the correction can arrive too late and overshoot; if the gain is too large, the loop itself starts a growing oscillation. Designing a controller means choosing its structure and gains so that it is fast enough and still well damped. In terms of the linear model of the system, a controller moves the <b>eigenvalues</b>: each oscillating pair <span class="lec-math-inline" data-tex="\sigma \pm j\omega"></span> is one type of swing, it dies out when <span class="lec-math-inline" data-tex="\sigma \lt 0"></span>, and the <b>damping ratio</b> <span class="lec-math-inline" data-tex="\zeta = -\sigma/\sqrt{\sigma^2 + \omega^2}"></span> says how fast. A good controller moves the eigenvalues to the left.</p>
+          <p lang="ja">反応の強さは<b>ゲイン</b>で決まります。ゲインが小さいと反応が遅く、ずれが大きく残ります。ゲインが大きいと素早く反応しますが、信号がループを一周するには時間がかかるので、修正が遅れて行き過ぎることがあります。ゲインが大きすぎると、ループそのものが大きくなっていく振動を起こします。制御器の設計とは、十分に速く、しかもよく減衰するように、制御器の形とゲインを選ぶことです。系統の線形モデルの言葉では、制御器は<b>固有値</b>を動かします。振動する固有値の対 <span class="lec-math-inline" data-tex="\sigma \pm j\omega"></span> の 1 つ 1 つが揺れの型で、<span class="lec-math-inline" data-tex="\sigma \lt 0"></span> なら揺れは収まり、その速さを<b>ダンピング比</b> <span class="lec-math-inline" data-tex="\zeta = -\sigma/\sqrt{\sigma^2 + \omega^2}"></span> が表します。よい制御器は固有値を左へ動かします。</p>
+        </section>
+
+        <section id="generator-control">
+          <h2><span lang="en">AVR, PSS and governor</span><span lang="ja">AVR・PSS・ガバナ</span></h2>
+          <p lang="en">A generator has two inputs that can be changed from outside: the <b>field voltage</b>, which sets its internal voltage, and the <b>mechanical power</b> from the turbine. Three controllers commonly sit around one generator and drive these inputs.</p>
+          <p lang="ja">発電機には、外から変えられる入力が 2 つあります。内部電圧を決める<b>界磁電圧</b>と、タービンからの<b>機械入力</b>です。発電機 1 台のまわりには、ふつう 3 つの制御器があり、これらの入力を動かします。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 300" role="img" aria-label="Signals around one generator: the AVR reads the terminal voltage and drives the field voltage; the PSS reads the speed deviation and adds a signal to the AVR; the governor reads the speed deviation and drives the mechanical power">
+                <defs>
+                  <marker id="p8-arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-c4" x="60" y="40" width="140" height="50" rx="5"/>
+                <text class="t-c4 t-mid" x="130" y="70">PSS</text>
+                <rect class="f-c4" x="300" y="40" width="150" height="50" rx="5"/>
+                <text class="t-c4 t-mid" x="375" y="70">AVR</text>
+                <rect class="f-c4" x="560" y="40" width="160" height="50" rx="5"/>
+                <text lang="en" class="t-c4 t-mid" x="640" y="70">governor</text>
+                <text lang="ja" class="t-c4 t-mid" x="640" y="70">ガバナ</text>
+                <rect class="f-c2" x="300" y="200" width="180" height="60" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="390" y="236">generator</text>
+                <text lang="ja" class="t-strong t-mid" x="390" y="236">発電機</text>
+                <!-- AVR -->
+                <line class="s-c2 is-dashed" x1="330" y1="198" x2="330" y2="92" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small t-end" x="322" y="150">V</text>
+                <line class="s-c4" x1="420" y1="92" x2="420" y2="198" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small" x="428" y="150">Vfield</text>
+                <!-- PSS -->
+                <path class="s-c2 is-dashed" d="M300 230 H130 V92" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small" x="138" y="150">ω</text>
+                <line class="s-c4" x1="200" y1="65" x2="298" y2="65" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small t-mid" x="249" y="57">Vpss</text>
+                <!-- governor -->
+                <path class="s-c2 is-dashed" d="M480 215 H600 V92" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small" x="608" y="150">ω</text>
+                <path class="s-c4" d="M690 92 V245 H482" marker-end="url(#p8-arrow-g)"/>
+                <text class="t-small" x="698" y="150">Pmech</text>
+                <!-- legend -->
+                <line class="s-c2 is-dashed" x1="60" y1="285" x2="90" y2="285"/>
+                <text lang="en" class="t-small" x="98" y="289">observed signal</text>
+                <text lang="ja" class="t-small" x="98" y="289">観測する信号</text>
+                <line class="s-c4" x1="300" y1="285" x2="330" y2="285"/>
+                <text lang="en" class="t-small" x="338" y="289">driven input</text>
+                <text lang="ja" class="t-small" x="338" y="289">動かす入力</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The three controllers of one generator. The AVR reads the terminal voltage V and drives the field voltage Vfield. The PSS reads the speed deviation ω and adds its output Vpss to the AVR. The governor reads ω and drives the mechanical power Pmech.</figcaption>
+            <figcaption lang="ja">発電機 1 台の 3 つの制御器です。AVR は端子電圧 V を読み、界磁電圧 Vfield を動かします。PSS は回転速度のずれ ω を読み、その出力 Vpss を AVR に加えます。ガバナは ω を読み、機械入力 Pmech を動かします。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">AVR (automatic voltage regulator)</span><span lang="ja">AVR（自動電圧調整器）</span></dt>
+            <dd><span lang="en">Keeps the terminal voltage at its reference. When the voltage drops, it raises the field voltage, so the generator sends more reactive power. It acts within a fraction of a second to a few seconds.</span><span lang="ja">端子電圧を目標値に保ちます。電圧が下がると界磁電圧を上げ、発電機はより多くの無効電力を送ります。1 秒未満から数秒で働きます。</span></dd>
+            <dt><span lang="en">PSS (power system stabilizer)</span><span lang="ja">PSS（系統安定化装置）</span></dt>
+            <dd><span lang="en">Damps the swings of the rotor. It watches the speed deviation and adds a small signal to the AVR so that the electrical power of the generator works against the swing.</span><span lang="ja">回転子の揺れを抑えます。回転速度のずれを見て、発電機の電気出力が揺れを打ち消す向きに働くよう、AVR に小さな信号を加えます。</span></dd>
+            <dt><span lang="en">Governor (speed governor)</span><span lang="ja">ガバナ（調速機）</span></dt>
+            <dd><span lang="en">Changes the mechanical power when the speed changes: it opens the steam or water valve when the rotor slows down. All governors together share a change of load, as described in the next section.</span><span lang="ja">回転の速さが変わると機械入力を変えます。回転子が遅くなると、蒸気や水の弁を開きます。次の節のように、すべてのガバナで負荷の変化を分け合います。</span></dd>
+          </dl>
+
+          <h3><span lang="en">Why a PSS is needed</span><span lang="ja">PSS が必要になる理由</span></h3>
+          <p lang="en">When a rotor swings by a small angle Δδ around its equilibrium, the electrical torque of the generator changes. For a swing of one frequency, the change can be split into two parts: one in phase with the angle, the <b>synchronizing torque</b>, which pulls the rotor back like a spring, and one in phase with the speed, the <b>damping torque</b>, which brakes the swing like friction.</p>
+          <p lang="ja">回転子が平衡点のまわりで小さな角度 Δδ だけ揺れると、発電機の電気的なトルクが変わります。ある 1 つの周波数の揺れについて、その変化は 2 つに分けられます。角度と同じ位相の<b>同期化トルク</b>はばねのように回転子を引き戻し、速さと同じ位相の<b>制動トルク</b>は摩擦のように揺れにブレーキをかけます。</p>
+          <div class="lec-math" data-tex="\Delta T_\mathrm{e} = K_\mathrm{S}\,\Delta\delta + K_\mathrm{D}\,\Delta\omega"></div>
+          <p lang="en">The coefficients <span class="lec-math-inline" data-tex="K_\mathrm{S}"></span> and <span class="lec-math-inline" data-tex="K_\mathrm{D}"></span> depend on the frequency of the swing and on the operating point.</p>
+          <p lang="ja">係数 <span class="lec-math-inline" data-tex="K_\mathrm{S}"></span>、<span class="lec-math-inline" data-tex="K_\mathrm{D}"></span> は、揺れの周波数と運転点によって変わります。</p>
+          <p lang="en">Both K<sub>S</sub> and K<sub>D</sub> must be positive for the swing to die out. A fast AVR with a high gain keeps the voltage steady and raises K<sub>S</sub>, which helps against large faults. But the field responds with a lag, and its contribution to K<sub>D</sub> can become negative: the stronger the AVR, the weaker the damping of the electromechanical modes, until a mode grows. This was explained by deMello and Concordia [4]. A PSS fixes it: it shifts the phase of the speed signal with lead-lag filters so that the torque it creates through the AVR is in phase with Δω, which is pure damping torque. GUILDA's PSS <code>pss-PSS1</code> has this structure: a washout filter, which passes only changes of <span class="lec-math-inline" data-tex="\omega"></span>, and two lead-lag blocks. From <span class="lec-math-inline" data-tex="\omega"></span> to its output (<span class="lec-math-inline" data-tex="s"></span> is the Laplace variable; the output limits are left out),</p>
+          <p lang="ja">揺れが収まるには、K<sub>S</sub> と K<sub>D</sub> の両方が正である必要があります。ゲインの高い速い AVR は電圧をしっかり保ち、K<sub>S</sub> を大きくするので、大きな事故に強くなります。ところが界磁は遅れて応答するので、K<sub>D</sub> への寄与が負になることがあります。AVR を強くするほど電気機械モードの減衰が弱くなり、ついにはモードが大きくなっていきます。これを説明したのが deMello と Concordia です [4]。PSS はこれを直します。進み遅れのフィルタで速さの信号の位相をずらし、AVR を通してつくるトルクが Δω と同じ位相、つまり純粋な制動トルクになるようにします。GUILDA の PSS <code>pss-PSS1</code> もこの形で、<span class="lec-math-inline" data-tex="\omega"></span> の変化だけを通すウォッシュアウトフィルタと、2 段の進み遅れのブロックからなります。<span class="lec-math-inline" data-tex="\omega"></span> から出力までの伝達関数は次のとおりです（<span class="lec-math-inline" data-tex="s"></span> はラプラス変換の変数。出力の上下限は省いています）。</p>
+          <div class="lec-math" data-tex="V_\mathrm{pss}(s) = k_\mathrm{pss}\,\frac{t_\mathrm{WS}s}{1 + t_\mathrm{WS}s}\,\frac{1 + t_\mathrm{n1}s}{1 + t_\mathrm{d1}s}\,\frac{1 + t_\mathrm{n2}s}{1 + t_\mathrm{d2}s}\,\omega(s)"></div>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part8/pss-response.png" alt="Speed deviations of the three generators of IEEE 9-bus after a fault, with the AVR gain at 20, drawn by GUILDA's plot_trajectory: (a) with the PSS gain 0 the swing grows for 20 s; (b) with the PSS gain 20 it dies out within about 10 s" width="1294" height="528">
+            </div>
+            <figcaption lang="en">IEEE 9-bus with the AVR gain <span class="lec-math-inline" data-tex="k_\mathrm{ap}"></span> raised from 2 to 20 on all three generators, simulated with GUILDA after a three-phase fault at bus 7 from 1.00 to 1.05 s; each panel is <code>plot_trajectory(Quantity="omega")</code>, the speed deviations <span class="lec-math-inline" data-tex="\omega"></span> [pu] of the three generators. (a) With the PSS gain <span class="lec-math-inline" data-tex="k_\mathrm{pss} = 0"></span> (the PSS gives no output), the 0.63 Hz mode (generator 1 against generators 2 and 3) has a damping ratio of about −2 % and keeps growing. (b) With <span class="lec-math-inline" data-tex="k_\mathrm{pss} = 20"></span> (the bundled value), the same mode has about 9 % and the swing dies out.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統で、3 台すべての AVR のゲイン <span class="lec-math-inline" data-tex="k_\mathrm{ap}"></span> を 2 から 20 に上げ、母線 7 で 1.00〜1.05 秒に三相地絡を起こした後を GUILDA でシミュレーションしました。各パネルは <code>plot_trajectory(Quantity="omega")</code> で描いた、3 台の発電機の回転速度のずれ <span class="lec-math-inline" data-tex="\omega"></span> [pu] です。(a) PSS のゲインが <span class="lec-math-inline" data-tex="k_\mathrm{pss} = 0"></span>（PSS が何も出さない）だと、0.63 Hz のモード（発電機 1 が発電機 2・3 に対して揺れる）のダンピング比は約 −2% で、揺れは大きくなり続けます。(b) <span class="lec-math-inline" data-tex="k_\mathrm{pss} = 20"></span>（同梱の値）では、同じモードのダンピング比は約 9% になり、揺れは収まります。</figcaption>
+          </figure>
+
+          <p lang="en">The eigenvalues tell the same story. Without PSS, the eigenvalue of the 0.63 Hz mode is to the right of the imaginary axis; with PSS, it moves to the left (and its frequency to about 0.72 Hz), and the 1.3 Hz mode also gains damping (from about 3 % to about 6 %). A PSS is most effective on a generator with a large participation factor in the mode to be damped.</p>
+          <p lang="ja">固有値でも同じことが分かります。PSS がないと、0.63 Hz のモードの固有値は虚軸より右にあります。PSS を付けると左へ動き（周波数は約 0.72 Hz になります）、1.3 Hz のモードも減衰が増えます（約 3% から約 6%）。PSS は、抑えたいモードへの参加係数の大きい発電機に付けると最もよく効きます。</p>
+        </section>
+
+        <section id="frequency-control">
+          <h2><span lang="en">The hierarchy of frequency control</span><span lang="ja">周波数制御の階層</span></h2>
+          <p lang="en">The frequency is the same everywhere in a synchronous system, and it falls whenever generation is smaller than consumption. Several controls act one after another on different time scales to bring it back.</p>
+          <p lang="ja">周波数は同期した系統のどこでも同じで、発電が消費より少ないと下がります。これを戻すために、時間の尺度の違う制御が順番に働きます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 340" role="img" aria-label="Frequency after a loss of generation and the controls acting on it: inertia in the first seconds, primary control by governors stopping the fall, secondary control by the AGC bringing the frequency back, and tertiary control restoring an economic dispatch">
+                <line class="s-ink" x1="60" y1="30" x2="60" y2="216"/>
+                <line class="s-ink" x1="60" y1="216" x2="750" y2="216"/>
+                <line class="s-line is-dashed" x1="60" y1="70" x2="750" y2="70"/>
+                <text class="t-muted t-end" x="52" y="75">f₀</text>
+                <text lang="en" class="t-muted" x="68" y="24">frequency</text>
+                <text lang="ja" class="t-muted" x="68" y="24">周波数</text>
+                <text lang="en" class="t-muted t-end" x="750" y="208">time</text>
+                <text lang="ja" class="t-muted t-end" x="750" y="208">時間</text>
+                <path class="s-brand" d="M60 70 H120 C 140 110, 155 190, 175 192 C 200 194, 220 140, 250 140 H330 C 400 140, 470 75, 560 71 H750"/>
+                <text lang="en" class="t-small" x="128" y="56">generation is lost</text>
+                <text lang="ja" class="t-small" x="128" y="56">発電が失われる</text>
+                <line class="s-line" x1="120" y1="60" x2="120" y2="70"/>
+                <text lang="en" class="t-muted t-small" x="186" y="206">nadir</text>
+                <text lang="ja" class="t-muted t-small" x="186" y="206">最下点</text>
+                <text lang="en" class="t-muted t-small" x="258" y="132">remaining deviation</text>
+                <text lang="ja" class="t-muted t-small" x="258" y="132">残るずれ</text>
+                <!-- bands -->
+                <rect class="f-brand" x="110" y="232" width="90" height="22" rx="4"/>
+                <text lang="en" class="t-small" x="118" y="248">inertia</text>
+                <text lang="ja" class="t-small" x="118" y="248">慣性</text>
+                <rect class="f-c2" x="140" y="260" width="270" height="22" rx="4"/>
+                <text lang="en" class="t-small" x="148" y="276">primary (governors): stop the fall</text>
+                <text lang="ja" class="t-small" x="148" y="276">一次制御（ガバナ）: 低下を止める</text>
+                <rect class="f-c4" x="250" y="288" width="350" height="22" rx="4"/>
+                <text lang="en" class="t-small" x="258" y="304">secondary (AGC): bring the frequency back to f₀</text>
+                <text lang="ja" class="t-small" x="258" y="304">二次制御（AGC）: 周波数を f₀ に戻す</text>
+                <rect class="f-c3" x="470" y="316" width="280" height="22" rx="4"/>
+                <text lang="en" class="t-small" x="478" y="332">tertiary: economic re-dispatch</text>
+                <text lang="ja" class="t-small" x="478" y="332">三次制御: 経済的な配分に戻す</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A sketch of the frequency after a sudden loss of generation (not to scale) and the controls that act on it, from the fastest (top) to the slowest (bottom).</figcaption>
+            <figcaption lang="ja">急に発電が失われた後の周波数の模式図（尺度は正確ではありません）と、それに働く制御です。上ほど速く、下ほど遅い制御です。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">Inertia</span><span lang="ja">慣性</span></dt>
+            <dd><span lang="en">First seconds. Not a control: the kinetic energy of the rotors covers the missing power at once. It sets how fast the frequency falls at the start.</span><span lang="ja">最初の数秒。制御ではありません。回転子の運動エネルギーが、足りない電力をすぐに補います。最初に周波数が下がる速さを決めます。</span></dd>
+            <dt><span lang="en">Primary control</span><span lang="ja">一次制御</span></dt>
+            <dd><span lang="en">Seconds to tens of seconds. Each governor raises its output in proportion to the frequency deviation (droop control). It acts locally and stops the fall, but a deviation remains.</span><span lang="ja">数秒〜数十秒。各ガバナが、周波数のずれに比例して出力を増やします（垂下特性、日本ではガバナフリー運転とも呼びます）。発電機ごとに働いて低下を止めますが、ずれは残ります。</span></dd>
+            <dt><span lang="en">Secondary control</span><span lang="ja">二次制御</span></dt>
+            <dd><span lang="en">Tens of seconds to minutes. The automatic generation control (AGC), also called load-frequency control (LFC), integrates the remaining deviation, together with the deviation of the power exchanged with neighbouring areas, and changes the output setting of selected generators until the frequency is back at f₀.</span><span lang="ja">数十秒〜数分。自動発電制御（AGC）、または負荷周波数制御（LFC）が、残ったずれ（と隣の地域との連系線の電力のずれ）を積分し、選んだ発電機の出力の設定を変えて、周波数を f₀ に戻します。</span></dd>
+            <dt><span lang="en">Tertiary control</span><span lang="ja">三次制御</span></dt>
+            <dd><span lang="en">About ten minutes and longer. Redistributes the outputs among the generators at the lowest cost (economic dispatch), so that the fast reserves are free again for the next disturbance.</span><span lang="ja">十数分以上。発電機の出力を、最も安くなるように配り直します（経済負荷配分）。これで速く動ける余力が、次の外乱に備えて空きます。</span></dd>
+          </dl>
+
+          <p lang="en">The droop of primary control is written with the droop <span class="lec-math-inline" data-tex="R"></span> (in per unit, typically a few percent). After the valve and the turbine have settled, a governor changes the mechanical power by</p>
+          <p lang="ja">一次制御の垂下特性は、調定率 <span class="lec-math-inline" data-tex="R"></span>（単位法、数 % 程度が目安）で表します。弁とタービンの動きが落ち着いた後、ガバナは機械入力を次のだけ変えます。</p>
+          <div class="lec-math" data-tex="\Delta P_\mathrm{mech} = -\frac{P_\mathrm{rate}}{R}\,\Delta\omega, \qquad \Delta\omega = \frac{\Delta f}{f_0}"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="P_\mathrm{rate}"></span> is the rating of the unit and <span class="lec-math-inline" data-tex="\Delta\omega"></span> the speed deviation in per unit (the frequency deviation <span class="lec-math-inline" data-tex="\Delta f"></span> divided by the rated frequency <span class="lec-math-inline" data-tex="f_0"></span>). GUILDA's governor <code>gov-LPT1</code> takes the droop in percent (<code>droop</code> = 100<span class="lec-math-inline" data-tex="R"></span>).</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="P_\mathrm{rate}"></span> はユニットの定格、<span class="lec-math-inline" data-tex="\Delta\omega"></span> は単位法の回転速度のずれ（周波数のずれ <span class="lec-math-inline" data-tex="\Delta f"></span> を定格周波数 <span class="lec-math-inline" data-tex="f_0"></span> で割ったもの）です。GUILDA のガバナ <code>gov-LPT1</code> では、調定率を % で与えます（<code>droop</code> = 100<span class="lec-math-inline" data-tex="R"></span>）。</p>
+          <p lang="en">Because the output changes only while Δf is not zero, primary control cannot bring the frequency all the way back. The AGC adds an integral: as long as a deviation remains, the integral keeps growing and keeps pushing the outputs, so the only steady state is Δf = 0.</p>
+          <p lang="ja">出力が変わるのは Δf が 0 でない間だけなので、一次制御だけでは周波数を完全には戻せません。AGC は積分を加えます。ずれが残る限り積分が増え続けて出力を押し上げるので、落ち着く先は Δf = 0 だけになります。</p>
+
+          <h3><span lang="en">The AGC</span><span lang="ja">AGC</span></h3>
+          <p lang="en">An AGC acts on the <b>area control error</b> (ACE). For an area connected to its neighbours by tie lines, with <span class="lec-math-inline" data-tex="\Delta P_\mathrm{tie}"></span> the deviation of the power exported over the tie lines from its schedule and <span class="lec-math-inline" data-tex="B \gt 0"></span> the frequency bias of the area, a PI controller sets the change <span class="lec-math-inline" data-tex="\Delta P_\mathrm{ref}"></span> of the output settings of the generators:</p>
+          <p lang="ja">AGC は<b>地域要求量</b>（ACE、area control error）にもとづいて働きます。隣の地域と連系線でつながった地域で、連系線で送り出す電力の計画からのずれを <span class="lec-math-inline" data-tex="\Delta P_\mathrm{tie}"></span>、その地域の周波数バイアスを <span class="lec-math-inline" data-tex="B \gt 0"></span> とすると、PI 制御で発電機の出力の設定の変化 <span class="lec-math-inline" data-tex="\Delta P_\mathrm{ref}"></span> を決めます。</p>
+          <div class="lec-math" data-tex="\mathrm{ACE} = \Delta P_\mathrm{tie} + B\,\Delta f, \qquad \Delta P_\mathrm{ref} = -\Bigl(K_\mathrm{P}\,\mathrm{ACE} + K_\mathrm{I}\int_0^t \mathrm{ACE}\,\mathrm{d}\tau\Bigr)"></div>
+          <p lang="en">The integral keeps changing as long as the ACE is not zero, so the only steady state is ACE = 0; for a single area without tie lines this means <span class="lec-math-inline" data-tex="\Delta f = 0"></span>. GUILDA's AGC <code>agc-PI</code> is of this single-area kind: it integrates a weighted sum <span class="lec-math-inline" data-tex="w"></span> of the speed deviations <span class="lec-math-inline" data-tex="\omega_i"></span> of the controlled generators and adds a share of one PI command to the mechanical power of each,</p>
+          <p lang="ja">ACE が 0 でない限り積分は変わり続けるので、落ち着く先は ACE = 0 だけです。連系線のない 1 つの地域なら、これは <span class="lec-math-inline" data-tex="\Delta f = 0"></span> のことです。GUILDA の AGC <code>agc-PI</code> はこの 1 地域の形で、制御する発電機の回転速度のずれ <span class="lec-math-inline" data-tex="\omega_i"></span> の重み付きの和 <span class="lec-math-inline" data-tex="w"></span> を積分し、1 つの PI の指令を分けて各発電機の機械入力に加えます。</p>
+          <div class="lec-math" data-tex="w = \sum_i \beta_i\,\omega_i, \qquad \dot{\xi} = w, \qquad P_{\mathrm{mech},i} = -\alpha_i\,\bigl(k_\mathrm{P}\,w + k_\mathrm{I}\,\xi\bigr)"></div>
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part8/frequency-control.png" alt="Speed deviations of the generators of IEEE 9-bus after a loss of 0.1 pu of mechanical power, drawn by GUILDA's plot_trajectory: (a) without control they keep falling; (b) with governors they stop at about -1.3e-3 pu; (c) with governors and AGC they return to 0 within about 40 s" width="1287" height="527">
+            </div>
+            <figcaption lang="en">Speed deviations <span class="lec-math-inline" data-tex="\omega"></span> [pu] of the three generators of IEEE 9-bus (60 Hz) after the mechanical power of generator 2 is lowered by 0.1 pu (10 MW) at 1 s, simulated with GUILDA; each panel is <code>plot_trajectory(Quantity="omega")</code>. (a) No frequency control (the bundled network has no governors): the frequency keeps falling. (b) A governor <code>gov-LPT1</code> on each generator (droop 4 %): the fall stops, and a deviation of about <span class="lec-math-inline" data-tex="-1.3\times 10^{-3}"></span> pu (about −80 mHz) remains. (c) The governors and the AGC <code>agc-PI</code> (integral action only, <span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span>, <span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span>): the frequency returns to its rated value. Tertiary control acts on longer times and is not shown.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統（60 Hz）で、1 秒に発電機 2 の機械入力を 0.1 pu（10 MW）下げた後の、3 台の発電機の回転速度のずれ <span class="lec-math-inline" data-tex="\omega"></span> [pu] です。GUILDA でシミュレーションし、各パネルを <code>plot_trajectory(Quantity="omega")</code> で描きました。(a) 周波数の制御なし（同梱の系統にはガバナがありません）: 周波数は下がり続けます。(b) 各発電機にガバナ <code>gov-LPT1</code>（調定率 4%）: 低下は止まり、約 <span class="lec-math-inline" data-tex="-1.3\times 10^{-3}"></span> pu（約 −80 mHz）のずれが残ります。(c) ガバナと AGC <code>agc-PI</code>（積分の働きだけ、<span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span>、<span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span>）: 周波数は定格の値に戻ります。三次制御はもっと長い時間で働くので、ここには現れません。</figcaption>
+          </figure>
+          <p lang="en">In the figure, <span class="lec-math-inline" data-tex="\alpha_i = \beta_i = 1"></span>, <span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span> and <span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span>. To try it in GUILDA, add a governor to each generator of IEEE 9-bus and the AGC to all three, lower the mechanical power of generator 2, and draw the speed deviations:</p>
+          <p lang="ja">図では <span class="lec-math-inline" data-tex="\alpha_i = \beta_i = 1"></span>、<span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span>、<span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span> です。GUILDA で確かめるときは、IEEE 9 母線系統の各発電機にガバナを、3 台すべてに AGC を加え、発電機 2 の機械入力を下げて、回転速度のずれを描きます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+for k = 1:3, gen = net.a_Bus{k}.a_Component{1}; gen.add_local_controller("gov-LPT1", parameter=struct(Prate=gen.rv_Uequilibrium(1)/0.8)); end
+net.add_global_controller("agc-PI", ["B001SG1","B002SG1","B003SG1"], parameter=struct(kP=0, kI=2));
+net.initialize();
+sc = net.add_scenario("loss", Time=[0 60]);
+sc.add_input("B002SG1", "Pmech", -0.1, [1, 60]);
+result = net.simulate("loss");
+result.plot_trajectory(Quantity="omega");</code></pre>
+        </section>
+
+        <section id="global">
+          <h2><span lang="en">Global controllers and the LQR</span><span lang="ja">グローバル制御器と LQR</span></h2>
+          <p lang="en">The AVR, the PSS and the governor each look at one generator. A controller that measures many places of the system and acts on several generators together is called a <b>global controller</b> in GUILDA; the AGC above is one. Measurements far apart can be collected with synchronized phasor measurement units (PMUs); such a measurement system is called a wide-area measurement system (WAMS). Seeing the whole system allows, for example, damping an inter-area mode, in which whole groups of generators swing against each other, by acting on the generators that participate in it most.</p>
+          <p lang="ja">AVR・PSS・ガバナは、それぞれ 1 台の発電機を見ます。系統の多くの場所を測り、複数の発電機にまとめて働きかける制御器を、GUILDA では<b>グローバル制御器</b>と呼びます。上の AGC もその 1 つです。遠く離れた場所の計測は、時刻を合わせたフェーザ計測装置（PMU）で集められます。このような計測の仕組みを広域計測システム（WAMS）といいます。系統全体が見えると、たとえば発電機の群れどうしが揺れ合う地域間モードを、そのモードへの参加の大きい発電機に働きかけて抑えることができます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="A global controller collects measurements from four generators and the bus voltages, computes commands together, and sends a command to each generator; each generator also keeps its own local controllers">
+                <defs>
+                  <marker id="p8-arrow-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-c4" x="280" y="20" width="220" height="60" rx="6"/>
+                <text lang="en" class="t-c4 t-mid" x="390" y="47">global controller</text>
+                <text lang="ja" class="t-c4 t-mid" x="390" y="47">グローバル制御器</text>
+                <text lang="en" class="t-muted t-small t-mid" x="390" y="67">computes together</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="390" y="67">まとめて計算する</text>
+                <!-- generators -->
+                <line class="s-line" x1="110" y1="230" x2="670" y2="230"/>
+                <circle class="f-c2" cx="110" cy="215" r="20"/><text class="t-mid t-small" x="110" y="220">G1</text>
+                <circle class="f-c2" cx="297" cy="215" r="20"/><text class="t-mid t-small" x="297" y="220">G2</text>
+                <circle class="f-c2" cx="483" cy="215" r="20"/><text class="t-mid t-small" x="483" y="220">G3</text>
+                <circle class="f-c2" cx="670" cy="215" r="20"/><text class="t-mid t-small" x="670" y="220">G4</text>
+                <!-- measurement (up) -->
+                <line class="s-c2 is-dashed" x1="100" y1="196" x2="300" y2="84" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c2 is-dashed" x1="287" y1="196" x2="350" y2="84" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c2 is-dashed" x1="473" y1="196" x2="430" y2="84" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c2 is-dashed" x1="660" y1="196" x2="465" y2="84" marker-end="url(#p8-arrow-w)"/>
+                <!-- commands (down) -->
+                <line class="s-c4" x1="330" y1="82" x2="120" y2="196" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c4" x1="370" y1="82" x2="307" y2="196" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c4" x1="450" y1="82" x2="493" y2="196" marker-end="url(#p8-arrow-w)"/>
+                <line class="s-c4" x1="485" y1="82" x2="680" y2="196" marker-end="url(#p8-arrow-w)"/>
+                <!-- local controllers -->
+                <rect class="f-card" x="80" y="244" width="60" height="22" rx="4"/><text lang="en" class="t-mid t-small" x="110" y="259">local</text><text lang="ja" class="t-mid t-small" x="110" y="259">ローカル</text>
+                <rect class="f-card" x="267" y="244" width="60" height="22" rx="4"/><text lang="en" class="t-mid t-small" x="297" y="259">local</text><text lang="ja" class="t-mid t-small" x="297" y="259">ローカル</text>
+                <rect class="f-card" x="453" y="244" width="60" height="22" rx="4"/><text lang="en" class="t-mid t-small" x="483" y="259">local</text><text lang="ja" class="t-mid t-small" x="483" y="259">ローカル</text>
+                <rect class="f-card" x="640" y="244" width="60" height="22" rx="4"/><text lang="en" class="t-mid t-small" x="670" y="259">local</text><text lang="ja" class="t-mid t-small" x="670" y="259">ローカル</text>
+                <!-- legend -->
+                <line class="s-c2 is-dashed" x1="560" y1="30" x2="590" y2="30"/>
+                <text lang="en" class="t-small" x="598" y="34">measurements</text>
+                <text lang="ja" class="t-small" x="598" y="34">計測</text>
+                <line class="s-c4" x1="560" y1="54" x2="590" y2="54"/>
+                <text lang="en" class="t-small" x="598" y="58">commands</text>
+                <text lang="ja" class="t-small" x="598" y="58">指令</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A global controller gathers measurements from several generators (and the bus voltages), computes all commands together, and sends one to each generator. The local controllers of each generator keep working; the command is added to what they do.</figcaption>
+            <figcaption lang="ja">グローバル制御器は、複数の発電機（と母線電圧）の計測を集め、すべての指令をまとめて計算して、各発電機に送ります。各発電機のローカル制御器はそのまま働き、指令はその働きに足し合わされます。</figcaption>
+          </figure>
+
+          <h3><span lang="en">The idea of the LQR</span><span lang="ja">LQR の考え方</span></h3>
+          <p lang="en">With many inputs and many measurements, choosing every gain by hand becomes hard. The <b>linear quadratic regulator</b> (LQR) chooses all of them at once from the linear model <span class="lec-math-inline" data-tex="\dot{x} = Ax + Bu"></span> of the system. We state what we care about as a cost: how large the deviations <span class="lec-math-inline" data-tex="x"></span> are, weighted by a matrix <span class="lec-math-inline" data-tex="Q"></span>, and how much input <span class="lec-math-inline" data-tex="u"></span> we spend, weighted by <span class="lec-math-inline" data-tex="R"></span>. The LQR is the state feedback <span class="lec-math-inline" data-tex="u = -Kx"></span> that makes this cost the smallest:</p>
+          <p lang="ja">入力と計測が多いと、ゲインを 1 つずつ手で選ぶのは難しくなります。<b>LQR</b>（線形二次レギュレータ）は、系統の線形モデル <span class="lec-math-inline" data-tex="\dot{x} = Ax + Bu"></span> から、すべてのゲインを一度に選びます。気にすることを「評価」の形で書きます。状態のずれ <span class="lec-math-inline" data-tex="x"></span> の大きさ（重み <span class="lec-math-inline" data-tex="Q"></span>）と、使う入力 <span class="lec-math-inline" data-tex="u"></span> の大きさ（重み <span class="lec-math-inline" data-tex="R"></span>）です。LQR は、この評価を最も小さくする状態フィードバック <span class="lec-math-inline" data-tex="u = -Kx"></span> です。</p>
+          <div class="lec-math" data-tex="J = \int_0^{\infty} \left( x^{\top} Q\, x + u^{\top} R\, u \right) dt"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="Q"></span> is positive semidefinite and <span class="lec-math-inline" data-tex="R"></span> positive definite. A larger <span class="lec-math-inline" data-tex="Q"></span> asks for swings that die out faster; a larger <span class="lec-math-inline" data-tex="R"></span> asks for gentler inputs. The optimal gain is</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="Q"></span> は半正定、<span class="lec-math-inline" data-tex="R"></span> は正定の行列です。<span class="lec-math-inline" data-tex="Q"></span> を大きくすると揺れを早く収めることを、<span class="lec-math-inline" data-tex="R"></span> を大きくすると入力を穏やかにすることを求めることになります。最適なゲインは次のとおりです。</p>
+          <div class="lec-math" data-tex="K = R^{-1}B^{\top}S, \qquad A^{\top}S + SA - SBR^{-1}B^{\top}S + Q = 0"></div>
+          <p lang="en">where <span class="lec-math-inline" data-tex="S"></span> is the positive semidefinite solution of the second equation, the algebraic <b>Riccati equation</b>; MATLAB solves it with the function <code>lqr</code> [5]. If <span class="lec-math-inline" data-tex="(A, B)"></span> is stabilizable and <span class="lec-math-inline" data-tex="(A, Q^{1/2})"></span> is detectable, the closed loop <span class="lec-math-inline" data-tex="\dot{x} = (A - BK)x"></span> is stable, so as long as the model is right, the LQR gives a stable closed loop. Its weak points are also clear: it needs every state x, so either all of them are measured or they are estimated, and it needs a model of the whole system, which for a large power system is big and changes with the operating point.</p>
+          <p lang="ja">ここで <span class="lec-math-inline" data-tex="S"></span> は 2 つ目の式（<b>リッカチ方程式</b>）の半正定の解で、MATLAB では関数 <code>lqr</code> で求められます [5]。<span class="lec-math-inline" data-tex="(A, B)"></span> が可安定で <span class="lec-math-inline" data-tex="(A, Q^{1/2})"></span> が可検出なら、閉ループ <span class="lec-math-inline" data-tex="\dot{x} = (A - BK)x"></span> は安定です。つまりモデルが正しければ、LQR は安定な閉ループを与えます。弱点もはっきりしています。すべての状態 x が必要なので、すべてを測るか推定しなければならず、また系統全体のモデルが必要です。大きな電力系統では、このモデルは大きく、運転点によっても変わります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part8/lqr-eigenvalues.png" alt="Eigenvalues of IEEE 68-bus near the origin drawn by GUILDA's plot_eigenvalue: (a) with AVR and PSS all are stable; (b) without PSS several have a positive real part (red); (c) with local LQR on generators 1 to 15 all are in the left half plane" width="1283" height="522">
+            </div>
+            <figcaption lang="en">Eigenvalues of IEEE 68-bus near the origin (upper half of the complex plane), each panel drawn by <code>plot_eigenvalue</code> of the linearization <code>net.get_sys()</code>; unstable eigenvalues are red. (a) As bundled (AVR + PSS on all 16 generators). (b) The PSS removed (AVR only): several modes have a positive real part and grow. (c) The AVR of generators 1–15 replaced by <code>local-LQR</code> (<code>Input="Vfield"</code>, <span class="lec-math-inline" data-tex="R = 10^{-4}"></span>; generator 16 keeps its AVR without PSS). Each LQR is designed from its own generator connected to an infinite bus; in this example every eigenvalue moves to the left.</figcaption>
+            <figcaption lang="ja">IEEE 68 母線系統の原点付近の固有値（複素平面の上半分）です。各パネルは、線形化 <code>net.get_sys()</code> の結果を <code>plot_eigenvalue</code> で描きました。不安定な固有値は赤で表示されます。(a) 同梱のまま（16 台すべてに AVR と PSS）。(b) PSS を外した場合（AVR だけ）: いくつかのモードの実部が正で、揺れが大きくなります。(c) 発電機 1〜15 の AVR を <code>local-LQR</code>（<code>Input="Vfield"</code>、<span class="lec-math-inline" data-tex="R = 10^{-4}"></span>。発電機 16 は PSS のない AVR のまま）に置き換えた場合です。各 LQR はその発電機を無限大母線につないだモデルから設計されていて、この例ではすべての固有値が左へ動きます。</figcaption>
+          </figure>
+
+          <div class="lec-callout">
+            <p lang="en"><b>In GUILDA.</b> A global controller is a <code>GlobalController</code>. It reads, by name, signals of the generators it controls (for example the speed <code>omega</code>) and the voltages of all buses, and its outputs are added to inputs of those generators or of their local controllers (for example <code>Pmech</code>). The bundled global controller is the AGC <code>agc-PI</code>, used in the figure above. The bundled LQR is the local controller <code>local-LQR</code>: it observes all the states <span class="lec-math-inline" data-tex="x"></span> of one generator, drives <span class="lec-math-inline" data-tex="u = u^* - K(x - x^*)"></span> around the equilibrium <span class="lec-math-inline" data-tex="(x^*, u^*)"></span>, and computes its gain from a model of that generator connected to an infinite bus.</p>
+            <p lang="ja"><b>GUILDA では。</b> グローバル制御器は <code>GlobalController</code> のクラスです。制御する発電機の信号（たとえば速さ <code>omega</code>）と全母線の電圧を名前で読み、その出力を発電機やそのローカル制御器の入力（たとえば <code>Pmech</code>）に足します。同梱のグローバル制御器は、上の図で使った AGC <code>agc-PI</code> です。同梱の LQR はローカル制御器 <code>local-LQR</code> で、1 台の発電機のすべての状態 <span class="lec-math-inline" data-tex="x"></span> を観測し、平衡点 <span class="lec-math-inline" data-tex="(x^*, u^*)"></span> のまわりで <span class="lec-math-inline" data-tex="u = u^* - K(x - x^*)"></span> を出力します。ゲインは、その発電機を無限大母線につないだモデルから求めます。</p>
+          </div>
+        </section>
+
+        <section id="retrofit">
+          <h2><span lang="en">Retrofit control</span><span lang="ja">Retrofit 制御</span></h2>
+          <p lang="en">Real power systems are already running, with many controllers designed by different owners. When a new controller is added to one generator or one wind farm, its designer does not know the model of the rest of the system, and the rest may change later. Two questions arise: can the controller be designed from a model of its own part only, and is the whole system still stable after it is added?</p>
+          <p lang="ja">実際の電力系統はすでに動いていて、別々の事業者が設計した多くの制御器を持っています。1 台の発電機や 1 つの風力発電所に新しい制御器を加えるとき、その設計者は系統の残りの部分のモデルを知らず、残りの部分は後で変わるかもしれません。ここで 2 つの問いが生まれます。自分の部分のモデルだけで制御器を設計できるか。加えた後も、系統全体は安定なままか。</p>
+          <p lang="en"><b>Retrofit control</b>, proposed by Ishizaki, Sadamoto, Imura, Sandberg and Johansson [6], answers both. The system is split into the subsystem of interest and its environment (everything else). The retrofit controller is attached to the subsystem only, and is made of two parts: an inner controller, for example an LQR designed for the subsystem model alone, and an <b>output rectifier</b>, which uses the subsystem model to remove from the measurement the effect of the environment, so that the inner controller sees the subsystem as if it were alone.</p>
+          <p lang="ja">石崎・定本・井村・Sandberg・Johansson が提案した <b>Retrofit 制御</b>（レトロフィット制御、後付けの制御）[6] は、この 2 つに答えます。系統を、注目する部分系と、その環境（それ以外のすべて）に分けます。Retrofit 制御器は部分系だけに付け、2 つの部分からできています。1 つは内部の制御器で、たとえば部分系のモデルだけで設計した LQR です。もう 1 つは<b>出力の補正器</b>（output rectifier）で、部分系のモデルを使って計測から環境の影響を取り除き、内部の制御器には部分系が単独でいるかのように見せます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="Retrofit control: a retrofit controller made of an inner controller and an output rectifier is attached to one subsystem; the rest of the system, the environment, interacts with the subsystem but its model is not used in the design">
+                <defs>
+                  <marker id="p8-arrow-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- environment -->
+                <rect class="f-group" x="20" y="100" width="350" height="170" rx="10"/>
+                <text lang="en" class="t-strong" x="40" y="132">environment (the rest of the system)</text>
+                <text lang="ja" class="t-strong" x="40" y="132">環境（系統の残りの部分）</text>
+                <text lang="en" class="t-muted t-small" x="40" y="158">other generators, loads, network,</text>
+                <text lang="ja" class="t-muted t-small" x="40" y="158">ほかの発電機・負荷・送電網・</text>
+                <text lang="en" class="t-muted t-small" x="40" y="178">their own controllers</text>
+                <text lang="ja" class="t-muted t-small" x="40" y="178">それぞれの制御器</text>
+                <text lang="en" class="t-c3 t-small" x="40" y="240">its model is not used in the design</text>
+                <text lang="ja" class="t-c3 t-small" x="40" y="240">設計にはそのモデルを使わない</text>
+                <!-- subsystem -->
+                <rect class="f-brand" x="470" y="160" width="190" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="565" y="190">subsystem of interest</text>
+                <text lang="ja" class="t-strong t-mid" x="565" y="190">注目する部分系</text>
+                <text lang="en" class="t-muted t-small t-mid" x="565" y="212">e.g. one generator</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="565" y="212">例: 発電機 1 台</text>
+                <!-- interaction -->
+                <line class="s-ink" x1="372" y1="180" x2="468" y2="180" marker-end="url(#p8-arrow-r)"/>
+                <line class="s-ink" x1="468" y1="212" x2="372" y2="212" marker-end="url(#p8-arrow-r)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="420" y="246">interaction</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="420" y="246">相互作用</text>
+                <!-- retrofit controller -->
+                <rect class="f-c4" x="420" y="14" width="340" height="96" rx="8"/>
+                <text lang="en" class="t-c4" x="432" y="34">retrofit controller</text>
+                <text lang="ja" class="t-c4" x="432" y="34">Retrofit 制御器</text>
+                <rect class="f-card" x="432" y="46" width="130" height="50" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="497" y="68">inner controller</text>
+                <text lang="ja" class="t-small t-mid" x="497" y="68">内部の制御器</text>
+                <text lang="en" class="t-muted t-small t-mid" x="497" y="86">(e.g. LQR)</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="497" y="86">（例: LQR）</text>
+                <rect class="f-card" x="592" y="46" width="160" height="50" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="672" y="68">output rectifier</text>
+                <text lang="ja" class="t-small t-mid" x="672" y="68">出力の補正器</text>
+                <text lang="en" class="t-muted t-small t-mid" x="672" y="86">removes environment</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="672" y="86">環境の影響を除く</text>
+                <line class="s-c4" x1="590" y1="71" x2="564" y2="71" marker-end="url(#p8-arrow-r)"/>
+                <line class="s-c4" x1="497" y1="98" x2="497" y2="158" marker-end="url(#p8-arrow-r)"/>
+                <text lang="en" class="t-small" x="505" y="134">input</text>
+                <text lang="ja" class="t-small" x="505" y="134">入力</text>
+                <line class="s-c2 is-dashed" x1="630" y1="158" x2="672" y2="98" marker-end="url(#p8-arrow-r)"/>
+                <text lang="en" class="t-small" x="664" y="134">measurement</text>
+                <text lang="ja" class="t-small" x="664" y="134">計測</text>
+                <text lang="en" class="t-brand t-small t-mid" x="600" y="260">designed from the subsystem model only</text>
+                <text lang="ja" class="t-brand t-small t-mid" x="600" y="260">部分系のモデルだけで設計する</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The structure of retrofit control. Only the subsystem of interest and its model are needed to design the controller; the environment is left as it is.</figcaption>
+            <figcaption lang="ja">Retrofit 制御の構成です。制御器の設計に要るのは注目する部分系とそのモデルだけで、環境はそのままにしておきます。</figcaption>
+          </figure>
+
+          <div class="lec-callout is-key">
+            <p lang="en"><b>The key property:</b> if the original system is stable, and the inner controller stabilizes the subsystem model on its own, then the whole system with the retrofit controller is stable too, whatever the environment is.</p>
+            <p lang="ja"><b>大事な性質:</b> 元の系統が安定で、内部の制御器が部分系のモデルを単独で安定にするなら、Retrofit 制御器を加えた系統全体も、環境がどうであれ安定です。</p>
+          </div>
+
+          <p lang="en">The price is that the inner controller only improves the behaviour of its own subsystem; it does not aim at the modes of the whole system, as a global controller does. Applications to power systems with wind farms and other distributed energy resources are summarized in [7].</p>
+          <p lang="ja">その代わり、内部の制御器が良くするのは自分の部分系の振る舞いで、グローバル制御器のように系統全体のモードを狙うものではありません。風力発電所などの分散型電源を含む電力系統への応用は、[7] にまとめられています。</p>
+          <h3><span lang="en">Retrofit control in GUILDA</span><span lang="ja">GUILDA の Retrofit 制御</span></h3>
+          <p lang="en">GUILDA's retrofit controller <code>pss-retrofit</code> (class <code>controller.pss.Retrofit</code>) is the retrofit power system stabilizer of the textbook [3]. Its subsystem is one generator. It goes in the place of a PSS under the Static AVR <code>avr-static</code> and drives its input <span class="lec-math-inline" data-tex="V_\mathrm{pss}"></span>, so that the field voltage is <span class="lec-math-inline" data-tex="V_\mathrm{field} = V_\mathrm{fd,ref} + V_\mathrm{pss}"></span>. It observes all the states <span class="lec-math-inline" data-tex="x"></span> of the generator and keeps a copy <span class="lec-math-inline" data-tex="\hat{x}"></span> of them, computed from the model of the generator with its inputs at the equilibrium <span class="lec-math-inline" data-tex="u^*"></span>:</p>
+          <p lang="ja">GUILDA の Retrofit 制御器 <code>pss-retrofit</code>（クラス <code>controller.pss.Retrofit</code>）は、教科書 [3] の Retrofit 制御による系統安定化装置です。部分系は 1 台の発電機です。Static の AVR <code>avr-static</code> の下に PSS の代わりに付き、その入力 <span class="lec-math-inline" data-tex="V_\mathrm{pss}"></span> を動かします。界磁電圧は <span class="lec-math-inline" data-tex="V_\mathrm{field} = V_\mathrm{fd,ref} + V_\mathrm{pss}"></span> になります。発電機のすべての状態 <span class="lec-math-inline" data-tex="x"></span> を観測し、入力を平衡点の値 <span class="lec-math-inline" data-tex="u^*"></span> に固定した発電機のモデルで、その写し <span class="lec-math-inline" data-tex="\hat{x}"></span> を計算し続けます。</p>
+          <div class="lec-math" data-tex="E\,\dot{\hat{x}} = f(x, V, u^*) - A_\mathrm{d}\,(x - \hat{x}), \qquad V_\mathrm{pss} = -K\,(x - \hat{x})"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="E\,\dot{x} = f(x, V, u)"></span> is the model of the generator with its bus voltage <span class="lec-math-inline" data-tex="V"></span> and inputs <span class="lec-math-inline" data-tex="u = (P_\mathrm{mech}, V_\mathrm{field})"></span>, <span class="lec-math-inline" data-tex="A_\mathrm{d} = \partial f/\partial x"></span> and <span class="lec-math-inline" data-tex="B = \partial f/\partial V_\mathrm{field}"></span> at the equilibrium, and <span class="lec-math-inline" data-tex="K"></span> the LQR gain of the generator alone, <code>lqr(E\A_d, E\B, Q, R)</code>. The copy <span class="lec-math-inline" data-tex="\hat{x}"></span> plays the part of the output rectifier. Because <span class="lec-math-inline" data-tex="f"></span> is linear in <span class="lec-math-inline" data-tex="V_\mathrm{field}"></span>, the error <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span> follows exactly</p>
+          <p lang="ja">ここで <span class="lec-math-inline" data-tex="E\,\dot{x} = f(x, V, u)"></span> は、母線電圧 <span class="lec-math-inline" data-tex="V"></span> と入力 <span class="lec-math-inline" data-tex="u = (P_\mathrm{mech}, V_\mathrm{field})"></span> を持つ発電機のモデル、<span class="lec-math-inline" data-tex="A_\mathrm{d} = \partial f/\partial x"></span> と <span class="lec-math-inline" data-tex="B = \partial f/\partial V_\mathrm{field}"></span> は平衡点での値、<span class="lec-math-inline" data-tex="K"></span> は発電機だけのモデルから求めた LQR のゲイン <code>lqr(E\A_d, E\B, Q, R)</code> です。写し <span class="lec-math-inline" data-tex="\hat{x}"></span> が出力の補正器の役をします。<span class="lec-math-inline" data-tex="f"></span> は <span class="lec-math-inline" data-tex="V_\mathrm{field}"></span> について線形なので、誤差 <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span> は厳密に次の式に従います。</p>
+          <div class="lec-math" data-tex="E\,\dot{e} = (A_\mathrm{d} - BK)\,e"></div>
+          <p lang="en">The error therefore decays whatever the rest of the network does, and the eigenvalues of the linearized network are those without the controller together with those of <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span>. At the equilibrium <span class="lec-math-inline" data-tex="\hat{x} = x"></span> and <span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span>, so attaching it does not move the operating point. To try it, give generator 2 of IEEE 9-bus the Static AVR and the retrofit controller, push its internal voltage <span class="lec-math-inline" data-tex="E_q"></span> by 0.1 pu at <span class="lec-math-inline" data-tex="t = 0"></span>, and draw the speed deviations:</p>
+          <p lang="ja">したがって誤差は、系統の残りがどう動いても減衰し、線形化した系統の固有値は、制御器がないときの固有値と <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span> の固有値を合わせたものになります。平衡点では <span class="lec-math-inline" data-tex="\hat{x} = x"></span>、<span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span> なので、付けても運転点は動きません。GUILDA で確かめるときは、IEEE 9 母線系統の発電機 2 を Static の AVR と Retrofit 制御器にし、<span class="lec-math-inline" data-tex="t = 0"></span> でその内部電圧 <span class="lec-math-inline" data-tex="E_q"></span> を 0.1 pu ずらして、回転速度のずれを描きます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+gen = net.a_Bus{2}.a_Component{1};
+gen.remove_local_controller(gen.avr.s_tag, RemoveNested=true);
+gen.add_local_controller("avr-static");
+gen.add_local_controller("pss-retrofit", parameter=struct(R=0.01));
+net.initialize();
+sc = net.add_scenario("kick", Time=[0 10]);
+sc.add_offset(gen.s_tag, "Eq", 0.1, 0);
+result = net.simulate("kick");
+result.plot_trajectory(Quantity="omega");</code></pre>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part8/retrofit-response.png" alt="Speed deviations of the three generators of IEEE 9-bus after a 0.1 pu disturbance in the internal voltage of generator 2: (a) with the Static AVR only they drift below zero for many seconds; (b) with pss-retrofit (R = 0.01) they stay around zero and die out faster" width="1294" height="528">
+            </div>
+            <figcaption lang="en">IEEE 9-bus with the AVR of generator 2 replaced by <code>avr-static</code>, after an initial disturbance of 0.1 pu in its internal voltage <span class="lec-math-inline" data-tex="E_q"></span> at <span class="lec-math-inline" data-tex="t = 0"></span>, simulated with GUILDA; each panel is <code>plot_trajectory(Quantity="omega")</code>. (a) The Static AVR only: the speed deviations stay below zero for many seconds. (b) With <code>pss-retrofit</code> (<span class="lec-math-inline" data-tex="R = 0.01"></span>): they stay around zero and die out faster. The integral of <span class="lec-math-inline" data-tex="|\omega|"></span> of generator 2 over 10 s falls from 0.0214 to 0.0046.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統で発電機 2 の AVR を <code>avr-static</code> にし、<span class="lec-math-inline" data-tex="t = 0"></span> でその内部電圧 <span class="lec-math-inline" data-tex="E_q"></span> を 0.1 pu ずらした後を GUILDA でシミュレーションしました。各パネルは <code>plot_trajectory(Quantity="omega")</code> です。(a) Static の AVR だけ: 回転速度のずれは何秒も 0 より下にとどまります。(b) <code>pss-retrofit</code>（<span class="lec-math-inline" data-tex="R = 0.01"></span>）あり: ずれは 0 のまわりにとどまり、早く収まります。発電機 2 の <span class="lec-math-inline" data-tex="|\omega|"></span> の 10 秒間の積分は、0.0214 から 0.0046 に減ります。</figcaption>
+          </figure>
+
+          <div class="lec-callout">
+            <p lang="en"><b>Points to note.</b></p>
+            <p lang="ja"><b>注意点</b></p>
+            <ul>
+              <li lang="en">With the default weights (<span class="lec-math-inline" data-tex="Q = I"></span>, <span class="lec-math-inline" data-tex="R = 1"></span>) the effect is very small: for generator 2 of IEEE 9-bus its pole pair moves only from −0.551 ± 9.08i to −0.557 ± 9.08i. Give a smaller <span class="lec-math-inline" data-tex="R"></span>, such as 0.01.</li>
+              <li lang="ja">既定の重み（<span class="lec-math-inline" data-tex="Q = I"></span>、<span class="lec-math-inline" data-tex="R = 1"></span>）では効きがとても小さく、IEEE 9 母線系統の発電機 2 では極の対が −0.551 ± 9.08i から −0.557 ± 9.08i に動くだけです。<span class="lec-math-inline" data-tex="R"></span> を 0.01 程度に小さくして使います。</li>
+              <li lang="en">What is guaranteed is the decay of the error <span class="lec-math-inline" data-tex="e"></span>. A disturbance that enters through the voltage <span class="lec-math-inline" data-tex="V"></span>, such as a fault on a distant bus, moves <span class="lec-math-inline" data-tex="x"></span> and <span class="lec-math-inline" data-tex="\hat{x}"></span> alike: <span class="lec-math-inline" data-tex="e"></span> stays 0, and the controller does nothing. The swing of the generator as a whole (<span class="lec-math-inline" data-tex="x = \hat{x} + e"></span>) does not always become smaller.</li>
+              <li lang="ja">保証されるのは誤差 <span class="lec-math-inline" data-tex="e"></span> の減衰です。遠くの母線の地絡のように電圧 <span class="lec-math-inline" data-tex="V"></span> を通して入る外乱では、<span class="lec-math-inline" data-tex="x"></span> と <span class="lec-math-inline" data-tex="\hat{x}"></span> が同じように動くので <span class="lec-math-inline" data-tex="e"></span> は 0 のままで、制御器は何もしません。発電機全体の揺れ（<span class="lec-math-inline" data-tex="x = \hat{x} + e"></span>）が小さくなるとは限りません。</li>
+              <li lang="en"><span class="lec-math-inline" data-tex="P_\mathrm{mech}"></span> is not observed, so the copy uses its equilibrium value. This is exact with the default static governor, and an approximation with a governor such as <code>gov-LPT1</code> or an AGC.</li>
+              <li lang="ja"><span class="lec-math-inline" data-tex="P_\mathrm{mech}"></span> は観測しないので、写しは平衡点の値を使います。既定の Static のガバナでは厳密ですが、<code>gov-LPT1</code> のようなガバナや AGC があると近似になります。</li>
+              <li lang="en">It goes only under <code>avr-static</code>; under <code>avr-ST1</code> or <code>avr-DC1</code> it stops with an error and leaves the generator as it was.</li>
+              <li lang="ja">付けられるのは <code>avr-static</code> の下だけです。<code>avr-ST1</code> や <code>avr-DC1</code> の下に付けようとするとエラーになり、発電機は元のままです。</li>
+            </ul>
+          </div>
+          <p lang="en">GUILDA's <code>local-LQR</code> also designs its gain from one generator (connected to an infinite bus), but it has no compensator, so it is not a retrofit controller and does not carry the property above.</p>
+          <p lang="ja">GUILDA の <code>local-LQR</code> も 1 台の発電機（無限大母線につないだモデル）からゲインを求めますが、補正器を持たないので Retrofit 制御器ではなく、上の性質も持ちません。</p>
+        </section>
+
+        <section id="own-controller">
+          <h2><span lang="en">Writing your own controller: observe, compute, drive</span><span lang="ja">自作するときの考え方（観測 → 計算 → 入力）</span></h2>
+          <p lang="en">Every controller on this page, from the AVR to the AGC, has the same three parts. Before writing one, it helps to answer three questions about it.</p>
+          <p lang="ja">このページの制御器は、AVR から AGC まで、どれも同じ 3 つの部分からできています。自作する前に、次の 3 つの問いに答えておくと整理できます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 260" role="img" aria-label="A controller as three steps: observe signals of the components, compute with its own states and equations, and drive inputs of the components; in GUILDA these are the input names, the states and model functions, and the output names">
+                <defs>
+                  <marker id="p8-arrow-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-c2" x="20" y="30" width="220" height="110" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="130" y="58">① observe</text>
+                <text lang="ja" class="t-strong t-mid" x="130" y="58">① 観測する</text>
+                <text lang="en" class="t-small t-mid" x="130" y="84">What does it look at?</text>
+                <text lang="ja" class="t-small t-mid" x="130" y="84">何を見るか</text>
+                <text lang="en" class="t-muted t-small t-mid" x="130" y="106">V, ω, all states, …</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="130" y="106">V、ω、すべての状態 …</text>
+                <line class="s-ink" x1="240" y1="85" x2="278" y2="85" marker-end="url(#p8-arrow-o)"/>
+                <rect class="f-c4" x="280" y="30" width="220" height="110" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="390" y="58">② compute</text>
+                <text lang="ja" class="t-strong t-mid" x="390" y="58">② 計算する</text>
+                <text lang="en" class="t-small t-mid" x="390" y="84">With what memory and rule?</text>
+                <text lang="ja" class="t-small t-mid" x="390" y="84">どんな状態と式で</text>
+                <text lang="en" class="t-muted t-small t-mid" x="390" y="106">filter, integral, gain K, …</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="390" y="106">フィルタ、積分、ゲイン K …</text>
+                <line class="s-ink" x1="500" y1="85" x2="538" y2="85" marker-end="url(#p8-arrow-o)"/>
+                <rect class="f-brand" x="540" y="30" width="220" height="110" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="650" y="58">③ drive an input</text>
+                <text lang="ja" class="t-strong t-mid" x="650" y="58">③ 入力を動かす</text>
+                <text lang="en" class="t-small t-mid" x="650" y="84">Which input does it change?</text>
+                <text lang="ja" class="t-small t-mid" x="650" y="84">どの入力を変えるか</text>
+                <text lang="en" class="t-muted t-small t-mid" x="650" y="106">Vfield, Pmech, …</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="650" y="106">Vfield、Pmech …</text>
+                <!-- GUILDA mapping -->
+                <text lang="en" class="t-muted t-small" x="20" y="172">In GUILDA:</text>
+                <text lang="ja" class="t-muted t-small" x="20" y="172">GUILDA では:</text>
+                <rect class="f-card" x="20" y="182" width="220" height="56" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="130" y="204">input names</text>
+                <text lang="ja" class="t-small t-mid" x="130" y="204">入力の名前</text>
+                <text class="t-muted t-small t-mid" x="130" y="224">sv_u</text>
+                <rect class="f-card" x="280" y="182" width="220" height="56" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="390" y="204">states and model functions</text>
+                <text lang="ja" class="t-small t-mid" x="390" y="204">状態とモデルの関数</text>
+                <text class="t-muted t-small t-mid" x="390" y="224">sv_x, fcn_dx, fcn_y</text>
+                <rect class="f-card" x="540" y="182" width="220" height="56" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="650" y="204">output names</text>
+                <text lang="ja" class="t-small t-mid" x="650" y="204">出力の名前</text>
+                <text class="t-muted t-small t-mid" x="650" y="224">sv_y</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A controller as three steps. In GUILDA, a controller is itself a small dynamical system: its input names say what it observes, its states and model functions say how it computes, and its output names say which inputs it drives.</figcaption>
+            <figcaption lang="ja">制御器を 3 つの段階で見たものです。GUILDA では、制御器そのものが小さな動的システムです。入力の名前が何を観測するかを、状態とモデルの関数がどう計算するかを、出力の名前がどの入力を動かすかを表します。</figcaption>
+          </figure>
+
+          <p lang="en">GUILDA connects the signals by their names. An input of a controller with the name of an output or a state of the generator reads it; an output of a controller with the name of an input of the generator drives it. The class to start from depends on how much of the system the controller sees:</p>
+          <p lang="ja">GUILDA は、信号を名前でつなぎます。制御器の入力が発電機の出力や状態と同じ名前なら、それを読みます。制御器の出力が発電機の入力と同じ名前なら、それを動かします。どのクラスから作るかは、制御器が系統のどこまでを見るかで決まります。</p>
+          <dl class="lec-terms">
+            <dt><code>LocalController</code></dt>
+            <dd><span lang="en">A local controller belongs to one component. It observes that component (and the voltage of its bus) and drives inputs of that component. A PSS is attached under an AVR and drives the AVR input Vpss.</span><span lang="ja">ローカル制御器は 1 つの機器に属します。その機器（とその母線の電圧）を観測し、その機器の入力を動かします。PSS は AVR の下に付き、AVR の入力 Vpss を動かします。</span></dd>
+            <dt><code>GlobalController</code></dt>
+            <dd><span lang="en">A global controller belongs to the network. It observes signals of the components it controls and the voltages of all buses, and its outputs are added to inputs of those components or of their local controllers. Its outputs are zero at the equilibrium, so that it does not move the operating point.</span><span lang="ja">グローバル制御器は系統全体に属します。制御する機器の信号と全母線の電圧を観測し、その出力を機器やそのローカル制御器の入力に足します。運転点を動かさないよう、出力は平衡点で 0 にします。</span></dd>
+          </dl>
+
+          <h3><span lang="en">The controllers of this page in this form</span><span lang="ja">このページの制御器を同じ形で見る</span></h3>
+          <div class="lec8-tablewrap">
+            <table>
+              <thead>
+                <tr><th><span lang="en">Controller (key)</span><span lang="ja">制御器（キー）</span></th><th><span lang="en">Class</span><span lang="ja">クラス</span></th><th><span lang="en">① Observes</span><span lang="ja">① 観測する</span></th><th><span lang="en">② Computes</span><span lang="ja">② 計算する</span></th><th><span lang="en">③ Drives</span><span lang="ja">③ 動かす</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td>AVR <code>avr-ST1</code></td><td><span lang="en">local</span><span lang="ja">ローカル</span></td><td><span lang="en">terminal voltage V</span><span lang="ja">端子電圧 V</span></td><td><span lang="en">amplified error from Vref</span><span lang="ja">Vref とのずれを増幅</span></td><td>Vfield</td></tr>
+                <tr><td>PSS <code>pss-PSS1</code></td><td><span lang="en">local (under the AVR)</span><span lang="ja">ローカル（AVR の下）</span></td><td><span lang="en">speed deviation ω</span><span lang="ja">速さのずれ ω</span></td><td><span lang="en">washout and lead-lag filters</span><span lang="ja">ウォッシュアウトと進み遅れのフィルタ</span></td><td><span lang="en">Vpss of the AVR</span><span lang="ja">AVR の Vpss</span></td></tr>
+                <tr><td><span lang="en">Governor</span><span lang="ja">ガバナ</span> <code>gov-LPT1</code></td><td><span lang="en">local</span><span lang="ja">ローカル</span></td><td><span lang="en">speed deviation ω</span><span lang="ja">速さのずれ ω</span></td><td><span lang="en">droop, valve and turbine</span><span lang="ja">垂下特性、弁、タービン</span></td><td>Pmech</td></tr>
+                <tr><td>LQR <code>local-LQR</code></td><td><span lang="en">local</span><span lang="ja">ローカル</span></td><td><span lang="en">all states of the generator</span><span lang="ja">発電機のすべての状態</span></td><td>u = −K x</td><td><span lang="en">its inputs (e.g. Vfield)</span><span lang="ja">その入力（例: Vfield）</span></td></tr>
+                <tr><td>AGC <code>agc-PI</code></td><td><span lang="en">global</span><span lang="ja">グローバル</span></td><td><span lang="en">ω of each controlled generator</span><span lang="ja">制御する各発電機の ω</span></td><td><span lang="en">PI of the weighted sum</span><span lang="ja">重み付きの和の PI</span></td><td><span lang="en">Pmech of each</span><span lang="ja">各発電機の Pmech</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p lang="en">When you design your own controller, a few more questions come after these three:</p>
+          <p lang="ja">自作の制御器を考えるときは、この 3 つに続いて、次のことも決めておきます。</p>
+          <ul>
+            <li lang="en"><b>Equilibrium:</b> what are its states and outputs when the system is at rest? A controller must not push the system away from the operating point found by the power flow.</li>
+            <li lang="ja"><b>平衡点:</b> 系統が落ち着いているとき、制御器の状態と出力はいくつか。潮流計算で決めた運転点から系統を動かしてはいけません。</li>
+            <li lang="en"><b>Time scale:</b> is it fast (voltage, swings) or slow (frequency restoration)? Controllers on very different time scales interfere less.</li>
+            <li lang="ja"><b>時間の尺度:</b> 速い制御（電圧、揺れ）か、遅い制御（周波数の回復）か。時間の尺度が大きく違う制御どうしは、干渉しにくくなります。</li>
+            <li lang="en"><b>Check:</b> does it move the eigenvalues to the left in the linear model, and does it survive a fault in a time-domain simulation? In GUILDA, both use the same model of the controller, so one controller class is checked in both ways.</li>
+            <li lang="ja"><b>確かめ方:</b> 線形モデルで固有値が左へ動くか。時間シミュレーションで事故に耐えるか。GUILDA では両方が同じ制御器のモデルを使うので、1 つの制御器のクラスを両方の方法で確かめられます。</li>
+          </ul>
+          <p lang="en">The concrete steps for writing a controller class are shown in the Live Script of this Part.</p>
+          <p lang="ja">制御器のクラスを書く具体的な手順は、この Part のライブスクリプトで扱います。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li lang="en">A controller measures, compares with a target and changes an input (feedback). Too strong a feedback can itself cause a growing swing; in the linear model, a good controller moves the eigenvalues to the left.</li>
+            <li lang="ja">制御器は測り、目標と比べ、入力を変えます（フィードバック）。強すぎるフィードバックは、それ自体が大きくなる揺れを生むことがあります。線形モデルでは、よい制御器は固有値を左へ動かします。</li>
+            <li lang="en">The AVR drives the field voltage from the terminal voltage, the governor drives the mechanical power from the speed, and the PSS adds a speed-based signal to the AVR to create damping torque.</li>
+            <li lang="ja">AVR は端子電圧から界磁電圧を、ガバナは速さから機械入力を動かします。PSS は速さにもとづく信号を AVR に加え、制動トルクをつくります。</li>
+            <li lang="en">Frequency is controlled in layers: inertia, primary control (governors, leaves a deviation), secondary control (AGC, brings it back with an integral) and tertiary control (economic re-dispatch).</li>
+            <li lang="ja">周波数は階層で制御されます。慣性、一次制御（ガバナ、ずれが残る）、二次制御（AGC、積分で戻す）、三次制御（経済負荷配分）です。</li>
+            <li lang="en">A global controller measures many places and acts on several generators together; the LQR chooses all its gains from a model and a cost. Retrofit control adds a controller designed from a local model only and keeps the whole system stable; in GUILDA it is <code>pss-retrofit</code> under <code>avr-static</code>.</li>
+            <li lang="ja">グローバル制御器は多くの場所を測り、複数の発電機にまとめて働きかけます。LQR はモデルと評価からすべてのゲインを選びます。Retrofit 制御は、部分のモデルだけで設計した制御器を、系統全体の安定を保ったまま加えます。GUILDA では <code>avr-static</code> の下に付ける <code>pss-retrofit</code> です。</li>
+            <li lang="en">Any controller is observe → compute → drive. In GUILDA these are the input names, the states and model functions, and the output names of a LocalController or a GlobalController.</li>
+            <li lang="ja">どの制御器も「観測 → 計算 → 入力」です。GUILDA では、LocalController や GlobalController の入力の名前、状態とモデルの関数、出力の名前がそれに当たります。</li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card" href="part1-network-components.html"><small>Part 1</small><b><span lang="en">Building a power system and its components</span><span lang="ja">電力系統の作成と機器の種類</span></b><span lang="en">The four parts of a model, including local and global controllers.</span><span lang="ja">ローカル制御器・グローバル制御器を含む、モデルの 4 つの部品を扱います。</span></a></li>
+          <li><a class="lec-card is-c2" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b><span lang="en">Faults, transient stability, inertia and governors.</span><span lang="ja">事故、過渡安定度、慣性とガバナを扱います。</span></a></li>
+          <li><a class="lec-card is-c2" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b><span lang="en">Eigenvalues, damping ratio and participation factors used to design controllers.</span><span lang="ja">制御器の設計に使う固有値、ダンピング比、参加係数を扱います。</span></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><code>_GUILDAtutorial/Part8_ControllerDesign.mlx</code>: <span lang="en">open it from the MATLAB Command Window with <code>open Part8_ControllerDesign.mlx</code> (after running <code>GUILDA</code> once to set the path). In Japanese. The figures on this page can be drawn with this Live Script.</span><span lang="ja">MATLAB のコマンド ウィンドウで <code>open Part8_ControllerDesign.mlx</code> と入力すると開きます（先に <code>GUILDA</code> を一度実行してパスを通しておきます）。日本語です。このページの図は Part 8 のライブスクリプトで描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">Excitation systems and the PSS, governors, and the control of active power and frequency (AGC).</span><span lang="ja">励磁系と PSS、ガバナ、有効電力と周波数の制御（AGC）を扱っています。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">Frequency control in layers, the damping of power swings and the PSS.</span><span lang="ja">階層的な周波数制御、電力動揺の減衰と PSS を扱っています。</span></span></li>
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; it treats power systems and their controllers as dynamical systems.</span><span lang="ja">GUILDA の基になった教科書です。電力系統と制御器を動的システムとして扱っています。</span></span></li>
+            <li>F. P. deMello and C. Concordia, “Concepts of synchronous machine stability as affected by excitation control,” <cite>IEEE Transactions on Power Apparatus and Systems</cite>, vol. PAS-88, no. 4, pp. 316–329, 1969.
+              <span class="lec-ref-note"><span lang="en">Synchronizing and damping torque, and why a fast AVR can weaken the damping.</span><span lang="ja">同期化トルクと制動トルク、速い AVR が減衰を弱めることがある理由を示した論文です。</span></span></li>
+            <li>B. D. O. Anderson and J. B. Moore, <cite>Optimal Control: Linear Quadratic Methods</cite>, Dover Publications, 2007.
+              <span class="lec-ref-note"><span lang="en">A standard text on the LQR (a reprint of the Prentice Hall edition).</span><span lang="ja">LQR の標準的な教科書です（Prentice Hall 版の再刊）。</span></span></li>
+            <li>T. Ishizaki, T. Sadamoto, J. Imura, H. Sandberg and K. H. Johansson, “Retrofit control: Localization of controller design and implementation,” <cite>Automatica</cite>, vol. 95, pp. 336–346, 2018.
+              <span class="lec-ref-note"><span lang="en">The paper that proposed retrofit control.</span><span lang="ja">Retrofit 制御を提案した論文です。</span></span></li>
+            <li>T. Sadamoto, A. Chakrabortty, T. Ishizaki and J. Imura, “Dynamic modeling, stability, and control of power systems with distributed energy resources: Handling faults using two control methods in tandem,” <cite>IEEE Control Systems Magazine</cite>, vol. 39, no. 2, pp. 34–65, 2019.
+              <span class="lec-ref-note"><span lang="en">Retrofit control applied to power systems with wind and solar farms.</span><span lang="ja">風力・太陽光発電所を含む電力系統への Retrofit 制御の応用です。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part7-continuation-power-flow.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 7: <span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b></a>
+      <a class="is-next" href="../index.html#tab-tutorial"><small><span lang="en">Back to the list →</span><span lang="ja">一覧に戻る →</span></small><b><span lang="en">Lecture notes</span><span lang="ja">講義ノート</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 1: 電力系統の作成と機器の種類">GUILDA Lecture Notes - Part 1: Building a power system and its equipment</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec1- ; shared lecture CSS (lec-*) is in style.css. -->
+  <style>
+    .lec1-tablewrap { margin: 16px 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .lec1-tablewrap table { display: table; min-width: 640px; margin: 0; font-size: 0.9rem; }
+    .lec1-tablewrap th { min-width: 0; white-space: nowrap; }
+    .lec1-tablewrap th, .lec1-tablewrap td { padding: 8px 10px; vertical-align: top; }
+    .lec1-tablewrap td.lec1-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .lec1-body :not(pre) > code { white-space: nowrap; overflow-wrap: normal; }
+    .lec1-body .lec-scripts code, .lec1-body .lec-refs a { white-space: normal; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 1 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 1</p>
+      <h1><span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></h1>
+      <p class="lec-lead" lang="en">Buses, branches, components and controllers; per-unit values, lines and transformers, bus types, generator and load models, and the bundled benchmark networks.</p>
+      <p class="lec-lead" lang="ja">母線・ブランチ・機器・制御器の 4 つの部品、単位法、送電線と変圧器、母線の種類、発電機と負荷のモデル、同梱のベンチマーク系統を説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#parts"><span lang="en">Four kinds of parts</span><span lang="ja">系統をつくる 4 つの部品</span></a></li>
+          <li><a href="#per-unit"><span lang="en">Per-unit values</span><span lang="ja">単位法</span></a></li>
+          <li><a href="#branches"><span lang="en">Lines and transformers</span><span lang="ja">送電線と変圧器</span></a></li>
+          <li><a href="#admittance"><span lang="en">Admittance matrix</span><span lang="ja">アドミタンス行列</span></a></li>
+          <li><a href="#bus-types"><span lang="en">Bus types</span><span lang="ja">母線の種類</span></a></li>
+          <li><a href="#generators"><span lang="en">Generators</span><span lang="ja">発電機</span></a></li>
+          <li><a href="#loads"><span lang="en">Load models</span><span lang="ja">負荷モデル</span></a></li>
+          <li><a href="#controllers"><span lang="en">Controllers</span><span lang="ja">制御器</span></a></li>
+          <li><a href="#benchmarks"><span lang="en">Bundled networks</span><span lang="ja">同梱のベンチマーク系統</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article lec1-body">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">The four kinds of parts that make up a power system model: buses, branches, components and controllers.</span><span lang="ja">電力系統のモデルをつくる 4 つの部品（母線・ブランチ・機器・制御器）。</span></li>
+            <li><span lang="en">Why values are written as per-unit values, and how lines and transformers are drawn as circuits.</span><span lang="ja">値を単位法で表す理由と、送電線と変圧器を回路として表す方法。</span></li>
+            <li><span lang="en">The three bus types (slack, PV, PQ) and what each one fixes in advance.</span><span lang="ja">3 つの母線の種類（Slack・PV・PQ）と、それぞれがあらかじめ決める量。</span></li>
+            <li><span lang="en">How generators, loads and controllers are modeled, and how detailed the models can be.</span><span lang="ja">発電機・負荷・制御器のモデルと、その詳しさの段階。</span></li>
+            <li><span lang="en">Which benchmark networks come with GUILDA.</span><span lang="ja">GUILDA に同梱されているベンチマーク系統。</span></li>
+          </ul>
+        </section>
+
+        <!-- ============================== PARTS ============================== -->
+        <section id="parts">
+          <h2><span lang="en">Four kinds of parts</span><span lang="ja">系統をつくる 4 つの部品</span></h2>
+          <p lang="en">A real power system has thousands of pieces of equipment, but for analysis it is enough to sort them into four kinds of parts. GUILDA builds every network from these four.</p>
+          <p lang="ja">実際の電力系統には数え切れないほどの設備がありますが、解析のためには 4 種類の部品に分けて考えれば十分です。GUILDA も、どの系統もこの 4 つの部品で組み立てます。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">Bus</span><span lang="ja">母線</span></dt>
+            <dd><span lang="en">A connection point of the network, such as a substation. Each bus has one voltage (its magnitude and phase angle).</span><span lang="ja">変電所などの、送電網の接続点です。母線ごとに 1 つの電圧（大きさと位相角）を持ちます。</span></dd>
+            <dt><span lang="en">Branch</span><span lang="ja">ブランチ</span></dt>
+            <dd><span lang="en">A transmission line or a transformer that joins two buses.</span><span lang="ja">2 つの母線を結ぶ送電線や変圧器です。</span></dd>
+            <dt><span lang="en">Component</span><span lang="ja">機器</span></dt>
+            <dd><span lang="en">Equipment attached to a bus that sends power into the network or takes it out: generators and loads.</span><span lang="ja">母線につながり、送電網に電力を送り込む、または取り出す設備です。発電機と負荷がこれにあたります。</span></dd>
+            <dt><span lang="en">Controller</span><span lang="ja">制御器</span></dt>
+            <dd><span lang="en">A device that measures the state of components and adjusts their inputs, such as a voltage regulator of a generator.</span><span lang="ja">機器の状態を測り、その入力を調整する装置です。発電機の電圧調整装置などがあります。</span></dd>
+          </dl>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 330" role="img" aria-label="A three-bus network: generators at buses 1 and 3, a load at bus 2, a local controller on each generator and one global controller over both">
+                <defs>
+                  <marker id="p1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- global controller -->
+                <rect class="f-c4" x="280" y="16" width="220" height="44" rx="5"/>
+                <text lang="en" class="t-c4 t-mid" x="390" y="43">Global controller</text>
+                <text lang="ja" class="t-c4 t-mid" x="390" y="43">グローバル制御器</text>
+                <path class="s-c4 is-dashed" d="M280 38 H40 V228 H124" marker-end="url(#p1-arrow)"/>
+                <path class="s-c4 is-dashed" d="M500 38 H740 V228 H656" marker-end="url(#p1-arrow)"/>
+                <!-- branches -->
+                <line class="s-ink" x1="210" y1="154" x2="330" y2="154"/>
+                <line class="s-ink" x1="450" y1="154" x2="570" y2="154"/>
+                <text lang="en" class="t-muted t-mid" x="270" y="144">branch</text>
+                <text lang="ja" class="t-muted t-mid" x="270" y="144">ブランチ</text>
+                <text lang="en" class="t-muted t-mid" x="510" y="144">branch</text>
+                <text lang="ja" class="t-muted t-mid" x="510" y="144">ブランチ</text>
+                <!-- buses -->
+                <rect class="f-brand-solid" x="90" y="150" width="120" height="8" rx="2"/>
+                <rect class="f-brand-solid" x="330" y="150" width="120" height="8" rx="2"/>
+                <rect class="f-brand-solid" x="570" y="150" width="120" height="8" rx="2"/>
+                <text lang="en" class="t-brand t-mid" x="150" y="140">Bus 1</text>
+                <text lang="ja" class="t-brand t-mid" x="150" y="140">母線 1</text>
+                <text lang="en" class="t-brand t-mid" x="390" y="140">Bus 2</text>
+                <text lang="ja" class="t-brand t-mid" x="390" y="140">母線 2</text>
+                <text lang="en" class="t-brand t-mid" x="630" y="140">Bus 3</text>
+                <text lang="ja" class="t-brand t-mid" x="630" y="140">母線 3</text>
+                <!-- generator 1 with its local controller -->
+                <line class="s-ink" x1="150" y1="158" x2="150" y2="206"/>
+                <circle class="f-c2" cx="150" cy="228" r="22"/>
+                <path class="s-c2" d="M136 228 C 141 216, 146 216, 150 228 S 159 240, 164 228"/>
+                <text lang="en" class="t-mid" x="150" y="272">generator</text>
+                <text lang="ja" class="t-mid" x="150" y="272">発電機</text>
+                <rect class="f-c4" x="196" y="208" width="80" height="40" rx="5"/>
+                <text class="t-c4 t-mid" x="236" y="233">AVR</text>
+                <line class="s-c4" x1="174" y1="228" x2="194" y2="228" marker-start="url(#p1-arrow)" marker-end="url(#p1-arrow)"/>
+                <text lang="en" class="t-c4 t-small t-mid" x="236" y="266">local controller</text>
+                <text lang="ja" class="t-c4 t-small t-mid" x="236" y="266">ローカル制御器</text>
+                <!-- load -->
+                <line class="s-ink" x1="390" y1="158" x2="390" y2="214" marker-end="url(#p1-arrow)"/>
+                <text lang="en" class="t-mid" x="390" y="236">load</text>
+                <text lang="ja" class="t-mid" x="390" y="236">負荷</text>
+                <!-- generator 3 with its local controller -->
+                <line class="s-ink" x1="630" y1="158" x2="630" y2="206"/>
+                <circle class="f-c2" cx="630" cy="228" r="22"/>
+                <path class="s-c2" d="M616 228 C 621 216, 626 216, 630 228 S 639 240, 644 228"/>
+                <text lang="en" class="t-mid" x="630" y="272">generator</text>
+                <text lang="ja" class="t-mid" x="630" y="272">発電機</text>
+                <rect class="f-c4" x="504" y="208" width="80" height="40" rx="5"/>
+                <text class="t-c4 t-mid" x="544" y="233">AVR</text>
+                <line class="s-c4" x1="586" y1="228" x2="606" y2="228" marker-start="url(#p1-arrow)" marker-end="url(#p1-arrow)"/>
+                <text lang="en" class="t-c4 t-small t-mid" x="544" y="266">local controller</text>
+                <text lang="ja" class="t-c4 t-small t-mid" x="544" y="266">ローカル制御器</text>
+                <!-- legend -->
+                <line class="s-line" x1="20" y1="290" x2="760" y2="290"/>
+                <rect class="f-brand-solid" x="40" y="308" width="24" height="6" rx="2"/>
+                <text lang="en" x="72" y="316">bus</text>
+                <text lang="ja" x="72" y="316">母線</text>
+                <line class="s-ink" x1="180" y1="311" x2="210" y2="311"/>
+                <text lang="en" x="218" y="316">branch</text>
+                <text lang="ja" x="218" y="316">ブランチ</text>
+                <circle class="f-c2" cx="340" cy="311" r="8"/>
+                <text lang="en" x="356" y="316">component</text>
+                <text lang="ja" x="356" y="316">機器（発電機・負荷）</text>
+                <rect class="f-c4" x="540" y="303" width="24" height="16" rx="3"/>
+                <text lang="en" x="572" y="316">controller</text>
+                <text lang="ja" x="572" y="316">制御器</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A three-bus network built from the four kinds of parts. Each generator has a local controller (here an AVR); the global controller watches and drives both generators.</figcaption>
+            <figcaption lang="ja">4 種類の部品で組み立てた 3 母線の系統です。発電機ごとにローカル制御器（ここでは AVR）が付き、グローバル制御器は 2 台の発電機をまとめて観測して入力を決めます。</figcaption>
+          </figure>
+
+          <p lang="en">The parts are layered. Components hang on buses, controllers hang on components (or, for a global controller, on the whole network), and branches tie the buses together. In GUILDA, a network is an object of the class <code>PowerNetwork</code>, which holds its buses, branches and global controllers; each bus holds its components, and each component holds its local controllers.</p>
+          <p lang="ja">部品は階層になっています。機器は母線に、制御器は機器に（グローバル制御器は系統全体に）つながり、ブランチが母線どうしを結びます。GUILDA では、系統は <code>PowerNetwork</code> クラスのオブジェクトで、母線・ブランチ・グローバル制御器を持ちます。母線はそこにつながる機器を持ち、機器はそのローカル制御器を持ちます。</p>
+        </section>
+
+        <!-- ============================== PER UNIT ============================== -->
+        <section id="per-unit">
+          <h2><span lang="en">Per-unit values</span><span lang="ja">単位法</span></h2>
+          <p lang="en">One network contains voltages from hundreds of kilovolts down to a few kilovolts, and powers from a few megawatts to thousands. To compare them easily, each quantity is divided by a chosen <strong>base value</strong>. The result is the <strong>per-unit value</strong> (pu): a quantity <span class="lec-math-inline" data-tex="x"></span> with the base <span class="lec-math-inline" data-tex="x_\mathrm{base}"></span> becomes <span class="lec-math-inline" data-tex="x_\mathrm{pu}"></span>.</p>
+          <p lang="ja">1 つの系統の中には、数百 kV から数 kV までの電圧と、数 MW から数千 MW までの電力が混ざっています。比べやすくするため、それぞれの量を決めておいた<strong>基準値</strong>で割って表します。これを<strong>単位法</strong>（per unit、pu）といいます。量 <span class="lec-math-inline" data-tex="x"></span> を基準値 <span class="lec-math-inline" data-tex="x_\mathrm{base}"></span> で割ったものが、単位法の値 <span class="lec-math-inline" data-tex="x_\mathrm{pu}"></span> です。</p>
+          <div class="lec-math" data-tex="x_\mathrm{pu} = \frac{x}{x_\mathrm{base}}"></div>
+          <p lang="en">One base power <span class="lec-math-inline" data-tex="S_\mathrm{base}"></span> (three-phase) is used for the whole network (100 MVA or 1000 MVA are common), and each voltage level has its own base voltage <span class="lec-math-inline" data-tex="V_\mathrm{base}"></span> (line-to-line), usually its rated voltage. The base current and the base impedance follow from these two:</p>
+          <p lang="ja">基準の電力 <span class="lec-math-inline" data-tex="S_\mathrm{base}"></span>（三相分）は系統全体で 1 つ（100 MVA や 1000 MVA がよく使われます）、基準の電圧 <span class="lec-math-inline" data-tex="V_\mathrm{base}"></span>（線間電圧）は電圧の階級ごとに、ふつうはその定格電圧に決めます。基準の電流と基準のインピーダンスは、この 2 つから決まります。</p>
+          <div class="lec-math" data-tex="I_\mathrm{base} = \frac{S_\mathrm{base}}{\sqrt{3}\,V_\mathrm{base}}, \qquad Z_\mathrm{base} = \frac{V_\mathrm{base}}{\sqrt{3}\,I_\mathrm{base}} = \frac{V_\mathrm{base}^2}{S_\mathrm{base}}"></div>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part1/per-unit.png" alt="Left: bus voltages of 495 kV, 67.3 kV and 6.6 kV at the 500 kV, 66 kV and 6.6 kV levels. Right: the same voltages as per-unit values, 0.99, 1.02 and 1.00 pu" width="1294" height="495">
+            </div>
+            <figcaption lang="en">Bus voltages at three voltage levels. As actual values (left) they differ by a factor of almost 100; as per-unit values from the formula above, with the rated voltage of each level as the base (right), they are all close to 1.</figcaption>
+            <figcaption lang="ja">3 つの電圧階級の母線電圧です。実際の値（左）では 100 倍近く違いますが、各階級の定格電圧を基準にして上の式で単位法に直すと（右）、どれも 1 の近くになります。</figcaption>
+          </figure>
+
+          <p lang="en">Per-unit values have three advantages. A value tells at a glance whether it is normal: a voltage of 0.95 pu is 5 % below rated, whatever the voltage level. Typical generator and line constants fall in narrow ranges. And a transformer between two levels needs no ratio of turns: with the rated voltages of both sides as bases, its nominal ratio becomes 1, and only the deviation from it (the tap) remains.</p>
+          <p lang="ja">単位法には 3 つの利点があります。値を見ただけで正常かどうかが分かります。電圧 0.95 pu なら、どの電圧階級でも定格より 5 % 低いという意味です。発電機や送電線の定数が、狭い範囲の値に収まります。そして、2 つの電圧階級の間の変圧器から巻数比が消えます。両側の定格電圧を基準にすれば公称の変圧比は 1 になり、そこからのずれ（タップ）だけが残ります。</p>
+          <div class="lec-callout">
+            <p lang="en">In GUILDA all electrical values are per-unit values on the base power of the network: 100 MVA in the IEEE benchmark networks and 1000 MVA in the IEEJ standard models. Times are in seconds and angles in radians.</p>
+            <p lang="ja">GUILDA では、電気の量はすべて系統の基準電力についての単位法の値で扱います。基準電力は、IEEE のベンチマーク系統では 100 MVA、電気学会の標準モデルでは 1000 MVA です。時間は秒、角度はラジアンです。</p>
+          </div>
+        </section>
+
+        <!-- ============================== BRANCHES ============================== -->
+        <section id="branches">
+          <h2><span lang="en">Transmission lines and transformers</span><span lang="ja">送電線と変圧器</span></h2>
+          <p lang="en">A transmission line is many kilometres of wire, but for analysis at the power frequency it can be replaced by a small equivalent circuit. The most common one is the <strong>π model</strong>: a series impedance <span class="lec-math-inline" data-tex="R + jX"></span> between the two ends, and half of the line charging at each end. The series resistance <span class="lec-math-inline" data-tex="R"></span> causes the losses, the series reactance <span class="lec-math-inline" data-tex="X"></span> comes from the magnetic field around the wires, and the shunt susceptance <span class="lec-math-inline" data-tex="B"></span> from the capacitance between the wires and the ground. In high-voltage lines <span class="lec-math-inline" data-tex="X"></span> is much larger than <span class="lec-math-inline" data-tex="R"></span>, which is why the reactance mainly decides how power flows.</p>
+          <p lang="ja">送電線は何 km もの電線ですが、商用周波数での解析では、小さな等価回路に置き換えられます。最もよく使われるのが <strong>π 型等価回路</strong>です。両端の間に直列インピーダンス <span class="lec-math-inline" data-tex="R + jX"></span> を置き、線路の対地静電容量の半分ずつを両端に置きます。直列の抵抗 <span class="lec-math-inline" data-tex="R"></span> は損失の原因になり、直列のリアクタンス <span class="lec-math-inline" data-tex="X"></span> は電線のまわりの磁界から、並列のサセプタンス <span class="lec-math-inline" data-tex="B"></span> は電線と大地の間の静電容量から生まれます。高い電圧の送電線では <span class="lec-math-inline" data-tex="X"></span> が <span class="lec-math-inline" data-tex="R"></span> よりずっと大きく、電力の流れ方は主にリアクタンスで決まります。</p>
+
+          <p lang="en">With the series admittance <span class="lec-math-inline" data-tex="y = 1/(R + jX)"></span>, the currents <span class="lec-math-inline" data-tex="I_{ij}"></span> and <span class="lec-math-inline" data-tex="I_{ji}"></span> that flow into the line at bus <span class="lec-math-inline" data-tex="i"></span> and at bus <span class="lec-math-inline" data-tex="j"></span> follow from the end voltages <span class="lec-math-inline" data-tex="V_i"></span>, <span class="lec-math-inline" data-tex="V_j"></span> (complex phasors in pu):</p>
+          <p lang="ja">直列のアドミタンスを <span class="lec-math-inline" data-tex="y = 1/(R + jX)"></span> とすると、母線 <span class="lec-math-inline" data-tex="i"></span> の端と母線 <span class="lec-math-inline" data-tex="j"></span> の端から線路に流れ込む電流 <span class="lec-math-inline" data-tex="I_{ij}"></span>、<span class="lec-math-inline" data-tex="I_{ji}"></span> は、両端の電圧 <span class="lec-math-inline" data-tex="V_i"></span>、<span class="lec-math-inline" data-tex="V_j"></span>（単位法の複素数のフェーザ）から次のように決まります。</p>
+          <div class="lec-math" data-tex="\begin{bmatrix} I_{ij} \\ I_{ji} \end{bmatrix} = \begin{bmatrix} y + j\dfrac{B}{2} &amp; -y \\ -y &amp; y + j\dfrac{B}{2} \end{bmatrix} \begin{bmatrix} V_i \\ V_j \end{bmatrix}"></div>
+          <p lang="en">The term <span class="lec-math-inline" data-tex="y(V_i - V_j)"></span> is the current through the series impedance, and <span class="lec-math-inline" data-tex="jB/2 \cdot V_i"></span> the charging current at one end. (In GUILDA, the <code>pi</code> branch takes the shunt value of one end, <span class="lec-math-inline" data-tex="C = B/2"></span>.)</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="y(V_i - V_j)"></span> は直列インピーダンスを流れる電流、<span class="lec-math-inline" data-tex="jB/2 \cdot V_i"></span> は片端の充電電流です（GUILDA の <code>pi</code> ブランチは、片端の値 <span class="lec-math-inline" data-tex="C = B/2"></span> を指定します）。</p>
+
+<figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 240" role="img" aria-label="The pi equivalent circuit of a line and the circuit of a transformer with a tap">
+                <!-- pi model -->
+                <line class="s-ink" x1="50" y1="60" x2="150" y2="60"/>
+                <rect class="f-card" x="150" y="46" width="100" height="28" rx="3"/>
+                <text class="t-mid" x="200" y="65">R + jX</text>
+                <line class="s-ink" x1="250" y1="60" x2="350" y2="60"/>
+                <path class="s-ink" d="M90 60 V100 M78 100 H102 M78 110 H102 M90 110 V160"/>
+                <path class="s-ink" d="M310 60 V100 M298 100 H322 M298 110 H322 M310 110 V160"/>
+                <text class="t-small" x="108" y="110">jB/2</text>
+                <text class="t-small t-end" x="292" y="110">jB/2</text>
+                <line class="s-line" x1="50" y1="160" x2="350" y2="160"/>
+                <circle class="f-ink" cx="50" cy="60" r="4"/>
+                <circle class="f-ink" cx="350" cy="60" r="4"/>
+                <text lang="en" class="t-brand t-mid" x="50" y="38">bus i</text>
+                <text lang="ja" class="t-brand t-mid" x="50" y="38">母線 i</text>
+                <text lang="en" class="t-brand t-mid" x="350" y="38">bus j</text>
+                <text lang="ja" class="t-brand t-mid" x="350" y="38">母線 j</text>
+                <text lang="en" class="t-strong t-mid" x="200" y="196">Line (π model)</text>
+                <text lang="ja" class="t-strong t-mid" x="200" y="196">送電線（π 型等価回路）</text>
+                <text lang="en" class="t-muted t-mid" x="200" y="218">series impedance and line charging</text>
+                <text lang="ja" class="t-muted t-mid" x="200" y="218">直列インピーダンスと対地静電容量</text>
+                <line class="s-line is-dashed" x1="395" y1="20" x2="395" y2="225"/>
+                <!-- transformer -->
+                <line class="s-ink" x1="440" y1="60" x2="512" y2="60"/>
+                <circle class="s-ink" cx="530" cy="60" r="18"/>
+                <circle class="s-ink" cx="556" cy="60" r="18"/>
+                <line class="s-ink" x1="574" y1="60" x2="620" y2="60"/>
+                <rect class="f-card" x="620" y="46" width="80" height="28" rx="3"/>
+                <text class="t-mid" x="660" y="65">jX</text>
+                <line class="s-ink" x1="700" y1="60" x2="740" y2="60"/>
+                <line class="s-line" x1="440" y1="160" x2="740" y2="160"/>
+                <circle class="f-ink" cx="440" cy="60" r="4"/>
+                <circle class="f-ink" cx="740" cy="60" r="4"/>
+                <text class="t-c3 t-mid" x="543" y="104">1 : t</text>
+                <text lang="en" class="t-brand t-mid" x="440" y="38">bus i</text>
+                <text lang="ja" class="t-brand t-mid" x="440" y="38">母線 i</text>
+                <text lang="en" class="t-brand t-mid" x="740" y="38">bus j</text>
+                <text lang="ja" class="t-brand t-mid" x="740" y="38">母線 j</text>
+                <text lang="en" class="t-strong t-mid" x="590" y="196">Transformer</text>
+                <text lang="ja" class="t-strong t-mid" x="590" y="196">変圧器</text>
+                <text lang="en" class="t-muted t-mid" x="590" y="218">tap ratio t and leakage reactance X</text>
+                <text lang="ja" class="t-muted t-mid" x="590" y="218">タップ比 t と漏れリアクタンス X</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Left: the π equivalent circuit of a line. Right: a transformer in per-unit values, an ideal transformer with tap ratio t followed by its leakage reactance.</figcaption>
+            <figcaption lang="ja">左: 送電線の π 型等価回路です。右: 単位法で表した変圧器で、タップ比 t の理想変圧器と、漏れリアクタンスを直列につないだものです。</figcaption>
+          </figure>
+
+          <p lang="en">A <strong>transformer</strong> joins two voltage levels. In per-unit values it becomes a series leakage reactance and an ideal transformer whose ratio <span class="lec-math-inline" data-tex="t"></span> is close to 1. Changing the tap <span class="lec-math-inline" data-tex="t"></span> raises or lowers the voltage on one side, which is one of the ways to keep voltages within range. Some transformers also shift the phase angle, to steer power between parallel paths.</p>
+          <p lang="ja"><strong>変圧器</strong>は 2 つの電圧階級をつなぎます。単位法で表すと、直列の漏れリアクタンスと、変圧比 <span class="lec-math-inline" data-tex="t"></span> が 1 に近い理想変圧器になります。タップ <span class="lec-math-inline" data-tex="t"></span> を変えると片側の電圧が上がったり下がったりするので、電圧を範囲内に保つ手段の 1 つになります。位相角をずらして、並行する経路の間で電力の流れを振り分ける変圧器（移相変圧器）もあります。</p>
+          <p lang="en">GUILDA has four branch types: <code>pi</code> (π model line), <code>T</code> (T model line, with the line charging at the midpoint), <code>pi_transformer</code> (an ideal transformer followed by a π model line) and <code>two_winding_transformer</code>. Both transformer types take a tap ratio and a phase shift. The lines <code>pi</code> and <code>T</code> have no transformer, so their <code>tap</code> and <code>phase</code> are NaN.</p>
+          <p lang="ja">GUILDA のブランチは 4 種類です。<code>pi</code>（π 型の送電線）、<code>T</code>（T 型の送電線。対地静電容量を中央に置く）、<code>pi_transformer</code>（理想変圧器の後に π 型の線路をつないだもの）、<code>two_winding_transformer</code>（2 巻線変圧器）です。変圧器の 2 種類は、タップ比と位相のずれを指定できます。線路の <code>pi</code> と <code>T</code> は変圧器を持たないので、<code>tap</code> と <code>phase</code> は NaN です。</p>
+        </section>
+
+        <!-- ============================== ADMITTANCE MATRIX ============================== -->
+        <section id="admittance">
+          <h2><span lang="en">The admittance matrix: I = YV</span><span lang="ja">アドミタンス行列：I = YV</span></h2>
+          <p lang="en">Putting the branches together gives the whole network. The current <span class="lec-math-inline" data-tex="I_i"></span> that the equipment at bus <span class="lec-math-inline" data-tex="i"></span> injects into the network must flow out through the branches at that bus and its shunt element (Kirchhoff's current law). With the matrix of each branch above, this gives one linear equation per bus:</p>
+          <p lang="ja">ブランチをつなぎ合わせると、系統全体になります。母線 <span class="lec-math-inline" data-tex="i"></span> の機器が送電網に注入する電流 <span class="lec-math-inline" data-tex="I_i"></span> は、その母線につながるブランチと並列の素子へ流れ出ます（キルヒホッフの電流則）。上のブランチの行列を使うと、母線ごとに 1 本の線形の式になります。</p>
+          <div class="lec-math" data-tex="I_i = \sum_{j=1}^{n} Y_{ij} V_j \quad (i = 1, \dots, n) \quad \Longleftrightarrow \quad I = Y V"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="n"></span> is the number of buses, and <span class="lec-math-inline" data-tex="Y"></span> is the <strong>bus admittance matrix</strong>. For a network of π lines, with <span class="lec-math-inline" data-tex="y_{ik}"></span> and <span class="lec-math-inline" data-tex="B_{ik}"></span> the series admittance and line charging of the line between buses <span class="lec-math-inline" data-tex="i"></span> and <span class="lec-math-inline" data-tex="k"></span>, and <span class="lec-math-inline" data-tex="y_{\mathrm{sh},i}"></span> the shunt admittance at bus <span class="lec-math-inline" data-tex="i"></span>, its elements are</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> は母線の数、<span class="lec-math-inline" data-tex="Y"></span> は<strong>母線アドミタンス行列</strong>です。π 型の送電線だけの系統では、母線 <span class="lec-math-inline" data-tex="i"></span> と <span class="lec-math-inline" data-tex="k"></span> を結ぶ線路の直列アドミタンスを <span class="lec-math-inline" data-tex="y_{ik}"></span>、対地静電容量のサセプタンスを <span class="lec-math-inline" data-tex="B_{ik}"></span>、母線 <span class="lec-math-inline" data-tex="i"></span> の並列アドミタンスを <span class="lec-math-inline" data-tex="y_{\mathrm{sh},i}"></span> とすると、要素は次のようになります。</p>
+          <div class="lec-math" data-tex="Y_{ii} = \sum_{k \in \mathcal{N}_i} \left( y_{ik} + j\frac{B_{ik}}{2} \right) + y_{\mathrm{sh},i}, \qquad Y_{ik} = -y_{ik} \;\; (k \in \mathcal{N}_i)"></div>
+          <p lang="en"><span class="lec-math-inline" data-tex="\mathcal{N}_i"></span> is the set of buses joined to bus <span class="lec-math-inline" data-tex="i"></span> by a line, and <span class="lec-math-inline" data-tex="Y_{ik} = 0"></span> for the other <span class="lec-math-inline" data-tex="k \neq i"></span>. In general each branch, transformers included, adds its own 2 × 2 matrix to the rows and columns <span class="lec-math-inline" data-tex="i"></span> and <span class="lec-math-inline" data-tex="j"></span>; a transformer with a tap <span class="lec-math-inline" data-tex="t \neq 1"></span> has a matrix that is not symmetric in its two ends, but the pattern is the same. A bus is joined to only a few others, so most elements of <span class="lec-math-inline" data-tex="Y"></span> are zero: the matrix is <strong>sparse</strong>.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="\mathcal{N}_i"></span> は母線 <span class="lec-math-inline" data-tex="i"></span> と送電線でつながる母線の集合で、それ以外の <span class="lec-math-inline" data-tex="k \neq i"></span> では <span class="lec-math-inline" data-tex="Y_{ik} = 0"></span> です。一般には、変圧器も含めて、ブランチごとに自分の 2 × 2 の行列を行と列 <span class="lec-math-inline" data-tex="i"></span>、<span class="lec-math-inline" data-tex="j"></span> の位置に足し込みます。タップ <span class="lec-math-inline" data-tex="t \neq 1"></span> の変圧器の行列は両端で対称になりませんが、0 でない要素の位置は同じです。1 つの母線がつながる母線は少ないので、<span class="lec-math-inline" data-tex="Y"></span> の要素の多くは 0 です。このような行列を<strong>疎行列</strong>といいます。</p>
+
+          <figure class="lec-figure is-compact" style="--lec-fig-max: 340px;">
+            <img src="../images/lecture/part1/admittance-matrix.png" alt="The nonzero elements of the 9-by-9 admittance matrix of the IEEE 9-bus system: the 9 diagonal elements and 18 off-diagonal elements, one pair for each of its 9 branches" width="449" height="541">
+            <figcaption lang="en">The elements of the admittance matrix of the IEEE 9-bus system that are not zero, computed with GUILDA (row <span class="lec-math-inline" data-tex="i"></span>, column <span class="lec-math-inline" data-tex="j"></span>). Each branch gives one pair of off-diagonal elements <span class="lec-math-inline" data-tex="Y_{ij} = Y_{ji}"></span>; only 27 of the 81 elements are nonzero.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の母線アドミタンス行列の 0 でない要素です（GUILDA で計算、行 <span class="lec-math-inline" data-tex="i"></span>・列 <span class="lec-math-inline" data-tex="j"></span>）。ブランチ 1 本ごとに、非対角の要素 <span class="lec-math-inline" data-tex="Y_{ij} = Y_{ji}"></span> が 1 組できます。81 個の要素のうち、0 でないのは 27 個だけです。</figcaption>
+          </figure>
+
+          <p lang="en">To see the matrix in GUILDA, load the IEEE 9-bus system and ask for its admittance matrix (a table with the bus tags as row and column names):</p>
+          <p lang="ja">GUILDA で確かめるときは、IEEE 9 母線系統を読み込み、母線アドミタンス行列を取り出します（行と列の名前が母線のタグの表です）。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+Y = net.get_admittance_matrix()</code></pre>
+          <p lang="en">The relation <span class="lec-math-inline" data-tex="I = YV"></span> is linear, but the equipment fixes powers rather than currents; this is what makes the power flow calculation (Part 2) nonlinear.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="I = YV"></span> は線形の関係ですが、機器が決めるのは電流ではなく電力です。そのため潮流計算（Part 2）は非線形の問題になります。</p>
+        </section>
+
+        <!-- ============================== BUS TYPES ============================== -->
+        <section id="bus-types">
+          <h2><span lang="en">Bus types: slack, PV and PQ</span><span lang="ja">母線の種類：Slack・PV・PQ</span></h2>
+          <p lang="en">Each bus has four quantities: the voltage magnitude <span class="lec-math-inline" data-tex="|V|"></span>, the phase angle <span class="lec-math-inline" data-tex="\theta"></span>, and the active and reactive power <span class="lec-math-inline" data-tex="P"></span>, <span class="lec-math-inline" data-tex="Q"></span> that its equipment sends into the network. The power flow calculation fixes two of them at each bus and finds the other two. Which two are fixed depends on the equipment, and this gives the <strong>bus type</strong>.</p>
+          <p lang="ja">母線には 4 つの量があります。電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span>、位相角 <span class="lec-math-inline" data-tex="\theta"></span>、そして機器が送電網に送り込む有効電力 <span class="lec-math-inline" data-tex="P"></span> と無効電力 <span class="lec-math-inline" data-tex="Q"></span> です。潮流計算では、母線ごとにこのうち 2 つを決めておき、残りの 2 つを求めます。どの 2 つを決めるかは、つながっている機器によって変わり、これが<strong>母線の種類</strong>になります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 260" role="img" aria-label="Which of the voltage magnitude, angle, active power and reactive power are set in advance for slack, PV and PQ buses">
+                <text lang="en" class="t-muted" x="30" y="30">Bus type</text>
+                <text lang="ja" class="t-muted" x="30" y="30">母線の種類</text>
+                <text lang="en" class="t-muted" x="140" y="30">Typical equipment</text>
+                <text lang="ja" class="t-muted" x="140" y="30">主な機器</text>
+                <text class="t-strong t-mid" x="440" y="30">|V|</text>
+                <text class="t-strong t-mid" x="530" y="30">θ</text>
+                <text class="t-strong t-mid" x="620" y="30">P</text>
+                <text class="t-strong t-mid" x="710" y="30">Q</text>
+                <line class="s-line" x1="20" y1="44" x2="760" y2="44"/>
+                <!-- slack -->
+                <text class="t-strong" x="30" y="85">Slack</text>
+                <text lang="en" x="140" y="85">one generator (reference)</text>
+                <text lang="ja" x="140" y="85">基準とする発電機 1 台</text>
+                <rect class="f-brand" x="405" y="64" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="440" y="84">set</text><text lang="ja" class="t-brand t-mid" x="440" y="84">指定</text>
+                <rect class="f-brand" x="495" y="64" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="530" y="84">set</text><text lang="ja" class="t-brand t-mid" x="530" y="84">指定</text>
+                <rect class="f-c3" x="585" y="64" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="620" y="84">?</text>
+                <rect class="f-c3" x="675" y="64" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="710" y="84">?</text>
+                <line class="s-line" x1="20" y1="110" x2="760" y2="110"/>
+                <!-- PV -->
+                <text class="t-strong" x="30" y="139">PV</text>
+                <text lang="en" x="140" y="139">generators</text>
+                <text lang="ja" x="140" y="139">発電機</text>
+                <rect class="f-brand" x="405" y="118" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="440" y="138">set</text><text lang="ja" class="t-brand t-mid" x="440" y="138">指定</text>
+                <rect class="f-c3" x="495" y="118" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="530" y="138">?</text>
+                <rect class="f-brand" x="585" y="118" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="620" y="138">set</text><text lang="ja" class="t-brand t-mid" x="620" y="138">指定</text>
+                <rect class="f-c3" x="675" y="118" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="710" y="138">?</text>
+                <line class="s-line" x1="20" y1="164" x2="760" y2="164"/>
+                <!-- PQ -->
+                <text class="t-strong" x="30" y="193">PQ</text>
+                <text lang="en" x="140" y="193">loads, empty buses</text>
+                <text lang="ja" x="140" y="193">負荷・機器のない母線</text>
+                <rect class="f-c3" x="405" y="172" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="440" y="192">?</text>
+                <rect class="f-c3" x="495" y="172" width="70" height="30" rx="4"/><text class="t-c3 t-mid" x="530" y="192">?</text>
+                <rect class="f-brand" x="585" y="172" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="620" y="192">set</text><text lang="ja" class="t-brand t-mid" x="620" y="192">指定</text>
+                <rect class="f-brand" x="675" y="172" width="70" height="30" rx="4"/><text lang="en" class="t-brand t-mid" x="710" y="192">set</text><text lang="ja" class="t-brand t-mid" x="710" y="192">指定</text>
+                <!-- legend -->
+                <rect class="f-brand" x="30" y="228" width="22" height="16" rx="3"/>
+                <text lang="en" x="60" y="241">set in advance</text>
+                <text lang="ja" x="60" y="241">あらかじめ決める</text>
+                <rect class="f-c3" x="260" y="228" width="22" height="16" rx="3"/>
+                <text lang="en" x="290" y="241">found by the power flow calculation</text>
+                <text lang="ja" x="290" y="241">潮流計算で求める</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The three bus types. Each fixes two of the four quantities and leaves the other two to the power flow calculation.</figcaption>
+            <figcaption lang="ja">3 つの母線の種類です。どれも 4 つの量のうち 2 つを決め、残りの 2 つを潮流計算で求めます。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">PQ bus</span><span lang="ja">PQ 母線</span></dt>
+            <dd><span lang="en">A bus with loads. The power the loads use is known, so <span class="lec-math-inline" data-tex="P"></span> and <span class="lec-math-inline" data-tex="Q"></span> are fixed; the voltage is the result. A bus with no equipment, such as a switching substation, is also a PQ bus, with <span class="lec-math-inline" data-tex="P = Q = 0"></span>.</span><span lang="ja">負荷のある母線です。負荷が使う電力は分かっているので <span class="lec-math-inline" data-tex="P"></span> と <span class="lec-math-inline" data-tex="Q"></span> を決め、電圧は結果として求めます。開閉所のように機器のない母線も、<span class="lec-math-inline" data-tex="P = Q = 0"></span> の PQ 母線です。</span></dd>
+            <dt><span lang="en">PV bus</span><span lang="ja">PV 母線</span></dt>
+            <dd><span lang="en">A bus with a generator. The operator sets its output <span class="lec-math-inline" data-tex="P"></span>, and its voltage regulator holds <span class="lec-math-inline" data-tex="|V|"></span>; the generator supplies whatever reactive power <span class="lec-math-inline" data-tex="Q"></span> that takes.</span><span lang="ja">発電機のある母線です。出力 <span class="lec-math-inline" data-tex="P"></span> は運用者が決め、電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span> は電圧調整装置が一定に保ちます。そのために必要な無効電力 <span class="lec-math-inline" data-tex="Q"></span> は、発電機が出すぶんだけ出します。</span></dd>
+            <dt><span lang="en">Slack bus</span><span lang="ja">Slack 母線</span></dt>
+            <dd><span lang="en">One generator bus chosen as the reference. Its angle is the zero of all phase angles, and its output covers whatever is left over, above all the line losses, which are not known before the calculation.</span><span lang="ja">基準として選んだ 1 つの発電機の母線です。その位相角をすべての位相角の基準（0）にし、出力は残りの過不足、特に計算する前には分からない送電損失を引き受けます。</span></dd>
+          </dl>
+          <p lang="en">In GUILDA the bus type is not chosen separately; it follows from the equipment. A bus marked as the slack bus is the slack bus, a bus with a generator is a PV bus, and every other bus is a PQ bus. The slack bus is the one choice left to the user: exactly one bus, usually a large generator bus, is marked as the slack bus before the power flow calculation.</p>
+          <p lang="ja">GUILDA では、母線の種類を別に指定するのではなく、つながっている機器から決まります。Slack 母線に指定した母線は Slack 母線、発電機のある母線は PV 母線、それ以外の母線は PQ 母線です。利用者が選ぶのは Slack 母線だけで、潮流計算の前に、ふつうは大きな発電機のある母線を 1 つ Slack 母線に指定します。</p>
+        </section>
+
+        <!-- ============================== GENERATORS ============================== -->
+        <section id="generators">
+          <h2><span lang="en">Generators: a heavy spinning disk</span><span lang="ja">発電機：回る重い円盤</span></h2>
+          <p lang="en">A synchronous generator is driven by a turbine and turns the mechanical power <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span> into the electrical power <span class="lec-math-inline" data-tex="P_\mathrm{e}"></span> that it sends to the network. Its rotor, together with the turbine, is a heavy disk weighing many tonnes and spinning in step with the AC frequency. When the two powers are equal the speed stays constant. When they differ, the difference speeds the rotor up or slows it down.</p>
+          <p lang="ja">同期発電機はタービンに回され、機械入力 <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span> を電気出力 <span class="lec-math-inline" data-tex="P_\mathrm{e}"></span> に変えて送電網に送り出します。回転子はタービンとともに何十 t もある重い円盤で、交流の周波数に合わせて回っています。2 つの電力が等しければ回転の速さは変わりません。違えば、その差が回転を速くしたり遅くしたりします。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="Left: the rotor as a disk between the mechanical input and the electrical output. Right: generator models from droop to Park, with 1 to 6 state variables">
+                <defs>
+                  <marker id="p1-arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- disk -->
+                <circle class="f-c2" cx="190" cy="120" r="60"/>
+                <circle class="f-ink" cx="190" cy="120" r="7"/>
+                <path class="s-c2" d="M150 52 A 78 78 0 0 1 258 82" marker-end="url(#p1-arrow-g)"/>
+                <line class="s-ink" x1="36" y1="120" x2="124" y2="120" marker-end="url(#p1-arrow-g)"/>
+                <line class="s-ink" x1="256" y1="120" x2="344" y2="120" marker-end="url(#p1-arrow-g)"/>
+                <text class="t-strong t-mid" x="76" y="108">Pm</text>
+                <text class="t-strong t-mid" x="304" y="108">Pe</text>
+                <text lang="en" class="t-muted t-mid" x="76" y="142">turbine</text>
+                <text lang="ja" class="t-muted t-mid" x="76" y="142">タービン</text>
+                <text lang="en" class="t-muted t-mid" x="304" y="142">network</text>
+                <text lang="ja" class="t-muted t-mid" x="304" y="142">送電網</text>
+                <text lang="en" class="t-c2 t-small t-mid" x="190" y="214">Pm &gt; Pe: speeds up</text>
+                <text lang="ja" class="t-c2 t-small t-mid" x="190" y="214">Pm &gt; Pe なら加速</text>
+                <text lang="en" class="t-c3 t-small t-mid" x="190" y="234">Pm &lt; Pe: slows down</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="190" y="234">Pm &lt; Pe なら減速</text>
+                <text lang="en" class="t-strong t-mid" x="190" y="270">The rotor as a heavy disk</text>
+                <text lang="ja" class="t-strong t-mid" x="190" y="270">重い円盤としての回転子</text>
+                <line class="s-line is-dashed" x1="395" y1="20" x2="395" y2="280"/>
+                <!-- model ladder -->
+                <text lang="en" class="t-muted" x="420" y="32">number of state variables</text>
+                <text lang="ja" class="t-muted" x="420" y="32">状態変数の数</text>
+                <line class="s-line" x1="414" y1="210" x2="754" y2="210"/>
+                <rect class="f-c2" x="420" y="185" width="56" height="25" rx="2"/>
+                <rect class="f-c2" x="488" y="160" width="56" height="50" rx="2"/>
+                <rect class="f-c2" x="556" y="135" width="56" height="75" rx="2"/>
+                <rect class="f-c2" x="624" y="110" width="56" height="100" rx="2"/>
+                <rect class="f-c2" x="692" y="60" width="56" height="150" rx="2"/>
+                <text class="t-c2 t-mid" x="448" y="178">1</text>
+                <text class="t-c2 t-mid" x="516" y="153">2</text>
+                <text class="t-c2 t-mid" x="584" y="128">3</text>
+                <text class="t-c2 t-mid" x="652" y="103">4</text>
+                <text class="t-c2 t-mid" x="720" y="53">6</text>
+                <text lang="en" class="t-small t-mid" x="448" y="228">droop</text>
+                <text lang="ja" class="t-small t-mid" x="448" y="228">ドループ</text>
+                <text lang="en" class="t-small t-mid" x="516" y="228">classical</text>
+                <text lang="ja" class="t-small t-mid" x="516" y="228">古典</text>
+                <text lang="en" class="t-small t-mid" x="584" y="228">1-axis</text>
+                <text lang="ja" class="t-small t-mid" x="584" y="228">1 軸</text>
+                <text lang="en" class="t-small t-mid" x="652" y="228">2-axis</text>
+                <text lang="ja" class="t-small t-mid" x="652" y="228">2 軸</text>
+                <text class="t-small t-mid" x="720" y="228">Park</text>
+                <line class="s-ink" x1="420" y1="250" x2="748" y2="250" marker-end="url(#p1-arrow-g)"/>
+                <text lang="en" class="t-strong t-mid" x="584" y="276">simpler → more detailed</text>
+                <text lang="ja" class="t-strong t-mid" x="584" y="276">簡単 → 詳しい</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Left: the difference between the mechanical input and the electrical output changes the speed of the rotor. Right: the generator models of GUILDA and their number of state variables.</figcaption>
+            <figcaption lang="ja">左: 機械入力と電気出力の差が、回転子の速さを変えます。右: GUILDA の発電機モデルと、その状態変数の数です。</figcaption>
+          </figure>
+
+          <p lang="en">This is the <strong>swing equation</strong>, the core of every generator model. With the rotor angle <span class="lec-math-inline" data-tex="\delta"></span> (rad), the speed deviation <span class="lec-math-inline" data-tex="\omega"></span> from the rated speed (pu) and the rated frequency <span class="lec-math-inline" data-tex="f_0"></span> (Hz), the form used in GUILDA is</p>
+          <p lang="ja">これを式にしたものが<strong>動揺方程式</strong>で、どの発電機モデルにも含まれる中心の式です。回転子の角度を <span class="lec-math-inline" data-tex="\delta"></span>（rad）、定格の速さからのずれを <span class="lec-math-inline" data-tex="\omega"></span>（pu）、定格周波数を <span class="lec-math-inline" data-tex="f_0"></span>（Hz）とすると、GUILDA で使う形は次のとおりです。</p>
+          <div class="lec-math" data-tex="\frac{\mathrm{d}\delta}{\mathrm{d}t} = 2\pi f_0\,\omega, \qquad M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = P_\mathrm{m} - P_\mathrm{e} - D\,\omega"></div>
+          <p lang="en"><span class="lec-math-inline" data-tex="M"></span> (s) is the <strong>inertia constant</strong>, <span class="lec-math-inline" data-tex="M = 2H"></span>, where <span class="lec-math-inline" data-tex="H"></span> (s) is the kinetic energy stored in the rotor at rated speed divided by the rated power: the heavier the rotor, the more slowly its speed changes for the same power difference. <span class="lec-math-inline" data-tex="D"></span> (pu) stands for damping that calms the swings. The inertia of all the generators together is what holds the frequency for the first seconds after a disturbance.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="M"></span>（s）は<strong>慣性定数</strong>で、定格の速さで回転子にたまる運動エネルギーを定格出力で割った値 <span class="lec-math-inline" data-tex="H"></span>（s、単位慣性定数）を使うと <span class="lec-math-inline" data-tex="M = 2H"></span> です。回転子が重いほど、同じ電力の差でも速さがゆっくり変わります。<span class="lec-math-inline" data-tex="D"></span>（pu）は揺れを静める制動の大きさを表します。外乱の後の最初の数秒間、周波数を支えているのは、すべての発電機の慣性を合わせたものです。</p>
+          <p lang="en">The swing equation describes only the rotation. Inside the generator there are also windings whose magnetic flux changes with time: the field winding, fed by the exciter, and damper windings. A model can include more or fewer of them. A more detailed model is closer to a real machine but needs more parameters and more computation. GUILDA has five levels:</p>
+          <p lang="ja">動揺方程式が表すのは回転だけです。発電機の中には、励磁装置から電流を流す界磁巻線や制動巻線もあり、その磁束も時間とともに変わります。モデルには、それをどこまで含めるかの段階があります。詳しいモデルほど実際の機械に近くなりますが、必要なパラメータと計算が増えます。GUILDA には次の 5 段階があります。</p>
+          <div class="lec1-tablewrap">
+            <table>
+              <thead>
+                <tr><th><span lang="en">Model (key)</span><span lang="ja">モデル（キー）</span></th><th><span lang="en">States</span><span lang="ja">状態</span></th><th><span lang="en">What it includes</span><span lang="ja">含むもの</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td><span lang="en">Droop</span><span lang="ja">ドループ</span> <code>gen-droop</code></td><td class="lec1-num">1</td><td><span lang="en">Rotor angle only; no inertia. The angle changes at a rate proportional to the power difference.</span><span lang="ja">回転子の角度だけで、慣性はありません。角度が、電力の差に比例した速さで変わります。</span></td></tr>
+                <tr><td><span lang="en">Classical</span><span lang="ja">古典モデル</span> <code>gen-classical</code></td><td class="lec1-num">2</td><td><span lang="en">The swing equation (angle and speed) with a constant internal voltage.</span><span lang="ja">動揺方程式（角度と速さ）と、一定の内部電圧です。</span></td></tr>
+                <tr><td><span lang="en">One-axis</span><span lang="ja">1 軸モデル</span> <code>gen-1axis</code></td><td class="lec1-num">3</td><td><span lang="en">Adds the field winding, so the internal voltage changes and an AVR can act on it.</span><span lang="ja">界磁巻線を加えたモデルです。内部電圧が変わるので、AVR の働きを表せます。</span></td></tr>
+                <tr><td><span lang="en">Two-axis</span><span lang="ja">2 軸モデル</span> <code>gen-2axis</code></td><td class="lec1-num">4</td><td><span lang="en">Adds a damper winding on the other axis.</span><span lang="ja">もう一方の軸の制動巻線を加えたモデルです。</span></td></tr>
+                <tr><td><span lang="en">Park</span><span lang="ja">Park モデル</span> <code>gen-park</code></td><td class="lec1-num">6</td><td><span lang="en">Adds the fast (subtransient) fluxes of the damper windings.</span><span lang="ja">制動巻線の速い変化（初期過渡）の磁束まで含めたモデルです。</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p lang="en">Which level to choose depends on the question. The classical model is enough to see how rotors swing against each other for about a second after a fault. Voltage control and slower oscillations need at least the one-axis model.</p>
+          <p lang="ja">どの段階を選ぶかは、知りたいことによります。事故の後の 1 秒ほどの間に回転子どうしがどう揺れるかを見るなら、古典モデルで十分です。電圧の制御や、ゆっくりした振動を見るには、少なくとも 1 軸モデルが必要です。</p>
+        </section>
+
+        <!-- ============================== LOADS ============================== -->
+        <section id="loads">
+          <h2><span lang="en">Load models</span><span lang="ja">負荷モデル</span></h2>
+          <p lang="en">A load in an analysis stands for everything behind one substation: lighting, motors, heaters and electronic devices together. What matters for the network is how the power it draws changes when the voltage changes. Three simple types are used. Each consumes <span class="lec-math-inline" data-tex="P_0"></span> at the operating voltage <span class="lec-math-inline" data-tex="|V_0|"></span>, and</p>
+          <p lang="ja">解析での負荷は、1 つの変電所の先にある照明・モーター・電熱器・電子機器などをまとめて表したものです。送電網にとって大切なのは、電圧が変わったときに負荷の消費電力がどう変わるかです。基本になるのは次の 3 つの型です。運転点の電圧 <span class="lec-math-inline" data-tex="|V_0|"></span> で <span class="lec-math-inline" data-tex="P_0"></span> を消費するとして、消費電力は次の式で表せます。</p>
+          <div class="lec-math" data-tex="P = P_0 \left( \frac{|V|}{|V_0|} \right)^{k}"></div>
+          <p lang="en">with <span class="lec-math-inline" data-tex="k = 0"></span> for constant power, <span class="lec-math-inline" data-tex="k = 1"></span> for constant current and <span class="lec-math-inline" data-tex="k = 2"></span> for constant impedance. The reactive power follows the same rule with <span class="lec-math-inline" data-tex="Q_0"></span>.</p>
+          <p lang="ja">定電力は <span class="lec-math-inline" data-tex="k = 0"></span>、定電流は <span class="lec-math-inline" data-tex="k = 1"></span>、定インピーダンスは <span class="lec-math-inline" data-tex="k = 2"></span> です。無効電力も、<span class="lec-math-inline" data-tex="Q_0"></span> を使って同じ式で表します。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part1/load-models.en.png" alt="Consumed power relative to P0 against the bus voltage from 0.5 to 1.1 pu: constant power stays at 1, constant current falls in proportion to the voltage, constant impedance with its square; at 0.5 pu they consume 1, 0.5 and 0.25" width="808" height="515">
+              <img lang="ja" src="../images/lecture/part1/load-models.ja.png" alt="母線電圧 0.5〜1.1 pu に対する、P0 を 1 とした消費電力。定電力は 1 のまま、定電流は電圧に比例し、定インピーダンスは電圧の 2 乗に比例して減る。0.5 pu ではそれぞれ 1、0.5、0.25" width="808" height="515">
+            </div>
+            <figcaption lang="en">The consumed power of the three load types from the formula above. All three draw the same power at the operating voltage (<span class="lec-math-inline" data-tex="|V_0| = 1"></span> pu here) and differ when the voltage falls.</figcaption>
+            <figcaption lang="ja">上の式から求めた、3 つの型の負荷の消費電力です。運転点の電圧（ここでは <span class="lec-math-inline" data-tex="|V_0| = 1"></span> pu）では同じ電力を消費し、電圧が下がったときに違いが出ます。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">Constant impedance</span><span lang="ja">定インピーダンス</span></dt>
+            <dd><span lang="en">Behaves like a fixed resistor and reactor, such as a heater. The power falls with the square of the voltage, which helps the network when the voltage drops.</span><span lang="ja">電熱器のように、決まった抵抗とリアクタンスとしてふるまいます。電力は電圧の 2 乗に比例して減るので、電圧が下がったときには系統を助ける向きに働きます。</span></dd>
+            <dt><span lang="en">Constant current</span><span lang="ja">定電流</span></dt>
+            <dd><span lang="en">Draws the same current whatever the voltage, so the power is proportional to the voltage. It lies between the other two.</span><span lang="ja">電圧によらず同じ電流を流すので、電力は電圧に比例します。ほかの 2 つの中間の性質です。</span></dd>
+            <dt><span lang="en">Constant power</span><span lang="ja">定電力</span></dt>
+            <dd><span lang="en">Draws the same power whatever the voltage, like a device with a regulated power supply. When the voltage falls it draws more current, which pushes the voltage down further; this is a cause of voltage collapse.</span><span lang="ja">電源回路で電力を一定に保つ機器のように、電圧によらず同じ電力を消費します。電圧が下がると電流を多く流し、それがさらに電圧を下げます。電圧崩壊の原因の 1 つです。</span></dd>
+          </dl>
+          <p lang="en">Real loads are a mixture of these types (often called a ZIP model, from impedance, current and power). GUILDA has three load models, one for each type: <code>load-impedance</code> (constant impedance, tag <code>LRX</code>), <code>load-current</code> (constant current, tag <code>LI</code>) and <code>load-power</code> (constant power, tag <code>LPQ</code>). A fourth model, <code>load-ZIP</code> (tag <code>LZIP</code>), mixes the three types in one component with the coefficients <code>kPZ</code>, <code>kPI</code>, <code>kPP</code> (and <code>kQZ</code>, <code>kQI</code>, <code>kQP</code> for the reactive power). One bus can hold several components, so a mixed load can be made by splitting the load of a bus into parts of different types and attaching each part to the same bus: the parts add up to the load of the bus at the operating point, and each part changes with the voltage in its own way. In the power flow calculation every load is simply a fixed <span class="lec-math-inline" data-tex="P"></span> and <span class="lec-math-inline" data-tex="Q"></span>; the load type matters only once the voltage moves, in time-domain simulation and in linearization.</p>
+          <p lang="ja">実際の負荷は、これらが混ざったものです（インピーダンス・電流・電力の頭文字から ZIP モデルと呼ばれます）。GUILDA の負荷モデルは、3 つの型にそれぞれ対応する <code>load-impedance</code>（定インピーダンス、タグ <code>LRX</code>）、<code>load-current</code>（定電流、タグ <code>LI</code>）、<code>load-power</code>（定電力、タグ <code>LPQ</code>）の 3 つです。このほかに、3 つの型を係数 <code>kPZ</code>・<code>kPI</code>・<code>kPP</code>（無効電力は <code>kQZ</code>・<code>kQI</code>・<code>kQP</code>）で 1 つの機器の中で混ぜる <code>load-ZIP</code>（タグ <code>LZIP</code>）もあります。1 つの母線には複数の機器をつなげるので、母線の負荷を型の違う部分に分け、それぞれを同じ母線につなげば、混ざった負荷を表せます。運転点では各部分の電力の和が母線の負荷になり、電圧が変わると、各部分がそれぞれの型に従って変わります。潮流計算では、どの負荷も決まった <span class="lec-math-inline" data-tex="P"></span> と <span class="lec-math-inline" data-tex="Q"></span> として扱います。負荷の型が効いてくるのは電圧が動くとき、つまり時間シミュレーションや近似線形化のときです。</p>
+        </section>
+
+        <!-- ============================== CONTROLLERS ============================== -->
+        <section id="controllers">
+          <h2><span lang="en">Controllers: local and global</span><span lang="ja">制御器：ローカルとグローバル</span></h2>
+          <p lang="en">A generator alone cannot keep its voltage and frequency steady: controllers measure what happens and adjust its inputs. GUILDA sorts controllers by what they see and what they drive.</p>
+          <p lang="ja">発電機だけでは、電圧や周波数を一定に保てません。制御器が状態を測り、発電機の入力を調整します。GUILDA では、制御器を「何を観測し、何を動かすか」で 2 つに分けます。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">Local controller</span><span lang="ja">ローカル制御器</span></dt>
+            <dd><span lang="en">Belongs to one component. It observes that component (and its bus) and drives that component's inputs.</span><span lang="ja">1 つの機器に属する制御器です。その機器（とその母線）を観測し、その機器の入力を動かします。</span></dd>
+            <dt><span lang="en">Global controller</span><span lang="ja">グローバル制御器</span></dt>
+            <dd><span lang="en">Belongs to the network. It observes several components and drives several components together.</span><span lang="ja">系統全体に属する制御器です。複数の機器を観測し、複数の機器の入力をまとめて動かします。</span></dd>
+          </dl>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="Left: a PSS, an AVR and a governor around one generator. Right: an AGC connected to three generators">
+                <defs>
+                  <marker id="p1-arrow-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- local -->
+                <rect class="f-c4" x="36" y="40" width="90" height="40" rx="5"/>
+                <text class="t-c4 t-mid" x="81" y="65">PSS</text>
+                <rect class="f-c4" x="150" y="40" width="90" height="40" rx="5"/>
+                <text class="t-c4 t-mid" x="195" y="65">AVR</text>
+                <rect class="f-c4" x="264" y="40" width="110" height="40" rx="5"/>
+                <text lang="en" class="t-c4 t-mid" x="319" y="65">governor</text>
+                <text lang="ja" class="t-c4 t-mid" x="319" y="65">ガバナ</text>
+                <circle class="f-c2" cx="195" cy="200" r="26"/>
+                <path class="s-c2" d="M178 200 C 184 186, 190 186, 195 200 S 206 214, 212 200"/>
+                <line class="s-c4" x1="126" y1="60" x2="148" y2="60" marker-end="url(#p1-arrow-c)"/>
+                <line class="s-c4" x1="195" y1="80" x2="195" y2="172" marker-end="url(#p1-arrow-c)"/>
+                <path class="s-c4" d="M319 80 V200 H223" marker-end="url(#p1-arrow-c)"/>
+                <path class="s-c4 is-dashed" d="M169 200 H81 V82" marker-end="url(#p1-arrow-c)"/>
+                <text class="t-small" x="202" y="130">Vfield</text>
+                <text class="t-small" x="325" y="140">Pmech</text>
+                <text class="t-small t-end" x="76" y="150">ω</text>
+                <text lang="en" class="t-strong t-mid" x="205" y="262">Local controllers</text>
+                <text lang="ja" class="t-strong t-mid" x="205" y="262">ローカル制御器</text>
+                <text lang="en" class="t-muted t-mid" x="205" y="282">one generator each</text>
+                <text lang="ja" class="t-muted t-mid" x="205" y="282">発電機 1 台ごと</text>
+                <line class="s-line is-dashed" x1="410" y1="20" x2="410" y2="280"/>
+                <!-- global -->
+                <rect class="f-c4" x="500" y="40" width="180" height="40" rx="5"/>
+                <text class="t-c4 t-mid" x="590" y="65">AGC</text>
+                <circle class="f-c2" cx="480" cy="200" r="22"/>
+                <path class="s-c2" d="M466 200 C 471 188, 476 188, 480 200 S 489 212, 494 200"/>
+                <circle class="f-c2" cx="590" cy="200" r="22"/>
+                <path class="s-c2" d="M576 200 C 581 188, 586 188, 590 200 S 599 212, 604 200"/>
+                <circle class="f-c2" cx="700" cy="200" r="22"/>
+                <path class="s-c2" d="M686 200 C 691 188, 696 188, 700 200 S 709 212, 714 200"/>
+                <line class="s-c4" x1="530" y1="82" x2="486" y2="176" marker-start="url(#p1-arrow-c)" marker-end="url(#p1-arrow-c)"/>
+                <line class="s-c4" x1="590" y1="82" x2="590" y2="176" marker-start="url(#p1-arrow-c)" marker-end="url(#p1-arrow-c)"/>
+                <line class="s-c4" x1="650" y1="82" x2="694" y2="176" marker-start="url(#p1-arrow-c)" marker-end="url(#p1-arrow-c)"/>
+                <text class="t-small" x="598" y="122">ω ↑</text>
+                <text class="t-small" x="598" y="142">Pmech ↓</text>
+                <text lang="en" class="t-strong t-mid" x="590" y="262">Global controller</text>
+                <text lang="ja" class="t-strong t-mid" x="590" y="262">グローバル制御器</text>
+                <text lang="en" class="t-muted t-mid" x="590" y="282">several generators together</text>
+                <text lang="ja" class="t-muted t-mid" x="590" y="282">複数の発電機をまとめて</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Left: the local controllers of one generator. The AVR sets the field voltage Vfield, the governor sets the mechanical power Pmech, and the PSS watches the speed deviation ω and adds a signal to the AVR. Right: a global controller (AGC) that reads ω of several generators and sends each of them a Pmech command.</figcaption>
+            <figcaption lang="ja">左: 発電機 1 台のローカル制御器です。AVR は界磁電圧 Vfield を、ガバナは機械入力 Pmech を決め、PSS は速さのずれ ω を見て AVR に信号を加えます。右: 複数の発電機の ω を読み、それぞれに Pmech の指令を送るグローバル制御器（AGC）です。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">AVR</span><span lang="ja">AVR（自動電圧調整器）</span></dt>
+            <dd><span lang="en">Automatic voltage regulator. Keeps the terminal voltage at its set value by adjusting the field voltage. GUILDA: <code>avr-DC1</code>, <code>avr-ST1</code>.</span><span lang="ja">界磁電圧を調整して、発電機の端子電圧を設定値に保ちます。GUILDA: <code>avr-DC1</code>、<code>avr-ST1</code>。</span></dd>
+            <dt><span lang="en">PSS</span><span lang="ja">PSS（系統安定化装置）</span></dt>
+            <dd><span lang="en">Power system stabilizer. Watches the speed deviation and adds a signal to the AVR so that rotor swings die out faster. GUILDA: <code>pss-PSS1</code>, attached to an AVR.</span><span lang="ja">速さのずれを見て AVR に信号を加え、回転子の揺れを早く収めます。GUILDA: <code>pss-PSS1</code>（AVR に付けて使う）。</span></dd>
+            <dt><span lang="en">Governor</span><span lang="ja">ガバナ（調速機）</span></dt>
+            <dd><span lang="en">Changes the turbine output when the speed changes, so that the generators share a change of demand within seconds. GUILDA: <code>gov-LPT1</code>, <code>gov-LPT3</code>, <code>gov-LPT4</code> (the governor models of the IEEJ standard models).</span><span lang="ja">回転の速さが変わるとタービンの出力を変え、需要の変化を数秒のうちに発電機で分担します。GUILDA: <code>gov-LPT1</code>、<code>gov-LPT3</code>、<code>gov-LPT4</code>（電気学会の標準モデルのガバナ）。</span></dd>
+            <dt><span lang="en">AGC</span><span lang="ja">AGC（自動発電制御）</span></dt>
+            <dd><span lang="en">Automatic generation control. The governors alone leave a small frequency offset; the AGC integrates the frequency deviation and shares out a correction among several generators to bring the frequency back to its rated value. GUILDA: <code>agc-PI</code>, a global controller.</span><span lang="ja">ガバナだけでは周波数に小さなずれが残ります。AGC は周波数のずれを積分し、その補正を複数の発電機に割り振って、周波数を定格の値に戻します。GUILDA: <code>agc-PI</code>（グローバル制御器）。</span></dd>
+          </dl>
+          <p lang="en">GUILDA also has <code>local-LQR</code>, a local controller that feeds back all the states of one generator with a gain designed by optimal control (LQR). Controller design is the topic of Part 8.</p>
+          <p lang="ja">GUILDA には、最適制御（LQR）で設計したゲインで 1 台の発電機のすべての状態をフィードバックするローカル制御器 <code>local-LQR</code> もあります。制御器の設計は Part 8 で扱います。</p>
+        </section>
+
+        <!-- ============================== BENCHMARKS ============================== -->
+        <section id="benchmarks">
+          <h2><span lang="en">Bundled benchmark networks</span><span lang="ja">同梱のベンチマーク系統</span></h2>
+          <p lang="en">Building a large network from its data takes time, and results are only comparable when everyone uses the same network. Researchers therefore use shared <strong>benchmark networks</strong>. GUILDA comes with several of them, each ready to use with one command, for example:</p>
+          <p lang="ja">大きな系統をデータから組み立てるのは手間がかかり、また同じ系統を使わなければ結果を比べられません。そこで研究では、共通の<strong>ベンチマーク系統</strong>が使われます。GUILDA には、1 行で使えるものがいくつか同梱されています。たとえば IEEE 9 母線系統は次のように読み込みます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();</code></pre>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part1/benchmarks.en.png" alt="Number of buses of the bundled networks: Txt3Bus 3, IEEE9bus 9, IEEE14bus 14, IEEJ_WEST10 27, IEEE39Bus 39, IEEJ_EAST10 47, IEEE68bus 68, IEEJ_EAST30 107, IEEJ_WEST30 115" width="1245" height="517">
+              <img lang="ja" src="../images/lecture/part1/benchmarks.ja.png" alt="同梱の系統の母線の数。Txt3Bus 3、IEEE9bus 9、IEEE14bus 14、IEEJ_WEST10 27、IEEE39Bus 39、IEEJ_EAST10 47、IEEE68bus 68、IEEJ_EAST30 107、IEEJ_WEST30 115" width="1245" height="518">
+            </div>
+            <figcaption lang="en">The bundled networks by number of buses, counted from the networks built with GUILDA. Small networks are good for understanding; the larger ones show the behaviour of real-sized systems.</figcaption>
+            <figcaption lang="ja">同梱の系統を、GUILDA で作った系統の母線の数で並べたものです。小さな系統は仕組みを理解するのに、大きな系統は実際の規模の系統のふるまいを見るのに向いています。</figcaption>
+          </figure>
+
+          <div class="lec1-tablewrap">
+            <table>
+              <thead>
+                <tr><th><span lang="en">Network</span><span lang="ja">系統</span></th><th><span lang="en">Buses</span><span lang="ja">母線</span></th><th><span lang="en">Gen.</span><span lang="ja">発電機</span></th><th><span lang="en">Freq.</span><span lang="ja">周波数</span></th><th><span lang="en">Generator model</span><span lang="ja">発電機モデル</span></th><th><span lang="en">Controllers</span><span lang="ja">制御器</span></th><th><span lang="en">Notes</span><span lang="ja">特徴</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>Txt3Bus</code></td><td class="lec1-num">3</td><td class="lec1-num">2</td><td class="lec1-num">60 Hz</td><td><span lang="en">one-axis</span><span lang="ja">1 軸</span></td><td><span lang="en">none</span><span lang="ja">なし</span></td><td><span lang="en">The 3-bus example of the textbook GUILDA is based on.</span><span lang="ja">GUILDA の基になった教科書の 3 母線の例です。</span></td></tr>
+                <tr><td><code>IEEE9bus</code></td><td class="lec1-num">9</td><td class="lec1-num">3</td><td class="lec1-num">60 Hz</td><td><span lang="en">one-axis</span><span lang="ja">1 軸</span></td><td>AVR, PSS</td><td><span lang="en">The WSCC 3-machine system; small enough to follow every bus.</span><span lang="ja">WSCC の 3 機系統です。すべての母線を追える小ささです。</span></td></tr>
+                <tr><td><code>IEEE14bus</code></td><td class="lec1-num">14</td><td class="lec1-num">5</td><td class="lec1-num">60 Hz</td><td>Park</td><td><span lang="en">none</span><span lang="ja">なし</span></td><td><span lang="en">A classic power flow test case; also without taps (<code>_NoTap</code>) and without resistance (<code>_lossless</code>).</span><span lang="ja">潮流計算の代表的な試験系統です。タップなし（<code>_NoTap</code>）と抵抗なし（<code>_lossless</code>）の版もあります。</span></td></tr>
+                <tr><td><code>IEEE39Bus</code></td><td class="lec1-num">39</td><td class="lec1-num">10</td><td class="lec1-num">60 Hz</td><td><span lang="en">two-axis</span><span lang="ja">2 軸</span></td><td><span lang="en">none</span><span lang="ja">なし</span></td><td><span lang="en">The New England 10-machine system.</span><span lang="ja">ニューイングランドの 10 機系統です。</span></td></tr>
+                <tr><td><code>IEEE68bus</code></td><td class="lec1-num">68</td><td class="lec1-num">16</td><td class="lec1-num">60 Hz</td><td><span lang="en">one-axis</span><span lang="ja">1 軸</span></td><td>AVR, PSS</td><td><span lang="en">New England and New York, 16 machines; a benchmark for inter-area oscillations.</span><span lang="ja">ニューイングランドとニューヨークの 16 機系統です。地域間の振動を調べる標準の系統です。</span></td></tr>
+                <tr><td><code>IEEJ_EAST10</code><br><code>IEEJ_EAST30</code></td><td class="lec1-num">47<br>107</td><td class="lec1-num">10<br>30</td><td class="lec1-num">50 Hz</td><td>Park</td><td><span lang="en">AVR, governor</span><span lang="ja">AVR・ガバナ</span></td><td><span lang="en">IEEJ standard models of a 50 Hz system; peak and night load cases.</span><span lang="ja">電気学会の標準モデルで、50 Hz の系統です。昼のピークと夜の 2 つの断面があります。</span></td></tr>
+                <tr><td><code>IEEJ_WEST10</code><br><code>IEEJ_WEST30</code></td><td class="lec1-num">27<br>115</td><td class="lec1-num">10<br>30</td><td class="lec1-num">60 Hz</td><td>Park</td><td><span lang="en">AVR, governor</span><span lang="ja">AVR・ガバナ</span></td><td><span lang="en">IEEJ standard models of a long 60 Hz system with slow oscillations; peak and night load cases.</span><span lang="ja">電気学会の標準モデルで、長く延びた 60 Hz の系統です。ゆっくりした振動が起きやすく、昼のピークと夜の 2 つの断面があります。</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p lang="en">There is also a test network, <code>TEST31bus</code> (31 buses, 10 generators). Every bundled network is an ordinary network: buses, branches, components and controllers can be added, replaced or removed, for example to try a different generator model or load model.</p>
+          <p lang="ja">ほかに、試験用の系統として <code>TEST31bus</code>（31 母線、発電機 10 台）があります。同梱の系統も普通の系統と同じで、母線・ブランチ・機器・制御器を加えたり、置き換えたり、取り除いたりできます。たとえば、発電機や負荷のモデルを変えて結果を比べられます。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li><span lang="en">A power system model is built from four kinds of parts: buses, branches (lines and transformers), components (generators and loads) and controllers.</span><span lang="ja">電力系統のモデルは、母線・ブランチ（送電線と変圧器）・機器（発電機と負荷）・制御器の 4 種類の部品で組み立てます。</span></li>
+            <li><span lang="en">Per-unit values divide each quantity by a base value, so that normal values are close to 1 at every voltage level.</span><span lang="ja">単位法では各量を基準値で割り、どの電圧階級でも正常な値が 1 の近くになるようにします。</span></li>
+            <li><span lang="en">A line is a π circuit of series impedance and line charging; a transformer is a leakage reactance with a tap.</span><span lang="ja">送電線は直列インピーダンスと対地静電容量の π 型回路、変圧器は漏れリアクタンスとタップで表します。</span></li>
+            <li><span lang="en">The branches together give the bus admittance matrix: I = YV relates the current injections to the bus voltages, and Y is sparse.</span><span lang="ja">ブランチをまとめると母線アドミタンス行列になり、I = YV が注入電流と母線電圧を結びます。Y は疎行列です。</span></li>
+            <li><span lang="en">Each bus fixes two of |V|, θ, P and Q: the slack bus fixes |V| and θ, PV buses (generators) fix P and |V|, PQ buses (loads and empty buses) fix P and Q.</span><span lang="ja">母線は |V|・θ・P・Q のうち 2 つを決めます。Slack 母線は |V| と θ、PV 母線（発電機）は P と |V|、PQ 母線（負荷と機器のない母線）は P と Q です。</span></li>
+            <li><span lang="en">A generator is a heavy spinning disk that follows the swing equation; models range from droop and classical to Park.</span><span lang="ja">発電機は動揺方程式に従う回る重い円盤で、モデルにはドループ・古典から Park までの段階があります。</span></li>
+            <li><span lang="en">Loads differ in how their power changes with voltage; constant power loads are the hardest on the network.</span><span lang="ja">負荷は、電圧によって電力がどう変わるかで型が分かれます。定電力負荷は系統にとって最も厳しい負荷です。</span></li>
+            <li><span lang="en">Local controllers (AVR, PSS, governor) act on one generator; a global controller (AGC) acts on several together.</span><span lang="ja">ローカル制御器（AVR・PSS・ガバナ）は 1 台の発電機に、グローバル制御器（AGC）は複数の発電機にまとめて働きます。</span></li>
+            <li><span lang="en">GUILDA comes with IEEE benchmark networks and IEEJ standard models, from 3 to 115 buses.</span><span lang="ja">GUILDA には、IEEE のベンチマーク系統と電気学会の標準モデルが、3 母線から 115 母線まで同梱されています。</span></li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card is-c3" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b><span><span lang="en">Uses the bus types to find the operating point.</span><span lang="ja">母線の種類を使って運転点を求める。</span></span></a></li>
+          <li><a class="lec-card is-c2" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b><span><span lang="en">How generators swing after a fault.</span><span lang="ja">事故の後に発電機がどう揺れるか。</span></span></a></li>
+          <li><a class="lec-card is-c4" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b><span><span lang="en">AVR, PSS, governor and global controllers in depth.</span><span lang="ja">AVR・PSS・ガバナとグローバル制御器を詳しく。</span></span></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><span lang="en"><code>_GUILDAtutorial/Part1_NetworkComponents.mlx</code>: after starting GUILDA, open it with <code>open Part1_NetworkComponents.mlx</code> in the MATLAB Command Window. The graphs on this page can be drawn by running this Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part1_NetworkComponents.mlx</code>：GUILDA を起動した後、MATLAB のコマンド ウィンドウで <code>open Part1_NetworkComponents.mlx</code> を実行して開きます。このページのグラフは、Part 1 のライブスクリプトを実行すると描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; its 3-bus example is the bundled <code>Txt3Bus</code>.</span><span lang="ja">GUILDA の基になった教科書です。その 3 母線の例が、同梱の <code>Txt3Bus</code> です。</span></span></li>
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">Per-unit values, line, transformer, generator and load models, excitation and governor systems.</span><span lang="ja">単位法、送電線・変圧器・発電機・負荷のモデル、励磁系と調速系を詳しく扱っています。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">The swing equation, generator models of different detail, and frequency control including AGC.</span><span lang="ja">動揺方程式、詳しさの異なる発電機モデル、AGC を含む周波数制御を扱っています。</span></span></li>
+            <li>B. Pal and B. Chaudhuri, <cite>Robust Control in Power Systems</cite>, Springer, 2005.
+              <span class="lec-ref-note"><span lang="en">The source of the 68-bus, 16-machine network (<code>IEEE68bus</code>).</span><span lang="ja">68 母線・16 機の系統（<code>IEEE68bus</code>）のデータの出典です。</span></span></li>
+            <li><span lang="en">IEEJ Power and Energy Society, standard power system models (web page),</span><span lang="ja">電気学会 電力・エネルギー部門、電力系統の標準モデル（Web ページ）、</span> <a href="http://www2.iee.or.jp/~pes/model/kikan/kikan_mokuji.html">http://www2.iee.or.jp/~pes/model/kikan/kikan_mokuji.html</a>
+              <span class="lec-ref-note"><span lang="en">The source of the IEEJ EAST and WEST models.</span><span lang="ja">電気学会の EAST・WEST モデルのデータの出典です。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part0-introduction.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 0: <span lang="en">Introduction</span><span lang="ja">導入</span></b></a>
+      <a class="is-next" href="part2-power-flow.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 2: <span lang="en">Power flow</span><span lang="ja">潮流計算</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 5: 近似線形化">GUILDA Lecture Notes - Part 5: Approximate linearization</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec5- ; shared lecture CSS (lec-*) is in style.css. -->
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 5 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 5</p>
+      <h1><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></h1>
+      <p class="lec-lead" lang="en">Small swings as a linear model: the state-space model, eigenvalues as modes of oscillation, the damping ratio and participation factors.</p>
+      <p class="lec-lead" lang="ja">小さな揺れを線形モデルで近似します。状態空間モデル、揺れの型としての固有値、ダンピング比、参加係数を説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#small-swing"><span lang="en">Small swings as lines</span><span lang="ja">小さな揺れと直線</span></a></li>
+          <li><a href="#state-space"><span lang="en">State-space model</span><span lang="ja">状態空間モデル</span></a></li>
+          <li><a href="#eigenvalues"><span lang="en">Eigenvalues as swing types</span><span lang="ja">固有値は揺れの型</span></a></li>
+          <li><a href="#complex-plane"><span lang="en">Complex plane and damping</span><span lang="ja">複素平面とダンピング比</span></a></li>
+          <li><a href="#modes"><span lang="en">Kinds of oscillation modes</span><span lang="ja">振動モードの種類</span></a></li>
+          <li><a href="#participation"><span lang="en">Participation factors</span><span lang="ja">参加係数</span></a></li>
+          <li><a href="#large-swing"><span lang="en">When the swing is large</span><span lang="ja">大きな揺れのとき</span></a></li>
+          <li><a href="#guilda"><span lang="en">Linearization in GUILDA</span><span lang="ja">GUILDA での線形化</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li lang="en">Why a small swing around an operating point can be described by a linear model, and what the state-space model is.</li>
+            <li lang="ja">運転点のまわりの小さな揺れが線形モデルで表せる理由と、状態空間モデルの形。</li>
+            <li lang="en">That each eigenvalue is one type of swing, and how to read it in the complex plane: stability, frequency and damping ratio.</li>
+            <li lang="ja">固有値の 1 つ 1 つが揺れの型であることと、複素平面での読み方（安定かどうか、周波数、ダンピング比）。</li>
+            <li lang="en">The kinds of oscillation modes (local and inter-area), mode shapes and participation factors, with IEEE 9-bus as the example.</li>
+            <li lang="ja">振動モードの種類（局所モード・地域間モード）、モード形、参加係数。IEEE 9 母線系統を例にします。</li>
+            <li lang="en">Where the linear model stops being accurate: large swings.</li>
+            <li lang="ja">線形モデルが合わなくなるところ（大きな揺れ）。</li>
+          </ul>
+        </section>
+
+        <section id="small-swing">
+          <h2><span lang="en">Small swings can be drawn with straight lines</span><span lang="ja">小さな揺れは直線で近似できる</span></h2>
+          <p lang="en">A power system is described by nonlinear equations. The best-known one is the power sent over a line: it follows a sine curve of the phase difference δ between the two ends. Solving such equations needs a time-domain simulation, and its result is a single trajectory for a single disturbance.</p>
+          <p lang="ja">電力系統は非線形の式で表されます。よく知られているのが送電線で送る電力で、両端の位相差 δ に対して正弦波の形の曲線になります。このような式を解くには時間シミュレーションが必要で、その結果は 1 つの外乱に対する 1 本の軌道です。</p>
+          <p lang="en">If we only look at a small range around the operating point, the curve is almost a straight line: its tangent. Replacing every curve of the model by its tangent at the operating point is <b>linearization</b>. The linear model holds for small swings only, but it can be studied with the tools of linear algebra, and it tells us how the system swings for <em>any</em> small disturbance at once.</p>
+          <p lang="ja">運転点のまわりの狭い範囲だけを見れば、曲線はほとんど直線（接線）です。モデルのすべての曲線を運転点での接線に置き換えることを<b>線形化</b>といいます。線形モデルが使えるのは小さな揺れだけですが、線形代数の道具で調べられ、<em>どんな</em>小さな外乱に対しても系統がどう揺れるかを一度に教えてくれます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/tangent.png" alt="Sine-shaped power curve P = Pmax sin delta with its tangent at the operating point delta0 = 40 degrees; in the shaded range of small swings the two agree, far from it they differ" width="1163" height="518">
+            </div>
+            <figcaption lang="en">The power over a line, P = P<sub>max</sub> sin δ, as a function of the phase difference δ, and its tangent at the operating point δ₀ (here 40°). In the shaded range δ₀ ± 0.15 rad the two differ by less than 0.8 % of P<sub>max</sub>; far from δ₀ the tangent misses the curve. The linear model uses the tangent.</figcaption>
+            <figcaption lang="ja">送電線の電力 P = P<sub>max</sub> sin δ と位相差 δ の関係と、運転点 δ₀（ここでは 40°）での接線です。色を付けた範囲 δ₀ ± 0.15 rad では、2 つの差は P<sub>max</sub> の 0.8% 未満です。δ₀ から離れると接線は曲線から外れます。線形モデルはこの接線を使います。</figcaption>
+          </figure>
+
+          <p lang="en">The same is done for all equations of the model at once. We write the state of the system as a vector x (rotor angles, speeds, internal voltages, the states of the controllers) and its equations as ẋ = f(x). At an operating point x₀ nothing moves, f(x₀) = 0. For the deviation Δx = x − x₀, a Taylor expansion of f around x₀ gives</p>
+          <p lang="ja">同じことを、モデルのすべての式についてまとめて行います。系統の状態（回転子の角度、回転速度、内部電圧、制御器の状態など）をベクトル x で表し、その式を ẋ = f(x) と書きます。運転点 x₀ では何も動かないので f(x₀) = 0 です。ずれ Δx = x − x₀ について、f を x₀ のまわりでテイラー展開すると次のようになります。</p>
+          <div class="lec-math" data-tex="\begin{gathered} \Delta\dot{x} = A\,\Delta x + O\bigl(\|\Delta x\|^{2}\bigr), \\ A = \left.\frac{\partial f}{\partial x}\right|_{x = x_0} \end{gathered}"></div>
+          <p lang="en">The linear model keeps the first term, Δẋ = A Δx, and drops the rest, which is of second order in Δx: this is why it is accurate only for small swings. Each entry of A is the slope of one equation with respect to one state, taken at the operating point. A matrix of such slopes (partial derivatives) is called a <b>Jacobian</b>. Because A is computed at x₀, a different operating point gives a different A.</p>
+          <p lang="ja">線形モデルは最初の項 Δẋ = A Δx だけを残し、Δx について 2 次以上の残りを捨てます。これが、小さな揺れでしか正確でない理由です。A の各要素は、運転点での「ある式の、ある状態に対する傾き」です。このような傾き（偏微分）を並べた行列を<b>ヤコビアン</b>といいます。A は x₀ で計算するので、運転点が変われば A も変わります。</p>
+        </section>
+
+        <section id="state-space">
+          <h2><span lang="en">The state-space model</span><span lang="ja">状態空間モデル</span></h2>
+          <p lang="en">To also see what we can push into the system and what we can measure, the linear model is written as a <b>state-space model</b>. The input u is what we can change from outside (for example a reference voltage or a mechanical power), and the output y is what we observe (for example a voltage or a speed).</p>
+          <p lang="ja">外から加えられる量と測れる量も含めるために、線形モデルを<b>状態空間モデル</b>の形に書きます。入力 u は外から変えられる量（たとえば電圧の目標値や機械入力）、出力 y は観測する量（たとえば電圧や回転速度）です。</p>
+          <div class="lec-math" data-tex="\dot{x} = A x + B u, \qquad y = C x + D u"></div>
+          <p lang="en">Here x, u and y all mean deviations from the operating point; the Δ is dropped as is usual. The four matrices have simple roles, shown in the block diagram below.</p>
+          <p lang="ja">ここでの x、u、y はすべて運転点からのずれを表します（慣例どおり Δ を省いています）。4 つの行列の役割は、下のブロック図のとおりです。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 270" role="img" aria-label="Block diagram of a state-space model: input u through B into an integrator giving x, fed back through A, and out through C to y; D goes directly from u to y">
+                <defs>
+                  <marker id="p5-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <text class="t-strong" x="22" y="125">u</text>
+                <line class="s-ink" x1="40" y1="120" x2="128" y2="120" marker-end="url(#p5-arrow)"/>
+                <rect class="f-c4" x="130" y="95" width="70" height="50" rx="5"/>
+                <text class="t-strong t-mid" x="165" y="126">B</text>
+                <line class="s-ink" x1="200" y1="120" x2="258" y2="120" marker-end="url(#p5-arrow)"/>
+                <circle class="f-card" cx="272" cy="120" r="13"/>
+                <text class="t-mid" x="272" y="125">+</text>
+                <line class="s-ink" x1="285" y1="120" x2="338" y2="120" marker-end="url(#p5-arrow)"/>
+                <text class="t-muted t-mid" x="312" y="110">ẋ</text>
+                <rect class="f-brand" x="340" y="90" width="90" height="60" rx="5"/>
+                <text class="t-strong t-mid" x="385" y="127">∫</text>
+                <line class="s-ink" x1="430" y1="120" x2="548" y2="120" marker-end="url(#p5-arrow)"/>
+                <text class="t-strong t-mid" x="468" y="110">x</text>
+                <rect class="f-c2" x="550" y="95" width="70" height="50" rx="5"/>
+                <text class="t-strong t-mid" x="585" y="126">C</text>
+                <line class="s-ink" x1="620" y1="120" x2="678" y2="120" marker-end="url(#p5-arrow)"/>
+                <circle class="f-card" cx="692" cy="120" r="13"/>
+                <text class="t-mid" x="692" y="125">+</text>
+                <line class="s-ink" x1="705" y1="120" x2="750" y2="120" marker-end="url(#p5-arrow)"/>
+                <text class="t-strong" x="756" y="125">y</text>
+                <!-- feedback A -->
+                <path class="s-ink" d="M490 120 V200 H420" marker-end="url(#p5-arrow)"/>
+                <rect class="f-brand" x="350" y="178" width="70" height="44" rx="5"/>
+                <text class="t-strong t-mid" x="385" y="206">A</text>
+                <path class="s-ink" d="M350 200 H272 V135" marker-end="url(#p5-arrow)"/>
+                <!-- feedthrough D -->
+                <path class="s-ink" d="M80 120 V40 H550" marker-end="url(#p5-arrow)"/>
+                <rect class="f-card" x="552" y="20" width="70" height="40" rx="5"/>
+                <text class="t-strong t-mid" x="587" y="45">D</text>
+                <path class="s-ink" d="M622 40 H692 V105" marker-end="url(#p5-arrow)"/>
+                <!-- role labels -->
+                <text lang="en" class="t-muted t-mid" x="165" y="165">how inputs push</text>
+                <text lang="ja" class="t-muted t-mid" x="165" y="165">入力の効き方</text>
+                <text lang="en" class="t-muted t-mid" x="385" y="245">how the states move by themselves</text>
+                <text lang="ja" class="t-muted t-mid" x="385" y="245">状態がひとりでにどう動くか</text>
+                <text lang="en" class="t-muted t-mid" x="585" y="165">what we measure</text>
+                <text lang="ja" class="t-muted t-mid" x="585" y="165">何を測るか</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The state-space model as a block diagram. The loop through A decides how the system swings by itself; B, C and D describe the inputs and outputs.</figcaption>
+            <figcaption lang="ja">状態空間モデルのブロック図です。A を通るループが、系統がひとりでにどう揺れるかを決めます。B、C、D は入力と出力の関係を表します。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">A (state matrix)</span><span lang="ja">A（状態行列）</span></dt>
+            <dd lang="en">How the states pull on each other: the swing of the rotors, the response of the field and of the controllers. It alone decides stability.</dd>
+            <dd lang="ja">状態どうしの引っぱり合いです。回転子の揺れ、界磁や制御器の応答を表します。安定かどうかは A だけで決まります。</dd>
+            <dt><span lang="en">B (input matrix)</span><span lang="ja">B（入力行列）</span></dt>
+            <dd lang="en">Which states an input moves, and how strongly.</dd>
+            <dd lang="ja">入力がどの状態を、どれくらい動かすかです。</dd>
+            <dt><span lang="en">C, D (output matrices)</span><span lang="ja">C、D（出力行列）</span></dt>
+            <dd lang="en">How the measured quantities are made from the states (C) and directly from the inputs (D).</dd>
+            <dd lang="ja">測る量を状態から（C）、入力から直接（D）どう作るかです。</dd>
+          </dl>
+
+          <div class="lec-callout">
+            <p lang="en">In a power system some equations have no time derivative: the current balance at each bus, for example. GUILDA keeps them: get_sys linearizes the model in the states x, the bus voltages v (real and imaginary parts) and the inputs u as</p>
+            <p lang="ja">電力系統には、各母線での電流のつり合いのように時間微分を含まない式もあります。GUILDA はこれも含めて、状態 x、母線電圧 v（実部と虚部）、入力 u について、get_sys で次のように線形化します。</p>
+            <div class="lec-math" data-tex="\begin{aligned} E\,\dot{x} &amp;= A_{xx}\,x + A_{xv}\,v + B_x\,u \\ 0 &amp;= A_{vx}\,x + A_{vv}\,v + B_v\,u \end{aligned}"></div>
+            <p lang="en">The second equation is the current balance of the buses. Solving it for v (A<sub>vv</sub> is invertible) and substituting gives the model that get_sys returns by default (Type "ODE"):</p>
+            <p lang="ja">2 つ目の式が母線の電流のつり合いです。これを v について解いて（A<sub>vv</sub> は正則）代入したものが、get_sys が既定で返すモデル（Type "ODE"）です。</p>
+            <div class="lec-math" data-tex="\begin{aligned} E\,\dot{x} = {}&amp; \bigl(A_{xx} - A_{xv} A_{vv}^{-1} A_{vx}\bigr)\,x \\ &amp;+ \bigl(B_x - A_{xv} A_{vv}^{-1} B_v\bigr)\,u \end{aligned}"></div>
+            <p lang="en">E is diagonal. Where it is zero, the row is again an algebraic equation (some internal variables of the AVR and PSS), so the eigenvalues are the finite solutions of det(λE − A) = 0, which MATLAB gives as eig(A, E). The idea of this page is the same in both forms.</p>
+            <p lang="ja">E は対角行列です。その 0 の行は、やはり代数方程式です（AVR や PSS の内部の変数の一部）。そのため固有値は det(λE − A) = 0 の有限な解で、MATLAB では eig(A, E) で求まります。このページの考え方は、どちらの形でも同じです。</p>
+          </div>
+        </section>
+
+        <section id="eigenvalues">
+          <h2><span lang="en">Eigenvalues are the types of swing</span><span lang="ja">固有値は揺れの型</span></h2>
+          <p lang="en">The motion of a linear model after a small disturbance is a sum of a few simple patterns called <b>modes</b>. Each mode belongs to one <b>eigenvalue</b> λ<sub>i</sub> of A. When A has distinct eigenvalues, the solution of Δẋ = A Δx from the deviation Δx(0) is</p>
+          <p lang="ja">小さな外乱のあとの線形モデルの動きは、<b>モード</b>と呼ばれるいくつかの単純な動きの重ね合わせになります。モードは A の<b>固有値</b> λ<sub>i</sub> に 1 つずつ対応します。A の固有値がすべて異なるとき、ずれ Δx(0) から始まる Δẋ = A Δx の解は次のとおりです。</p>
+          <div class="lec-math" data-tex="\begin{gathered} \Delta x(t) = \sum_i v_i\, e^{\lambda_i t}\, w_i^{\top} \Delta x(0) \\ A v_i = \lambda_i v_i,\;\; w_i^{\top} A = \lambda_i w_i^{\top},\;\; w_i^{\top} v_i = 1 \end{gathered}"></div>
+          <p lang="en">The right eigenvector v<sub>i</sub> tells which states move in that mode and how; the number w<sub>i</sub><sup>T</sup>Δx(0), with the left eigenvector w<sub>i</sub>, tells how strongly the disturbance excites it. An eigenvalue is in general a complex number, λ = σ ± jω, and its pair of terms adds up to a real oscillation e<sup>σt</sup>cos(ωt + φ) in each state, with angular frequency ω and a size that changes as e<sup>σt</sup>. So the eigenvalues alone already tell the <em>type</em> of every swing the system can make: the real part σ says whether it dies out or grows, and the imaginary part ω how fast it oscillates.</p>
+          <p lang="ja">右固有ベクトル v<sub>i</sub> はそのモードでどの状態がどう動くかを表し、左固有ベクトル w<sub>i</sub> を使った数 w<sub>i</sub><sup>T</sup>Δx(0) は、外乱がそのモードをどれだけ強く励起するかを表します。固有値は一般に複素数 λ = σ ± jω で、その対の 2 つの項を合わせると、各状態で e<sup>σt</sup>cos(ωt + φ) の実数の振動になります。角周波数は ω、大きさは e<sup>σt</sup> のように変わります。つまり、固有値だけで、系統が起こし得るすべての揺れの<em>型</em>が分かります。実部 σ は揺れが収まるか大きくなるかを、虚部 ω は振動の速さを表します。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/eigenvalue-responses.png" alt="Four eigenvalue positions and the motions they give: a negative real eigenvalue decays, a complex pair with negative real part oscillates and decays, a complex pair with positive real part oscillates and grows, a positive real eigenvalue grows" width="1284" height="800">
+            </div>
+            <figcaption lang="en">Top: where the eigenvalue is in the complex plane (×; the right half plane is shaded). Bottom: the motion of the mode, e<sup>σt</sup>cos ωt, for λ = −0.5, −0.3 ± 2j, 0.15 ± 2j and 0.3 s<sup>−1</sup>. Left of the imaginary axis (σ &lt; 0) the swing dies out; right of it (σ &gt; 0) it grows. A pair off the real axis (ω ≠ 0) oscillates.</figcaption>
+            <figcaption lang="ja">上は複素平面上の固有値の位置（×。右半面に色を付けています）、下はそのモードの動き e<sup>σt</sup>cos ωt です。λ = −0.5、−0.3 ± 2j、0.15 ± 2j、0.3 s<sup>−1</sup> の 4 つの場合です。虚軸より左（σ &lt; 0）なら揺れは収まり、右（σ &gt; 0）なら大きくなります。実軸から離れた対（ω ≠ 0）は振動します。</figcaption>
+          </figure>
+
+          <div class="lec-callout is-key">
+            <p lang="en"><b>Small-signal stability:</b> the operating point is stable against small disturbances when every eigenvalue of A has a negative real part, that is, every eigenvalue lies to the left of the imaginary axis.</p>
+            <p lang="ja"><b>小信号安定度（定態安定度）:</b> A のすべての固有値の実部が負、つまりすべての固有値が虚軸より左にあれば、その運転点は小さな外乱に対して安定です。</p>
+          </div>
+        </section>
+
+        <section id="complex-plane">
+          <h2><span lang="en">Reading the complex plane: frequency and damping ratio</span><span lang="ja">複素平面の読み方とダンピング比</span></h2>
+          <p lang="en">Plotting all eigenvalues in the complex plane gives a map of every swing of the system. For an oscillating pair λ = σ ± jω two numbers are read from it: the <b>frequency</b> f of the oscillation, and the <b>damping ratio</b> ζ, which says how quickly the swing dies out compared with its oscillation.</p>
+          <p lang="ja">すべての固有値を複素平面に描くと、系統の揺れの地図になります。振動する対 λ = σ ± jω からは 2 つの数を読み取ります。振動の<b>周波数</b> f と、振動の速さに比べて揺れがどれだけ早く収まるかを表す<b>ダンピング比</b>（減衰比）ζ です。</p>
+          <div class="lec-math" data-tex="f = \frac{\omega}{2\pi}, \qquad \zeta = \frac{-\sigma}{\sqrt{\sigma^2 + \omega^2}}"></div>
+          <p lang="en">The higher an eigenvalue, the faster it oscillates. The damping ratio is the angle seen from the origin: eigenvalues on one straight line through the origin have the same ζ. With ζ = 5 %, the swing is still about 73 % of its first size after one period; with ζ = 20 % it is about 28 %. A mode with a small ζ rings for a long time, so operators often ask that every mode keeps at least some minimum damping ratio, for example a few percent; the value depends on the system and the operator.</p>
+          <p lang="ja">上にある固有値ほど速く振動します。ダンピング比は原点から見た角度で、原点を通る同じ直線の上にある固有値は ζ が同じです。ζ = 5% では 1 周期たっても振幅は最初の約 73% 残り、ζ = 20% なら約 28% になります。ζ の小さいモードは長く揺れ続けるので、運用ではすべてのモードに一定以上のダンピング比（たとえば数 %）を求めることがあります。値は系統や運用者によって異なります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/eigenvalues-ieee9.png" alt="Eigenvalues of the IEEE 9-bus system near the imaginary axis, with lines of 5 and 10 percent damping ratio; the two electromechanical modes at 1.28 Hz and 0.58 Hz both have a damping ratio of 4.1 percent, and no eigenvalue is right of the imaginary axis" width="1155" height="524">
+            </div>
+            <figcaption lang="en">Eigenvalues of IEEE 9-bus (3 generators with AVR and PSS) at its operating point, drawn with plot_eigenvalue of the result of get_sys (no eigenvalue is unstable, so all are blue), with the lines of 5 % and 10 % damping ratio added; the frequency and the damping ratio are from the equations above. ① and ② are the two pairs of electromechanical modes, both with a damping ratio of about 4.1 %, just inside the 5 % line. The other eigenvalues are real or well damped; nine fast ones lie far to the left of the plot (σ ≈ −20 to −100 s<sup>−1</sup>).</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統（AVR・PSS 付きの発電機 3 台）の運転点での固有値です。get_sys の結果の plot_eigenvalue で描き（不安定な固有値はないので、すべて青）、ダンピング比 5% と 10% の線を加えました。周波数とダンピング比は上の式から求めました。① と ② は 2 対の電気機械モードで、どちらもダンピング比は約 4.1% で、5% の線のすぐ内側にあります。ほかの固有値は実数か、よく減衰しています。速い 9 個は図のずっと左（σ ≈ −20〜−100 s<sup>−1</sup>）にあります。</figcaption>
+          </figure>
+
+          <p lang="en">The eigenvalue at the origin is not a swing. It belongs to turning all rotor angles by the same amount, which does not change the operating state, because only the differences of the angles matter.</p>
+          <p lang="ja">原点にある固有値は揺れではありません。すべての回転子の角度を同じだけ回す動きに対応し、効くのは角度の差だけなので、運転状態は変わりません。</p>
+        </section>
+
+        <section id="modes">
+          <h2><span lang="en">Kinds of oscillation modes</span><span lang="ja">振動モードの種類</span></h2>
+          <p lang="en">The oscillating modes of a power system come mainly from the generator rotors, which swing against each other like masses connected by springs. These <b>electromechanical modes</b> are named by which generators swing against which:</p>
+          <p lang="ja">電力系統の振動モードの多くは、ばねでつながれた重りのように互いに揺れ合う発電機の回転子から生まれます。この<b>電気機械モード</b>は、どの発電機がどの発電機に対して揺れるかで名前が付いています。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">Local mode</span><span lang="ja">局所モード</span></dt>
+            <dd lang="en">One generator, or one plant, swings against the rest of the system nearby. Typically about 1 to 2 Hz.</dd>
+            <dd lang="ja">1 台の発電機（または 1 つの発電所）が、近くの系統の残りに対して揺れます。目安は 1〜2 Hz 程度です。</dd>
+            <dt><span lang="en">Inter-area mode</span><span lang="ja">地域間モード</span></dt>
+            <dd lang="en">A whole group of generators in one area swings against a group in another area, over long tie lines. Slower, typically about 0.1 to 0.7 Hz, and often poorly damped.</dd>
+            <dd lang="ja">ある地域の発電機の群れ全体が、長い連系線を通して別の地域の群れに対して揺れます。より遅く、目安は 0.1〜0.7 Hz 程度で、減衰が小さくなりやすいモードです。</dd>
+            <dt><span lang="en">Control mode</span><span lang="ja">制御モード</span></dt>
+            <dd lang="en">A mode that comes mainly from a controller, such as an AVR or a governor, rather than from the rotors.</dd>
+            <dd lang="ja">回転子よりも、AVR やガバナなどの制御器から主に生まれるモードです。</dd>
+          </dl>
+
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 240" role="img" aria-label="Left: a local mode, one generator swinging against its neighbours. Right: an inter-area mode, a group of generators in area A swinging against a group in area B over a tie line">
+                <defs>
+                  <marker id="p5-arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- local -->
+                <rect class="f-group" x="20" y="30" width="340" height="160" rx="10"/>
+                <text lang="en" class="t-strong" x="34" y="22">Local mode</text>
+                <text lang="ja" class="t-strong" x="34" y="22">局所モード</text>
+                <path class="s-line" d="M110 110 L200 80 L290 110 L200 150 Z M200 80 V150"/>
+                <circle class="f-c3" cx="110" cy="110" r="18"/>
+                <circle class="f-card" cx="200" cy="80" r="16"/>
+                <circle class="f-card" cx="290" cy="110" r="16"/>
+                <circle class="f-card" cx="200" cy="150" r="16"/>
+                <text class="t-mid t-small" x="110" y="115">G</text>
+                <text class="t-mid t-small" x="200" y="85">G</text>
+                <text class="t-mid t-small" x="290" y="115">G</text>
+                <text class="t-mid t-small" x="200" y="155">G</text>
+                <path class="s-c3" d="M42 110 H88" marker-start="url(#p5-arrow2)" marker-end="url(#p5-arrow2)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="190" y="214">one machine against its neighbours</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="190" y="214">1 台が近くの発電機に対して揺れる</text>
+                <!-- inter-area -->
+                <rect class="f-group" x="400" y="30" width="150" height="160" rx="10"/>
+                <rect class="f-group" x="610" y="30" width="150" height="160" rx="10"/>
+                <text lang="en" class="t-strong" x="400" y="22">Inter-area mode</text>
+                <text lang="ja" class="t-strong" x="400" y="22">地域間モード</text>
+                <text lang="en" class="t-muted t-small" x="412" y="182">area A</text>
+                <text lang="ja" class="t-muted t-small" x="412" y="182">地域 A</text>
+                <text lang="en" class="t-muted t-small" x="622" y="182">area B</text>
+                <text lang="ja" class="t-muted t-small" x="622" y="182">地域 B</text>
+                <path class="s-line" d="M445 80 L505 80 L475 135 Z M655 80 L715 80 L685 135 Z"/>
+                <line class="s-ink" x1="505" y1="80" x2="655" y2="80"/>
+                <text lang="en" class="t-muted t-small t-mid" x="580" y="70">tie line</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="580" y="70">連系線</text>
+                <circle class="f-brand" cx="445" cy="80" r="15"/><circle class="f-brand" cx="505" cy="80" r="15"/><circle class="f-brand" cx="475" cy="135" r="15"/>
+                <circle class="f-c2" cx="655" cy="80" r="15"/><circle class="f-c2" cx="715" cy="80" r="15"/><circle class="f-c2" cx="685" cy="135" r="15"/>
+                <path class="s-brand" d="M450 160 H500" marker-start="url(#p5-arrow2)" marker-end="url(#p5-arrow2)"/>
+                <path class="s-c2" d="M660 160 H710" marker-start="url(#p5-arrow2)" marker-end="url(#p5-arrow2)"/>
+                <text lang="en" class="t-muted t-small t-mid" x="580" y="214">group against group, in opposite phase</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="580" y="214">群れどうしが逆向きに揺れる</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Two kinds of electromechanical modes. A local mode involves one machine; an inter-area mode moves whole areas against each other.</figcaption>
+            <figcaption lang="ja">電気機械モードの 2 つの種類です。局所モードは 1 台の発電機の揺れ、地域間モードは地域全体どうしの揺れです。</figcaption>
+          </figure>
+
+          <h3><span lang="en">Mode shapes in IEEE 9-bus</span><span lang="ja">IEEE 9 母線系統のモード形</span></h3>
+          <p lang="en">Which generators swing, and in which direction, is read from the eigenvector of the mode: its <b>mode shape</b>. The figure shows the speed part of the right eigenvectors of modes ① and ②. A bar to the right and a bar to the left mean swinging in opposite phase.</p>
+          <p lang="ja">どの発電機がどちら向きに揺れるかは、そのモードの固有ベクトル（<b>モード形</b>）から読み取ります。図は、モード ① と ② の右固有ベクトルのうち回転速度の成分です。右向きの棒と左向きの棒は、逆向き（逆位相）に揺れることを表します。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/mode-shapes.png" alt="Mode shapes of IEEE 9-bus: in mode 1 (1.28 Hz) generator 3 (+1.00) swings against generator 2 (−0.22); in mode 2 (0.58 Hz) generators 2 (+1.00) and 3 (+0.83) swing together against generator 1 (−0.50)" width="1281" height="519">
+            </div>
+            <figcaption lang="en">Speed part of the right eigenvectors, divided by its largest entry so that it is 1 (real parts). Mode ① (1.28 Hz): generator 3 against generator 2, close to a local mode. Mode ② (0.58 Hz): generators 2 and 3 together against generator 1, the group-against-group pattern that in a large system becomes an inter-area mode.</figcaption>
+            <figcaption lang="ja">右固有ベクトルの回転速度の成分を、最大の成分が 1 になるように割ったものです（実部）。モード ①（1.28 Hz）は発電機 3 が発電機 2 に対して揺れ、局所モードに近い形です。モード ②（0.58 Hz）は発電機 2 と 3 がそろって発電機 1 に対して揺れます。大きな系統では、このような群れどうしの揺れが地域間モードになります。</figcaption>
+          </figure>
+        </section>
+
+        <section id="participation">
+          <h2><span lang="en">Participation factors</span><span lang="ja">参加係数</span></h2>
+          <p lang="en">The mode shape says how the states <em>move</em> in a mode. A related question is which states <em>make</em> the mode: if we change a part of the system, which mode changes? The <b>participation factor</b> answers it. It multiplies the right eigenvector v<sub>i</sub> (how a state moves in the mode) by the left eigenvector w<sub>i</sub> (how much the state excites the mode), entry by entry:</p>
+          <p lang="ja">モード形は、そのモードで状態がどう<em>動く</em>かを表します。これと関係する問いが、どの状態がそのモードを<em>つくって</em>いるか、つまり系統のどこを変えるとそのモードが変わるか、です。これに答えるのが<b>参加係数</b>です。右固有ベクトル v<sub>i</sub>（状態がモードでどう動くか）と左固有ベクトル w<sub>i</sub>（状態がモードをどれだけ励起するか）を、成分ごとに掛け合わせます。</p>
+          <div class="lec-math" data-tex="p_{ki} = \frac{|w_{ki}\, v_{ki}|}{\sum_{j} |w_{ji}\, v_{ji}|}"></div>
+          <p lang="en">v<sub>ki</sub> and w<sub>ki</sub> are the entries of state k in the right and left eigenvectors of mode i (A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>, w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>), and p<sub>ki</sub> is the share of state k in mode i: the shares of one mode add up to 1. The product w<sub>ki</sub>v<sub>ki</sub> does not change when a state is measured in other units, so the states of different generators and controllers can be compared directly. The original definition uses w<sub>ki</sub>v<sub>ki</sub> itself with w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1, a complex number; this page uses its magnitude, normalized as above. A model with algebraic rows (zeros on the diagonal of E) is first reduced to ẋ = A x by eliminating them.</p>
+          <p lang="ja">v<sub>ki</sub> と w<sub>ki</sub> は、モード i の右固有ベクトルと左固有ベクトル（A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>、w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>）の状態 k の成分で、p<sub>ki</sub> はモード i に対する状態 k の割合です。1 つのモードについて合計すると 1 になります。積 w<sub>ki</sub>v<sub>ki</sub> は状態を別の単位で測っても変わらないので、別の発電機や制御器の状態どうしをそのまま比べられます。もとの定義は w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1 とした積 w<sub>ki</sub>v<sub>ki</sub> そのもの（複素数）で、このページではその絶対値を上の式のように正規化して使います。代数方程式の行（E の対角の 0）があるモデルは、先にそれを消去して ẋ = A x の形にしてから求めます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/participation.png" alt="Participation factors of the generators of IEEE 9-bus: in mode 1 (1.28 Hz) G1 0.00, G2 0.17, G3 0.82; in mode 2 (0.58 Hz) G1 0.33, G2 0.57, G3 0.10" width="1264" height="519">
+            </div>
+            <figcaption lang="en">Participation factors of IEEE 9-bus from the equation above, summed over the states of each generator with its AVR and PSS. Mode ① is mostly generator 3; mode ② is mostly generators 2 and 1. A damping controller (a PSS) tends to work best on a generator with a large share in the mode to be damped.</figcaption>
+            <figcaption lang="ja">上の式から求めた IEEE 9 母線系統の参加係数を、発電機ごとに（その AVR・PSS の状態も含めて）合計したものです。モード ① はほとんど発電機 3、モード ② は主に発電機 2 と 1 です。揺れを抑える制御器（PSS）は、抑えたいモードへの参加の大きい発電機に付けると効きやすくなります。</figcaption>
+          </figure>
+
+          <div class="lec-callout is-key">
+            <p lang="en"><b>Eigenvalues move when the system changes.</b> Changing the output of a generator, a line or a controller gain changes A, and so the eigenvalues. How much an eigenvalue moves for a small change is its <b>sensitivity</b>, and the participation factors give a first idea of where it is large. Stability-constrained OPF (Part 6) uses such sensitivities to keep the damping of every mode while choosing the cheapest operation.</p>
+            <p lang="ja"><b>系統が変わると固有値は動きます。</b> 発電機の出力、送電線、制御器のゲインなどを変えると A が変わり、固有値も動きます。小さな変化に対して固有値がどれだけ動くかが<b>感度</b>で、参加係数はそれがどこで大きいかの見当を与えます。定態安定度制約付き OPF（Part 6）は、この感度を使って、すべてのモードの減衰を保ちながら最も安い運転を選びます。</p>
+          </div>
+        </section>
+
+        <section id="large-swing">
+          <h2><span lang="en">When the swing is large</span><span lang="ja">大きな揺れでは合わなくなる</span></h2>
+          <p lang="en">The linear model is the tangent at one operating point, so it is accurate only while the system stays close to that point. The figure compares the linear model with GUILDA's time-domain simulation of the full nonlinear model of IEEE 9-bus. At the start, the rotor angle of generator 2 is pushed away from its equilibrium, once by a small amount and once by a large amount.</p>
+          <p lang="ja">線形モデルは 1 つの運転点での接線なので、系統がその点の近くにいる間しか正確ではありません。図は、IEEE 9 母線系統の線形モデルと、GUILDA の時間シミュレーションによる非線形モデルの応答を比べたものです。最初に発電機 2 の回転子の角度を平衡点からずらしました（小さくずらした場合と、大きくずらした場合）。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part5/linear-vs-nonlinear.en.png" alt="Deviation of the angle difference between generators 2 and 1 after an initial push of 0.05 rad and of 1.2 rad: for the small push the linear model and the time-domain simulation coincide; for the large push the linear model swings about twice as far and at a different rhythm" width="1303" height="524">
+              <img lang="ja" src="../images/lecture/part5/linear-vs-nonlinear.ja.png" alt="発電機 2 の角度を 0.05 rad と 1.2 rad ずらしたあとの、発電機 2 と 1 の角度差のずれ。小さくずらすと線形モデルと時間シミュレーションは重なり、大きくずらすと線形モデルは約 2 倍大きく、違うリズムで揺れる" width="1303" height="524">
+            </div>
+            <figcaption lang="en">Deviation of the angle difference δ₂ − δ₁ of IEEE 9-bus from its equilibrium value, after the rotor angle of generator 2 is moved by 0.05 rad (left) and by 1.2 rad (right) at t = 0. The linear model is the solution x(t) = e<sup>At</sup>x(0) of the model of get_sys. For the small push the two curves lie on top of each other. For the large push the linear model swings about twice as far as the real (nonlinear) system and at a different rhythm.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の角度差 δ₂ − δ₁ の、平衡点の値からのずれです。t = 0 で発電機 2 の回転子の角度を 0.05 rad（左）と 1.2 rad（右）ずらしました。線形モデルは、get_sys のモデルの解 x(t) = e<sup>At</sup>x(0) です。小さくずらした場合、2 本の曲線はほぼ重なります。大きくずらした場合、線形モデルは実際の（非線形の）系統の 2 倍ほど大きく揺れ、揺れのリズムも違います。</figcaption>
+          </figure>
+
+          <p lang="en">The nonlinear response is a time-domain simulation of a scenario that moves the angle of generator 2 at t = 0 (after the commands of the last section):</p>
+          <p lang="ja">非線形の応答は、t = 0 で発電機 2 の角度をずらすシナリオの時間シミュレーションです（最後の節のコマンドのあとに実行します）。</p>
+          <pre class="lec-cmd"><code>sc = net.add_scenario("push", Time=[0 6]);
+sc.add_offset("B002SG1", "delta", 1.2, 0);
+res = net.simulate("push");</code></pre>
+
+          <p lang="en">A linear model always answers in proportion: twice the push gives twice the swing, and a stable linear model never loses synchronism. The real system does not behave like this when the swing is large; whether it survives a large disturbance such as a fault (transient stability) has to be checked with a time-domain simulation. The two tools work together: the linear model for the many small disturbances that happen all the time, and the simulation for a few large events.</p>
+          <p lang="ja">線形モデルは常に比例して答えます。2 倍ずらせば 2 倍揺れ、安定な線形モデルは決して脱調しません。揺れが大きいときの実際の系統はそうはなりません。地絡などの大きな外乱に耐えられるか（過渡安定度）は、時間シミュレーションで確かめる必要があります。2 つの道具は補い合います。いつも起きている多くの小さな外乱には線形モデル、少数の大きな出来事には時間シミュレーションを使います。</p>
+        </section>
+
+        <section id="guilda">
+          <h2><span lang="en">Linearization in GUILDA</span><span lang="ja">GUILDA での線形化</span></h2>
+          <p lang="en">In GUILDA, the linear model is made from the same network model that the power flow and the time-domain simulation use. Each generator, load and controller gives its own linear block, and GUILDA connects them through the network. The operating point is the equilibrium found from the power flow.</p>
+          <p lang="ja">GUILDA では、潮流計算や時間シミュレーションと同じ系統モデルから線形モデルを作ります。発電機・負荷・制御器がそれぞれ自分の線形のブロックを出し、GUILDA がそれらを系統を通してつなぎます。運転点は、潮流計算から求めた平衡点です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 200" role="img" aria-label="Flow in GUILDA: the network model, initialize (power flow and equilibrium), get_sys, a ResultLIN with A, B, C, D, E, then the eigenvalue map or a state-space object">
+                <defs>
+                  <marker id="p5-arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <rect class="f-card" x="10" y="60" width="140" height="70" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="80" y="90">network model</text>
+                <text lang="ja" class="t-strong t-mid" x="80" y="90">系統モデル</text>
+                <text class="t-muted t-small t-mid" x="80" y="112">network.IEEE9bus()</text>
+                <line class="s-ink" x1="150" y1="95" x2="173" y2="95" marker-end="url(#p5-arrow3)"/>
+                <rect class="f-c3" x="175" y="60" width="130" height="70" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="240" y="90">operating point</text>
+                <text lang="ja" class="t-strong t-mid" x="240" y="90">運転点</text>
+                <text class="t-muted t-small t-mid" x="240" y="112">net.initialize()</text>
+                <line class="s-ink" x1="305" y1="95" x2="328" y2="95" marker-end="url(#p5-arrow3)"/>
+                <rect class="f-brand" x="330" y="60" width="130" height="70" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="395" y="90">linearize</text>
+                <text lang="ja" class="t-strong t-mid" x="395" y="90">線形化</text>
+                <text class="t-muted t-small t-mid" x="395" y="112">net.get_sys()</text>
+                <line class="s-ink" x1="460" y1="95" x2="483" y2="95" marker-end="url(#p5-arrow3)"/>
+                <rect class="f-brand" x="485" y="60" width="110" height="70" rx="5"/>
+                <text class="t-strong t-mid" x="540" y="90">ResultLIN</text>
+                <text class="t-muted t-small t-mid" x="540" y="112">A, B, C, D, E</text>
+                <path class="s-ink" d="M595 85 H615 V45 H638" marker-end="url(#p5-arrow3)"/>
+                <path class="s-ink" d="M595 105 H615 V150 H638" marker-end="url(#p5-arrow3)"/>
+                <text lang="en" class="t-small" x="644" y="44">eigenvalue map</text>
+                <text lang="ja" class="t-small" x="644" y="44">固有値の図</text>
+                <text class="t-muted t-small" x="644" y="62">plot_eigenvalue</text>
+                <text lang="en" class="t-small" x="644" y="149">ss object</text>
+                <text lang="ja" class="t-small" x="644" y="149">ss オブジェクト</text>
+                <text class="t-muted t-small" x="644" y="167">get_ss</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The flow of a linearization in GUILDA. get_sys returns a ResultLIN object that holds the matrices; its plot_eigenvalue draws the eigenvalues in the complex plane (unstable ones in red), and get_ss gives the model as a state-space object of MATLAB's Control System Toolbox for controller design.</figcaption>
+            <figcaption lang="ja">GUILDA での線形化の流れです。get_sys は行列を持つ ResultLIN オブジェクトを返します。その plot_eigenvalue は固有値を複素平面に描き（不安定なものは赤）、get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</figcaption>
+          </figure>
+
+          <p lang="en">The commands below linearize IEEE 9-bus at its equilibrium. get_sys returns a ResultLIN object that holds the matrices A, B, C, D and E with the names of the states and inputs; plot_eigenvalue draws its eigenvalues in the complex plane (unstable ones in red); eig gives the eigenvalues used on this page; and get_ss gives the model as a state-space object of MATLAB's Control System Toolbox for controller design.</p>
+          <p lang="ja">GUILDA で確かめるときは、次のコマンドで IEEE 9 母線系統を平衡点のまわりで線形化します。get_sys は、行列 A、B、C、D、E と状態・入力の名前を持つ ResultLIN オブジェクトを返します。plot_eigenvalue は固有値を複素平面に描き（不安定なものは赤）、eig はこのページで使った固有値を求め、get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+net.initialize();
+sys = net.get_sys();
+sys.plot_eigenvalue();
+lambda = eig(sys.A, sys.E);
+sys_ss = sys.get_ss("ODE");</code></pre>
+
+          <ul>
+            <li lang="en">The linear model can also be taken at another point than the equilibrium, for example at a moment of a time-domain simulation, and for one part of the system alone: a bus, a component or a controller.</li>
+            <li lang="ja">線形モデルは、平衡点以外の点（たとえば時間シミュレーションのある時刻）でも求められます。また、母線・機器・制御器など、系統の一部だけについても求められます。</li>
+            <li lang="en">The eigenvalues, mode shapes and participation factors on this page were computed from the matrices A and E of this ResultLIN with MATLAB's eig.</li>
+            <li lang="ja">このページの固有値・モード形・参加係数は、この ResultLIN の行列 A と E から MATLAB の eig で求めました。</li>
+          </ul>
+
+          <h3><span lang="en">Where these ideas are used next</span><span lang="ja">この考え方を使う Part</span></h3>
+          <p lang="en"><b>Part 6</b> (stability-constrained OPF) solves an OPF, linearizes the system at the result, checks the real parts and damping ratios of the eigenvalues, and, if a mode is not damped enough, adds a constraint made from the eigenvalue sensitivity and solves again. <b>Part 7</b> (continuation power flow) uses the Jacobian of the power flow equations: the same idea of slopes at an operating point, applied to the static equations; when it becomes singular, the operating point is at its limit.</p>
+          <p lang="ja"><b>Part 6</b>（定態安定度制約付き OPF）は、OPF を解き、その結果の運転点で線形化して固有値の実部とダンピング比を調べ、減衰の足りないモードがあれば固有値の感度から作った制約を加えて解き直します。<b>Part 7</b>（連続潮流計算）は電力方程式のヤコビアンを使います。運転点での傾きという同じ考え方を静的な式に当てはめたもので、それが特異になるところが運転点の限界です。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li lang="en">Around an operating point, a small swing is described by a linear model, Δẋ ≈ A Δx. The matrix A is the Jacobian of the model at that point.</li>
+            <li lang="ja">運転点のまわりの小さな揺れは、線形モデル Δẋ ≈ A Δx で表せます。行列 A はその点でのモデルのヤコビアンです。</li>
+            <li lang="en">Each eigenvalue of A is one type of swing. All eigenvalues left of the imaginary axis means the point is small-signal stable.</li>
+            <li lang="ja">A の固有値の 1 つ 1 つが揺れの型です。すべての固有値が虚軸より左にあれば、その運転点は小信号安定です。</li>
+            <li lang="en">From an oscillating pair σ ± jω we read the frequency f = ω/2π and the damping ratio ζ; a small ζ means a swing that lasts long.</li>
+            <li lang="ja">振動する対 σ ± jω からは、周波数 f = ω/2π とダンピング比 ζ を読み取ります。ζ が小さいと揺れが長く続きます。</li>
+            <li lang="en">Electromechanical modes are local (one machine) or inter-area (group against group). Mode shapes show who swings against whom, and participation factors show which states make the mode.</li>
+            <li lang="ja">電気機械モードには局所モード（1 台）と地域間モード（群れどうし）があります。モード形は誰が誰に対して揺れるかを、参加係数はどの状態がそのモードをつくっているかを表します。</li>
+            <li lang="en">The linear model holds for small swings only; large disturbances need a time-domain simulation.</li>
+            <li lang="ja">線形モデルが使えるのは小さな揺れだけです。大きな外乱には時間シミュレーションが必要です。</li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card is-c2" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b><span lang="en">Large disturbances, which the linear model cannot follow.</span><span lang="ja">線形モデルでは追えない大きな外乱を扱います。</span></a></li>
+          <li><a class="lec-card is-c3" href="part6-optimal-power-flow.html"><small>Part 6</small><b><span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b><span lang="en">Keeps the damping of every mode using eigenvalue sensitivities.</span><span lang="ja">固有値の感度を使って、すべてのモードの減衰を保ちます。</span></a></li>
+          <li><a class="lec-card is-c3" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the Jacobian of the power flow equations</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b><span lang="en">The Jacobian as a sensitivity of the static equations.</span><span lang="ja">静的な式の感度としてのヤコビアンを扱います。</span></a></li>
+          <li><a class="lec-card is-c4" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b><span lang="en">Uses the state-space model to design controllers such as a PSS.</span><span lang="ja">状態空間モデルを使って PSS などの制御器を設計します。</span></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><code>_GUILDAtutorial/Part5_Linearization.mlx</code>: <span lang="en">open it from the MATLAB Command Window with <code>open Part5_Linearization.mlx</code> (after running <code>GUILDA</code> once to set the path). In Japanese. The graphs on this page can be drawn with the Part 5 Live Script.</span><span lang="ja">MATLAB のコマンド ウィンドウで <code>open Part5_Linearization.mlx</code> と入力すると開きます（先に <code>GUILDA</code> を一度実行してパスを通しておきます）。日本語です。このページの図は Part 5 のライブスクリプトで描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">The chapter on small-signal stability covers the state-space model, eigenvalues, damping ratio, mode shapes, participation factors and the kinds of oscillation modes.</span><span lang="ja">小信号安定度の章で、状態空間モデル、固有値、ダンピング比、モード形、参加係数、振動モードの種類を扱っています。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">Small-signal stability of multi-machine systems and the damping of power swings.</span><span lang="ja">多機系統の小信号安定度と、電力動揺の減衰を扱っています。</span></span></li>
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; it treats power system models as state-space systems.</span><span lang="ja">GUILDA の基になった教科書です。電力系統のモデルを状態空間のシステムとして扱っています。</span></span></li>
+            <li>I. J. Pérez-Arriaga, G. C. Verghese and F. C. Schweppe, “Selective modal analysis with applications to electric power systems, Part I: Heuristic introduction,” <cite>IEEE Transactions on Power Apparatus and Systems</cite>, vol. PAS-101, no. 9, pp. 3117–3125, 1982.
+              <span class="lec-ref-note"><span lang="en">The paper that introduced participation factors.</span><span lang="ja">参加係数を導入した論文です。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part4-spring-mass-model.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 4: <span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b></a>
+      <a class="is-next" href="part6-optimal-power-flow.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 6: <span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>

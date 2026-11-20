@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-title-ja="GUILDA 講義ノート - Part 3: 時間シミュレーション">GUILDA Lecture Notes - Part 3: Time-domain simulation</title>
+  <script src="../doc-lang.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../vendor/katex/katex.min.js"></script>
+  <!-- Page-only CSS goes here with the prefix lec3- ; shared lecture CSS (lec-*) is in style.css. -->
+  <style>
+    .lec-svg .lec3-area1 { fill: var(--lec-c3); fill-opacity: 0.32; stroke: none; }
+    .lec-svg .lec3-area2 { fill: var(--lec-c2); fill-opacity: 0.32; stroke: none; }
+    .lec-svg .lec3-dot { fill: var(--ink); }
+    .lec-svg .lec3-hollow { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+  </style>
+</head>
+<body class="lec">
+  <main class="lec-main">
+    <div class="lec-topbar">
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
+      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 3 / 8</span>
+    </div>
+
+    <header class="lec-hero">
+      <p class="lec-kicker">Part 3</p>
+      <h1><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></h1>
+      <p class="lec-lead" lang="en">Equilibrium and deviation, the swing equation, the course of a fault, transient stability and the equal-area criterion, and frequency after a disturbance.</p>
+      <p class="lec-lead" lang="ja">平衡点とずれ、動揺方程式の意味、事故の経過、過渡安定度と等面積法、外乱の後の周波数の変化を説明します。</p>
+    </header>
+
+    <div class="lec-layout">
+      <nav class="lec-toc" aria-label="On this page">
+        <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
+        <ol>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#equilibrium"><span lang="en">Equilibrium and deviation</span><span lang="ja">平衡点とずれ</span></a></li>
+          <li><a href="#swing"><span lang="en">The swing equation</span><span lang="ja">動揺方程式</span></a></li>
+          <li><a href="#synchronizing"><span lang="en">Synchronizing and damping</span><span lang="ja">同期化力と制動</span></a></li>
+          <li><a href="#fault"><span lang="en">The course of a fault</span><span lang="ja">事故の流れ</span></a></li>
+          <li><a href="#transient"><span lang="en">Critical clearing time</span><span lang="ja">過渡安定度と臨界除去時間</span></a></li>
+          <li><a href="#equal-area"><span lang="en">The equal-area criterion</span><span lang="ja">等面積法</span></a></li>
+          <li><a href="#frequency"><span lang="en">Inertia and governors</span><span lang="ja">周波数の変化</span></a></li>
+          <li><a href="#events"><span lang="en">Events in GUILDA</span><span lang="ja">GUILDA のイベント</span></a></li>
+          <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
+          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
+        </ol>
+      </nav>
+
+      <article class="lec-article">
+        <section class="lec-goals" id="goals">
+          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <ul>
+            <li><span lang="en">What a time-domain simulation computes: how the system moves away from its equilibrium and whether it comes back.</span><span lang="ja">時間シミュレーションが何を計算するか。平衡点からずれた系統が、どう動き、戻ってくるかどうか。</span></li>
+            <li><span lang="en">What the swing equation says about a generator, and the roles of the synchronizing power and damping.</span><span lang="ja">動揺方程式が発電機について何を表すか。同期化力と制動の役割。</span></li>
+            <li><span lang="en">How a fault proceeds, why the clearing time decides stability, and how the equal-area criterion explains it.</span><span lang="ja">事故がどう進むか。除去までの時間が安定かどうかを決める理由と、それを説明する等面積法。</span></li>
+            <li><span lang="en">How the frequency changes after a loss of generation, and what inertia and governors do.</span><span lang="ja">発電が失われた後に周波数がどう変わるか。慣性とガバナが果たす役割。</span></li>
+            <li><span lang="en">Which disturbances GUILDA can apply in a simulation.</span><span lang="ja">GUILDA のシミュレーションで与えられる外乱の種類。</span></li>
+          </ul>
+        </section>
+
+        <!-- ============================== EQUILIBRIUM ============================== -->
+        <section id="equilibrium">
+          <h2><span lang="en">Equilibrium and deviation</span><span lang="ja">平衡点とずれ</span></h2>
+          <p lang="en">A power flow gives a "photograph" of the operating state: the voltages and power flows when nothing is changing. In this state every generator turns at the same speed and its mechanical input equals its electrical output, so the state stays as it is. Such a state is called an <strong>equilibrium</strong>.</p>
+          <p lang="ja">潮流計算は、何も変化していないときの運転状態、つまり電圧と電力の流れの「写真」を求めます。この状態では、すべての発電機が同じ速さで回り、機械から受け取る電力と電気として送り出す電力が等しいので、状態はそのまま変わりません。このような状態を<strong>平衡点</strong>といいます。</p>
+          <p lang="en">A real system is pushed away from its equilibrium all the time: loads change, lines are struck by lightning, generators trip. A <strong>time-domain simulation</strong> starts from the equilibrium, applies such a disturbance, and computes step by step how the state changes over time. The main question is whether the system settles again, and how far it swings on the way.</p>
+          <p lang="ja">実際の系統は、平衡点から常に押し出されています。負荷が変わり、送電線に雷が落ち、発電機が止まります。<strong>時間シミュレーション</strong>は、平衡点から始めてこうした外乱を加え、状態が時間とともにどう変わるかを少しずつ計算します。知りたいことの中心は、系統が再び落ち着くかどうか、そしてその途中でどれだけ大きく揺れるかです。</p>
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 270" role="img" aria-label="A ball in a valley: a small push makes it swing and return; a large push carries it over the hill">
+                <defs>
+                  <marker id="p3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- landscape: valley, hill top, slope down -->
+                <path class="s-ink" d="M30 70 C 110 70, 150 190, 230 190 C 310 190, 360 100, 440 100 C 520 100, 560 230, 750 236"/>
+                <!-- ball at the bottom -->
+                <circle class="f-brand-solid" cx="230" cy="178" r="12"/>
+                <!-- small swing -->
+                <path class="s-c2" d="M170 150 Q 230 128 290 150" marker-start="url(#p3-arrow)" marker-end="url(#p3-arrow)"/>
+                <!-- large swing over the hill -->
+                <path class="s-c3 is-dashed" d="M248 168 C 320 70, 400 60, 450 72 C 520 86, 570 150, 640 186" marker-end="url(#p3-arrow)"/>
+                <!-- hill top marker -->
+                <circle class="lec3-hollow" cx="440" cy="100" r="6"/>
+                <!-- labels -->
+                <text lang="en" class="t-strong t-mid" x="230" y="222">equilibrium</text>
+                <text lang="ja" class="t-strong t-mid" x="230" y="222">平衡点（谷の底）</text>
+                <text lang="en" class="t-c2 t-small t-mid" x="230" y="118">small deviation: swings and returns</text>
+                <text lang="ja" class="t-c2 t-small t-mid" x="230" y="118">小さなずれ：揺れて戻る</text>
+                <text lang="en" class="t-c3 t-small" x="470" y="48">large deviation: over the hill</text>
+                <text lang="ja" class="t-c3 t-small" x="470" y="48">大きなずれ：山を越える</text>
+                <line class="s-line is-dashed" x1="440" y1="110" x2="440" y2="184"/>
+                <text lang="en" class="t-muted t-mid" x="440" y="202">unstable equilibrium</text>
+                <text lang="ja" class="t-muted t-mid" x="440" y="202">不安定な平衡点（山の頂上）</text>
+                <text lang="en" class="t-c3 t-small t-mid" x="660" y="216">loss of synchronism</text>
+                <text lang="ja" class="t-c3 t-small t-mid" x="660" y="216">脱調</text>
+              </svg>
+            </div>
+            <figcaption lang="en">A picture of stability: a ball in a valley. After a small push it swings and comes back to the bottom; after a large push it goes over the hill and does not come back.</figcaption>
+            <figcaption lang="ja">安定性のたとえとして、谷に置いた玉を考えます。小さく押すと揺れながら谷の底に戻りますが、大きく押すと山を越えてしまい、戻ってきません。</figcaption>
+          </figure>
+
+          <p lang="en">For a generator, "going over the hill" means that it can no longer turn in step with the other generators. This is called <strong>loss of synchronism</strong> (out of step). Protection then disconnects it from the network. The rest of this page explains where this valley and hill come from.</p>
+          <p lang="ja">発電機にとって「山を越える」とは、ほかの発電機と同じ速さで回り続けられなくなることです。これを<strong>脱調</strong>といい、保護装置がその発電機を系統から切り離します。以下では、この谷と山がどこから来るのかを説明します。</p>
+        </section>
+
+        <!-- ============================== SWING ============================== -->
+        <section id="swing">
+          <h2><span lang="en">The swing equation</span><span lang="ja">動揺方程式</span></h2>
+          <p lang="en">A synchronous generator has a heavy rotor driven by a turbine. The turbine pushes the rotor with the <strong>mechanical power</strong> <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span>, and the network pulls power out of it as the <strong>electrical power</strong> <span class="lec-math-inline" data-tex="P_\mathrm{e}"></span>. If the two are equal the speed does not change. If more comes in than goes out, the surplus is stored as kinetic energy and the rotor speeds up; if less comes in, the rotor slows down.</p>
+          <p lang="ja">同期発電機は、タービンで回される重い回転子を持っています。タービンは<strong>機械入力</strong> <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span> で回転子を押し、系統は<strong>電気出力</strong> <span class="lec-math-inline" data-tex="P_\mathrm{e}"></span> として電力を取り出します。2 つが等しければ回転の速さは変わりません。入ってくる電力のほうが多ければ、余った分が運動エネルギーとして蓄えられて回転が速くなり、少なければ遅くなります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 230" role="img" aria-label="A rotor between a turbine pushing in mechanical power and the network pulling out electrical power">
+                <!-- turbine -->
+                <rect class="f-c3" x="40" y="70" width="140" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="110" y="102">Turbine</text>
+                <text lang="ja" class="t-strong t-mid" x="110" y="102">タービン</text>
+                <text lang="en" class="t-muted t-mid" x="110" y="124">steam, water, …</text>
+                <text lang="ja" class="t-muted t-mid" x="110" y="124">蒸気・水など</text>
+                <!-- rotor -->
+                <circle class="f-brand" cx="390" cy="105" r="62"/>
+                <line class="s-brand" x1="390" y1="105" x2="436" y2="64"/>
+                <path class="s-brand" d="M390 28 A 77 77 0 0 1 462 72" marker-end="url(#p3-arrow)"/>
+                <text lang="en" class="t-strong t-mid" x="390" y="122">rotor</text>
+                <text lang="ja" class="t-strong t-mid" x="390" y="122">回転子</text>
+                <text lang="en" class="t-brand t-small t-mid" x="390" y="20">angle δ, speed ω</text>
+                <text lang="ja" class="t-brand t-small t-mid" x="390" y="20">角度 δ・速さ ω</text>
+                <!-- network -->
+                <rect class="f-card" x="600" y="70" width="140" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="670" y="102">Network</text>
+                <text lang="ja" class="t-strong t-mid" x="670" y="102">系統</text>
+                <text lang="en" class="t-muted t-mid" x="670" y="124">loads</text>
+                <text lang="ja" class="t-muted t-mid" x="670" y="124">負荷</text>
+                <!-- arrows -->
+                <line class="s-c3" x1="182" y1="105" x2="322" y2="105" marker-end="url(#p3-arrow)"/>
+                <line class="s-ink" x1="456" y1="105" x2="596" y2="105" marker-end="url(#p3-arrow)"/>
+                <text class="t-c3 t-mid" x="252" y="94">Pm</text>
+                <text class="t-strong t-mid" x="526" y="94">Pe</text>
+                <!-- results -->
+                <text lang="en" class="t-small t-mid" x="250" y="196">Pm &gt; Pe : speeds up, δ grows</text>
+                <text lang="ja" class="t-small t-mid" x="250" y="196">Pm &gt; Pe：加速し、δ が増える</text>
+                <text lang="en" class="t-small t-mid" x="530" y="196">Pm &lt; Pe : slows down, δ shrinks</text>
+                <text lang="ja" class="t-small t-mid" x="530" y="196">Pm &lt; Pe：減速し、δ が減る</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The rotor sits between the mechanical power coming in and the electrical power going out. Their difference changes its speed.</figcaption>
+            <figcaption lang="ja">回転子は、入ってくる機械入力と出ていく電気出力の間にあります。その差が回転の速さを変えます。</figcaption>
+          </figure>
+
+          <p lang="en">The <strong>swing equation</strong> writes this down. The generator models of GUILDA (classical, one-axis, two-axis and Park) use exactly this form:</p>
+          <p lang="ja">これを式にしたものが<strong>動揺方程式</strong>です。GUILDA の発電機のモデル（古典・1 軸・2 軸・Park）は、どれもこの形を使っています。</p>
+          <div class="lec-math" data-tex="\begin{aligned} M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} &= P_\mathrm{m} - P_\mathrm{e} - D\,\omega \\ \frac{\mathrm{d}\delta}{\mathrm{d}t} &= 2\pi f_0\,\omega \end{aligned}"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="\omega"></span> is the deviation of the rotor speed from the rated speed in per unit (0 at the rated speed), <span class="lec-math-inline" data-tex="\delta"></span> [rad] is the rotor angle measured against a frame that turns at the rated frequency <span class="lec-math-inline" data-tex="f_0"></span> [Hz], <span class="lec-math-inline" data-tex="M = 2H"></span> [s] is the inertia (<span class="lec-math-inline" data-tex="H"></span> is the inertia constant), <span class="lec-math-inline" data-tex="D"></span> [pu] is the damping coefficient, and the powers are in per unit.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="\omega"></span> は回転の速さの定格からのずれ（単位法、定格の速さで 0）、<span class="lec-math-inline" data-tex="\delta"></span> [rad] は定格の周波数 <span class="lec-math-inline" data-tex="f_0"></span> [Hz] で回る基準から測った回転子の角度、<span class="lec-math-inline" data-tex="M = 2H"></span> [s] は慣性（<span class="lec-math-inline" data-tex="H"></span> は慣性定数）、<span class="lec-math-inline" data-tex="D"></span> [pu] は制動係数で、電力は単位法の値です。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">First line</span><span lang="ja">1 行目</span></dt>
+            <dd><span lang="en">Inertia × acceleration = power in − power out − damping. A heavier rotor (larger M) changes its speed more slowly for the same imbalance.</span><span lang="ja">慣性 × 加速 ＝ 入る電力 − 出る電力 − 制動。回転子が重い（M が大きい）ほど、同じ差でも速さはゆっくり変わります。</span></dd>
+            <dt><span lang="en">Second line</span><span lang="ja">2 行目</span></dt>
+            <dd><span lang="en">While the rotor turns faster than the rated speed (ω &gt; 0), its angle moves ahead; while slower, it falls behind.</span><span lang="ja">回転子が定格より速く回っている間（ω &gt; 0）は角度が進み、遅い間は遅れていきます。</span></dd>
+          </dl>
+          <p lang="en">The figure solves this equation for one generator after a sudden increase of the mechanical power. The rotor speeds up first, the angle grows, and the angle then swings around its new equilibrium.</p>
+          <p lang="ja">下の図は、機械入力を急に増やしたときの 1 台の発電機について、この式を解いたものです。まず回転子が加速して角度が増え、そのあと角度は新しい平衡点のまわりで揺れます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part3/swing-step.png" alt="Speed deviation omega and rotor angle delta after the mechanical power steps from 1.0 to 1.2 pu at 0.5 s: without damping the angle swings between 30 and 44 degrees for ever; with D = 20 pu it settles at 36.9 degrees" width="1286" height="802">
+            </div>
+            <figcaption lang="en">Solution of the swing equation above for one generator with <span class="lec-math-inline" data-tex="P_\mathrm{e} = 2\sin\delta"></span> pu, <span class="lec-math-inline" data-tex="M = 10"></span> s and <span class="lec-math-inline" data-tex="f_0 = 50"></span> Hz. At 0.5 s <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span> rises from 1.0 to 1.2 pu. Top: speed deviation; bottom: rotor angle, with the new equilibrium dotted. Without damping (dashed) the swing goes on; with <span class="lec-math-inline" data-tex="D = 20"></span> pu it dies out.</figcaption>
+            <figcaption lang="ja">上の動揺方程式を、<span class="lec-math-inline" data-tex="P_\mathrm{e} = 2\sin\delta"></span> pu、<span class="lec-math-inline" data-tex="M = 10"></span> s、<span class="lec-math-inline" data-tex="f_0 = 50"></span> Hz の 1 台の発電機について解いた結果です。0.5 秒に <span class="lec-math-inline" data-tex="P_\mathrm{m}"></span> を 1.0 pu から 1.2 pu に増やしています。上は回転の速さのずれ、下は回転子の角度で、点線が新しい平衡点です。制動がないと（破線）揺れは続き、<span class="lec-math-inline" data-tex="D = 20"></span> pu では収まります。</figcaption>
+          </figure>
+        </section>
+
+        <!-- ============================== SYNCHRONIZING ============================== -->
+        <section id="synchronizing">
+          <h2><span lang="en">Synchronizing power and damping</span><span lang="ja">同期化力と制動</span></h2>
+          <p lang="en">The electrical output depends on the rotor angle. Model the generator as a constant internal voltage <span class="lec-math-inline" data-tex="E"></span> behind a reactance, and connect it through a lossless line to a network so large that its voltage <span class="lec-math-inline" data-tex="V"></span> and frequency do not change (an infinite bus). If <span class="lec-math-inline" data-tex="X"></span> is the total reactance between the two voltages and <span class="lec-math-inline" data-tex="\delta"></span> the angle of <span class="lec-math-inline" data-tex="E"></span> ahead of <span class="lec-math-inline" data-tex="V"></span>, the output is</p>
+          <p lang="ja">電気出力は、回転子の角度によって変わります。発電機を、リアクタンスの奥にある一定の内部電圧 <span class="lec-math-inline" data-tex="E"></span> で表し、損失のない送電線で、電圧 <span class="lec-math-inline" data-tex="V"></span> と周波数が変わらないほど大きな系統（無限大母線）につなぎます。2 つの電圧の間のリアクタンスの合計を <span class="lec-math-inline" data-tex="X"></span>、<span class="lec-math-inline" data-tex="V"></span> から見た <span class="lec-math-inline" data-tex="E"></span> の進みの角度を <span class="lec-math-inline" data-tex="\delta"></span> とすると、電気出力は次の式になります。</p>
+          <div class="lec-math" data-tex="P_\mathrm{e} = \frac{E\,V}{X}\,\sin\delta = P_\mathrm{max}\sin\delta"></div>
+          <p lang="en">Drawing this <strong>power–angle curve</strong> together with the mechanical power gives two crossings, <span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span> and <span class="lec-math-inline" data-tex="\delta_\mathrm{u} = \pi - \delta_\mathrm{s}"></span>. At both, input equals output, but they behave differently.</p>
+          <p lang="ja">この<strong>電力相差角曲線</strong>と機械入力を同じ図に描くと、<span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span> と <span class="lec-math-inline" data-tex="\delta_\mathrm{u} = \pi - \delta_\mathrm{s}"></span> の 2 か所で交わります。どちらも入力と出力が等しい点ですが、ふるまいは異なります。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part3/power-angle.png" alt="Power-angle curve 2 sin delta and the mechanical power 1 pu crossing at 30 degrees (stable, arrows point towards it) and 150 degrees (unstable, arrows point away)" width="810" height="557">
+            </div>
+            <figcaption lang="en">The power–angle curve for <span class="lec-math-inline" data-tex="P_\mathrm{max} = 2"></span> pu and <span class="lec-math-inline" data-tex="P_\mathrm{m} = 1"></span> pu. The arrows show where the angle moves: towards <span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span> (stable, filled) and away from <span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span> (unstable, hollow).</figcaption>
+            <figcaption lang="ja"><span class="lec-math-inline" data-tex="P_\mathrm{max} = 2"></span> pu、<span class="lec-math-inline" data-tex="P_\mathrm{m} = 1"></span> pu の電力相差角曲線です。矢印は角度が動く向きで、<span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span>（安定、黒丸）へは向かい、<span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span>（不安定、白丸）からは離れます。</figcaption>
+          </figure>
+
+          <p lang="en">At the left crossing, if the angle grows a little, the electrical output becomes larger than the mechanical input, so the rotor slows down and the angle returns. If the angle shrinks, the opposite happens. This restoring effect is the <strong>synchronizing power</strong>; it is what keeps the generators turning together, like a spring between them. Its strength is the slope of the curve, the synchronizing power coefficient</p>
+          <p lang="ja">左の交点では、角度が少し増えると電気出力が機械入力より大きくなるので、回転子が減速して角度は戻ります。角度が減ると逆のことが起きます。この引き戻す働きが<strong>同期化力</strong>で、発電機どうしを、ばねのようにつないで同じ速さで回らせています。その強さは曲線の傾き、つまり次の同期化力係数です。</p>
+          <div class="lec-math" data-tex="K_\mathrm{s} = \frac{\mathrm{d}P_\mathrm{e}}{\mathrm{d}\delta} = \frac{E\,V}{X}\,\cos\delta"></div>
+          <p lang="en">It is positive below 90° and negative above. Around the right crossing the effect therefore has the wrong sign, which is the "hill top" of the valley picture.</p>
+          <p lang="ja">これは 90° より小さい角度で正、大きい角度で負です。そのため右の交点のまわりでは、引き戻す働きの向きが逆になります。これが谷のたとえの「山の頂上」です。</p>
+          <p lang="en">A spring alone would make the angle oscillate forever, as the dashed curves of the previous figure do. What makes the swing die out is <strong>damping</strong>: the term <span class="lec-math-inline" data-tex="D\,\omega"></span> and, in real machines, the damper windings and controllers such as the power system stabilizer (PSS). Synchronizing power decides whether the rotor is pulled back; damping decides how quickly the oscillation fades.</p>
+          <p lang="ja">ばねだけなら、前の図の破線のように、角度はいつまでも振動し続けます。揺れを小さくしていくのが<strong>制動</strong>です。式の <span class="lec-math-inline" data-tex="D\,\omega"></span> の項がそれにあたり、実際の発電機ではダンパ巻線や、系統安定化装置（PSS）などの制御器も制動を生みます。同期化力は引き戻されるかどうかを、制動は振動がどれだけ速く収まるかを決めます。</p>
+        </section>
+
+        <!-- ============================== FAULT ============================== -->
+        <section id="fault">
+          <h2><span lang="en">The course of a fault</span><span lang="ja">事故の流れ</span></h2>
+          <p lang="en">The typical large disturbance is a <strong>short circuit</strong> (fault), for example a transmission line struck by lightning and grounded. A fault proceeds in a fixed order.</p>
+          <p lang="ja">代表的な大きな外乱は、送電線に雷が落ちて地面とつながる<strong>地絡</strong>のような短絡事故です。事故は決まった順に進みます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 250" role="img" aria-label="Fault sequence: normal operation, fault, clearing by protection, then recovery or loss of synchronism">
+                <rect class="f-card" x="20" y="90" width="150" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="95" y="120">Normal</text>
+                <text lang="ja" class="t-strong t-mid" x="95" y="120">平常の運転</text>
+                <text lang="en" class="t-muted t-mid" x="95" y="142">equilibrium</text>
+                <text lang="ja" class="t-muted t-mid" x="95" y="142">平衡点</text>
+
+                <rect class="f-c3" x="210" y="90" width="150" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="285" y="120">Fault</text>
+                <text lang="ja" class="t-strong t-mid" x="285" y="120">事故の発生</text>
+                <text lang="en" class="t-muted t-mid" x="285" y="142">voltage drops</text>
+                <text lang="ja" class="t-muted t-mid" x="285" y="142">電圧が下がる</text>
+
+                <rect class="f-brand" x="400" y="90" width="150" height="70" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="475" y="120">Clearing</text>
+                <text lang="ja" class="t-strong t-mid" x="475" y="120">事故の除去</text>
+                <text lang="en" class="t-muted t-mid" x="475" y="142">breakers open</text>
+                <text lang="ja" class="t-muted t-mid" x="475" y="142">遮断器が開く</text>
+
+                <rect class="f-c2" x="600" y="40" width="160" height="62" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="680" y="67">Recovery</text>
+                <text lang="ja" class="t-strong t-mid" x="680" y="67">回復</text>
+                <text lang="en" class="t-muted t-mid" x="680" y="88">swings die out</text>
+                <text lang="ja" class="t-muted t-mid" x="680" y="88">揺れが収まる</text>
+
+                <rect class="f-c3" x="600" y="148" width="160" height="62" rx="6"/>
+                <text lang="en" class="t-strong t-mid" x="680" y="175">Out of step</text>
+                <text lang="ja" class="t-strong t-mid" x="680" y="175">脱調</text>
+                <text lang="en" class="t-muted t-mid" x="680" y="196">generators trip</text>
+                <text lang="ja" class="t-muted t-mid" x="680" y="196">発電機を解列</text>
+
+                <line class="s-ink" x1="172" y1="125" x2="206" y2="125" marker-end="url(#p3-arrow)"/>
+                <line class="s-ink" x1="362" y1="125" x2="396" y2="125" marker-end="url(#p3-arrow)"/>
+                <path class="s-c2" d="M552 115 C 575 115, 575 72, 596 72" marker-end="url(#p3-arrow)"/>
+                <path class="s-c3" d="M552 135 C 575 135, 575 178, 596 178" marker-end="url(#p3-arrow)"/>
+
+                <line class="s-line" x1="210" y1="232" x2="400" y2="232"/>
+                <line class="s-line" x1="210" y1="224" x2="210" y2="240"/>
+                <line class="s-line" x1="400" y1="224" x2="400" y2="240"/>
+                <text lang="en" class="t-small t-mid" x="305" y="222">clearing time (often around 0.1 s)</text>
+                <text lang="ja" class="t-small t-mid" x="305" y="222">除去までの時間（0.1 秒前後が多い）</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The course of a fault. Whether the system recovers or loses synchronism depends mainly on how long the fault lasts.</figcaption>
+            <figcaption lang="ja">事故の流れです。回復するか脱調するかは、主に事故がどれだけ続くかで決まります。</figcaption>
+          </figure>
+
+          <p lang="en">During the fault the voltage near the fault point drops sharply, so the generators can hardly send their electrical power out. The mechanical power from the turbines does not change that fast, so the rotors accelerate and their angles grow. Protection relays detect the fault and open the circuit breakers at both ends of the faulted line, which removes the fault. The network after clearing may be weaker than before, because one line is now out.</p>
+          <p lang="ja">事故の間は、事故点の近くで電圧が大きく下がるため、発電機は電気出力をほとんど送り出せません。タービンからの機械入力はそれほど速く変わらないので、回転子は加速し、角度が増えていきます。保護リレーが事故を検出して、事故が起きた送電線の両端の遮断器を開くと、事故は除去されます。除去の後の系統は、送電線が 1 本減っているぶん、事故の前より弱くなっていることがあります。</p>
+        </section>
+
+        <!-- ============================== TRANSIENT ============================== -->
+        <section id="transient">
+          <h2><span lang="en">Transient stability and the critical clearing time</span><span lang="ja">過渡安定度と臨界除去時間</span></h2>
+          <p lang="en"><strong>Transient stability</strong> is the ability of the generators to stay in synchronism after a large disturbance such as a fault. The longer the fault lasts, the more the rotors accelerate. The longest fault duration for which the system still recovers is the <strong>critical clearing time</strong> (CCT). Protection must clear faults faster than this.</p>
+          <p lang="ja"><strong>過渡安定度</strong>は、事故のような大きな外乱の後も、発電機が同期を保ち続けられるかどうかを表します。事故が長く続くほど、回転子はより加速します。系統が回復できる、最も長い事故の継続時間を<strong>臨界除去時間</strong>（CCT）といいます。保護装置は、これより短い時間で事故を除去しなければなりません。</p>
+          <p lang="en">The figure below is a GUILDA simulation of the bundled IEEE 9-bus system (three one-axis generators, each with an AVR and a PSS). Bus 7, next to generator 2, is grounded at 1 s, and the fault is removed after 0.15 s or 0.20 s. The lines show the rotor angles of the three generators.</p>
+          <p lang="ja">下の図は、同梱の IEEE 9 母線系統（1 軸モデルの発電機 3 台。それぞれに AVR と PSS 付き）を GUILDA でシミュレーションした結果です。発電機 2 の近くの母線 7 を 1 秒で地絡させ、0.15 秒後または 0.20 秒後に除去しています。線は、3 台の発電機の回転子の角度です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part3/stable-vs-out-of-step.png" alt="Rotor angles of the three generators of the IEEE 9-bus system after a fault at bus 7: with the fault cleared after 0.15 s they swing and move together; cleared after 0.20 s generators 2 and 3 run away from generator 1" width="1293" height="523">
+            </div>
+            <figcaption lang="en">Output of GUILDA (<code>plot_trajectory</code>, IEEE 9-bus system): the rotor angles δ of the three generators. (a) Fault cleared after 0.15 s: the angles swing and then move together. (b) Cleared after 0.20 s: generators 2 and 3 run away from generator 1, which is loss of synchronism.</figcaption>
+            <figcaption lang="ja">GUILDA の出力です（<code>plot_trajectory</code>、IEEE 9 母線系統）。3 台の発電機の回転子の角度 δ です。(a) 0.15 秒で除去すると、角度は揺れたあと、そろって動きます。(b) 0.20 秒で除去すると、発電機 2 と 3 が発電機 1 から離れていきます。これが脱調です。</figcaption>
+          </figure>
+
+          <p lang="en">To run case (a) in GUILDA, load the system, make a scenario with the fault, simulate it and draw the rotor angles:</p>
+          <p lang="ja">GUILDA で (a) を確かめるときは、系統を読み込み、地絡を入れたシナリオを作ってシミュレーションし、回転子の角度を図にします。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+sc = net.add_scenario("fault", Time=[0, 4]);
+sc.add_fault("B007", [1, 1.15]);
+result = net.simulate("fault");
+result.plot_trajectory(Quantity="delta");</code></pre>
+          <p lang="en">A difference of only 0.05 s separates the two results. Searching between them, the critical clearing time of this fault in this model is about 0.188 s. The value depends on the place of the fault, the operating state, and the models and controllers of the generators; finding it is a typical use of time-domain simulation.</p>
+          <p lang="ja">2 つの結果の差は、わずか 0.05 秒です。この間を細かく調べると、このモデルでのこの事故の臨界除去時間は約 0.188 秒です。この値は、事故の場所、運転状態、発電機や制御器のモデルによって変わります。それを求めることは、時間シミュレーションの代表的な使い方です。</p>
+          <div class="lec-callout">
+            <p lang="en">Loss of synchronism in a multi-machine system is judged from the differences between rotor angles, not from one angle alone, because all angles may drift together without any harm. GUILDA judges a simulation result in this way, comparing the angles with that of a reference generator (by default the one at the slack bus) or with the center of inertia:</p>
+            <p lang="ja">多機系統の脱調は、1 台の角度ではなく、回転子の角度の差で判定します。すべての角度がそろって動くだけなら問題はないからです。GUILDA は、基準の発電機（既定は slack 母線の発電機）、または慣性中心からの角度の差で、シミュレーションの結果が脱調したかどうかを判定します。</p>
+            <pre class="lec-cmd"><code>result.judge_out_of_step()</code></pre>
+          </div>
+        </section>
+
+        <!-- ============================== EQUAL AREA ============================== -->
+        <section id="equal-area">
+          <h2><span lang="en">The equal-area criterion</span><span lang="ja">等面積法</span></h2>
+          <p lang="en">For one generator connected to a large network, the critical clearing can be explained without solving the equations in time. Take the swing equation without damping (<span class="lec-math-inline" data-tex="D = 0"></span>), multiply the first line by <span class="lec-math-inline" data-tex="\mathrm{d}\delta/\mathrm{d}t = 2\pi f_0\,\omega"></span> and integrate from the equilibrium <span class="lec-math-inline" data-tex="\delta_0"></span>, where <span class="lec-math-inline" data-tex="\omega = 0"></span>:</p>
+          <p lang="ja">大きな系統につながった 1 台の発電機なら、式を時間で解かなくても、臨界の除去を説明できます。制動のない（<span class="lec-math-inline" data-tex="D = 0"></span>）動揺方程式の 1 行目に <span class="lec-math-inline" data-tex="\mathrm{d}\delta/\mathrm{d}t = 2\pi f_0\,\omega"></span> を掛け、<span class="lec-math-inline" data-tex="\omega = 0"></span> の平衡点 <span class="lec-math-inline" data-tex="\delta_0"></span> から積分すると、次の式になります。</p>
+          <div class="lec-math" data-tex="\pi f_0 M\,\omega^2 = \int_{\delta_0}^{\delta} \bigl(P_\mathrm{m} - P_\mathrm{e}\bigr)\,\mathrm{d}\delta"></div>
+          <p lang="en">The left side is the kinetic energy of the speed deviation (in the units of the swing equation); the right side is the area between the mechanical power and the output curve. Now draw three power–angle curves: before the fault, during the fault (much lower, because little power can be sent), and after clearing (lower than before if a line was removed).</p>
+          <p lang="ja">左辺は回転の速さのずれによる運動エネルギー（動揺方程式の単位で表したもの）、右辺は機械入力と出力の曲線の間の面積です。ここで 3 つの電力相差角曲線を描きます。事故の前、事故の間（電力をほとんど送れないので、ずっと低い）、除去の後（送電線を 1 本外した場合は、事故の前より低い）の 3 つです。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 360px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part3/equal-area.en.png" alt="Equal-area criterion: power-angle curves before (2 pu), during (0.4 pu) and after the fault (1.6 pu) with Pm = 1 pu; the acceleration area A1 from 30 to 70 degrees equals the deceleration area A2 from 70 to 122 degrees" width="810" height="557">
+              <img lang="ja" src="../images/lecture/part3/equal-area.ja.png" alt="等面積法。事故の前（2 pu）、事故の間（0.4 pu）、除去の後（1.6 pu）の電力相差角曲線と Pm = 1 pu。30 度から 70 度の加速面積 A1 と、70 度から 122 度の減速面積 A2 が等しい" width="810" height="557">
+            </div>
+            <figcaption lang="en">Equal-area criterion (<span class="lec-math-inline" data-tex="P_\mathrm{max}"></span> = 2, 0.4 and 1.6 pu, <span class="lec-math-inline" data-tex="P_\mathrm{m} = 1"></span> pu). The fault starts at <span class="lec-math-inline" data-tex="\delta_0 = 30^\circ"></span> and is cleared at <span class="lec-math-inline" data-tex="\delta_\mathrm{c} = 70^\circ"></span>. The rotor turns back at <span class="lec-math-inline" data-tex="\delta_\mathrm{max} = 122^\circ"></span>, where <span class="lec-math-inline" data-tex="A_2"></span> computed from the equations below equals <span class="lec-math-inline" data-tex="A_1"></span>. The hollow circle is the hill top of the post-fault curve (141°).</figcaption>
+            <figcaption lang="ja">等面積法です（<span class="lec-math-inline" data-tex="P_\mathrm{max}"></span> ＝ 2、0.4、1.6 pu、<span class="lec-math-inline" data-tex="P_\mathrm{m} = 1"></span> pu）。事故は <span class="lec-math-inline" data-tex="\delta_0 = 30^\circ"></span> で始まり、<span class="lec-math-inline" data-tex="\delta_\mathrm{c} = 70^\circ"></span> で除去されます。下の式で求めた <span class="lec-math-inline" data-tex="A_2"></span> が <span class="lec-math-inline" data-tex="A_1"></span> と等しくなる <span class="lec-math-inline" data-tex="\delta_\mathrm{max} = 122^\circ"></span> で、回転子は折り返します。白い丸は、除去の後の曲線の山の頂上（141°）です。</figcaption>
+          </figure>
+
+          <p lang="en">During the fault (from <span class="lec-math-inline" data-tex="\delta_0"></span> to the clearing angle <span class="lec-math-inline" data-tex="\delta_\mathrm{c}"></span>) the input is larger than the output <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{F}"></span>, and the rotor gains the energy of area <span class="lec-math-inline" data-tex="A_1"></span>. After clearing the output <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{post}"></span> is larger, and the rotor loses energy as the angle grows. By the equation above, it stops (<span class="lec-math-inline" data-tex="\omega = 0"></span>) and turns back at the angle <span class="lec-math-inline" data-tex="\delta_\mathrm{max}"></span> where the two areas are equal:</p>
+          <p lang="ja">事故の間（<span class="lec-math-inline" data-tex="\delta_0"></span> から除去の角度 <span class="lec-math-inline" data-tex="\delta_\mathrm{c}"></span> まで）は入力が出力 <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{F}"></span> より大きく、回転子は面積 <span class="lec-math-inline" data-tex="A_1"></span> のエネルギーを得ます。除去の後は出力 <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{post}"></span> のほうが大きく、角度が増えるにつれてエネルギーを失います。上の式から、2 つの面積が等しくなる角度 <span class="lec-math-inline" data-tex="\delta_\mathrm{max}"></span> で回転子は止まり（<span class="lec-math-inline" data-tex="\omega = 0"></span>）、折り返します。</p>
+          <div class="lec-math" data-tex="A_1 = \int_{\delta_0}^{\delta_\mathrm{c}} \bigl(P_\mathrm{m} - P_\mathrm{e}^\mathrm{F}\bigr)\,\mathrm{d}\delta \;=\; A_2 = \int_{\delta_\mathrm{c}}^{\delta_\mathrm{max}} \bigl(P_\mathrm{e}^\mathrm{post} - P_\mathrm{m}\bigr)\,\mathrm{d}\delta"></div>
+          <div class="lec-callout is-key">
+            <p lang="en">The system is stable if an area <span class="lec-math-inline" data-tex="A_2"></span> as large as <span class="lec-math-inline" data-tex="A_1"></span> fits before the hill top <span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span> of the post-fault curve, that is, if <span class="lec-math-inline" data-tex="\delta_\mathrm{max} \lt \delta_\mathrm{u}"></span>. A later clearing makes <span class="lec-math-inline" data-tex="A_1"></span> larger and leaves less room for <span class="lec-math-inline" data-tex="A_2"></span>. The clearing angle at which the two just fit is the critical clearing angle (73° for the curves of the figure), and the time to reach it is the critical clearing time.</p>
+            <p lang="ja">除去の後の曲線の山の頂上 <span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span> に届く前に、<span class="lec-math-inline" data-tex="A_1"></span> と同じ大きさの <span class="lec-math-inline" data-tex="A_2"></span> をとれれば、つまり <span class="lec-math-inline" data-tex="\delta_\mathrm{max} \lt \delta_\mathrm{u}"></span> なら安定です。除去が遅れると <span class="lec-math-inline" data-tex="A_1"></span> が大きくなり、<span class="lec-math-inline" data-tex="A_2"></span> をとれる余地が減ります。ちょうど等しくとれる除去の角度が臨界除去角（図の曲線では 73°）で、そこに達するまでの時間が臨界除去時間です。</p>
+          </div>
+          <p lang="en">The equal-area criterion is exact only for one generator against a large network without damping. For many generators with controllers, as in the 9-bus example above, the time-domain simulation is used instead; the picture of "energy gained during the fault, energy lost after it" still explains the results.</p>
+          <p lang="ja">等面積法がそのまま成り立つのは、制動のない 1 台の発電機が大きな系統につながった場合だけです。前の節の 9 母線系統のように、制御器付きの発電機が何台もある場合は、時間シミュレーションを使います。それでも、「事故の間に得たエネルギーを、除去の後に失えるか」という見方で結果を理解できます。</p>
+        </section>
+
+        <!-- ============================== FREQUENCY ============================== -->
+        <section id="frequency">
+          <h2><span lang="en">Frequency after a disturbance: inertia and governors</span><span lang="ja">周波数の変化（慣性とガバナ）</span></h2>
+          <p lang="en">Not every disturbance shakes the generators apart. When a generator trips or a large load is connected, all the rotors slow down together, because the missing power is drawn from their common kinetic energy. The <strong>frequency</strong> of the whole system falls. Treating the whole system as one generator (the swing equation with all inertias added up), a loss of generation <span class="lec-math-inline" data-tex="\Delta P_\mathrm{L}"></span> gives</p>
+          <p lang="ja">外乱がいつも発電機どうしを引き離すわけではありません。発電機が止まったり、大きな負荷がつながったりすると、足りない電力が全体の運動エネルギーから取り出されるので、すべての回転子がそろって遅くなります。系統全体の<strong>周波数</strong>が下がります。系統全体を 1 台の発電機とみなすと（すべての慣性を足し合わせた動揺方程式）、発電が <span class="lec-math-inline" data-tex="\Delta P_\mathrm{L}"></span> だけ不足したとき、次の式になります。</p>
+          <div class="lec-math" data-tex="M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \Delta P_\mathrm{m} - \Delta P_\mathrm{L} - D\,\omega, \qquad \Delta f = f_0\,\omega"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="M"></span> is the total inertia, <span class="lec-math-inline" data-tex="\Delta P_\mathrm{m}"></span> the increase of the mechanical power by the governors, and <span class="lec-math-inline" data-tex="D"></span> mainly the frequency dependence of the loads (their power falls a little with the frequency). The course of the frequency has three parts.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="M"></span> は全体の慣性、<span class="lec-math-inline" data-tex="\Delta P_\mathrm{m}"></span> はガバナによる機械入力の増加、<span class="lec-math-inline" data-tex="D"></span> は主に負荷の周波数特性（周波数が下がると消費が少し減ること）です。周波数の経過は 3 つに分けられます。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part3/frequency-governor.png" alt="Speed deviation of the three generators of the IEEE 9-bus system after generator 2 loses 0.1 pu of mechanical power: without governors it keeps falling to about -0.006 pu at 30 s; with gov-LPT1 governors it stops near -0.0013 pu" width="1294" height="528">
+            </div>
+            <figcaption lang="en">Output of GUILDA (<code>plot_trajectory</code>, IEEE 9-bus system, 60 Hz): at t = 1 s the mechanical power of generator 2 falls by 0.1 pu. (a) Without governors the frequency keeps falling; only the damping of the generators slows it. (b) With the governor model <code>gov-LPT1</code> on each generator the fall stops within a few seconds, but a deviation remains.</figcaption>
+            <figcaption lang="ja">GUILDA の出力です（<code>plot_trajectory</code>、IEEE 9 母線系統、60 Hz）。t = 1 s に発電機 2 の機械入力が 0.1 pu 減ります。(a) ガバナがないと、周波数は下がり続けます。遅くするのは発電機の制動だけです。(b) 各発電機にガバナのモデル <code>gov-LPT1</code> を付けると、数秒で低下が止まりますが、ずれは残ります。</figcaption>
+          </figure>
+
+          <dl class="lec-terms">
+            <dt><span lang="en">Inertia (first seconds)</span><span lang="ja">慣性（最初の数秒）</span></dt>
+            <dd><span lang="en">Right after the loss, the governors have not yet acted and <span class="lec-math-inline" data-tex="\omega = 0"></span>, so only the stored kinetic energy covers the missing power. The initial rate of fall is <span class="lec-math-inline" data-tex="\mathrm{d}\Delta f/\mathrm{d}t = -f_0\,\Delta P_\mathrm{L}/M"></span>: a system with more heavy rotors falls more slowly.</span><span lang="ja">不足が起きた直後は、ガバナはまだ働かず <span class="lec-math-inline" data-tex="\omega = 0"></span> なので、蓄えられた運動エネルギーだけが足りない電力を補います。初めに周波数が下がる速さは <span class="lec-math-inline" data-tex="\mathrm{d}\Delta f/\mathrm{d}t = -f_0\,\Delta P_\mathrm{L}/M"></span> です。重い回転子が多い系統ほど、ゆっくり下がります。</span></dd>
+            <dt><span lang="en">Governors (seconds)</span><span lang="ja">ガバナ（数秒〜）</span></dt>
+            <dd><span lang="en">The governor of each generator senses the speed drop and opens the steam or water valve, raising the mechanical power. This stops the fall. The lowest point reached on the way is called the frequency nadir.</span><span lang="ja">各発電機のガバナ（調速機）は回転の低下を感じとり、蒸気や水の弁を開いて機械入力を増やします。これで低下が止まります。途中で最も下がった点を周波数の最下点（ナディア）といいます。</span></dd>
+            <dt><span lang="en">Remaining deviation</span><span lang="ja">残るずれ</span></dt>
+            <dd><span lang="en">Governors increase their output in proportion to the frequency deviation, <span class="lec-math-inline" data-tex="\Delta P_\mathrm{m} = -\omega/R"></span> in steady state (droop control). Setting the derivative to zero gives the deviation that remains, <span class="lec-math-inline" data-tex="\Delta f = -f_0\,\Delta P_\mathrm{L}/(D + 1/R)"></span>. Bringing the frequency back to its rated value is the job of a slower control, the AGC (Part 8).</span><span lang="ja">ガバナは周波数のずれに比例して出力を増やします（垂下特性。定常状態で <span class="lec-math-inline" data-tex="\Delta P_\mathrm{m} = -\omega/R"></span>）。上の式の微分を 0 とおくと、残るずれ <span class="lec-math-inline" data-tex="\Delta f = -f_0\,\Delta P_\mathrm{L}/(D + 1/R)"></span> が得られます。周波数を定格の値まで戻すのは、より遅い制御である AGC の役割です（Part 8）。</span></dd>
+          </dl>
+          <p lang="en">Without governors (<span class="lec-math-inline" data-tex="\Delta P_\mathrm{m} = 0"></span>) the frequency falls until the loads consume less, to <span class="lec-math-inline" data-tex="-f_0\,\Delta P_\mathrm{L}/D"></span>, much lower than with governors, as in (a) of the figure. In GUILDA, governor models can be attached to generators as local controllers, and the same kind of simulation shows these effects.</p>
+          <p lang="ja">ガバナがなければ（<span class="lec-math-inline" data-tex="\Delta P_\mathrm{m} = 0"></span>）、負荷の消費が減るまで、<span class="lec-math-inline" data-tex="-f_0\,\Delta P_\mathrm{L}/D"></span> まで下がり続け、ガバナがある場合よりずっと低くなります。図の (a) がこれにあたります。GUILDA では、ガバナのモデルをローカル制御器として発電機に付けられ、同じ時間シミュレーションでこうした効果を確かめられます。</p>
+        </section>
+
+        <!-- ============================== EVENTS ============================== -->
+        <section id="events">
+          <h2><span lang="en">Disturbances that GUILDA can apply</span><span lang="ja">GUILDA で設定できるイベントの種類</span></h2>
+          <p lang="en">In GUILDA a simulation run starts from the equilibrium found by the power flow and follows one <strong>scenario</strong>: a simulation time and a list of disturbances (events), each with the time at which it starts and ends. A scenario is made with <code>net.add_scenario</code>, and each kind of event is added by its own method.</p>
+          <p lang="ja">GUILDA の時間シミュレーションは、潮流計算で求めた平衡点から始まり、1 つの<strong>シナリオ</strong>に従って進みます。シナリオは、シミュレーションの時間と、外乱（イベント）の一覧（それぞれ始まりと終わりの時刻付き）の組です。シナリオは <code>net.add_scenario</code> で作り、イベントは種類ごとのメソッドで加えます。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">Bus fault</span><span lang="ja">母線の地絡</span> (<code>add_fault</code>)</dt>
+            <dd><span lang="en">The voltage of a bus is held at 0 during the fault, as in the 9-bus example above.</span><span lang="ja">事故の間、母線の電圧を 0 にします。前の節の 9 母線系統の例がこれです。</span></dd>
+            <dt><span lang="en">Branch fault</span><span lang="ja">ブランチの地絡</span> (<code>add_fault</code>)</dt>
+            <dd><span lang="en">A line is grounded at a point along its length, on one circuit or on all circuits.</span><span lang="ja">送電線の途中の点で地絡させます。1 回線だけ、またはすべての回線を選べます。</span></dd>
+            <dt><span lang="en">Branch opening</span><span lang="ja">ブランチの開放</span> (<code>add_open_branch</code>)</dt>
+            <dd><span lang="en">One circuit or all circuits of a line are opened at a given time and stay open to the end of the run, for example to model the line removed by protection after a fault.</span><span lang="ja">送電線の 1 回線、またはすべての回線を、指定した時刻に開きます。実行の終わりまで開いたままです。事故の後に保護装置が送電線を外した状態を表すのに使います。</span></dd>
+            <dt><span lang="en">Trip</span><span lang="ja">解列</span> (<code>add_trip</code>)</dt>
+            <dd><span lang="en">A generator, load or other component, or a controller, is disconnected at a given time and stays disconnected to the end of the run.</span><span lang="ja">発電機や負荷などの機器、または制御器を、指定した時刻に切り離します。実行の終わりまで切り離したままです。</span></dd>
+            <dt><span lang="en">Offset of a state</span><span lang="ja">状態のずれ</span> (<code>add_offset</code>)</dt>
+            <dd><span lang="en">A value is added to state variables at one moment, for example a small push to the rotor angle of a generator.</span><span lang="ja">ある時刻に状態変数へ値を加えます。たとえば、発電機の回転子の角度を少しずらします。</span></dd>
+            <dt><span lang="en">Added input</span><span lang="ja">入力の追加</span> (<code>add_input</code>)</dt>
+            <dd><span lang="en">A constant or a time series is added to an input of a component over a time span, for example a change in the mechanical power of a generator or in the impedance of a load.</span><span lang="ja">一定の値や時系列を、ある時間の間、機器の入力に加えます。たとえば、発電機の機械入力や、負荷のインピーダンスを変えます。</span></dd>
+          </dl>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 210" role="img" aria-label="A scenario on a time axis: a bus fault from 1.0 to 1.15 s, then a branch opening until the end">
+                <line class="s-ink" x1="60" y1="170" x2="740" y2="170" marker-end="url(#p3-arrow)"/>
+                <text lang="en" class="t-muted t-end" x="740" y="160">time [s]</text>
+                <text lang="ja" class="t-muted t-end" x="740" y="160">時間 [s]</text>
+                <text class="t-small t-mid" x="60" y="190">0</text>
+                <text class="t-small t-mid" x="220" y="190">1.0</text>
+                <text class="t-small t-mid" x="268" y="190">1.15</text>
+                <text class="t-small t-mid" x="700" y="190">10</text>
+                <line class="s-line" x1="220" y1="40" x2="220" y2="170"/>
+                <line class="s-line" x1="268" y1="40" x2="268" y2="170"/>
+                <!-- equilibrium start -->
+                <rect class="f-card" x="60" y="40" width="150" height="40" rx="5"/>
+                <text lang="en" class="t-small t-mid" x="135" y="65">start: equilibrium</text>
+                <text lang="ja" class="t-small t-mid" x="135" y="65">始め：平衡点</text>
+                <!-- fault -->
+                <rect class="f-c3" x="220" y="96" width="48" height="28" rx="3"/>
+                <text lang="en" class="t-c3 t-small" x="276" y="115">bus fault</text>
+                <text lang="ja" class="t-c3 t-small" x="276" y="115">母線の地絡</text>
+                <!-- opening -->
+                <rect class="f-brand" x="268" y="132" width="432" height="28" rx="3"/>
+                <text lang="en" class="t-brand t-small" x="280" y="151">branch opening (to the end)</text>
+                <text lang="ja" class="t-brand t-small" x="280" y="151">ブランチの開放（最後まで）</text>
+                <!-- watch -->
+                <text lang="en" class="t-c2 t-small" x="420" y="65">watch: rotor angles, frequency, voltages</text>
+                <text lang="ja" class="t-c2 t-small" x="420" y="65">見るもの：回転子の角度・周波数・電圧</text>
+              </svg>
+            </div>
+            <figcaption lang="en">An example scenario: a fault at 1.0 s, cleared at 1.15 s by opening a line that stays open to the end of the run.</figcaption>
+            <figcaption lang="ja">シナリオの例です。1.0 秒に地絡が起き、1.15 秒に送電線を開いて除去し、その送電線は最後まで開いたままにします。</figcaption>
+          </figure>
+
+          <p lang="en">Events can be combined. For example, to clear the fault of the 9-bus example by opening the line between buses 5 and 7 (branch EL006) at 1.15 s and keeping it open, add the opening to the same scenario and run it again:</p>
+          <p lang="ja">イベントは組み合わせられます。たとえば、9 母線系統の例の地絡を、1.15 秒に母線 5 と 7 の間の送電線（ブランチ EL006）を開いて除去し、そのまま開いておくときは、同じシナリオに開放を加えて、もう一度実行します。</p>
+          <pre class="lec-cmd"><code>sc.add_open_branch("EL006", 1.15);
+result = net.simulate("fault");
+result.judge_out_of_step()</code></pre>
+          <p lang="en">With one line less after clearing, the same 0.15 s fault now ends in loss of synchronism: the post-fault network is weaker, as in the equal-area picture. The result holds the time series of all states, voltages and currents, so the rotor angles, frequencies and voltages can be plotted after the run. How to write scenarios in detail is shown in the Live Script of this Part.</p>
+          <p lang="ja">除去の後に送電線が 1 本少ないため、同じ 0.15 秒の地絡でも、こんどは脱調します。等面積法の図のように、除去の後の系統が弱くなるからです。結果には、すべての状態・電圧・電流の時系列が入っているので、実行の後に回転子の角度、周波数、電圧を図に描けます。シナリオの詳しい書き方は、この Part のライブスクリプトで扱います。</p>
+        </section>
+
+        <section class="lec-summary" id="summary">
+          <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
+          <ul>
+            <li><span lang="en">A time-domain simulation starts from the equilibrium, applies a disturbance and follows the state over time.</span><span lang="ja">時間シミュレーションは、平衡点から始めて外乱を加え、状態の変化を時間とともに追います。</span></li>
+            <li><span lang="en">The swing equation says that the difference between mechanical input and electrical output accelerates or decelerates the rotor.</span><span lang="ja">動揺方程式は、機械入力と電気出力の差が回転子を加速・減速させることを表します。</span></li>
+            <li><span lang="en">Synchronizing power pulls the rotor angle back like a spring; damping makes the swing die out.</span><span lang="ja">同期化力はばねのように回転子の角度を引き戻し、制動は揺れを収めます。</span></li>
+            <li><span lang="en">The longer a fault lasts, the more the rotors accelerate. Beyond the critical clearing time the generators lose synchronism; the equal-area criterion explains this with energy.</span><span lang="ja">事故が長く続くほど回転子は加速し、臨界除去時間を超えると脱調します。等面積法は、これをエネルギーで説明します。</span></li>
+            <li><span lang="en">After a loss of generation the frequency falls at a rate set by the inertia; governors stop the fall, and a deviation remains until AGC removes it.</span><span lang="ja">発電が不足すると、周波数は慣性で決まる速さで下がります。ガバナが低下を止め、残るずれは AGC が取り除きます。</span></li>
+            <li><span lang="en">In GUILDA a scenario combines bus and branch faults, branch openings, trips, state offsets and added inputs.</span><span lang="ja">GUILDA のシナリオでは、母線とブランチの地絡、ブランチの開放、解列、状態のずれ、入力の追加を組み合わせられます。</span></li>
+          </ul>
+        </section>
+
+        <section id="related">
+          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
+          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
+          <ul class="lec-cards">
+          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b><span><span lang="en">The equilibrium that the simulation starts from.</span><span lang="ja">シミュレーションの出発点になる平衡点。</span></span></a></li>
+          <li><a class="lec-card is-c2" href="part4-spring-mass-model.html"><small>Part 4</small><b><span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b><span><span lang="en">The swings of this Part shown as moving masses.</span><span lang="ja">この Part の揺れを、動く質点として見る。</span></span></a></li>
+          <li><a class="lec-card is-c3" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b><span><span lang="en">Small swings analysed with eigenvalues.</span><span lang="ja">小さな揺れを固有値で調べる。</span></span></a></li>
+          <li><a class="lec-card is-c4" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b><span><span lang="en">AVR, PSS, governors and AGC.</span><span lang="ja">AVR・PSS・ガバナ・AGC。</span></span></a></li>
+          </ul>
+          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <ul class="lec-scripts">
+            <li><span lang="en"><code>_GUILDAtutorial/Part3_TimeSimulation.mlx</code>: after starting GUILDA, open it with <code>open Part3_TimeSimulation.mlx</code>. The graphs on this page can be drawn with the Part 3 Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part3_TimeSimulation.mlx</code> です。GUILDA を起動してから、<code>open Part3_TimeSimulation.mlx</code> で開きます。このページの図は Part 3 のライブスクリプトで描けます。</span></li>
+          </ul>
+        </section>
+
+        <section id="references">
+          <h2><span lang="en">References</span><span lang="ja">参考文献</span></h2>
+          <ol class="lec-refs">
+            <li><span lang="en">T. Ishizaki (ed.), T. Kawaguchi and K. Kawabe,</span><span lang="ja">石崎孝幸 編著、川口貴弘・河辺賢一 著、</span> <cite>電力系統のシステム制御工学 – システム数理と MATLAB シミュレーション –</cite><span lang="en">, Corona Publishing, 2022 (in Japanese).</span><span lang="ja">、コロナ社、2022 年（計測・制御セレクションシリーズ 4）。</span>
+              <span class="lec-ref-note"><span lang="en">The textbook GUILDA is based on; the generator models and the swing equation of this page follow its notation.</span><span lang="ja">GUILDA の基になった教科書です。このページの発電機のモデルと動揺方程式は、この本の書き方に合わせています。</span></span></li>
+            <li>P. Kundur and O. P. Malik, <cite>Power System Stability and Control</cite>, 2nd ed., McGraw Hill, 2022.
+              <span class="lec-ref-note"><span lang="en">Transient stability, the equal-area criterion, and frequency control with governors and AGC.</span><span lang="ja">過渡安定度、等面積法、ガバナと AGC による周波数制御。</span></span></li>
+            <li>J. Machowski, Z. Lubosny, J. W. Bialek and J. R. Bumby, <cite>Power System Dynamics: Stability and Control</cite>, 3rd ed., Wiley, 2020.
+              <span class="lec-ref-note"><span lang="en">The swing equation, the power–angle curve, fault clearing and the frequency response after a loss of generation.</span><span lang="ja">動揺方程式、電力相差角曲線、事故の除去、発電の脱落後の周波数の応答。</span></span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+
+    <nav class="lec-pager" aria-label="Parts">
+      <a class="is-prev" href="part2-power-flow.html"><small><span lang="en">← Previous</span><span lang="ja">← 前の Part</span></small><b>Part 2: <span lang="en">Power flow</span><span lang="ja">潮流計算</span></b></a>
+      <a class="is-next" href="part4-spring-mass-model.html"><small><span lang="en">Next →</span><span lang="ja">次の Part →</span></small><b>Part 4: <span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b></a>
+    </nav>
+  </main>
+  <script src="lecture.js"></script>
+</body>
+</html>
