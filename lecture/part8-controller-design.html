@@ -279,7 +279,7 @@
           </figure>
           <p lang="en">In the figure, <span class="lec-math-inline" data-tex="\alpha_i = \beta_i = 1"></span>, <span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span> and <span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span>. To try it in GUILDA, add a governor to each generator of IEEE 9-bus and the AGC to all three, lower the mechanical power of generator 2, and draw the speed deviations:</p>
           <p lang="ja">図では <span class="lec-math-inline" data-tex="\alpha_i = \beta_i = 1"></span>、<span class="lec-math-inline" data-tex="k_\mathrm{P} = 0"></span>、<span class="lec-math-inline" data-tex="k_\mathrm{I} = 2"></span> です。GUILDA で確かめるときは、IEEE 9 母線系統の各発電機にガバナを、3 台すべてに AGC を加え、発電機 2 の機械入力を下げて、回転速度のずれを描きます。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 for k = 1:3, gen = net.a_Bus{k}.a_Component{1}; gen.add_local_controller("gov-LPT1", parameter=struct(Prate=gen.rv_Uequilibrium(1)/0.8)); end
 net.add_global_controller("agc-PI", ["B001SG1","B002SG1","B003SG1"], parameter=struct(kP=0, kI=2));
 net.initialize();
@@ -442,7 +442,7 @@ result.plot_trajectory(Quantity="omega");</code></pre>
           <div class="lec-math" data-tex="E\,\dot{e} = (A_\mathrm{d} - BK)\,e"></div>
           <p lang="en">The error therefore decays whatever the rest of the network does, and the eigenvalues of the linearized network are those without the controller together with those of <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span>. At the equilibrium <span class="lec-math-inline" data-tex="\hat{x} = x"></span> and <span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span>, so attaching it does not move the operating point. To try it, give generator 2 of IEEE 9-bus the Static AVR and the retrofit controller, push its internal voltage <span class="lec-math-inline" data-tex="E_q"></span> by 0.1 pu at <span class="lec-math-inline" data-tex="t = 0"></span>, and draw the speed deviations:</p>
           <p lang="ja">したがって誤差は、系統の残りがどう動いても減衰し、線形化した系統の固有値は、制御器がないときの固有値と <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span> の固有値を合わせたものになります。平衡点では <span class="lec-math-inline" data-tex="\hat{x} = x"></span>、<span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span> なので、付けても運転点は動きません。GUILDA で確かめるときは、IEEE 9 母線系統の発電機 2 を Static の AVR と Retrofit 制御器にし、<span class="lec-math-inline" data-tex="t = 0"></span> でその内部電圧 <span class="lec-math-inline" data-tex="E_q"></span> を 0.1 pu ずらして、回転速度のずれを描きます。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 gen = net.a_Bus{2}.a_Component{1};
 gen.remove_local_controller(gen.avr.s_tag, RemoveNested=true);
 gen.add_local_controller("avr-static");

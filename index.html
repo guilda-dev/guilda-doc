@@ -225,11 +225,6 @@
         .ab-gallery img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
         .ab-gallery figcaption { margin-top: 6px; color: var(--muted); font-size: 0.85rem; }
         .ab-row pre { margin: 0; }
-        .ab-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; max-width: 760px; margin: 16px 0; }
-        .ab-figs figure { margin: 0; }
-        .ab-figs img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
-        .ab-figs figcaption { margin-top: 6px; color: var(--muted); font-size: 0.85rem; }
-        .ab-refs { padding-left: 1.6em; color: var(--muted); font-size: 0.88rem; }
         .about-fig { margin: 0; }
         .ab-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
         .about-fig.is-vision { max-width: 680px; margin: 18px auto 12px; }
@@ -265,7 +260,7 @@
           .ab-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 480px) {
-          .ab-gallery, .ab-figs { grid-template-columns: minmax(0, 1fr); }
+          .ab-gallery { grid-template-columns: minmax(0, 1fr); }
               .about-fig text.nm { font-size: 17px; }
           .about-fig text.mu { font-size: 14px; }
           .about-fig .sym { font-size: 22px; }
@@ -286,10 +281,10 @@
       </svg>
 
       <h1><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></h1>
-      <p lang="en">GUILDA (Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer) is a power-system simulator for MATLAB, developed for students and researchers in systems and control.</p>
-      <p lang="ja">GUILDA（Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer）は、システム制御を専門とする学生や研究者に向けて開発した、MATLAB で動く電力系統シミュレータです。</p>
-      <p lang="en">GUILDA is developed together with the textbook <a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a> (<em>Systems Control Engineering of Power Systems</em>, Corona Publishing, 2022), which explains power systems from the viewpoint of control and uses GUILDA for its numerical examples. The whole grid is written as differential-algebraic equations with named states and inputs, so the methods of systems and control can be applied to it as they are.</p>
-      <p lang="ja">GUILDA は、教科書<a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a>（コロナ社、2022 年）と一緒に開発しています。この教科書は電力系統を制御の視点から解説しており、数値例の計算に GUILDA を使っています。系統全体は、状態と入力に名前の付いた微分代数方程式として書かれているので、システム制御の手法をそのまま適用できます。</p>
+      <p lang="en">GUILDA (Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer) is a power-system simulator for MATLAB, made for students and researchers in systems and control. It is developed with the textbook <a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a> (<em>Systems Control Engineering of Power Systems</em>, Corona Publishing, 2022), whose numerical examples are computed with GUILDA.</p>
+      <p lang="ja">GUILDA（Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer）は、システム制御を学ぶ学生や研究者のための、MATLAB で動く電力系統シミュレータです。教科書<a href="https://lim.ishizaki-lab.jp/guilda#h.66rvn04iyvio" target="_blank">「電力系統のシステム制御工学」</a>（コロナ社、2022 年）と一緒に開発しており、教科書の数値例は GUILDA で計算しています。</p>
+      <p lang="en">The whole grid is a set of differential-algebraic equations with named states and inputs, so control methods apply to it directly.</p>
+      <p lang="ja">系統全体を、状態と入力に名前の付いた微分代数方程式として扱うので、制御の手法をそのまま使えます。</p>
 
       <h2 id="about-background"><span lang="en">Background</span><span lang="ja">開発の背景</span></h2>
       <div class="ab-row">
@@ -349,62 +344,60 @@
           <figcaption id="about-future-cap"><span lang="en">Future grid. Renewable plants and prosumers join, and power flows both ways.</span><span lang="ja">これからの電力系統。再生可能エネルギーの発電所やプロシューマが加わり、電力は双方向に流れます。</span></figcaption>
         </figure>
       </div>
-      <p lang="en">Wind and solar plants, homes with rooftop PV, batteries and microgrids are now connected to the grid, and many of them can be controlled. A stable supply with these participants requires controlling the power flow, and control engineering can contribute here.</p>
-      <p lang="ja">風力発電所や太陽光発電所、屋根に太陽光パネルを載せた住宅、蓄電池、マイクログリッドなどが系統につながるようになり、その多くは制御できます。こうした設備がつながった系統で電力を安定して供給するには電力の流れを制御する必要があり、制御工学の知見を活かせます。</p>
-      <p lang="en">The two fields, however, expect different things from a simulator.</p>
-      <p lang="ja">ただし、二つの分野ではシミュレータに求めるものが異なります。</p>
+      <p lang="en">Wind and solar plants, homes with rooftop PV, batteries and microgrids now connect to the grid, and many of them are controllable. Keeping the supply stable with them is a control problem. Power engineering and control engineering, however, expect different things from a simulator.</p>
+      <p lang="ja">風力・太陽光発電所、太陽光パネル付きの住宅、蓄電池、マイクログリッドが系統につながり、その多くは制御できます。こうした系統で電力を安定に届けることは制御の問題です。ただし、電力工学と制御工学ではシミュレータに求めるものが違います。</p>
       <div class="ab-cards is-two">
         <div class="ab-card">
           <h3><span lang="en">Power-system and power-electronics tools</span><span lang="ja">電力系統・パワーエレクトロニクスの解析ツール</span></h3>
           <ul lang="en">
-            <li>Models are detailed.</li>
-            <li>Computation is fast.</li>
-            <li>Real events are reproduced faithfully.</li>
-            <li>Each piece of equipment is one module, which keeps the tool easy to use.</li>
+            <li>Detailed models</li>
+            <li>Fast computation</li>
+            <li>Faithful reproduction of real events</li>
+            <li>One module per device</li>
           </ul>
           <ul lang="ja">
-            <li>モデルを精緻にします。</li>
-            <li>解析を高速に処理します。</li>
-            <li>現実の事象を忠実に再現します。</li>
-            <li>電気設備ごとにモジュールを分け、使いやすくします。</li>
+            <li>精緻なモデル</li>
+            <li>高速な計算</li>
+            <li>現実の事象の忠実な再現</li>
+            <li>設備ごとのモジュール</li>
           </ul>
         </div>
         <div class="ab-card is-accent">
           <h3><span lang="en">Control engineering</span><span lang="ja">制御工学</span></h3>
           <ul lang="en">
-            <li>Models keep only the essential dynamics of the physical system.</li>
-            <li>Principles are derived from the mathematical models.</li>
+            <li>Models with only the essential dynamics</li>
+            <li>Principles derived from the mathematical model</li>
           </ul>
           <ul lang="ja">
-            <li>物理システムの本質的な動特性だけを取り出したモデルを作ります。</li>
-            <li>数理モデルに基づいて原理原則を導きます。</li>
+            <li>本質的な動特性だけを残したモデル</li>
+            <li>数理モデルから導く原理原則</li>
           </ul>
         </div>
       </div>
-      <p lang="en">A control researcher who turns to power systems therefore spends a long time learning the power domain first.</p>
-      <p lang="ja">そのため、制御の研究者が電力系統を研究しようとすると、まず電力分野の知識を身につけるのに多くの時間がかかります。</p>
+      <p lang="en">A control researcher who turns to power systems therefore first spends a long time learning the power domain.</p>
+      <p lang="ja">そのため、制御の研究者が電力系統に取り組むと、まず電力分野の知識の習得に時間がかかります。</p>
 
       <h2 id="about-work"><span lang="en">Work that GUILDA takes over</span><span lang="ja">GUILDA が引き受ける作業</span></h2>
       <div class="ab-cards is-two">
         <div class="ab-card">
           <h3><span lang="en">Simulating a grid from scratch</span><span lang="ja">一から実装する場合</span></h3>
           <ol lang="en">
-            <li>Look up the model of each device and write it as code.</li>
+            <li>Write the model of each device as code.</li>
             <li>Connect the devices and derive the admittance matrix.</li>
-            <li>Write the differential-algebraic equations of the whole system as functions.</li>
+            <li>Write the equations of the whole system.</li>
             <li>Find the operating point of each device.</li>
           </ol>
           <ol lang="ja">
-            <li>各設備のモデルを調べ、コードに書き直します。</li>
-            <li>機器を接続し、アドミタンス行列を導出します。</li>
-            <li>システム全体の微分代数方程式を関数として実装します。</li>
-            <li>各機器の動作点を決めます。</li>
+            <li>各設備のモデルをコードにします。</li>
+            <li>機器を接続し、アドミタンス行列を導きます。</li>
+            <li>系統全体の方程式を書きます。</li>
+            <li>各機器の動作点を求めます。</li>
           </ol>
         </div>
         <div class="ab-card is-accent">
           <h3><span lang="en">With GUILDA</span><span lang="ja">GUILDA を使う場合</span></h3>
-          <p lang="en">Add buses, branches and components to a network object. GUILDA derives the admittance matrix, the equations of the whole system and the operating point, taking the electrical constraints and the interactions between devices into account.</p>
-          <p lang="ja">母線、ブランチ、機器をネットワークのオブジェクトに追加します。アドミタンス行列、システム全体の方程式、動作点は、電気的な制約や機器間の相互作用を考慮して GUILDA が求めます。</p>
+          <p lang="en">Add buses, branches and components to a network object. GUILDA derives the admittance matrix, the equations of the whole system and the operating point.</p>
+          <p lang="ja">母線、ブランチ、機器をネットワークのオブジェクトに追加します。アドミタンス行列、系統全体の方程式、動作点は GUILDA が求めます。</p>
         </div>
       </div>
 
@@ -434,17 +427,17 @@
             <figcaption id="about-p1-cap" hidden><span lang="en">Named state-space matrices with the rows of one generator highlighted</span><span lang="ja">名前の付いた状態空間行列と、一台の発電機の行</span></figcaption>
           </figure>
           <h3><span lang="en">A linear model taken apart by element</span><span lang="ja">要素ごとに分解できる線形モデル</span></h3>
-          <p lang="en">Many tools output state matrices for eigenvalue analysis. GUILDA also shows which element owns which entry. <code>net.get_sys()</code> returns a linear model (<code>ResultLIN</code>) whose states, inputs and outputs have names, and three methods take it apart.</p>
-          <p lang="ja">固有値解析のために状態空間行列を出力するツールは多くあります。GUILDA では、さらに行列のどの要素がどの機器に由来するかまで確かめられます。<code>net.get_sys()</code> は状態、入力、出力に名前の付いた線形モデル（<code>ResultLIN</code>）を返し、次の三つのメソッドでその中身を分解できます。</p>
+          <p lang="en">Many tools output state matrices for eigenvalue analysis. In GUILDA the states, inputs and outputs of the linear model have names, and the model can be taken apart:</p>
+          <p lang="ja">固有値解析用の状態空間行列を出力するツールは多くあります。GUILDA の線形モデルは状態・入力・出力に名前が付いており、次のように分解できます。</p>
           <ul lang="en">
-            <li><code>get_contribution</code> splits the matrices of the DAE into the additive parts of each generator, controller, branch and bus.</li>
-            <li><code>get_kernel</code> returns the kernel of the DAE Jacobian, the common rotation of all phases, one for each island.</li>
-            <li><code>get_reduced_matrix</code> eliminates the variables of chosen elements by the Schur complement, for example to see the grid from its buses only.</li>
+            <li>into the parts of each generator, controller, branch and bus;</li>
+            <li>into the kernel of the Jacobian, the uniform rotation of all phases, one for each island;</li>
+            <li>into a reduced model without the variables of chosen elements (Schur complement), such as the grid seen from its buses.</li>
           </ul>
           <ul lang="ja">
-            <li><code>get_contribution</code> は、DAE の行列を発電機、制御器、ブランチ、母線ごとの和に分けます。</li>
-            <li><code>get_kernel</code> は、DAE のヤコビ行列の核を求めます。核はすべての位相が一様に回転する方向を表し、つながった部分系統（アイランド）ごとに一つずつ得られます。</li>
-            <li><code>get_reduced_matrix</code> は、指定した機器の変数をシューア補元で消去します。たとえば母線だけから見た系統の行列を求められます。</li>
+            <li>発電機、制御器、ブランチ、母線ごとの寄与の和に分けられます。</li>
+            <li>ヤコビ行列の核（すべての位相が一様に回転する方向）を、アイランドごとに求められます。</li>
+            <li>指定した機器の変数をシューア補元で消去できます。たとえば母線だけから見た系統の行列です。</li>
           </ul>
         </div>
         <div class="ab-card">
@@ -476,8 +469,8 @@
             <figcaption id="about-p2-cap" hidden><span lang="en">A global AGC over two generators, each with its own local controllers</span><span lang="ja">2 台の発電機にまたがる AGC と、各発電機のローカル制御器</span></figcaption>
           </figure>
           <h3><span lang="en">Controllers in the same network</span><span lang="ja">制御器もネットワークの一部</span></h3>
-          <p lang="en">Local controllers such as AVRs, PSSs and governors are attached to a component with <code>add_local_controller</code>, and global controllers such as AGC to the network with <code>add_global_controller</code>. Each controller is a class, and time simulation and linearization include it.</p>
-          <p lang="ja">AVR、PSS、ガバナなどのローカル制御器は <code>add_local_controller</code> で機器に、AGC などのグローバル制御器は <code>add_global_controller</code> でネットワークに追加します。制御器はそれぞれクラスとして実装されており、時間応答シミュレーションと近似線形化に含まれます。</p>
+          <p lang="en">Local controllers such as AVRs, PSSs and governors are added to a component, and global controllers such as AGC to the network. Each controller is a class, and time simulation and linearization include it.</p>
+          <p lang="ja">AVR、PSS、ガバナなどのローカル制御器は機器に、AGC などのグローバル制御器はネットワークに追加します。制御器はクラスとして実装され、時間応答シミュレーションにも近似線形化にも含まれます。</p>
         </div>
         <div class="ab-card">
           <figure class="about-fig">
@@ -520,22 +513,22 @@
             <figcaption id="about-p3-cap" hidden><span lang="en">One network object and the result of each analysis</span><span lang="ja">一つのネットワークのオブジェクトと各解析の結果</span></figcaption>
           </figure>
           <h3><span lang="en">One model from optimization to stability</span><span lang="ja">最適化と安定性を一つのモデルで</span></h3>
-          <p lang="en">The same <code>net</code> runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object. The admittance matrix, the operating point and the equations are derived by GUILDA.</p>
-          <p lang="ja">同じ <code>net</code> で潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。アドミタンス行列、動作点、方程式は GUILDA が導出します。</p>
+          <p lang="en">One network runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object.</p>
+          <p lang="ja">一つのネットワークで潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。</p>
           <ul lang="en">
-            <li><code>net.initialize(Method="OPF")</code> sets the AC OPF solution as the operating point, and <code>simulate</code> and <code>get_sys</code> start from it with no data conversion.</li>
-            <li><code>calculate_optimal_powerflow</code> can add small-signal stability limits on the dynamic model of the same network, such as a lowest damping ratio (<code>MinDampingRatio</code>) or a largest real part of the eigenvalues (<code>MaxRealPart</code>).</li>
+            <li>The solution of the AC optimal power flow can be the operating point; time simulation and linearization start from it with no data conversion.</li>
+            <li>The optimal power flow can include small-signal stability limits of the same network, such as a lowest damping ratio or a largest real part of the eigenvalues.</li>
           </ul>
           <ul lang="ja">
-            <li><code>net.initialize(Method="OPF")</code> を使うと AC 最適潮流計算の解が動作点になり、<code>simulate</code> や <code>get_sys</code> はデータを変換せずにその点から計算できます。</li>
-            <li><code>calculate_optimal_powerflow</code> では、同じネットワークの動的モデルに対する小信号安定度の条件を制約に加えられます。たとえば減衰比の下限（<code>MinDampingRatio</code>）や固有値の実部の上限（<code>MaxRealPart</code>）を指定します。</li>
+            <li>AC 最適潮流計算の解を動作点にでき、時間応答シミュレーションや近似線形化はデータを変換せずにその点から始められます。</li>
+            <li>最適潮流計算に、同じネットワークの小信号安定度の制約（減衰比の下限、固有値の実部の上限など）を加えられます。</li>
           </ul>
         </div>
       </div>
 
       <h2 id="about-model"><span lang="en">Building a model</span><span lang="ja">モデルの構成</span></h2>
-      <p lang="en">Buses, branches, generators, loads and controllers are each a class. A model is built by adding these objects to a <code>PowerNetwork</code>, which then runs the analyses.</p>
-      <p lang="ja">母線、ブランチ、発電機、負荷、制御器はそれぞれクラスになっています。これらのオブジェクトを <code>PowerNetwork</code> に追加してモデルを組み立て、そのまま解析を実行します。</p>
+      <p lang="en">Buses, branches, generators, loads and controllers are classes. Adding these objects to a <code>PowerNetwork</code> builds the model, which then runs the analyses.</p>
+      <p lang="ja">母線、ブランチ、発電機、負荷、制御器はそれぞれクラスです。これらのオブジェクトを <code>PowerNetwork</code> に追加してモデルを作り、そのまま解析します。</p>
       <div class="ab-row">
         <figure class="about-fig">
           <svg viewBox="0 0 360 290" role="img" aria-labelledby="about-oop-cap">
@@ -594,80 +587,36 @@ sys = net.get_sys();           % linearized model</code></pre>
       </div>
 
       <h2 id="about-output"><span lang="en">Output of GUILDA</span><span lang="ja">GUILDA の出力例</span></h2>
-      <p lang="en">These figures come from the IEEE 14-bus example above: a short fault at bus B008 from 1 s to 1.05 s.</p>
-      <p lang="ja">上のコードの IEEE 14 母線系統の例で出力した図です。母線 B008 で 1 秒から 1.05 秒まで事故が起きています。</p>
+      <p lang="en">Output of the IEEE 14-bus example above, with a fault at bus B008 from 1 s to 1.05 s.</p>
+      <p lang="ja">上の IEEE 14 母線系統の例の出力です。母線 B008 で 1 秒から 1.05 秒まで事故が起きています。</p>
       <div class="ab-gallery">
         <figure>
-          <img src="./images/about/output-frequency.png" alt="Frequency deviation omega of five generators oscillating after the fault and settling within 10 s" data-alt-ja="事故後に振動し、10 秒以内に落ち着く 5 台の発電機の周波数偏差 omega" width="720" height="462" loading="lazy">
-          <figcaption><span lang="en">Frequency deviation of the generators</span><span lang="ja">発電機の周波数偏差</span> (<code>res.plot_trajectory(Quantity="omega")</code>)</figcaption>
+          <img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625" loading="lazy">
+          <figcaption><span lang="en">Frequency deviation of the generators</span><span lang="ja">発電機の周波数偏差</span></figcaption>
         </figure>
         <figure>
-          <img src="./images/about/output-voltage.png" alt="Voltage magnitudes of the 14 buses over time" data-alt-ja="14 母線の電圧の大きさの時間変化" width="720" height="457" loading="lazy">
-          <figcaption><span lang="en">Bus voltage magnitudes</span><span lang="ja">母線電圧の大きさ</span> (<code>res.plot_trajectory()</code>)</figcaption>
+          <img src="./images/about/output-voltage.png" alt="Voltage magnitudes of the 14 buses: they drop during the fault at 1 s and recover within about 1 s" data-alt-ja="14 母線の電圧の大きさ。1 秒の事故で下がり、約 1 秒で回復します。" width="1029" height="622" loading="lazy">
+          <figcaption><span lang="en">Bus voltage magnitudes</span><span lang="ja">母線電圧の大きさ</span></figcaption>
         </figure>
         <figure>
-          <img src="./images/about/output-network-diagram.png" alt="Network diagram of the IEEE 14-bus system at t = 1.02 s, branches colored by current" data-alt-ja="t = 1.02 秒の IEEE 14 母線系統のネットワーク図。ブランチは電流の大きさで色分けされています。" width="720" height="540" loading="lazy">
-          <figcaption><span lang="en">Network diagram during the fault</span><span lang="ja">事故中のネットワーク図</span> (<code>res.plot_diagram()</code>)</figcaption>
+          <img src="./images/about/output-network-diagram.png" alt="Network diagram of the IEEE 14-bus system at t = 1.02 s, with branches colored by the current magnitude" data-alt-ja="t = 1.02 秒の IEEE 14 母線系統のネットワーク図。ブランチは電流の大きさで色分けされています。" width="877" height="802" loading="lazy">
+          <figcaption><span lang="en">Network diagram during the fault</span><span lang="ja">事故中のネットワーク図</span></figcaption>
         </figure>
         <figure>
-          <img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="720" height="459" loading="lazy">
-          <figcaption><span lang="en">Eigenvalues of the linearized model</span><span lang="ja">近似線形化モデルの固有値</span> (<code>sys.plot_eigenvalue()</code>)</figcaption>
+          <img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy">
+          <figcaption><span lang="en">Eigenvalues of the linearized model</span><span lang="ja">近似線形化モデルの固有値</span></figcaption>
         </figure>
         <figure>
-          <img src="./images/about/output-model-gui.png" alt="Model GUI of the network with the list of buses and the parameter tab" data-alt-ja="母線の一覧とパラメータのタブを表示したネットワークのモデル GUI" width="720" height="460" loading="lazy">
-          <figcaption><span lang="en">Model GUI</span><span lang="ja">モデルの GUI</span> (<code>net.launch_gui()</code>)</figcaption>
+          <img src="./images/about/output-model-gui.png" alt="Model GUI of the network: add buttons and the table of buses on the left, the parameter tab on the right" data-alt-ja="ネットワークのモデル GUI。左に追加ボタンと母線の表、右にパラメータのタブがあります。" width="720" height="460" loading="lazy">
+          <figcaption><span lang="en">Model GUI</span><span lang="ja">モデルの GUI</span></figcaption>
         </figure>
       </div>
-      <p lang="en">Each analysis result has plots for viewing it, for example:</p>
-      <p lang="ja">どの解析結果にも、結果を確かめるための描画メソッドがあります。たとえば次のものです。</p>
-      <ul lang="en">
-        <li>The network diagram, in 2D or 3D, with an animation of the power flow in 2D (<code>plot_diagram</code>).</li>
-        <li>Trajectories of a time simulation (<code>plot_trajectory</code>).</li>
-        <li>Eigenvalues of a linear model (<code>plot_eigenvalue</code>).</li>
-        <li>PV curves of a continuation power flow (<code>plot_pvcurve</code>).</li>
-        <li>The dispatch of an optimal power flow as bar charts (<code>plot_dispatch</code>), and its locational marginal prices on the network diagram (<code>plot_lmp</code>).</li>
-        <li>The spring-mass model described below (<code>plot_spring_model</code>).</li>
-      </ul>
-      <ul lang="ja">
-        <li><code>plot_diagram</code> は、ネットワーク図を 2D または 3D で描きます。2D では電力の流れをアニメーションで示せます。</li>
-        <li><code>plot_trajectory</code> は、時間応答シミュレーションの軌道を描きます。</li>
-        <li><code>plot_eigenvalue</code> は、線形モデルの固有値を描きます。</li>
-        <li><code>plot_pvcurve</code> は、連続潮流計算の PV 曲線を描きます。</li>
-        <li><code>plot_dispatch</code> は最適潮流計算の出力配分を棒グラフで描き、<code>plot_lmp</code> は地点別限界価格をネットワーク図の上に描きます。</li>
-        <li><code>plot_spring_model</code> は、次の節で紹介するばねと質点のモデルを描きます。</li>
-      </ul>
-      <p lang="en">Every <code>plot_*</code> method returns a graph object (<code>GraphBase</code>). A graph with several time samples plays with <code>animate</code>, and graphs joined with <code>link</code> share one time cursor (<code>set_time</code>).</p>
-      <p lang="ja"><code>plot_*</code> メソッドはどれもグラフのオブジェクト（<code>GraphBase</code>）を返します。複数の時刻を持つグラフは <code>animate</code> で再生でき、<code>link</code> でつないだグラフは同じ時刻（<code>set_time</code>）に合わせて一緒に動きます。</p>
-
-      <h2 id="about-spring"><span lang="en">The grid as masses and springs</span><span lang="ja">ばねと質点で見る電力系統</span></h2>
-      <p lang="en">Picturing a power system as masses joined by springs is a known idea: Gronquist and co-authors animated a multi-machine system on the phasor plane in this way [<a href="#about-ref-1">1</a>]. GUILDA draws this picture from its own results with <code>plot_spring_model</code> (<code>GraphSpring2D</code> and <code>GraphSpring3D</code>).</p>
-      <p lang="ja">電力系統を、ばねでつながった質点として思い描く考え方は以前からあります。Gronquist らは、多数の発電機を含む系統をフェーザの平面上でこのように動かして見せました [<a href="#about-ref-1">1</a>]。GUILDA では、解析結果からこの図を <code>plot_spring_model</code>（<code>GraphSpring2D</code> と <code>GraphSpring3D</code>）で描けます。</p>
-      <ul lang="en">
-        <li>The nodes are voltage phasors: every bus, and the internal voltage of each generator. They are drawn over a polar grid in 2D, or on the surface z = log|V| in 3D.</li>
-        <li>The branches and the machine reactances are drawn as coil springs, and arrows show the active power P and the reactive current Iq.</li>
-        <li>Results of power flow, time simulation and continuation power flow can be animated and saved as videos (<code>export_video</code>).</li>
-      </ul>
-      <ul lang="ja">
-        <li>節点は電圧のフェーザで、すべての母線と各発電機の内部電圧を表します。2D では極座標の格子の上に、3D では曲面 z = log|V| の上に描きます。</li>
-        <li>ブランチと発電機のリアクタンスはコイルばねとして描き、有効電力 P と無効電流 Iq を矢印で示します。</li>
-        <li>潮流計算、時間応答シミュレーション、連続潮流計算の結果をアニメーションにでき、動画として保存することもできます（<code>export_video</code>）。</li>
-      </ul>
-      <div class="ab-figs">
-        <figure>
-          <img src="./images/lecture/part4/power-flow-ieee9.png" alt="Spring-mass picture of the IEEE 9-bus system at its equilibrium: three generator nodes joined by springs to a cluster of nine bus nodes near the real axis" data-alt-ja="IEEE 9 母線系統の平衡点をばねと質点で描いた図。3 台の発電機の節点が、実軸の近くに集まった 9 つの母線とばねでつながっています。" width="932" height="859" loading="lazy">
-          <figcaption><span lang="en">Equilibrium of the IEEE 9-bus system on the phasor plane</span><span lang="ja">フェーザの平面に描いた IEEE 9 母線系統の平衡点</span> (<code>net.plot_spring_model()</code>)</figcaption>
-        </figure>
-        <figure>
-          <img src="./images/lecture/part4/swing-voltage-collapse-3d.gif" alt="Animation of a voltage collapse in the 6-bus system Tutorial6bus: as the load at bus 4 grows, the nodes move down the funnel surface z = log|V|, the balance is lost and bus 4 falls to the bottom of the funnel" data-alt-ja="6 母線系統 Tutorial6bus の電圧崩壊のアニメーション。母線 4 の負荷が増えるにつれて、節点が曲面 z = log|V| の漏斗を下り、つり合いを失った母線 4 が漏斗の底へ落ちていきます。" width="448" height="576" loading="lazy">
-          <figcaption><span lang="en">Voltage collapse of the 6-bus system on the surface z = log|V|</span><span lang="ja">曲面 z = log|V| の上の 6 母線系統の電圧崩壊</span> (<code>res.plot_spring_model(Dimension=3)</code>)</figcaption>
-        </figure>
-      </div>
-      <p lang="en">The lecture <a href="./lecture/part4-spring-mass-model.html">Part 4 (Visualization: the spring-mass model)</a> explains how to read the picture.</p>
-      <p lang="ja">図の読み方は、講義の <a href="./lecture/part4-spring-mass-model.html">Part 4「可視化機能：ばね質点モデル」</a>で解説しています。</p>
+      <p lang="en">Other figures include the network diagram in 3D, an animation of the power flow on the 2D diagram, PV curves of the continuation power flow, and the dispatch and locational marginal prices of the optimal power flow. Figures with several time samples can be played back, and linked figures move together.</p>
+      <p lang="ja">ほかに、3D のネットワーク図、2D のネットワーク図上の電力の流れのアニメーション、連続潮流計算の PV 曲線、最適潮流計算の出力配分と地点別限界価格も描けます。複数の時刻を持つ図は再生でき、つないだ図は一緒に動きます。</p>
 
       <h2 id="about-knowledge"><span lang="en">Sharing research knowledge</span><span lang="ja">研究の知識の共有</span></h2>
-      <p lang="en">Research know-how often stays with one person and is lost when that person leaves. GUILDA aims to share the tacit knowledge gained in research as explicit knowledge in the form of programs, and to keep each person's knowledge organized on the platform so that others can build on it.</p>
-      <p lang="ja">研究のノウハウは一人の研究者の中にとどまりやすく、その人がいなくなると失われがちです。GUILDA は、研究で得た暗黙知をプログラムという形式知にして共有し、各自の知識をプラットフォーム上で体系的に整理することを目指しています。そうすれば、ほかの人がその上に研究を積み重ねられます。</p>
+      <p lang="en">Research know-how tends to stay with one person and is lost when that person leaves. GUILDA aims to turn it into programs, explicit knowledge that others can reuse and build on.</p>
+      <p lang="ja">研究のノウハウは個人にとどまりやすく、その人が離れると失われがちです。GUILDA は、こうした暗黙知をプログラムという形式知にして共有し、ほかの人がその上に研究を積み重ねられるようにすることを目指しています。</p>
       <figure class="about-fig is-vision">
         <svg viewBox="0 0 440 470" role="img" aria-labelledby="about-vision-cap">
           <defs>
@@ -762,8 +711,8 @@ sys = net.get_sys();           % linearized model</code></pre>
         </svg>
         <figcaption id="about-vision-cap"><span lang="en">The platform is meant to let each person add models that others combine, analyse and extend.</span><span lang="ja">各自が追加したモデルを、ほかの人が組み合わせ、解析し、発展させられるプラットフォームを目指しています。</span></figcaption>
       </figure>
-      <p lang="en">This follows the SECI model of knowledge creation by Ikujiro Nonaka, in which tacit and explicit knowledge are converted into each other in four steps.</p>
-      <p lang="ja">この考え方は、野中郁次郎の SECI モデルに基づいています。SECI モデルでは、暗黙知と形式知が四つの段階を経て相互に変換されます。</p>
+      <p lang="en">The idea follows the SECI model of Ikujiro Nonaka, in which tacit and explicit knowledge convert into each other in four steps.</p>
+      <p lang="ja">この考え方は野中郁次郎の SECI モデルに基づきます。SECI モデルでは、暗黙知と形式知が四つの段階で互いに変換されます。</p>
       <div class="ab-row">
         <figure class="about-fig">
           <svg viewBox="0 0 440 250" role="img" aria-labelledby="about-seci-cap">
@@ -800,21 +749,21 @@ sys = net.get_sys();           % linearized model</code></pre>
         </figure>
         <div>
           <ul lang="en">
-            <li>In socialization, members share their experience and progress in meetings and discussions.</li>
-            <li>In externalization, what they have learned is written as models and analyses with clear interfaces.</li>
-            <li>In combination, these objects are connected on the platform to build new analyses.</li>
-            <li>In internalization, researchers use the platform in their own work and gain new insight.</li>
+            <li>Socialization: members share experience and progress in meetings.</li>
+            <li>Externalization: what they learned is written as models and analyses with clear interfaces.</li>
+            <li>Combination: these are combined on the platform into new analyses.</li>
+            <li>Internalization: researchers use the platform in their own work and gain new insight.</li>
           </ul>
           <ul lang="ja">
-            <li>共同化では、ミーティングや議論を通して経験や研究の進み具合を共有します。</li>
-            <li>表出化では、学んだことを、インタフェースの明確なモデルや解析として記述します。</li>
-            <li>連結化では、プラットフォーム上でそれらのオブジェクトを組み合わせ、新しい解析を作ります。</li>
-            <li>内面化では、プラットフォームを自分の研究に使い、新しい知見を得ます。</li>
+            <li>共同化：ミーティングで経験や進み具合を共有します。</li>
+            <li>表出化：学んだことを、インタフェースの明確なモデルや解析として書きます。</li>
+            <li>連結化：それらをプラットフォーム上で組み合わせ、新しい解析を作ります。</li>
+            <li>内面化：プラットフォームを自分の研究に使い、新しい知見を得ます。</li>
           </ul>
         </div>
       </div>
-      <p lang="en">The aim is that each cycle leaves models and analyses that others can reuse, so that the knowledge does not depend on particular people. The name GUILDA comes from <em>guild</em>, a group of researchers and engineers who learn from one another and build things together.</p>
-      <p lang="ja">このサイクルを回すたびに、ほかの人が再利用できるモデルや解析が残り、知識が特定の個人に依存しなくなることを目指しています。GUILDA という名前は、互いに学び合いながら一緒にものを作る研究者や技術者の集まりを<em>ギルド</em>になぞらえたものです。</p>
+      <p lang="en">Each turn of the cycle is meant to leave reusable models and analyses, so that the knowledge does not depend on particular people. The name GUILDA comes from <em>guild</em>: researchers and engineers who learn from one another and build things together.</p>
+      <p lang="ja">サイクルを回すたびに再利用できるモデルや解析が残り、知識が個人に依存しなくなることを目指しています。GUILDA の名前は、学び合いながら一緒にものを作る研究者や技術者の集まりを<em>ギルド</em>になぞらえたものです。</p>
 
       <h2 id="about-compare"><span lang="en">Comparison with other tools</span><span lang="ja">他のツールとの比較</span></h2>
       <div class="compare-scroll">
@@ -830,13 +779,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </tbody>
         </table>
       </div>
-      <p class="compare-note" lang="en">The table follows Table 1 of an article listed under <a href="#home-books" onclick="openTab('tab-home', 'home-books'); return false;">Books and articles</a> on the Home tab, which compares GUILDA with CPAT, a power-system analysis package widely used in Japan. CPAT also provides fault and harmonic calculations, which GUILDA does not cover.</p>
-      <p class="compare-note" lang="ja">表は、ホームタブの<a href="#home-books" onclick="openTab('tab-home', 'home-books'); return false;">書籍・記事</a>に掲載している記事の表 1 をもとにしています。この表では、国内で広く使われている電力系統解析パッケージ CPAT と GUILDA を比較しています。CPAT は故障計算や高調波計算にも対応していますが、GUILDA はこれらを扱いません。</p>
 
-      <h2 id="about-references"><span lang="en">References</span><span lang="ja">参考文献</span></h2>
-      <ol class="ab-refs">
-        <li id="about-ref-1">J. Gronquist, W. Sethares, F. Alvarado and R. Lasseter, “Animated vectors for visualization of power system phenomena,” <cite>IEEE Transactions on Power Systems</cite>, vol. 11, no. 1, pp. 267–273, 1996. <a href="https://doi.org/10.1109/59.486105" target="_blank">doi:10.1109/59.486105</a></li>
-      </ol>
 
     </div>
 
@@ -1132,7 +1075,7 @@ sol = net.simulate("fault");</code></pre>
     }
 
     // Open the tab named by the fragment, or the tab that holds the element it names
-    // (#tab-about, #about-references, #step1_buildnetwork_mlx, ...), and scroll to that element.
+    // (#tab-about, #about-compare, #step1_buildnetwork_mlx, ...), and scroll to that element.
     function openFragment() {
       const id = decodeURIComponent(location.hash.replace(/^#/, ''));
       const target = id ? document.getElementById(id) : null;

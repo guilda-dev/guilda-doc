@@ -265,10 +265,10 @@ result.plot_convergence();</code></pre>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
-              <img src="../images/lecture/part2/ieee9-flow.png" alt="Power flow of the IEEE 9-bus system drawn by GUILDA: the buses B001 to B009 coloured by voltage magnitude, highest at B001 (1.04 pu) and lowest at B005 (about 0.996 pu), and the branches as arrows in the direction of the active power, widest from B002 to B007" width="1140" height="737">
+              <img src="../images/lecture/part2/ieee9-flow.png" alt="Power flow of the IEEE 9-bus system drawn by GUILDA: the buses B001 to B009 as bars coloured by voltage magnitude, highest at B001 (1.04 pu) and lowest at B005 (about 0.996 pu), and small white triangles on the branches pointing in the direction of the active power" data-alt-ja="GUILDA で描いた IEEE 9 母線系統の潮流。母線 B001〜B009 は電圧の大きさで色分けした棒で、最も高いのが B001（1.04 pu）、最も低いのが B005（約 0.996 pu）です。ブランチ上の白い小さな三角は有効電力の向きを指しています。" width="928" height="678">
             </div>
-            <figcaption lang="en">Power flow of the IEEE 9-bus system computed and drawn with GUILDA (<code>plot_network</code>). The colour of each bus is its voltage magnitude <span class="lec-math-inline" data-tex="|V|"></span> (pu). Each arrow points in the direction of the active power, and a wider arrow carries more. The values below are those of <code>result.tab_bus</code> and <code>result.tab_branch</code>; every arrow goes from the larger angle to the smaller one.</figcaption>
-            <figcaption lang="ja">GUILDA で計算し、GUILDA の <code>plot_network</code> で描いた IEEE 9 母線系統の潮流です。母線の色は電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span>（pu）です。矢印は有効電力の向きで、太いほど多く流れています。下の値は <code>result.tab_bus</code> と <code>result.tab_branch</code> のものです。どの矢印も、位相角の大きい母線から小さい母線へ向いています。</figcaption>
+            <figcaption lang="en">Power flow of the IEEE 9-bus system computed and drawn with GUILDA (<code>plot_diagram</code>). The colour of each bus is its voltage magnitude <span class="lec-math-inline" data-tex="|V|"></span> (pu). The small white triangles on each branch point in the direction of the active power. The values below are those of <code>result.tab_bus</code> and <code>result.tab_branch</code>; every triangle points from the larger angle to the smaller one.</figcaption>
+            <figcaption lang="ja">GUILDA で計算し、GUILDA の <code>plot_diagram</code> で描いた IEEE 9 母線系統の潮流です。母線の色は電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span>（pu）です。ブランチ上の白い小さな三角は有効電力の向きを指しています。下の値は <code>result.tab_bus</code> と <code>result.tab_branch</code> のものです。どの三角も、位相角の大きい母線から小さい母線へ向いています。</figcaption>
           </figure>
 
           <p lang="en">Some points to read from the picture:</p>
@@ -280,13 +280,13 @@ result.plot_convergence();</code></pre>
             <li><span lang="en"><strong>Losses.</strong> The total generation is 3.196 pu, so the active losses are 0.046 pu, about 1.5 % of the load. On each line with resistance, the power at the receiving end is a little smaller than at the sending end.</span><span lang="ja"><strong>損失</strong>: 発電の合計は 3.196 pu なので、有効電力の損失は 0.046 pu で、負荷の約 1.5 % です。抵抗のある送電線では、受け取る側の端の電力が、送り出す側よりわずかに小さくなります。</span></li>
           </ul>
           <div class="lec-callout">
-            <p lang="en">In GUILDA, the power flow calculation returns a result object. Its <code>disp_summary</code> prints the outcome, the totals of generation, load and losses, and the range of voltages; <code>result.tab_bus</code> and <code>result.tab_branch</code> hold the values of each bus and branch; <code>plot_voltage</code> and <code>plot_network</code> draw them. The power flow does not change the model.</p>
-            <p lang="ja">GUILDA では、潮流計算が結果のオブジェクトを返します。その <code>disp_summary</code> は計算の結果、発電・負荷・損失の合計、電圧の範囲を表示します。母線ごと、ブランチごとの値は <code>result.tab_bus</code> と <code>result.tab_branch</code> にあり、<code>plot_voltage</code> や <code>plot_network</code> で図にできます。潮流計算はモデルを書き換えません。</p>
+            <p lang="en">In GUILDA, the power flow calculation returns a result object. Its <code>disp_summary</code> prints the outcome, the totals of generation, load and losses, and the range of voltages; <code>result.tab_bus</code> and <code>result.tab_branch</code> hold the values of each bus and branch; <code>plot_voltage</code> and <code>plot_diagram</code> draw them, and <code>plot_single_line_diagram</code> draws a black-and-white single-line diagram for papers. The power flow does not change the model.</p>
+            <p lang="ja">GUILDA では、潮流計算が結果のオブジェクトを返します。その <code>disp_summary</code> は計算の結果、発電・負荷・損失の合計、電圧の範囲を表示します。母線ごと、ブランチごとの値は <code>result.tab_bus</code> と <code>result.tab_branch</code> にあり、<code>plot_voltage</code> や <code>plot_diagram</code> で図にできます。<code>plot_single_line_diagram</code> は論文向けの白黒の単線結線図を描きます。潮流計算はモデルを書き換えません。</p>
             <pre class="lec-cmd"><code>net = network.IEEE9bus();
 result = net.calculate_powerflow();
 result.disp_summary();
 result.plot_voltage();
-result.plot_network();</code></pre>
+result.plot_diagram(BusColorMode="V", ColorMode="none");</code></pre>
           </div>
         </section>
 
