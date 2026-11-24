@@ -17,14 +17,15 @@
     .about-cite { font-size: 0.85rem; white-space: pre-wrap; }
     /* Tutorial tab: the two audience cards at the top (lecture notes / how to use GUILDA) */
     .tutorial-audience { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 28px; }
-    .tutorial-audience-card { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); border-left: 3px solid var(--brand); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; }
-    .tutorial-audience-card:hover, .tutorial-audience-card:focus-visible { border-color: var(--brand); background: var(--brand-tint); color: var(--ink); }
-    .tutorial-audience-label { color: var(--brand); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; }
-    .tutorial-audience-title { font-size: 1rem; font-weight: 700; line-height: 1.4; word-break: auto-phrase; }
-    .tutorial-audience-text { color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+    .tutorial-audience-card { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; }
+    .tutorial-audience-card:hover, .tutorial-audience-card:focus-visible { border-color: var(--line-strong); color: var(--ink); }
+    .tutorial-audience-card:hover .tutorial-audience-more, .tutorial-audience-card:focus-visible .tutorial-audience-more { color: var(--brand-strong); text-decoration-color: currentColor; }
+    .tutorial-audience-label { color: var(--muted); font-size: 0.88rem; }
+    .tutorial-audience-title { font-size: 1rem; font-weight: 600; line-height: 1.45; word-break: auto-phrase; }
+    .tutorial-audience-text { color: var(--ink-2); font-size: 0.9rem; line-height: 1.6; }
     .tutorial-audience-text code { font-size: 0.82rem; }
     .tutorial-audience-nowrap { white-space: nowrap; }
-    .tutorial-audience-more { margin-top: auto; padding-top: 4px; color: var(--brand); font-size: 0.88rem; font-weight: 600; }
+    .tutorial-audience-more { margin-top: auto; padding-top: 4px; color: var(--brand); font-size: 0.9rem; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--brand) 45%, transparent); text-underline-offset: 0.18em; }
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
@@ -55,14 +56,13 @@
           <h1 class="hero-title"><span lang="en">GUILDA Documentation</span><span lang="ja">GUILDA ドキュメント</span></h1>
           <p class="hero-subtitle">Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</p>
         </div>
-        <div class="hero-mark" aria-hidden="true"><img src="./images/GUILDA-logo-square.png" alt="" width="128" height="128"></div>
       </div>
 
       <p class="home-intro" lang="en">A MATLAB power-system simulator for students and researchers in systems and control. Combine blocks into models, then analyse and share them.</p>
       <p class="home-intro" lang="ja">システム制御を学ぶ学生や研究者に向けた、MATLAB で動く電力系統シミュレータです。部品を組み合わせてモデルを作り、解析したり共有したりできます。</p>
       <div class="home-actions">
-        <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
-        <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
+        <a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><span lang="en">Getting Started</span><span lang="ja">はじめに</span></a>
+        <a href="#tab-about" onclick="openTab('tab-about'); return false;"><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
       </div>
 
       <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
@@ -79,8 +79,8 @@
             <p lang="ja">三相平衡の電力系統を、実効値（RMS）のフェーザで表します。電圧と電流は基本周波数の複素フェーザとして扱い、送電網は代数方程式で表します。動的な振る舞いは、発電機、負荷、制御器のモデルが受け持ちます。</p>
             <p lang="en">Load a standard model, such as the IEEE 9-, 14-, 39- and 68-bus test systems or the IEEJ EAST10, EAST30, WEST10 and WEST30 standard models, or build a network of your own configuration from buses, branches and components.</p>
             <p lang="ja">IEEE 9 母線系統、14 母線系統、39 母線系統、68 母線系統や、電気学会の EAST10/EAST30/WEST10/WEST30 系統モデルを、すぐに読み込めます。母線、ブランチ、機器を自分で組み合わせて、独自の構成の系統を作ることもできます。</p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step1_BuildNetwork.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step1_BuildNetwork.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -91,8 +91,8 @@
           <div class="analysis-body">
             <h3><span lang="en">Time-domain simulation</span><span lang="ja">時間応答シミュレーション</span></h3>
             <p><span lang="en">Responses to faults, load and input changes, and initial-value perturbations.</span><span lang="ja">地絡や負荷・入力の変化、初期値の摂動に対して、系統がどう応答するかを計算します。</span></p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step5_SimulationScenario.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step5_SimulationScenario.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -105,8 +105,8 @@
             <h3><span lang="en">Linear analysis</span><span lang="ja">線形解析</span></h3>
             <p lang="en">Linearize the network around an operating point into <span class="nowrap">Eẋ = Ax + Bu</span>, <span class="nowrap">y = Cx + Du</span>, and analyse small-signal stability from its eigenvalues. The matrices A, B, C, D and E come with the names of the states, inputs and outputs, so they can be used for further linear analyses such as kernel analysis.</p>
             <p lang="ja">動作点のまわりで系統を近似線形化し、<span class="nowrap">Eẋ = Ax + Bu</span>、<span class="nowrap">y = Cx + Du</span> の形のモデルを得ます。固有値を調べれば、定態安定性を評価できます。行列 A、B、C、D、E には状態・入力・出力の変数名が付いているので、カーネル解析など、ほかの線形解析にもそのまま使えます。</p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step8_Linearization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step8_Linearization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -120,8 +120,8 @@
             <h3><span lang="en">Continuation power flow</span><span lang="ja">連続潮流計算</span></h3>
             <p lang="en">Raise the loads of chosen buses step by step and trace the power-flow solution to draw the nose (PV) curve, then find the maximum loading point to assess voltage stability.</p>
             <p lang="ja">連続潮流計算で PV カーブ（ノーズカーブ）を描けます。選んだ母線の負荷を少しずつ増やしながら潮流解をたどるので、最大負荷点がわかり、電圧安定性の評価に使えます。</p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step10_ContinuationPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step10_ContinuationPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -135,8 +135,8 @@
           <div class="analysis-body">
             <h3><span lang="en">Optimal power flow</span><span lang="ja">最適潮流計算</span></h3>
             <p><span lang="en">General formulations of OPF problems on the same network.</span><span lang="ja">同じ系統モデルを使って、一般的な形で定式化した最適潮流計算問題を解けます。</span></p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step9_OptimalPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step9_OptimalPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -150,8 +150,8 @@
             <h3><span lang="en">Controller design from scripts</span><span lang="ja">スクリプトによる制御器設計</span></h3>
             <p lang="en">Design controllers in MATLAB scripts, for example an LQR gain from the linear model, attach them as local or global controllers, then simulate or linearize the network to evaluate them.</p>
             <p lang="ja">制御器は MATLAB のスクリプトで設計できます。たとえば線形モデルから LQR のゲインを求め、ローカル制御器やグローバル制御器として系統に取り付けます。そのうえでシミュレーションや近似線形化を行い、効果を確かめます。</p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Part8_ControllerDesign.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Part8_ControllerDesign.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
         <li class="analysis-item">
           <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -164,8 +164,8 @@
           <div class="analysis-body">
             <h3><span lang="en">Graph &amp; animation</span><span lang="ja">グラフとアニメーション</span></h3>
             <p><span lang="en">Network graphs whose node heights and colours follow the response.</span><span lang="ja">応答に合わせてノードの高さと色が変わる、系統のグラフを描けます。</span></p>
+            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step7_Visualization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
-          <a class="analysis-link" data-tutorial="Step7_Visualization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span> <span aria-hidden="true">→</span></a>
         </li>
       </ol>
 
@@ -212,14 +212,14 @@
         .ab-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 16px 0; }
         .ab-cards.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .ab-card { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-        .ab-card.is-accent { border-color: var(--brand); background: var(--brand-tint); }
+        .ab-cards:not(.is-two) > .ab-card { padding: 0; border: 0; }
         .ab-card h3 { margin: 4px 0 8px; font-size: 1rem; }
         .ab-card p, .ab-card ol, .ab-card ul { margin: 0; font-size: 0.92rem; }
         .ab-card ol, .ab-card ul { padding-left: 1.2em; }
         .ab-card li + li { margin-top: 4px; }
         .ab-glyph { display: block; width: 40px; height: 40px; }
-        .ab-glyph .g { fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linejoin: round; }
-        .ab-glyph .gf { fill: var(--brand); }
+        .ab-glyph .g { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
+        .ab-glyph .gf { fill: var(--ink); }
         .ab-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 16px 0; }
         .ab-gallery figure { margin: 0; }
         .ab-gallery img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
@@ -861,7 +861,7 @@ sys = net.get_sys();           % linearized model</code></pre>
       <p lang="en">Continue from the tutorial Live Script that just opened (<code>Main.mlx</code>, Step 0): it is the table of contents of the Live Scripts in <code>_GUILDAtutorial</code>, with the usage manual (Steps 1–12) and the texts on the analyses (Parts 0–8). If you are new to GUILDA, start with Step 1. Close it by mistake? <code>GUILDA.tutorial()</code> opens it again. The Tutorial tab introduces what you can analyze with the Live Script of each Part, gives the basic workflow as plain code and lists Steps 1–12.</p>
       <p lang="ja">続きは、起動時に開いたチュートリアルの Live Script（<code>Main.mlx</code>、Step 0）から進めます。これは <code>_GUILDAtutorial</code> にある Live Script の目次で、使い方のマニュアル（Step 1〜12）と、解析を学ぶテキスト（<span class="tutorial-audience-nowrap">Part 0〜8</span>）を並べています。初めて使う人は Step 1 から読んでください。閉じてしまったときは <code>GUILDA.tutorial()</code> でもう一度開けます。チュートリアルタブでは、解析できることを Part ごとの Live Script とあわせて紹介し、基本的な流れのコードと、Step 1〜12 の一覧を見られます。</p>
       <div class="home-actions">
-        <a class="btn btn-primary" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><span lang="en">Go to the Tutorial</span><span lang="ja">チュートリアルへ</span> <span aria-hidden="true">→</span></a>
+        <a href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><span lang="en">Go to the Tutorial</span><span lang="ja">チュートリアルへ</span></a>
       </div>
 
       <h2 id="gs-options"><span lang="en">Options</span><span lang="ja">オプション</span></h2>
@@ -927,14 +927,14 @@ sys = net.get_sys();           % linearized model</code></pre>
           <span class="tutorial-audience-title"><span lang="en">Lecture notes (<span class="tutorial-audience-nowrap">Part 0–8</span>)</span><span lang="ja">講義ノート（<span class="tutorial-audience-nowrap">Part 0〜8</span>）</span></span>
           <span class="tutorial-audience-text" lang="en">The basics of power system engineering. Each Part explains one kind of analysis with figures and comes with a Live Script that computes it in GUILDA. No prior knowledge of power systems is assumed.</span>
           <span class="tutorial-audience-text" lang="ja">電力系統工学の基礎を学べます。各 Part で解析を図で説明し、その内容を GUILDA で計算する Live Script も付いています。電力系統の予備知識は前提にしていません。</span>
-          <span class="tutorial-audience-more"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span> <span aria-hidden="true">→</span></span>
+          <span class="tutorial-audience-more"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span></span>
         </a>
         <a class="tutorial-audience-card" href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;">
           <span class="tutorial-audience-label"><span lang="en">To learn to use GUILDA</span><span lang="ja">GUILDA の使い方を学びたい人へ</span></span>
           <span class="tutorial-audience-title"><span lang="en">How to use GUILDA (hands-on <span class="tutorial-audience-nowrap">Step 1–12</span>)</span><span lang="ja">GUILDA の使い方（ハンズオン <span class="tutorial-audience-nowrap">Step 1〜12</span>）</span></span>
           <span class="tutorial-audience-text" lang="en">The usage manual: Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step. The basic workflow, the hands-on Steps and reference material to look things up.</span>
           <span class="tutorial-audience-text" lang="ja">使い方のマニュアルです。<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います。基本的な流れ、ハンズオンの Step、調べものに使う参考資料があります。</span>
-          <span class="tutorial-audience-more"><span lang="en">Go to how to use GUILDA</span><span lang="ja">GUILDA の使い方へ</span> <span aria-hidden="true">→</span></span>
+          <span class="tutorial-audience-more"><span lang="en">Go to how to use GUILDA</span><span lang="ja">GUILDA の使い方へ</span></span>
         </a>
       </div>
 
@@ -1100,7 +1100,7 @@ sol = net.simulate("fault");</code></pre>
     function wireAnalysisLinks() {
       document.querySelectorAll('.analysis-link').forEach(link => {
         const targetId = link.dataset.tutorial ? tutorialAnchorId(link.dataset.tutorial) : link.dataset.section;
-        if (!targetId || !document.getElementById(targetId)) { link.remove(); return; }
+        if (!targetId || !document.getElementById(targetId)) { (link.closest('.analysis-more') || link).remove(); return; }
         link.href = `#${targetId}`;
         link.addEventListener('click', (e) => { e.preventDefault(); openTab('tab-tutorial', targetId); });
       });
@@ -1224,7 +1224,7 @@ sol = net.simulate("fault");</code></pre>
             <h3 class="analysis-card-title">${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</h3>
             <p class="analysis-card-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
             ${t.ready
-              ? `<span class="analysis-card-more">${bilingual('Read the page', 'ページを読む')} <span aria-hidden="true">→</span></span>`
+              ? `<span class="analysis-card-more">${bilingual('Read the page', 'ページを読む')}</span>`
               : `<span class="lec-pending">${bilingual('In preparation', '準備中')}</span>`}`;
         const script = t.file ? `
             <div class="analysis-card-script">

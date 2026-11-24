@@ -44,7 +44,7 @@
       <nav class="lec-toc" aria-label="On this page">
         <p><span lang="en">On this page</span><span lang="ja">このページの内容</span></p>
         <ol>
-          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></a></li>
+          <li><a href="#goals"><span lang="en">What this Part covers</span><span lang="ja">この Part の内容</span></a></li>
           <li><a href="#why"><span lang="en">Why it is hard to see</span><span lang="ja">現象が見えにくい理由</span></a></li>
           <li><a href="#phasor"><span lang="en">Voltages as points</span><span lang="ja">電圧を点として置く</span></a></li>
           <li><a href="#springs"><span lang="en">Lines as springs</span><span lang="ja">送電線をばねに見立てる</span></a></li>
@@ -61,7 +61,7 @@
 
       <article class="lec-article">
         <section class="lec-goals" id="goals">
-          <h2><span lang="en">What this Part covers</span><span lang="ja">このPartで分かること</span></h2>
+          <h2><span lang="en">What this Part covers</span><span lang="ja">この Part の内容</span></h2>
           <ul>
             <li><span lang="en">How a power system can be pictured as masses joined by springs: voltages are points on a plane, and lines are springs between them.</span><span lang="ja">電力系統を、ばねでつながった質点として描く考え方。電圧は平面上の点、送電線はその間のばねです。</span></li>
             <li><span lang="en">Why a power flow solution is the position where all the springs balance.</span><span lang="ja">潮流計算の解が、すべてのばねがつり合う位置になる理由。</span></li>
@@ -86,10 +86,16 @@
           </dl>
           <p lang="en">As a result, questions like these are difficult to answer intuitively:</p>
           <p lang="ja">そのため、次のような問いに直感的に答えるのは難しくなります。</p>
-          <div class="lec-callout is-key">
-            <p lang="en">(1) Why does the frequency fall when the load grows? (2) What is the "inertia" of a power system? (3) What is happening when transient stability is lost?</p>
-            <p lang="ja">(1) 負荷が増えると、周波数はなぜ下がるのか。(2) 電力系統の「慣性」とは何か。(3) 過渡安定性が崩れるとき、何が起きているのか。</p>
-          </div>
+          <ol class="lec-questions" lang="en">
+            <li>Why does the frequency fall when the load grows?</li>
+            <li>What is the "inertia" of a power system?</li>
+            <li>What is happening when transient stability is lost?</li>
+          </ol>
+          <ol class="lec-questions" lang="ja">
+            <li>負荷が増えると、周波数はなぜ下がるのか。</li>
+            <li>電力系統の「慣性」とは何か。</li>
+            <li>過渡安定性が崩れるとき、何が起きているのか。</li>
+          </ol>
           <p lang="en">This Part translates the electrical system into a mechanical one that we can imagine: points that move on a plane, joined by springs. The idea is old. The Noda model explained a two-node system with a mechanical model, and Gronquist and co-authors showed in 1996 that a multi-machine system can be animated as masses and springs on the phasor plane. This page follows that idea and adds a third dimension that makes voltage collapse visible.</p>
           <p lang="ja">この Part では、電気の系統を、思い描ける機械の系に置き換えます。平面の上を動く点と、それをつなぐばねです。考え方そのものは以前からあり、野田モデルは 2 ノードの系統の電気的な特性を機械のモデルで説明しました。また Gronquist らは 1996 年に、多数の発電機を含む系統を、フェーザの平面上の質点とばねのアニメーションとして見せています。このページはその考え方に沿って説明し、さらに 3 次元目の座標を加えて、電圧崩壊も見えるようにします。</p>
         </section>
