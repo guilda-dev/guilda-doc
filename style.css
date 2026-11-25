@@ -1957,13 +1957,17 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 .vc { margin: 18px 0 12px; border-radius: 6px; }
 .vc:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
 .vc-viewport { overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
-.vc-track { display: flex; margin: 0; padding: 0; list-style: none; transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.vc-viewport { transition: height 0.3s ease; }
+.vc-track { display: flex; align-items: flex-start; margin: 0; padding: 0; list-style: none; transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1); }
 .vc-item { flex: 0 0 100%; min-width: 0; }
 .vc-item figure { margin: 0; }
 .vc-media { aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; background: #FFFFFF; }
 .vc-media > img, .vc-media > video { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 .vc-item figcaption { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 20px; align-items: center; padding: 12px 16px 14px; border-top: 1px solid var(--line); }
 .vc-caption { color: var(--ink-2); font-size: 0.92rem; line-height: 1.55; }
+.vc-tag { display: inline-flex; align-items: center; gap: 5px; margin: 0 8px 4px 0; padding: 1px 8px; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); font-size: 0.78rem; font-weight: 600; line-height: 1.5; vertical-align: 1px; }
+.vc-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.vc-caption code { font-size: 0.85em; }
 .vc-cmd { margin: 0; padding: 8px 12px; font-size: 0.8rem; line-height: 1.5; white-space: pre; overflow-x: auto; }
 .vc-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
 .vc-prev, .vc-next { position: relative; display: inline-grid; place-items: center; width: 40px; height: 36px; padding: 0; border: 1px solid var(--line-strong); border-radius: 4px; background: var(--surface); color: var(--brand); cursor: pointer; }
@@ -1985,9 +1989,14 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
   .vc-media { aspect-ratio: 4 / 3; padding: 6px; }
   .vc-cmd { font-size: 0.76rem; }
   .vc-count { display: none; }
+  .vc-controls { gap: 6px; }
+  .vc-dots { flex-wrap: nowrap; gap: 0; }
+  .vc-dot { width: 22px; }
+  .vc-dot::before { width: 14px; }
+  .vc-dot[aria-current="true"]::before { width: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .vc-track, .vc-dot::before { transition: none; }
+  .vc-track, .vc-viewport, .vc-dot::before { transition: none; }
 }
 
 /* Lecture notes: the back link and the pager are buttons, the pager sits under a transmission line */
@@ -2051,3 +2060,7 @@ img, video { height: auto; }
   /* a figure that scrolls sideways says so */
   .lec-figure.is-scroll .lec-scroll { position: relative; padding-bottom: 4px; scrollbar-width: thin; }
 }
+
+/* Annotated equations (lecture/annotate.css): a highlight of a term of a wide equation that
+   scrolls sideways is not drawn past the edge of the page */
+.lec-annot { overflow-x: clip; }
