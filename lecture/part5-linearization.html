@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec5- ; shared lecture CSS (lec-*) is in style.css. -->
 </head>
@@ -75,7 +76,14 @@
 
           <p lang="en">The same is done for all equations of the model at once. We write the state of the system as a vector x (rotor angles, speeds, internal voltages, the states of the controllers) and its equations as ẋ = f(x). At an operating point x₀ nothing moves, f(x₀) = 0. For the deviation Δx = x − x₀, a Taylor expansion of f around x₀ gives</p>
           <p lang="ja">同じことを、モデルのすべての式についてまとめて行います。系統の状態（回転子の角度、回転速度、内部電圧、制御器の状態など）をベクトル x で表し、その式を ẋ = f(x) と書きます。運転点 x₀ では何も動かないので f(x₀) = 0 です。ずれ Δx = x − x₀ について、f を x₀ のまわりでテイラー展開すると次のようになります。</p>
-          <div class="lec-math" data-tex="\begin{gathered} \Delta\dot{x} = A\,\Delta x + O\bigl(\|\Delta x\|^{2}\bigr), \\ A = \left.\frac{\partial f}{\partial x}\right|_{x = x_0} \end{gathered}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{gathered} \Delta\dot{x} = \annot{1}{A}\,\Delta x + \annot{2}{O\bigl(\|\Delta x\|^{2}\bigr)}, \\ A = \annot{3}{\left.\frac{\partial f}{\partial x}\right|_{x = x_0}} \end{gathered}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the A matrix of the state equation!</span><span lang="ja">これが状態方程式の A 行列！</span></li>
+              <li data-at="above"><span lang="en">The rest of second order and higher: dropped</span><span lang="ja">捨てる 2 次以上の残り</span></li>
+              <li><span lang="en">Slopes at the operating point: the Jacobian</span><span lang="ja">運転点での傾き（ヤコビアン）</span></li>
+            </ol>
+          </figure>
           <p lang="en">The linear model keeps the first term, Δẋ = A Δx, and drops the rest, which is of second order in Δx: this is why it is accurate only for small swings. Each entry of A is the slope of one equation with respect to one state, taken at the operating point. A matrix of such slopes (partial derivatives) is called a <b>Jacobian</b>. Because A is computed at x₀, a different operating point gives a different A.</p>
           <p lang="ja">線形モデルは最初の項 Δẋ = A Δx だけを残し、Δx について 2 次以上の残りを捨てます。これが、小さな揺れでしか正確でない理由です。A の各要素は、運転点での「ある式の、ある状態に対する傾き」です。このような傾き（偏微分）を並べた行列を<b>ヤコビアン</b>といいます。A は x₀ で計算するので、運転点が変われば A も変わります。</p>
         </section>
@@ -84,7 +92,15 @@
           <h2><span lang="en">The state-space model</span><span lang="ja">状態空間モデル</span></h2>
           <p lang="en">To also see what we can push into the system and what we can measure, the linear model is written as a <b>state-space model</b>. The input u is what we can change from outside (for example a reference voltage or a mechanical power), and the output y is what we observe (for example a voltage or a speed).</p>
           <p lang="ja">外から加えられる量と測れる量も含めるために、線形モデルを<b>状態空間モデル</b>の形に書きます。入力 u は外から変えられる量（たとえば電圧の目標値や機械入力）、出力 y は観測する量（たとえば電圧や回転速度）です。</p>
-          <div class="lec-math" data-tex="\dot{x} = A x + B u, \qquad y = C x + D u"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\dot{x} = \annot{1}{A} x + \annot{2}{B} u, \qquad y = \annot{3}{C} x + \annot{4}{D} u"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the A matrix: how the system moves by itself!</span><span lang="ja">これが A 行列：系統がひとりでにどう動くか！</span></li>
+              <li><span lang="en">How the inputs act on the states</span><span lang="ja">入力が状態にどう効くか</span></li>
+              <li data-at="above"><span lang="en">What is observed of the states</span><span lang="ja">状態のどこを観測するか</span></li>
+              <li><span lang="en">Inputs that reach the outputs directly</span><span lang="ja">入力が出力へ直接届く分</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here x, u and y all mean deviations from the operating point; the Δ is dropped as is usual. The four matrices have simple roles, shown in the block diagram below.</p>
           <p lang="ja">ここでの x、u、y はすべて運転点からのずれを表します（慣例どおり Δ を省いています）。4 つの行列の役割は、下のブロック図のとおりです。</p>
 
@@ -155,7 +171,13 @@
             <div class="lec-math" data-tex="\begin{aligned} E\,\dot{x} &amp;= A_{xx}\,x + A_{xv}\,v + B_x\,u \\ 0 &amp;= A_{vx}\,x + A_{vv}\,v + B_v\,u \end{aligned}"></div>
             <p lang="en">The second equation is the current balance of the buses. Solving it for v (A<sub>vv</sub> is invertible) and substituting gives the model that get_sys returns by default (Type "ODE"):</p>
             <p lang="ja">2 つ目の式が母線の電流のつり合いです。これを v について解いて（A<sub>vv</sub> は正則）代入したものが、get_sys が既定で返すモデル（Type "ODE"）です。</p>
-            <div class="lec-math" data-tex="\begin{aligned} E\,\dot{x} = {}&amp; \bigl(A_{xx} - A_{xv} A_{vv}^{-1} A_{vx}\bigr)\,x \\ &amp;+ \bigl(B_x - A_{xv} A_{vv}^{-1} B_v\bigr)\,u \end{aligned}"></div>
+            <figure class="lec-annot">
+              <div class="lec-math" data-tex="\begin{aligned} \annot{2}{E}\,\dot{x} = {}&amp; \bigl(A_{xx} - \annot{1}{A_{xv} A_{vv}^{-1} A_{vx}}\bigr)\,x \\ &amp;+ \bigl(B_x - A_{xv} A_{vv}^{-1} B_v\bigr)\,u \end{aligned}"></div>
+              <ol class="lec-annot-notes">
+                <li data-at="above"><span lang="en">Coupling of the components through the network</span><span lang="ja">送電網を通した機器どうしの結合</span></li>
+                <li data-at="above"><span lang="en">Diagonal; its zero rows are algebraic equations</span><span lang="ja">対角行列：0 の行は代数方程式</span></li>
+              </ol>
+            </figure>
             <p lang="en">E is diagonal. Where it is zero, the row is again an algebraic equation (some internal variables of the AVR and PSS), so the eigenvalues are the finite solutions of det(λE − A) = 0, which MATLAB gives as eig(A, E). The idea of this page is the same in both forms.</p>
             <p lang="ja">E は対角行列です。その 0 の行は、やはり代数方程式です（AVR や PSS の内部の変数の一部）。そのため固有値は det(λE − A) = 0 の有限な解で、MATLAB では eig(A, E) で求まります。このページの考え方は、どちらの形でも同じです。</p>
           </div>
@@ -165,7 +187,14 @@
           <h2><span lang="en">Eigenvalues are the types of swing</span><span lang="ja">固有値は揺れの型</span></h2>
           <p lang="en">The motion of a linear model after a small disturbance is a sum of a few simple patterns called <b>modes</b>. Each mode belongs to one <b>eigenvalue</b> λ<sub>i</sub> of A. When A has distinct eigenvalues, the solution of Δẋ = A Δx from the deviation Δx(0) is</p>
           <p lang="ja">小さな外乱のあとの線形モデルの動きは、<b>モード</b>と呼ばれるいくつかの単純な動きの重ね合わせになります。モードは A の<b>固有値</b> λ<sub>i</sub> に 1 つずつ対応します。A の固有値がすべて異なるとき、ずれ Δx(0) から始まる Δẋ = A Δx の解は次のとおりです。</p>
-          <div class="lec-math" data-tex="\begin{gathered} \Delta x(t) = \sum_i v_i\, e^{\lambda_i t}\, w_i^{\top} \Delta x(0) \\ A v_i = \lambda_i v_i,\;\; w_i^{\top} A = \lambda_i w_i^{\top},\;\; w_i^{\top} v_i = 1 \end{gathered}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{gathered} \Delta x(t) = \sum_i \annot{1}{v_i}\, \annot{2}{e^{\lambda_i t}}\, \annot{3}{w_i^{\top} \Delta x(0)} \\ A v_i = \lambda_i v_i,\;\; w_i^{\top} A = \lambda_i w_i^{\top},\;\; w_i^{\top} v_i = 1 \end{gathered}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Mode shape: which states move, and how</span><span lang="ja">モード形：どの状態がどう動くか</span></li>
+              <li data-at="above"><span lang="en">The type of swing, set by the eigenvalue</span><span lang="ja">揺れの型（固有値で決まる）</span></li>
+              <li data-at="above"><span lang="en">How strongly the disturbance excites the mode</span><span lang="ja">外乱がモードを励起する強さ</span></li>
+            </ol>
+          </figure>
           <p lang="en">The right eigenvector v<sub>i</sub> tells which states move in that mode and how; the number w<sub>i</sub><sup>T</sup>Δx(0), with the left eigenvector w<sub>i</sub>, tells how strongly the disturbance excites it. An eigenvalue is in general a complex number, λ = σ ± jω, and its pair of terms adds up to a real oscillation e<sup>σt</sup>cos(ωt + φ) in each state, with angular frequency ω and a size that changes as e<sup>σt</sup>. So the eigenvalues alone already tell the <em>type</em> of every swing the system can make: the real part σ says whether it dies out or grows, and the imaginary part ω how fast it oscillates.</p>
           <p lang="ja">右固有ベクトル v<sub>i</sub> はそのモードでどの状態がどう動くかを表し、左固有ベクトル w<sub>i</sub> を使った数 w<sub>i</sub><sup>T</sup>Δx(0) は、外乱がそのモードをどれだけ強く励起するかを表します。固有値は一般に複素数 λ = σ ± jω で、その対の 2 つの項を合わせると、各状態で e<sup>σt</sup>cos(ωt + φ) の実数の振動になります。角周波数は ω、大きさは e<sup>σt</sup> のように変わります。つまり、固有値だけで、系統が起こし得るすべての揺れの<em>型</em>が分かります。実部 σ は揺れが収まるか大きくなるかを、虚部 ω は振動の速さを表します。</p>
 
@@ -187,7 +216,14 @@
           <h2><span lang="en">Reading the complex plane: frequency and damping ratio</span><span lang="ja">複素平面の読み方とダンピング比</span></h2>
           <p lang="en">Plotting all eigenvalues in the complex plane gives a map of every swing of the system. For an oscillating pair λ = σ ± jω two numbers are read from it: the <b>frequency</b> f of the oscillation, and the <b>damping ratio</b> ζ, which says how quickly the swing dies out compared with its oscillation.</p>
           <p lang="ja">すべての固有値を複素平面に描くと、系統の揺れの地図になります。振動する対 λ = σ ± jω からは 2 つの数を読み取ります。振動の<b>周波数</b> f と、振動の速さに比べて揺れがどれだけ早く収まるかを表す<b>ダンピング比</b>（減衰比）ζ です。</p>
-          <div class="lec-math" data-tex="f = \frac{\omega}{2\pi}, \qquad \zeta = \frac{-\sigma}{\sqrt{\sigma^2 + \omega^2}}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="f = \frac{\annot{1}{\omega}}{2\pi}, \qquad \annot{3}{\zeta} = \frac{-\annot{2}{\sigma}}{\sqrt{\sigma^2 + \omega^2}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Imaginary part of the eigenvalue: how fast it oscillates</span><span lang="ja">固有値の虚部：振動の速さ</span></li>
+              <li data-at="above"><span lang="en">Real part of the eigenvalue: negative means it decays</span><span lang="ja">固有値の実部：負なら揺れが減衰する</span></li>
+              <li><span lang="en">This is the damping ratio!</span><span lang="ja">これがダンピング比！</span></li>
+            </ol>
+          </figure>
           <p lang="en">The higher an eigenvalue, the faster it oscillates. The damping ratio is the angle seen from the origin: eigenvalues on one straight line through the origin have the same ζ. With ζ = 5 %, the swing is still about 73 % of its first size after one period; with ζ = 20 % it is about 28 %. A mode with a small ζ rings for a long time, so operators often ask that every mode keeps at least some minimum damping ratio, for example a few percent; the value depends on the system and the operator.</p>
           <p lang="ja">上にある固有値ほど速く振動します。ダンピング比は原点から見た角度で、原点を通る同じ直線の上にある固有値は ζ が同じです。ζ = 5% では 1 周期たっても振幅は最初の約 73% 残り、ζ = 20% なら約 28% になります。ζ の小さいモードは長く揺れ続けるので、運用ではすべてのモードに一定以上のダンピング比（たとえば数 %）を求めることがあります。値は系統や運用者によって異なります。</p>
 
@@ -284,7 +320,14 @@
           <h2><span lang="en">Participation factors</span><span lang="ja">参加係数</span></h2>
           <p lang="en">The mode shape says how the states <em>move</em> in a mode. A related question is which states <em>make</em> the mode: if we change a part of the system, which mode changes? The <b>participation factor</b> answers it. It multiplies the right eigenvector v<sub>i</sub> (how a state moves in the mode) by the left eigenvector w<sub>i</sub> (how much the state excites the mode), entry by entry:</p>
           <p lang="ja">モード形は、そのモードで状態がどう<em>動く</em>かを表します。これと関係する問いが、どの状態がそのモードを<em>つくって</em>いるか、つまり系統のどこを変えるとそのモードが変わるか、です。これに答えるのが<b>参加係数</b>です。右固有ベクトル v<sub>i</sub>（状態がモードでどう動くか）と左固有ベクトル w<sub>i</sub>（状態がモードをどれだけ励起するか）を、成分ごとに掛け合わせます。</p>
-          <div class="lec-math" data-tex="p_{ki} = \frac{|w_{ki}\, v_{ki}|}{\sum_{j} |w_{ji}\, v_{ji}|}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{3}{p_{ki}} = \frac{|\annot{1}{w_{ki}}\, \annot{2}{v_{ki}}|}{\sum_{j} |w_{ji}\, v_{ji}|}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">How strongly state <span class="lec-math-inline" data-tex="k"></span> excites the mode</span><span lang="ja">状態 <span class="lec-math-inline" data-tex="k"></span> がモードを励起する強さ</span></li>
+              <li data-at="above"><span lang="en">How much state <span class="lec-math-inline" data-tex="k"></span> moves in the mode</span><span lang="ja">モードで状態 <span class="lec-math-inline" data-tex="k"></span> が動く大きさ</span></li>
+              <li><span lang="en">This is the participation factor! (sums to 1)</span><span lang="ja">これが参加係数！（合計は 1）</span></li>
+            </ol>
+          </figure>
           <p lang="en">v<sub>ki</sub> and w<sub>ki</sub> are the entries of state k in the right and left eigenvectors of mode i (A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>, w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>), and p<sub>ki</sub> is the share of state k in mode i: the shares of one mode add up to 1. The product w<sub>ki</sub>v<sub>ki</sub> does not change when a state is measured in other units, so the states of different generators and controllers can be compared directly. The original definition uses w<sub>ki</sub>v<sub>ki</sub> itself with w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1, a complex number; this page uses its magnitude, normalized as above. A model with algebraic rows (zeros on the diagonal of E) is first reduced to ẋ = A x by eliminating them.</p>
           <p lang="ja">v<sub>ki</sub> と w<sub>ki</sub> は、モード i の右固有ベクトルと左固有ベクトル（A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>、w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>）の状態 k の成分で、p<sub>ki</sub> はモード i に対する状態 k の割合です。1 つのモードについて合計すると 1 になります。積 w<sub>ki</sub>v<sub>ki</sub> は状態を別の単位で測っても変わらないので、別の発電機や制御器の状態どうしをそのまま比べられます。もとの定義は w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1 とした積 w<sub>ki</sub>v<sub>ki</sub> そのもの（複素数）で、このページではその絶対値を上の式のように正規化して使います。代数方程式の行（E の対角の 0）があるモデルは、先にそれを消去して ẋ = A x の形にしてから求めます。</p>
 
