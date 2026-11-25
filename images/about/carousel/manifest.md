@@ -9,9 +9,10 @@ addpath("notes/about-anim"); make_about_carousel(OutDir="<docs>/images/about/car
 ```
 
 Videos: MP4 (H.264, yuv420p, faststart), 1280 x 640 px, 20 frames/s, each with a PNG
-poster of the same name. Stills: PNG. The pointer and the blue click rings in 06 and 07
+poster of the same name. Stills: PNG. The pointer and the blue click rings in 06 to 09
 are drawn onto the recorded frames to show where the script clicked; everything else is
-the figure as GUILDA draws it.
+the figure as GUILDA draws it. In 09 the result window that Analyze result opens is
+recorded as its own figure and drawn over the app, as a window opened over it.
 
 ## 01 OPF の LMP
 
@@ -34,8 +35,8 @@ G = res.plot_lmp(LabelMode="bus");
 - file: `02-single-line-diagram.png`
 - poster: (still)
 - type: still
-- JA: 潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列幅に合わせて配置します。
-- EN: A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper.
+- JA: 潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列幅に合わせて配置します（母線名は 6 pt）。
+- EN: A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper (bus names in 6 pt).
 - code:
 
 ```matlab
@@ -136,4 +137,37 @@ G.BusColorMode = "V";
 G.MarkerSizeMode = "S";
 G.Dimension = "3D";
 G.BusHeightMode = "V";
+```
+
+## 08 固有値をクリックして参加率を見る
+
+- file: `08-eigen-participation.mp4`
+- poster: `08-eigen-participation.png`
+- type: interactive (11.7 s)
+- replaces: the eigenvalue still `images/about/output-eigenvalues.png`
+- JA: IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。
+- EN: The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.
+- code:
+
+```matlab
+net = network.IEEE68bus();
+res = net.get_sys();
+sct = res.plot_participation();   % click an eigenvalue, then a bus
+```
+
+## 09 GUI で編集して解析する
+
+- file: `09-app-gui.mp4`
+- poster: `09-app-gui.png`
+- type: interactive (14.0 s)
+- replaces: the model GUI still `images/about/output-model-gui.png`
+- JA: GUILDA のアプリで IEEE 14 母線系統を開き、ネットワーク図で母線 B009 の負荷をクリックして、モデルの GUI で有効電力 P を -0.295 から -0.6 に書き換えています。続けて Power flow のタブで潮流計算を実行し、Analyze result で結果の窓を開いています。操作はすべて MATLAB のコードとして下のログに残り、Export script でスクリプトに書き出せます。
+- EN: The GUILDA app opens the IEEE 14-bus system; the load at bus B009 is clicked on the network diagram and its active power P is changed from -0.295 to -0.6 in the model GUI. The Power flow tab then runs the power flow, and Analyze result opens the result window. Every action is kept as MATLAB code in the log below, and Export script writes it out as a script.
+- code:
+
+```matlab
+h = GUILDA.launch_gui(network.IEEE14bus());
+% the log of the session:
+net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
+[res_pf, flag_pf] = net.calculate_powerflow();
 ```
