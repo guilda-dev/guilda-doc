@@ -159,15 +159,8 @@ tr:hover { background-color: var(--surface-subtle); }
 @keyframes flow-underline { to { background-position: 140% calc(100% - 0.05em), 0 calc(100% - 0.05em); } }
 @keyframes flow-edge { to { background-position: 140% 0; } }
 
-/* Section divider: a thin transmission line on towers instead of a plain rule.
-   <hr class="line-divider"> ; the drawing is a mask, so it takes --line-strong. */
-hr.line-divider, .tutorial-divider {
-  display: block; height: 30px; margin: 40px 0; border: 0; background: var(--line-strong);
-  -webkit-mask: var(--line-divider-mask) repeat-x 0 50% / 240px 30px; mask: var(--line-divider-mask) repeat-x 0 50% / 240px 30px;
-}
-:root {
-  --line-divider-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 30' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M0 19Q53 19 106 11M134 11Q187 19 240 19M120 2.5 113.5 28.5M120 2.5l6.5 26M104 8h32M106 8v3M134 8v3M117 13h6M116.4 16.5l7.2 11M123.6 16.5l-7.2 11M110 28.5h20'/%3E%3C/svg%3E");
-}
+/* Section divider: a plain thin rule. <hr class="line-divider"> (Home) and <hr class="tutorial-divider"> (Tutorial) */
+hr.line-divider, .tutorial-divider { display: block; height: 0; margin: 40px 0; border: 0; border-top: 1px solid var(--line); }
 
 .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--line-strong); border-radius: var(--radius); font-size: 1rem; font-family: inherit; box-sizing: border-box; }
 
@@ -202,36 +195,16 @@ body.home-layout main { max-width: 1000px; width: 100%; box-sizing: border-box; 
 .tab-content > p, .tab-content > ul, .tab-content > ol:not([class]), .tab-content section > p, .tab-content section > ul { max-width: 50em; }
 .tab-content.active { display: block; }
 
-/* ヒーローセクション: title left, tilted mark at the right end standing on a soft contact shadow */
-.hero { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 0 28px; border-bottom: 1px solid var(--line); }
-.hero-text { min-width: 0; }
-/* The title never wraps: its size follows the viewport so the longest language still fits beside (or, on phones, below) the mark */
-.hero-title {
-  font-size: clamp(1.25rem, 5.4vw, 4rem); font-weight: 800; letter-spacing: 0.02em; color: var(--brand); white-space: nowrap;
-  border-bottom: none; line-height: 1.1; margin: 0 0 14px 0; padding: 0;
-}
-.hero-subtitle { font-size: clamp(0.9rem, 2vw, 1.15rem); font-weight: 400; color: var(--muted); margin: 0; }
-.hero-mark { position: relative; flex: none; width: clamp(64px, 11vw, 112px); margin-right: clamp(0px, 2vw, 24px); padding-bottom: 14px; }
-.hero-mark img { position: relative; z-index: 1; display: block; width: 100%; height: auto; transform: translateY(-6px) rotate(-8deg); border-radius: 14%; }
-.hero-mark::after {
-  content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 14px; border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 26%, transparent), transparent);
-}
-/* A pointer over the mark makes it hop once on its shadow */
-@media (prefers-reduced-motion: no-preference) {
-  .hero-mark:hover img { animation: hero-hop 0.9s cubic-bezier(0.3, 0, 0.3, 1); }
-  .hero-mark:hover::after { animation: hero-hop-shadow 0.9s cubic-bezier(0.3, 0, 0.3, 1); }
-}
-@keyframes hero-hop {
-  0%, 100% { transform: translateY(-6px) rotate(-8deg); }
-  35% { transform: translateY(-22px) rotate(-14deg); }
-  60% { transform: translateY(-3px) rotate(-5deg); }
-  78% { transform: translateY(-10px) rotate(-9deg); }
-}
-@keyframes hero-hop-shadow { 0%, 100% { transform: scaleX(1); opacity: 1; } 35% { transform: scaleX(0.7); opacity: 0.55; } 78% { transform: scaleX(0.88); opacity: 0.8; } }
-@media (max-width: 560px) {
-  .hero { flex-direction: column-reverse; align-items: flex-start; gap: 12px; }
-  .hero-title { font-size: clamp(1.25rem, 6.6vw, 2.4rem); }
+/* Hero: the network that spells GUILDA, full width. Its colours sit on the page background, so it has no frame.
+   height: auto keeps the aspect ratio of whatever image is there; the width/height attributes only reserve space. */
+.home-hero { margin: 8px 0 0; }
+.home-hero picture { display: block; }
+.home-hero img { display: block; width: 100%; max-width: 1200px; height: auto; margin: 0 auto; }
+
+/* Hidden on screen, read by screen readers */
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
 }
 
 .home-intro { max-width: 680px; margin: 26px 0 16px; font-size: 1.1rem; color: var(--ink-2); }
@@ -1923,12 +1896,6 @@ a.lec-card:hover b { color: var(--brand-strong); text-decoration: underline; tex
 .flow-edge { position: relative; }
 hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 
-/* Home: the network GIF, shown once images/home/guilda-network.gif exists */
-.home-network { margin: 28px 0 8px; }
-.home-network picture { display: block; }
-.home-network img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: contain; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
-.home-network figcaption { margin-top: 6px; color: var(--muted); font-size: 0.88rem; }
-
 /* Home: "Try it in a few lines" */
 .home-try { margin: 36px 0 8px; }
 .home-try h2 { margin: 0 0 12px; }
@@ -1999,14 +1966,10 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
   .vc-track, .vc-viewport, .vc-dot::before { transition: none; }
 }
 
-/* Lecture notes: the back link and the pager are buttons, the pager sits under a transmission line */
+/* Lecture notes: the back link and the pager are buttons, the pager sits under a thin rule */
 .lec-back { position: relative; display: inline-flex; align-items: center; padding: 5px 12px; border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600; text-decoration: none; }
 .lec-back:hover, .lec-back:focus-visible { border-color: var(--brand); text-decoration: none; }
-.lec-pager { position: relative; border-top: 0; padding-top: 44px; }
-.lec-pager::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 30px; background: var(--line-strong);
-  -webkit-mask: var(--line-divider-mask) repeat-x 0 50% / 240px 30px; mask: var(--line-divider-mask) repeat-x 0 50% / 240px 30px;
-}
+.lec-pager { position: relative; }
 .lec-pager a { position: relative; padding: 10px 14px !important; border: 1px solid var(--line-strong); border-radius: 4px; }
 .lec-pager a:hover, .lec-pager a:focus-visible { border-color: var(--brand); }
 .lec-pager a b { text-decoration: none !important; font-weight: 600 !important; }
@@ -2034,6 +1997,7 @@ img, video { height: auto; }
   table:not(.req-table):not(.compare-table) { font-size: 0.85rem; }
   th, td { padding: 8px 10px; }
   th { min-width: 0; }
+  .home-hero { margin: 4px -16px 0; }
   .home-intro { font-size: 1rem; margin-top: 18px; }
   .home-actions .btn { flex: 1 1 100%; justify-content: center; }
   .btn { white-space: normal; text-align: center; }
