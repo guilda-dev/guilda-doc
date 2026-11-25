@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <style>
-    .lec-svg .lec7-hollow { fill: var(--surface); stroke: var(--brand); stroke-width: 2; }
+    .lec-svg .lec7-hollow { fill: var(--surface); stroke: var(--gem-1); stroke-width: 2; }
+    .lec-svg .lec7-hollow-ink { fill: var(--surface); stroke: var(--ink-2); stroke-width: 2; }
   </style>
   <!-- Page-only CSS goes here with the prefix lec7- ; shared lecture CSS (lec-*) is in style.css. -->
 </head>
@@ -107,20 +108,20 @@
                 <text lang="ja" class="t-muted" x="438" y="30">負荷の電圧 V [pu]</text>
                 <text lang="en" class="t-muted t-end" x="765" y="262">load power P</text>
                 <text lang="ja" class="t-muted t-end" x="765" y="262">負荷の電力 P</text>
-                <polyline class="s-brand" points="430.0,58.2 444.8,59.5 459.3,60.8 473.6,62.3 487.7,63.8 501.4,65.4 514.8,67.1 527.8,68.9 540.4,70.7 552.7,72.6 564.5,74.6 575.9,76.6 586.8,78.8 597.3,81.0 607.2,83.2 616.7,85.5 625.6,87.9 633.9,90.4 641.7,92.9 648.9,95.5 655.6,98.2 661.6,100.9 667.0,103.7 671.8,106.6 676.0,109.5 679.5,112.4 682.4,115.4 684.6,118.5 686.2,121.6 687.1,124.8 687.4,127.6"/>
-                <polyline class="s-brand is-dashed" points="687.4,127.6 687.1,130.9 686.1,134.2 684.5,137.6 682.3,141.0 679.4,144.4 675.8,147.9 671.6,151.5 666.8,155.0 661.4,158.6 655.3,162.3 648.7,166.0 641.4,169.7 633.6,173.4 625.3,177.2 616.3,181.0 606.9,184.8 596.9,188.7 586.4,192.5 575.5,196.4 564.1,200.4 552.2,204.3 540.0,208.2 527.3,212.2 514.3,216.2 500.9,220.1 487.1,224.1 473.1,228.1 458.8,232.1 444.2,236.1 431.3,239.6"/>
+                <polyline class="s-gem1" points="430.0,58.2 444.8,59.5 459.3,60.8 473.6,62.3 487.7,63.8 501.4,65.4 514.8,67.1 527.8,68.9 540.4,70.7 552.7,72.6 564.5,74.6 575.9,76.6 586.8,78.8 597.3,81.0 607.2,83.2 616.7,85.5 625.6,87.9 633.9,90.4 641.7,92.9 648.9,95.5 655.6,98.2 661.6,100.9 667.0,103.7 671.8,106.6 676.0,109.5 679.5,112.4 682.4,115.4 684.6,118.5 686.2,121.6 687.1,124.8 687.4,127.6"/>
+                <polyline class="s-gem1 is-dashed" points="687.4,127.6 687.1,130.9 686.1,134.2 684.5,137.6 682.3,141.0 679.4,144.4 675.8,147.9 671.6,151.5 666.8,155.0 661.4,158.6 655.3,162.3 648.7,166.0 641.4,169.7 633.6,173.4 625.3,177.2 616.3,181.0 606.9,184.8 596.9,188.7 586.4,192.5 575.5,196.4 564.1,200.4 552.2,204.3 540.0,208.2 527.3,212.2 514.3,216.2 500.9,220.1 487.1,224.1 473.1,228.1 458.8,232.1 444.2,236.1 431.3,239.6"/>
                 <!-- margin -->
                 <line class="s-line is-dashed" x1="571.8" y1="75.9" x2="571.8" y2="240"/>
-                <line class="s-c3 is-dashed" x1="687.4" y1="127.8" x2="687.4" y2="240"/>
-                <line class="s-c3" x1="575" y1="226" x2="684" y2="226" marker-start="url(#p7-arrow)" marker-end="url(#p7-arrow)"/>
-                <text lang="en" class="t-c3 t-small t-mid" x="629.6" y="218">margin</text>
-                <text lang="ja" class="t-c3 t-small t-mid" x="629.6" y="218">余裕</text>
-                <circle class="f-brand-solid" cx="571.8" cy="75.9" r="5"/>
-                <text lang="en" class="t-brand t-small t-end" x="564" y="98">operating point</text>
-                <text lang="ja" class="t-brand t-small t-end" x="564" y="98">運転点</text>
-                <circle class="f-c3" cx="687.4" cy="127.8" r="6"/>
-                <text lang="en" class="t-c3 t-small" x="697" y="124">nose point</text>
-                <text lang="ja" class="t-c3 t-small" x="697" y="124">ノーズ点</text>
+                <line class="s-line is-dashed" x1="687.4" y1="127.8" x2="687.4" y2="240"/>
+                <line class="s-ink" x1="575" y1="226" x2="684" y2="226" marker-start="url(#p7-arrow)" marker-end="url(#p7-arrow)"/>
+                <text lang="en" class="t-small t-mid" x="629.6" y="218">margin</text>
+                <text lang="ja" class="t-small t-mid" x="629.6" y="218">余裕</text>
+                <circle class="f-gem1" cx="571.8" cy="75.9" r="5"/>
+                <text lang="en" class="t-small t-end" x="564" y="98">operating point</text>
+                <text lang="ja" class="t-small t-end" x="564" y="98">運転点</text>
+                <circle class="lec7-hollow-ink" cx="687.4" cy="127.8" r="6"/>
+                <text lang="en" class="t-small" x="697" y="124">nose point</text>
+                <text lang="ja" class="t-small" x="697" y="124">ノーズ点</text>
                 <circle class="lec7-hollow" cx="572" cy="197.7" r="4.5"/>
                 <text lang="en" class="t-muted t-small" x="470" y="182">low-voltage solution</text>
                 <text lang="ja" class="t-muted t-small" x="470" y="182">電圧の低い解</text>
@@ -239,31 +240,31 @@
             <div class="lec-scroll">
               <svg class="lec-svg" viewBox="0 0 640 290" role="img" aria-label="The continuation power flow traces points along the PV curve and past the nose: at each step a predictor moves along the curve direction, and a corrector brings the point back onto the curve">
                 <defs>
-                  <marker id="p7-arrow-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--lec-c3)" d="M0 0 L10 5 L0 10 Z"/></marker>
-                  <marker id="p7-arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--lec-c2)" d="M0 0 L10 5 L0 10 Z"/></marker>
+                  <marker id="p7-arrow-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--gem-2)" d="M0 0 L10 5 L0 10 Z"/></marker>
+                  <marker id="p7-arrow-y" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path style="fill: var(--gem-3)" d="M0 0 L10 5 L0 10 Z"/></marker>
                 </defs>
-                <rect class="f-c3" x="551" y="30" width="64" height="210" style="stroke: none"/>
-                <text lang="en" class="t-c3 t-small t-mid" x="583" y="200">no</text>
-                <text lang="en" class="t-c3 t-small t-mid" x="583" y="216">solution</text>
-                <text lang="ja" class="t-c3 t-small t-mid" x="583" y="200">解が</text>
-                <text lang="ja" class="t-c3 t-small t-mid" x="583" y="216">ない</text>
+                <rect class="f-tint" x="551" y="30" width="64" height="210"/>
+                <text lang="en" class="t-muted t-small t-mid" x="583" y="200">no</text>
+                <text lang="en" class="t-muted t-small t-mid" x="583" y="216">solution</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="583" y="200">解が</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="583" y="216">ない</text>
                 <line class="s-line" x1="80" y1="240" x2="625" y2="240" marker-end="url(#p7-arrow)"/>
                 <line class="s-line" x1="80" y1="240" x2="80" y2="26" marker-end="url(#p7-arrow)"/>
                 <text class="t-muted" x="88" y="30">V</text>
                 <text lang="en" class="t-muted t-end" x="625" y="262">load parameter λ</text>
                 <text lang="ja" class="t-muted t-end" x="625" y="262">負荷のパラメータ λ</text>
                 <polyline class="s-line" points="80.0,58.2 100.3,59.1 120.4,60.1 140.2,61.2 159.8,62.3 179.1,63.4 198.0,64.6 216.6,65.8 234.9,67.1 252.9,68.4 270.4,69.8 287.5,71.2 304.3,72.6 320.6,74.1 336.4,75.6 351.8,77.2 366.7,78.8 381.1,80.4 395.0,82.1 408.4,83.8 421.3,85.5 433.6,87.3 445.3,89.2 456.5,91.0 467.1,92.9 477.0,94.9 486.4,96.9 495.2,98.9 503.4,100.9 510.9,103.0 517.8,105.1 524.0,107.3 529.6,109.5 534.6,111.7 538.9,113.9 542.5,116.2 545.5,118.5 547.7,120.8 549.4,123.2 550.3,125.6 550.6,128.0 550.2,130.5 549.1,133.0 547.3,135.5 544.9,138.0 541.8,140.6 538.0,143.1 533.6,145.7 528.5,148.4 522.7,151.0 516.4,153.7 509.3,156.4 501.7,159.1 493.4,161.8 484.5,164.6 474.9,167.4 464.8,170.2 454.1,173.0 442.8,175.8 430.9,178.6 418.5,181.5 405.6,184.3 392.1,187.2 378.0,190.1 363.5,193.0 348.5,196.0 333.0,198.9 317.1,201.8 300.7,204.8 283.9,207.7 266.6,210.7 249.0,213.7 231.0,216.7 212.6,219.6 193.9,222.6 174.9,225.6 155.6,228.6 136.0,231.6 116.1,234.6 95.9,237.6 80.7,239.9"/>
-                <circle class="f-brand-solid" cx="80.0" cy="58.2" r="4"/><circle class="f-brand-solid" cx="142.2" cy="61.3" r="4"/><circle class="f-brand-solid" cx="203.6" cy="65.0" r="4"/><circle class="f-brand-solid" cx="266.1" cy="69.4" r="4"/><circle class="f-brand-solid" cx="327.8" cy="74.8" r="4"/><circle class="f-brand-solid" cx="388.8" cy="81.3" r="4"/><circle class="f-brand-solid" cx="450.4" cy="90.0" r="4"/><circle class="f-brand-solid" cx="510.9" cy="103.0" r="4"/><circle class="f-brand-solid" cx="544.0" cy="138.8" r="4"/><circle class="f-brand-solid" cx="487.6" cy="163.6" r="4"/><circle class="f-brand-solid" cx="427.9" cy="179.3" r="4"/><circle class="f-brand-solid" cx="367.2" cy="192.3" r="4"/><circle class="f-brand-solid" cx="306.5" cy="203.7" r="4"/><circle class="f-brand-solid" cx="245.4" cy="214.3" r="4"/><circle class="f-brand-solid" cx="183.5" cy="224.3" r="4"/><circle class="f-brand-solid" cx="123.1" cy="233.6" r="4"/>
+                <circle class="f-gem1" cx="80.0" cy="58.2" r="4"/><circle class="f-gem1" cx="142.2" cy="61.3" r="4"/><circle class="f-gem1" cx="203.6" cy="65.0" r="4"/><circle class="f-gem1" cx="266.1" cy="69.4" r="4"/><circle class="f-gem1" cx="327.8" cy="74.8" r="4"/><circle class="f-gem1" cx="388.8" cy="81.3" r="4"/><circle class="f-gem1" cx="450.4" cy="90.0" r="4"/><circle class="f-gem1" cx="510.9" cy="103.0" r="4"/><circle class="f-gem1" cx="544.0" cy="138.8" r="4"/><circle class="f-gem1" cx="487.6" cy="163.6" r="4"/><circle class="f-gem1" cx="427.9" cy="179.3" r="4"/><circle class="f-gem1" cx="367.2" cy="192.3" r="4"/><circle class="f-gem1" cx="306.5" cy="203.7" r="4"/><circle class="f-gem1" cx="245.4" cy="214.3" r="4"/><circle class="f-gem1" cx="183.5" cy="224.3" r="4"/><circle class="f-gem1" cx="123.1" cy="233.6" r="4"/>
                 <!-- predictor / corrector at one step -->
-                <line class="s-c3 is-dashed" x1="511" y1="103" x2="562" y2="114.3" marker-end="url(#p7-arrow-o)"/>
-                <circle class="f-c3" cx="565" cy="115" r="4"/>
-                <line class="s-c2" x1="563" y1="118" x2="547" y2="135" marker-end="url(#p7-arrow-g)"/>
-                <text lang="en" class="t-c3 t-small" x="470" y="80">predictor</text>
-                <text lang="ja" class="t-c3 t-small" x="470" y="80">予測子</text>
-                <text lang="en" class="t-c2 t-small t-end" x="538" y="136">corrector</text>
-                <text lang="ja" class="t-c2 t-small t-end" x="538" y="136">修正子</text>
-                <text lang="en" class="t-brand t-small" x="110" y="150">the trace turns at the nose and comes back</text>
-                <text lang="ja" class="t-brand t-small" x="110" y="150">ノーズ点で向きを変えて戻ってくる</text>
+                <line class="s-gem2 is-dashed" x1="511" y1="103" x2="562" y2="114.3" marker-end="url(#p7-arrow-o)"/>
+                <circle class="f-gem2" cx="565" cy="115" r="4"/>
+                <line class="s-gem3" x1="563" y1="118" x2="547" y2="135" marker-end="url(#p7-arrow-y)"/>
+                <text lang="en" class="t-small" x="470" y="80">predictor</text>
+                <text lang="ja" class="t-small" x="470" y="80">予測子</text>
+                <text lang="en" class="t-small t-end" x="538" y="136">corrector</text>
+                <text lang="ja" class="t-small t-end" x="538" y="136">修正子</text>
+                <text lang="en" class="t-small" x="110" y="150">the trace turns at the nose and comes back</text>
+                <text lang="ja" class="t-small" x="110" y="150">ノーズ点で向きを変えて戻ってくる</text>
               </svg>
             </div>
             <figcaption lang="en">Schematic of the predictor–corrector method. The predictor can land beyond the nose, where no power-flow solution exists for that λ; the corrector, which looks for a point at a fixed distance, still finds the curve.</figcaption>

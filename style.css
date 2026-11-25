@@ -23,6 +23,10 @@
   --ok: #3F6B4A;     --ok-bg: #F3F5F3;
   --warn: #7D6420;   --warn-line: #B8A06A; --warn-bg: #F7F5EF;
   --err: #934545;    --err-bg: #F7F2F2;
+  /* Data series of the plots drawn on the site (not MATLAB figures): MATLAB's default
+     colour order "gem", series k takes --gem-k. Axes, labels and annotations stay ink/grey. */
+  --gem-1: #1171BE; --gem-2: #DD5400; --gem-3: #EDB120; --gem-4: #8516D1;
+  --gem-5: #3BAA32; --gem-6: #2FBEEF; --gem-7: #D1048B;
   --radius: 2px;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Hiragino Sans", "Noto Sans JP", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -1765,6 +1769,14 @@ body.lec main.lec-main { max-width: 900px; width: 100%; margin: 16px auto 48px; 
 .lec-svg .s-c2 { fill: none; stroke: var(--lec-c2); stroke-width: 2; stroke-linecap: round; }
 .lec-svg .s-c3 { fill: none; stroke: var(--lec-c3); stroke-width: 2; stroke-linecap: round; }
 .lec-svg .s-c4 { fill: none; stroke: var(--lec-c4); stroke-width: 2; stroke-linecap: round; }
+/* Data series of a plot (axes with curves or markers): s-gemK for lines, f-gemK for markers */
+.lec-svg .s-gem1 { fill: none; stroke: var(--gem-1); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lec-svg .s-gem2 { fill: none; stroke: var(--gem-2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lec-svg .s-gem3 { fill: none; stroke: var(--gem-3); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lec-svg .f-gem1 { fill: var(--gem-1); stroke: none; }
+.lec-svg .f-gem2 { fill: var(--gem-2); stroke: none; }
+.lec-svg .t-gem1 { fill: var(--gem-1); font-weight: 700; }
+.lec-svg .t-gem2 { fill: var(--gem-2); font-weight: 700; }
 .lec-svg .is-dashed { stroke-dasharray: 5 4; }
 .lec-svg .f-card { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.25; }
 .lec-svg .f-brand { fill: var(--lec-c1-soft); stroke: var(--brand); stroke-width: 1.5; }
