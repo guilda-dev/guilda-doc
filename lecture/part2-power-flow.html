@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec2- ; shared lecture CSS (lec-*) is in style.css. -->
 </head>
@@ -162,7 +163,14 @@ net.get_pf_condition()</code></pre>
           <h2><span lang="en">Active power follows the angle, reactive power the voltage</span><span lang="ja">有効電力は位相差で、無効電力は電圧差で流れる</span></h2>
           <p lang="en">Take two buses joined by a line. Transmission lines are mostly inductive, so we keep only the reactance <span class="lec-math-inline" data-tex="X"></span> of the line and ignore its resistance. With the voltage magnitudes <span class="lec-math-inline" data-tex="V_1"></span>, <span class="lec-math-inline" data-tex="V_2"></span> and the angles <span class="lec-math-inline" data-tex="\theta_1"></span>, <span class="lec-math-inline" data-tex="\theta_2"></span> of the two buses, the active power sent from bus 1 to bus 2 is then</p>
           <p lang="ja">2 つの母線を 1 本の送電線でつないだ場合を考えます。送電線はほとんどがインダクタンスの性質を持つので、抵抗を無視し、リアクタンス <span class="lec-math-inline" data-tex="X"></span> だけを考えます。2 つの母線の電圧の大きさを <span class="lec-math-inline" data-tex="V_1"></span>、<span class="lec-math-inline" data-tex="V_2"></span>、位相角を <span class="lec-math-inline" data-tex="\theta_1"></span>、<span class="lec-math-inline" data-tex="\theta_2"></span> とすると、母線 1 から母線 2 に送られる有効電力は次の式になります（抵抗がないので損失はなく、母線 2 に届く有効電力も同じです）。</p>
-          <div class="lec-math" data-tex="P = \frac{V_1 V_2}{X}\,\sin\delta, \qquad \delta = \theta_1 - \theta_2"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{P} = \annot{2}{\frac{V_1 V_2}{X}}\,\annot{3}{\sin\delta}, \qquad \delta = \theta_1 - \theta_2"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the power flowing on the line!</span><span lang="ja">これが送電線を流れる電力！</span></li>
+              <li><span lang="en">The most the line can carry: smaller for a longer line</span><span lang="ja">送れる電力の上限（線が長いほど小さい）</span></li>
+              <li data-at="above"><span lang="en">Set by the angle difference</span><span lang="ja">位相差で決まる</span></li>
+            </ol>
+          </figure>
           <p lang="en">Active power flows from the bus whose angle is <strong>ahead</strong> to the bus whose angle is <strong>behind</strong>, and the larger the angle difference <span class="lec-math-inline" data-tex="\delta"></span>, the more power flows. The voltage magnitudes stay close to 1 pu in normal operation, so it is mainly the angle that moves the active power.</p>
           <p lang="ja">有効電力は、位相が<strong>進んだ</strong>母線から<strong>遅れた</strong>母線に流れ、位相差 <span class="lec-math-inline" data-tex="\delta"></span> が大きいほど多く流れます。ふだんの運転では電圧の大きさはどこも 1 pu に近いので、有効電力を動かすのは主に位相差です。</p>
 
@@ -181,7 +189,13 @@ net.get_pf_condition()</code></pre>
           <div class="lec-math" data-tex="Q_2 = \frac{V_1 V_2 \cos\delta - V_2^2}{X}"></div>
           <p lang="en">When the angle difference is small, <span class="lec-math-inline" data-tex="\cos\delta"></span> is close to 1 (above 0.98 for <span class="lec-math-inline" data-tex="|\delta| \le 10^\circ"></span>), and the formula becomes approximately</p>
           <p lang="ja">位相差が小さいときは <span class="lec-math-inline" data-tex="\cos\delta"></span> がほぼ 1 なので（<span class="lec-math-inline" data-tex="|\delta| \le 10^\circ"></span> なら 0.98 以上）、近似的に次の式になります。</p>
-          <div class="lec-math" data-tex="Q_2 \approx \frac{V_2}{X}\,(V_1 - V_2) \qquad (\cos\delta \approx 1)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{Q_2} \approx \frac{V_2}{X}\,\annot{2}{(V_1 - V_2)} \qquad (\cos\delta \approx 1)"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Reactive power arriving at bus 2</span><span lang="ja">母線 2 に届く無効電力</span></li>
+              <li><span lang="en">The voltage difference drives the reactive power!</span><span lang="ja">電圧の差が無効電力を流す！</span></li>
+            </ol>
+          </figure>
           <p lang="en">Reactive power flows from the higher voltage to the lower voltage. Turned around, a bus that draws a lot of reactive power pulls its own voltage down. This is why voltage is kept up by supplying reactive power near where it is needed, and why the voltage, unlike the frequency, differs from bus to bus.</p>
           <p lang="ja">無効電力は、電圧の高い母線から低い母線に流れます。逆にいえば、無効電力を多く使う母線では、その母線の電圧が下がります。電圧を保つには必要な場所の近くで無効電力を供給すること、そして周波数と違い電圧が母線ごとに異なることは、この性質から来ています。</p>
           <div class="lec-callout is-key">
@@ -195,15 +209,36 @@ net.get_pf_condition()</code></pre>
           <h2><span lang="en">Newton's method in pictures</span><span lang="ja">ニュートン法を図で</span></h2>
           <p lang="en">For a network of <span class="lec-math-inline" data-tex="n"></span> buses, the power that flows from bus <span class="lec-math-inline" data-tex="i"></span> into the network follows from the voltages of all buses and the elements <span class="lec-math-inline" data-tex="Y_{im} = G_{im} + jB_{im}"></span> of the bus admittance matrix (the matrix that gives the bus currents from the bus voltages, <span class="lec-math-inline" data-tex="I = YV"></span>). These are the <strong>power equations</strong>:</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> 母線の系統で、母線 <span class="lec-math-inline" data-tex="i"></span> からネットワークに流れ出す電力は、すべての母線の電圧と、母線アドミタンス行列（母線電圧から母線電流を与える行列、<span class="lec-math-inline" data-tex="I = YV"></span>）の要素 <span class="lec-math-inline" data-tex="Y_{im} = G_{im} + jB_{im}"></span> で決まります。これが<strong>電力方程式</strong>です。</p>
-          <div class="lec-math" data-tex="\begin{aligned} P_i(V, \theta) &amp;= \sum_{m=1}^{n} V_i V_m \left( G_{im} \cos\theta_{im} + B_{im} \sin\theta_{im} \right) \\ Q_i(V, \theta) &amp;= \sum_{m=1}^{n} V_i V_m \left( G_{im} \sin\theta_{im} - B_{im} \cos\theta_{im} \right) \end{aligned} \qquad \theta_{im} = \theta_i - \theta_m"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{aligned} \annot{1}{P_i(V, \theta)} &amp;= \sum_{m=1}^{n} V_i V_m \left( \annot{2}{G_{im}} \cos\theta_{im} + \annot{3}{B_{im}} \sin\theta_{im} \right) \\ Q_i(V, \theta) &amp;= \sum_{m=1}^{n} V_i V_m \left( G_{im} \sin\theta_{im} - B_{im} \cos\theta_{im} \right) \end{aligned} \qquad \theta_{im} = \theta_i - \theta_m"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Power that bus <span class="lec-math-inline" data-tex="i"></span> sends into the network</span><span lang="ja">母線 <span class="lec-math-inline" data-tex="i"></span> から送電網へ流れ出す電力</span></li>
+              <li data-at="above"><span lang="en">Real part of <span class="lec-math-inline" data-tex="Y_{im}"></span> (conductance)</span><span lang="ja"><span class="lec-math-inline" data-tex="Y_{im}"></span> の実部（コンダクタンス）</span></li>
+              <li data-at="above"><span lang="en">Imaginary part of <span class="lec-math-inline" data-tex="Y_{im}"></span> (susceptance)</span><span lang="ja"><span class="lec-math-inline" data-tex="Y_{im}"></span> の虚部（サセプタンス）</span></li>
+            </ol>
+          </figure>
           <p lang="en">At the solution, these must equal the powers <span class="lec-math-inline" data-tex="P_i^\mathrm{spec}"></span>, <span class="lec-math-inline" data-tex="Q_i^\mathrm{spec}"></span> fixed at each bus. The differences are called the <strong>mismatches</strong>:</p>
           <p lang="ja">解では、これが各母線で決めた電力 <span class="lec-math-inline" data-tex="P_i^\mathrm{spec}"></span>、<span class="lec-math-inline" data-tex="Q_i^\mathrm{spec}"></span> に等しくなければなりません。その差を<strong>不平衡量</strong>（ミスマッチ）といいます。</p>
-          <div class="lec-math" data-tex="\Delta P_i = P_i^\mathrm{spec} - P_i(V, \theta), \qquad \Delta Q_i = Q_i^\mathrm{spec} - Q_i(V, \theta)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{\Delta P_i} = \annot{2}{P_i^\mathrm{spec}} - \annot{3}{P_i(V, \theta)}, \qquad \Delta Q_i = Q_i^\mathrm{spec} - Q_i(V, \theta)"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the mismatch: make it 0!</span><span lang="ja">これが不平衡量！ 0 にしたい</span></li>
+              <li><span lang="en">The value fixed at the bus</span><span lang="ja">母線ごとに決めた値</span></li>
+              <li data-at="above"><span lang="en">Computed from the trial voltages</span><span lang="ja">仮の電圧から計算した値</span></li>
+            </ol>
+          </figure>
           <p lang="en">The unknowns are the angles of all buses except the slack bus and the voltage magnitudes of the PQ buses; the equations are <span class="lec-math-inline" data-tex="\Delta P_i = 0"></span> at the same buses and <span class="lec-math-inline" data-tex="\Delta Q_i = 0"></span> at the PQ buses, as many as the unknowns. They are nonlinear (products of voltages and sines and cosines of angles), so they cannot be solved in one step. The calculation guesses the voltages, measures the mismatches, corrects the guess, and repeats.</p>
           <p lang="ja">未知数は、slack 母線以外のすべての母線の位相角と、PQ 母線の電圧の大きさです。式は、同じ母線の <span class="lec-math-inline" data-tex="\Delta P_i = 0"></span> と PQ 母線の <span class="lec-math-inline" data-tex="\Delta Q_i = 0"></span> で、未知数と同じ数だけあります。電圧どうしの積や位相角の sin・cos を含む非線形の式なので、一度では解けません。電圧を仮に決め、不平衡量を測り、仮の値を直す、という手順を繰り返して解きます。</p>
           <p lang="en"><strong>Newton's method</strong> (the Newton–Raphson method) is the standard way to correct the guess. Think of one unknown <span class="lec-math-inline" data-tex="x"></span> and a mismatch <span class="lec-math-inline" data-tex="f(x)"></span> that should become 0. At the current guess, draw the tangent of the curve and move to where the tangent crosses zero:</p>
           <p lang="ja">仮の値の直し方として標準的なのが<strong>ニュートン法</strong>（ニュートン・ラフソン法）です。未知数が 1 つ <span class="lec-math-inline" data-tex="x"></span> で、0 にしたい不平衡量が <span class="lec-math-inline" data-tex="f(x)"></span> だとします。今の仮の値で曲線の接線を引き、接線が 0 になる点に移ります。</p>
-          <div class="lec-math" data-tex="x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{3}{x_{k+1}} = x_k - \frac{\annot{1}{f(x_k)}}{\annot{2}{f'(x_k)}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The present mismatch</span><span lang="ja">今の不平衡量</span></li>
+              <li><span lang="en">Slope of the tangent: the Jacobian with many unknowns</span><span lang="ja">接線の傾き（未知数が多いとヤコビアン）</span></li>
+              <li><span lang="en">This is the next trial value!</span><span lang="ja">これが次の仮の値！</span></li>
+            </ol>
+          </figure>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
