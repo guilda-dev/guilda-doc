@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js?v=20261126"></script>
-  <link rel="stylesheet" href="style.css?v=20261126">
+  <script src="doc-lang.js?v=20261126b"></script>
+  <link rel="stylesheet" href="style.css?v=20261126b">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js?v=20261126"></script>
-  <script src="./database/list_Lectures.js?v=20261126"></script>
+  <script src="./database/list_Tutorials.js?v=20261126b"></script>
+  <script src="./database/list_Lectures.js?v=20261126b"></script>
 </head>
 <body class="home-layout">
 
@@ -60,7 +60,7 @@
         <h1 class="visually-hidden"><span lang="en">GUILDA Documentation: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span><span lang="ja">GUILDA ドキュメント: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span></h1>
         <picture>
           <source media="(prefers-reduced-motion: reduce)" srcset="./images/home/guilda-network.png">
-          <img src="./images/home/guilda-network.gif" width="1200" height="400" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
+          <img src="./images/home/guilda-network.gif" width="1200" height="311" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
         </picture>
       </div>
 
@@ -641,7 +641,7 @@ sys = net.get_sys();           % linearized model</code></pre>
               <figure>
                 <div class="vc-media"><img src="./images/about/carousel/02-single-line-diagram.png" alt="Black-and-white single-line diagram of the IEEE 14-bus system with generator, load and transformer symbols and bus names" data-alt-ja="発電機・負荷・変圧器の記号と母線名を描いた、IEEE 14 母線系統の白黒の単線結線図" loading="lazy"></div>
                 <figcaption>
-                  <span class="vc-caption"><span lang="en">A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper.</span><span lang="ja">潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列の幅に合わせて配置します。</span></span>
+                  <span class="vc-caption"><span lang="en">A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper (bus names in 6 pt).</span><span lang="ja">潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列幅に合わせて配置します（母線名は 6 pt）。</span></span>
                   <pre class="vc-cmd"><code>res = network.IEEE14bus().calculate_powerflow();
 G = res.plot_single_line_diagram();
 exportgraphics(G.ax, "ieee14.png", Resolution=300);</code></pre>
@@ -701,11 +701,12 @@ G.animate();</code></pre>
             </li>
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy"></div>
+                <div class="vc-media"><video src="./images/about/carousel/08-eigen-participation.mp4" poster="./images/about/carousel/08-eigen-participation.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Modes are clicked on the eigenvalue map of the linearized IEEE 68-bus system, and the network diagram beside it is recolored with the participation of each bus in that mode"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span lang="en">Eigenvalues of the model linearized at the operating point.</span><span lang="ja">動作点で近似線形化したモデルの固有値です。</span></span>
-                  <pre class="vc-cmd"><code>sys = net.get_sys();
-sys.plot_eigenvalue();</code></pre>
+                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.</span><span lang="ja">IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE68bus();
+res = net.get_sys();
+sct = res.plot_participation();   % click an eigenvalue, then a bus</code></pre>
                 </figcaption>
               </figure>
             </li>
@@ -756,10 +757,13 @@ G.BusHeightMode = "V";</code></pre>
             </li>
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><img src="./images/about/output-model-gui.png" alt="Model GUI of the network: add buttons and the table of buses on the left, the parameter tab on the right" data-alt-ja="ネットワークのモデル GUI。左に追加ボタンと母線の表、右にパラメータのタブがあります。" width="720" height="460" loading="lazy"></div>
+                <div class="vc-media"><video src="./images/about/carousel/09-app-gui.mp4" poster="./images/about/carousel/09-app-gui.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="In the GUILDA app, the active power of a load of the IEEE 14-bus system is changed in the model GUI, the power flow is run and the result window is opened, while the log records each action as MATLAB code"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span lang="en">The model GUI: the network as tables of buses, branches and components.</span><span lang="ja">モデルの GUI です。母線、ブランチ、機器の表で系統モデルを見られます。</span></span>
-                  <pre class="vc-cmd"><code>net.launch_gui();</code></pre>
+                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The GUILDA app opens the IEEE 14-bus system; the load at bus B009 is clicked on the network diagram and its active power P is changed from -0.295 to -0.6 in the model GUI. The Power flow tab then runs the power flow, and Analyze result opens the result window. Every action is kept as MATLAB code in the log below, and Export script writes it out as a script.</span><span lang="ja">GUILDA のアプリで IEEE 14 母線系統を開き、ネットワーク図で母線 B009 の負荷をクリックして、モデルの GUI で有効電力 P を -0.295 から -0.6 に書き換えています。続けて Power flow のタブで潮流計算を実行し、Analyze result で結果の窓を開いています。操作はすべて MATLAB のコードとして下のログに残り、Export script でスクリプトに書き出せます。</span></span>
+                  <pre class="vc-cmd"><code>h = GUILDA.launch_gui(network.IEEE14bus());
+% the log of the session:
+net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
+[res_pf, flag_pf] = net.calculate_powerflow();</code></pre>
                 </figcaption>
               </figure>
             </li>
