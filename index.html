@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <script src="doc-lang.js?v=20261126"></script>
+  <link rel="stylesheet" href="style.css?v=20261126">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js"></script>
-  <script src="./database/list_Lectures.js"></script>
+  <script src="./database/list_Tutorials.js?v=20261126"></script>
+  <script src="./database/list_Lectures.js?v=20261126"></script>
 </head>
 <body class="home-layout">
 
@@ -40,43 +40,37 @@
       <img src="./images/GUILDAicon.png" alt="GUILDA Logo" class="header-logo">
       
       <div class="tabs">
-        <button class="tab-button active" onclick="openTab('tab-home')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M6.5 12q2.75-5.5 5.5 0t5.5 0"/></svg><span lang="en">Home</span><span lang="ja">ホーム</span></button>
-        <button class="tab-button" onclick="openTab('tab-about')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About</span><span lang="ja">概要</span></button>
-        <button class="tab-button" onclick="openTab('tab-getting-started')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Getting Started</span><span lang="ja">はじめに</span></button>
-        <button class="tab-button" onclick="openTab('tab-tutorial')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></button>
-        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-reference"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/><path d="M1.5 12h2M20.5 12h2"/></svg><span lang="en">Reference</span><span lang="ja">リファレンス</span><span class="tab-ext" aria-hidden="true">↗</span></a>
-        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-developer"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="7" y="6.5" width="10" height="11" rx="1.5"/><path d="M1.5 12H7M4.5 9.5 7 12l-2.5 2.5M17 12h5.5M20 9.5l2.5 2.5-2.5 2.5M9.5 12h5M11 9.5h2M10.5 14.5h3"/></svg><span lang="en">For Developer</span><span lang="ja">開発者向け</span><span class="tab-ext" aria-hidden="true">↗</span></a>
+        <button class="tab-button active" onclick="openTab('tab-home')"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M6.5 12q2.75-5.5 5.5 0t5.5 0"/></svg><span lang="en">Home</span><span lang="ja">ホーム</span></button>
+        <button class="tab-button" onclick="openTab('tab-about')"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About</span><span lang="ja">概要</span></button>
+        <button class="tab-button" onclick="openTab('tab-getting-started')"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Getting Started</span><span lang="ja">はじめに</span></button>
+        <button class="tab-button" onclick="openTab('tab-tutorial')"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></button>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-reference"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/><path d="M1.5 12h2M20.5 12h2"/></svg><span lang="en">Reference</span><span lang="ja">リファレンス</span><span class="tab-ext" aria-hidden="true">↗</span></a>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-developer"><svg class="tab-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="7" y="6.5" width="10" height="11" rx="1.5"/><path d="M1.5 12H7M4.5 9.5 7 12l-2.5 2.5M17 12h5.5M20 9.5l2.5 2.5-2.5 2.5M9.5 12h5M11 9.5h2M10.5 14.5h3"/></svg><span lang="en">For Developer</span><span lang="ja">開発者向け</span><span class="tab-ext" aria-hidden="true">↗</span></a>
       </div>
     </div>
   </header>
 
   <main>
     <div id="tab-home" class="tab-content active">
-      <div class="hero">
-        <div class="hero-text">
-          <h1 class="hero-title"><span lang="en">GUILDA Documentation</span><span lang="ja">GUILDA ドキュメント</span></h1>
-          <p class="hero-subtitle">Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</p>
-        </div>
-        <div class="hero-mark" aria-hidden="true"><img src="./images/GUILDA-logo-square.png" alt="" width="128" height="128"></div>
+      <!-- Hero: a power-flow diagram whose network spells "GUILDA" (images/home/guilda-network.gif, 1200 px wide).
+           With reduced motion the still poster (guilda-network.png) is shown instead. The width and height
+           attributes only give the aspect ratio before the image loads; CSS sets height: auto, so a new
+           image with another height needs only new attribute values. The h1 is for screen readers. -->
+      <div class="home-hero">
+        <h1 class="visually-hidden"><span lang="en">GUILDA Documentation: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span><span lang="ja">GUILDA ドキュメント: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span></h1>
+        <picture>
+          <source media="(prefers-reduced-motion: reduce)" srcset="./images/home/guilda-network.png">
+          <img src="./images/home/guilda-network.gif" width="1200" height="400" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
+        </picture>
       </div>
 
       <p class="home-intro" lang="en">A MATLAB power-system simulator for students and researchers in systems and control. Combine blocks into models, then analyse and share them.</p>
       <p class="home-intro" lang="ja">システム制御を学ぶ学生や研究者に向けた、MATLAB で動く電力系統シミュレータです。部品を組み合わせてモデルを作り、解析したり共有したりできます。</p>
       <div class="home-actions">
-        <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
-        <a class="btn" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial and lecture notes</span><span lang="ja">チュートリアルと講義ノート</span></a>
-        <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
+        <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
+        <a class="btn" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial and lecture notes</span><span lang="ja">チュートリアルと講義ノート</span></a>
+        <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
       </div>
-
-      <!-- Home animation: a power-flow diagram whose network spells "GUILDA" (images/home/guilda-network.gif, 1200x400).
-           With reduced motion the still poster (guilda-network.png) is shown instead. -->
-      <figure class="home-network">
-        <picture>
-          <source media="(prefers-reduced-motion: reduce)" srcset="./images/home/guilda-network.png">
-          <img src="./images/home/guilda-network.gif" width="1200" height="400" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
-        </picture>
-        <figcaption><span lang="en">A network that spells GUILDA, with its power flow animated.</span><span lang="ja">GUILDA の文字を描く系統と、その潮流のアニメーションです。</span></figcaption>
-      </figure>
 
       <section class="home-try" aria-labelledby="home-try-title">
         <h2 id="home-try-title"><span lang="en">Try it in a few lines</span><span lang="ja">数行で試す</span></h2>
@@ -98,7 +92,7 @@ sys = net.get_sys();           % linearized model</code></pre>
       <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
       <ol class="analysis-list">
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <path class="ai-axis" d="M6 40 H44 M10 44 V6"/>
             <path class="ai-ink is-dashed" d="M24 40 A14 14 0 0 0 20.4 30.6"/>
             <path class="ai-brand" d="M10 40 L36 14 M36 14 L29 15.6 M36 14 L34.4 21"/>
@@ -113,7 +107,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <path class="ai-axis" d="M4 26 H44 M6 6 V44"/>
             <path class="ai-axis is-dashed" d="M14 8 V42"/>
             <path class="ai-brand" d="M6 26 H14 C17 26 17 10 21 10 C25 10 25 38 29 38 C32 38 32 18 35 18 C38 18 38 31 40.5 31 C42.5 31 43 26 44 26"/>
@@ -125,7 +119,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <path class="ai-axis" d="M6 42 H44 M8 44 V6"/>
             <path class="ai-ink" d="M8 38 C18 37 24 31 28 24 C32 17 37 11 44 9"/>
             <path class="ai-brand" d="M14 39 L42 10"/>
@@ -139,7 +133,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <path class="ai-axis" d="M6 42 H44 M8 44 V6"/>
             <path class="ai-brand is-dashed" d="M37 27 V42"/>
             <path class="ai-ink" d="M8 11 C21 12 31 17 37 27"/>
@@ -154,7 +148,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <ellipse class="ai-axis" cx="22" cy="26" rx="17" ry="12"/>
             <ellipse class="ai-axis" cx="22" cy="26" rx="10.5" ry="7"/>
             <ellipse class="ai-axis" cx="22" cy="26" rx="4" ry="2.6"/>
@@ -169,7 +163,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <rect class="ai-ink" x="17" y="7" width="15" height="11" rx="1.5"/>
             <rect class="ai-brand" x="17" y="30" width="15" height="11" rx="1.5"/>
             <path class="ai-axis" d="M4 12.5 H17 M32 12.5 H44 M39 12.5 V35.5 H32 M17 35.5 H10 V12.5"/>
@@ -184,7 +178,7 @@ sys = net.get_sys();           % linearized model</code></pre>
           </div>
         </li>
         <li class="analysis-item">
-          <svg class="analysis-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <svg class="analysis-icon" width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 48 48" aria-hidden="true">
             <path class="ai-axis" d="M6 38 L18 44 L32 36 L42 41 M18 44 L22 33 M32 36 L22 33 M6 38 L22 33"/>
             <path class="ai-ink" d="M6 38 V24 M18 44 V30 M32 36 V26 M42 41 V31"/>
             <path class="ai-brand" d="M22 33 V8"/>
@@ -636,41 +630,21 @@ sys = net.get_sys();           % linearized model</code></pre>
 
            The media and their captions and commands come from images/about/carousel/manifest.md.
            The dots, the counter and the keyboard and swipe handling are made by the script; nothing else needs
-           editing. Order: animations and the interactive recordings first, then the still figures. Media are shown whole inside a 16:10 frame (object-fit: contain). Only the video of the item
-           on screen plays; the others are paused, and with reduced motion videos do not play by themselves. -->
+           editing. Order: from simple results to richer ones (power flow, time response, linearization, OPF),
+           then the recordings of someone using a figure or the GUI. Media are shown whole inside a 16:10 frame
+           (object-fit: contain). The video of the item on screen plays from its start whenever that item is shown;
+           the others are paused, and with reduced motion videos do not play by themselves. -->
       <section class="vc" aria-roledescription="carousel" aria-labelledby="about-output">
         <div class="vc-viewport">
           <ol class="vc-track">
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><video src="./images/about/carousel/06-explore-click.mp4" poster="./images/about/carousel/06-explore-click.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The playback bar of the IEEE 14-bus network diagram is dragged to the fault, and clicked buses are selected in the diagram and in the voltage chart beside it"></video></div>
+                <div class="vc-media"><img src="./images/about/carousel/02-single-line-diagram.png" alt="Black-and-white single-line diagram of the IEEE 14-bus system with generator, load and transformer symbols and bus names" data-alt-ja="発電機・負荷・変圧器の記号と母線名を描いた、IEEE 14 母線系統の白黒の単線結線図" loading="lazy"></div>
                 <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Drag the playback bar to the moment of the fault and click buses: a few lines in <code>ElementClickedFcn</code> select the clicked bus both in the diagram and in the |V| chart. The pointer and the blue click rings were drawn onto the recording to show where it was clicked.</span><span lang="ja">再生バーをドラッグして事故の瞬間に移動し、母線をクリックしています。<code>ElementClickedFcn</code> に書いた数行で、クリックした母線がネットワーク図と右の |V| のグラフの両方で選択されます。マウスポインタと青いクリックの輪は、操作した位置を示すために録画に描き加えたものです。</span></span>
-                  <pre class="vc-cmd"><code>[G, G_chart] = res.plot_diagram();
-G.ElementClickedFcn = @(G, d) select_bus(G, G_chart, d);
-
-function select_bus(G, G_chart, d)
-    if d.Kind == "bus"
-        G.clear_selection();       G.select(d.Tag);
-        G_chart.clear_selection(); G_chart.select(d.Tag);
-    end
-end</code></pre>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="vc-item">
-              <figure>
-                <div class="vc-media"><video src="./images/about/carousel/07-control-panel.mp4" poster="./images/about/carousel/07-control-panel.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The control panel of the IEEE 39-bus network diagram switches the colours, the 3D drawing and the bus height, and the figure is redrawn each time"></video></div>
-                <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The panel of <code>show_controls</code> switches the colour, the bus colour, the 3D drawing and the bus height, and a command sets the marker size. The panel and the properties stay in step: a change from either one redraws the figure. The pointer and the blue click rings were drawn onto the recording.</span><span lang="ja"><code>show_controls</code> で出したパネルから、色、母線の色、3D 表示、母線の高さを切り替え、コマンドでマーカーの大きさを変えています。パネルとプロパティは常に同期しており、どちらで変えても図が更新されます。マウスポインタと青いクリックの輪は、録画に描き加えたものです。</span></span>
-                  <pre class="vc-cmd"><code>res = network.IEEE39Bus().calculate_powerflow();
-G = res.plot_diagram();
-G.show_controls();
-G.ColorMode = "P";
-G.BusColorMode = "V";
-G.MarkerSizeMode = "S";
-G.Dimension = "3D";
-G.BusHeightMode = "V";</code></pre>
+                  <span class="vc-caption"><span lang="en">A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper.</span><span lang="ja">潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列の幅に合わせて配置します。</span></span>
+                  <pre class="vc-cmd"><code>res = network.IEEE14bus().calculate_powerflow();
+G = res.plot_single_line_diagram();
+exportgraphics(G.ax, "ieee14.png", Resolution=300);</code></pre>
                 </figcaption>
               </figure>
             </li>
@@ -685,6 +659,16 @@ sc.add_fault("B008", [1, 1.05]);
 res = net.simulate("fault");
 [G, G_chart] = res.plot_diagram();
 G.play();                        % or drag the playback bar</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">The time response itself: the frequency deviation of the generators after a fault at bus B008 (IEEE 14-bus system).</span><span lang="ja">時間応答そのものも描けます。母線 B008 の事故の後の、発電機の周波数偏差です（IEEE 14 母線系統）。</span></span>
+                  <pre class="vc-cmd"><code>res = net.simulate("fault");
+res.plot_trajectory(Quantity="omega");</code></pre>
                 </figcaption>
               </figure>
             </li>
@@ -717,6 +701,16 @@ G.animate();</code></pre>
             </li>
             <li class="vc-item">
               <figure>
+                <div class="vc-media"><img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Eigenvalues of the model linearized at the operating point.</span><span lang="ja">動作点で近似線形化したモデルの固有値です。</span></span>
+                  <pre class="vc-cmd"><code>sys = net.get_sys();
+sys.plot_eigenvalue();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
                 <div class="vc-media"><img src="./images/about/carousel/01-opf-lmp.png" alt="Locational marginal prices of the IEEE 14-bus system shown by colour on the network diagram, with the congested branch highlighted" data-alt-ja="IEEE 14 母線系統の地点別限界価格を色で示したネットワーク図。混雑したブランチが強調されています。" loading="lazy"></div>
                 <figcaption>
                   <span class="vc-caption"><span lang="en">The locational marginal price (LMP) of each bus from an AC optimal power flow, shown by colour. The branch at its capacity limit is highlighted, so you can see how congestion splits the prices.</span><span lang="ja">最適潮流計算（AC OPF）の結果から、各母線の地点別限界価格（LMP）を色で表しています。送電容量の上限に達したブランチが強調され、混雑によって価格が分かれる様子が分かります。</span></span>
@@ -729,32 +723,34 @@ G = res.plot_lmp(LabelMode="bus");</code></pre>
             </li>
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><img src="./images/about/carousel/02-single-line-diagram.png" alt="Black-and-white single-line diagram of the IEEE 14-bus system with generator, load and transformer symbols and bus names" data-alt-ja="発電機・負荷・変圧器の記号と母線名を描いた、IEEE 14 母線系統の白黒の単線結線図" loading="lazy"></div>
+                <div class="vc-media"><video src="./images/about/carousel/06-explore-click.mp4" poster="./images/about/carousel/06-explore-click.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The playback bar of the IEEE 14-bus network diagram is dragged to the fault, and clicked buses are selected in the diagram and in the voltage chart beside it"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span lang="en">A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper.</span><span lang="ja">潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列の幅に合わせて配置します。</span></span>
-                  <pre class="vc-cmd"><code>res = network.IEEE14bus().calculate_powerflow();
-G = res.plot_single_line_diagram();
-exportgraphics(G.ax, "ieee14.png", Resolution=300);</code></pre>
+                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Drag the playback bar to the moment of the fault and click buses: a few lines in <code>ElementClickedFcn</code> select the clicked bus both in the diagram and in the |V| chart. The pointer and the blue click rings were drawn onto the recording to show where it was clicked.</span><span lang="ja">再生バーをドラッグして事故の瞬間に移動し、母線をクリックしています。<code>ElementClickedFcn</code> に書いた数行で、クリックした母線がネットワーク図と右の |V| のグラフの両方で選択されます。マウスポインタと青いクリックの輪は、操作した位置を示すために録画に描き加えたものです。</span></span>
+                  <pre class="vc-cmd"><code>[G, G_chart] = res.plot_diagram();
+G.ElementClickedFcn = @(G, d) select_bus(G, G_chart, d);
+
+function select_bus(G, G_chart, d)
+    if d.Kind == "bus"
+        G.clear_selection();       G.select(d.Tag);
+        G_chart.clear_selection(); G_chart.select(d.Tag);
+    end
+end</code></pre>
                 </figcaption>
               </figure>
             </li>
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625" loading="lazy"></div>
+                <div class="vc-media"><video src="./images/about/carousel/07-control-panel.mp4" poster="./images/about/carousel/07-control-panel.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The control panel of the IEEE 39-bus network diagram switches the colours, the 3D drawing and the bus height, and the figure is redrawn each time"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span lang="en">The time response itself: the frequency deviation of the generators after a fault at bus B008 (IEEE 14-bus system).</span><span lang="ja">時間応答そのものも描けます。母線 B008 の事故の後の、発電機の周波数偏差です（IEEE 14 母線系統）。</span></span>
-                  <pre class="vc-cmd"><code>res = net.simulate("fault");
-res.plot_trajectory(Quantity="omega");</code></pre>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="vc-item">
-              <figure>
-                <div class="vc-media"><img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy"></div>
-                <figcaption>
-                  <span class="vc-caption"><span lang="en">Eigenvalues of the model linearized at the operating point.</span><span lang="ja">動作点で近似線形化したモデルの固有値です。</span></span>
-                  <pre class="vc-cmd"><code>sys = net.get_sys();
-sys.plot_eigenvalue();</code></pre>
+                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The panel of <code>show_controls</code> switches the colour, the bus colour, the 3D drawing and the bus height, and a command sets the marker size. The panel and the properties stay in step: a change from either one redraws the figure. The pointer and the blue click rings were drawn onto the recording.</span><span lang="ja"><code>show_controls</code> で出したパネルから、色、母線の色、3D 表示、母線の高さを切り替え、コマンドでマーカーの大きさを変えています。パネルとプロパティは常に同期しており、どちらで変えても図が更新されます。マウスポインタと青いクリックの輪は、録画に描き加えたものです。</span></span>
+                  <pre class="vc-cmd"><code>res = network.IEEE39Bus().calculate_powerflow();
+G = res.plot_diagram();
+G.show_controls();
+G.ColorMode = "P";
+G.BusColorMode = "V";
+G.MarkerSizeMode = "S";
+G.Dimension = "3D";
+G.BusHeightMode = "V";</code></pre>
                 </figcaption>
               </figure>
             </li>
@@ -1382,8 +1378,9 @@ sol = net.simulate("fault");</code></pre>
     }
 
     // Carousels (section.vc, About tab): one item at a time; prev/next buttons, dots, arrow keys
-    // and a horizontal swipe move between items. There is no autoplay. Only the video of the item
-    // on screen plays, and with prefers-reduced-motion videos do not start by themselves (they show
+    // and a horizontal swipe move between items. The carousel does not advance by itself. The video of
+    // the item on screen plays from its start each time the item (or the About tab) is shown, and the
+    // other videos are paused. With prefers-reduced-motion videos do not start by themselves (they show
     // their poster and controls). Items that are off screen are inert, so Tab skips them.
     function wireCarousels() {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1420,6 +1417,13 @@ sol = net.simulate("fault");</code></pre>
           dots.appendChild(b);
           return b;
         });
+        // Play a video from its first frame; a browser that refuses autoplay keeps the poster
+        function playFromStart(v) {
+          if (reduceMotion.matches) return;
+          try { v.currentTime = 0; } catch (e) { /* not seekable yet: it starts at 0 anyway */ }
+          const p = v.play();
+          if (p) p.catch(() => {});
+        }
         function go(i) {
           index = (i + items.length) % items.length;
           track.style.transform = `translateX(${-100 * index}%)`;
@@ -1429,7 +1433,7 @@ sol = net.simulate("fault");</code></pre>
             item.inert = !on;
             item.setAttribute('aria-hidden', String(!on));
             item.querySelectorAll('video').forEach(v => {
-              if (on && shown() && !reduceMotion.matches) { const p = v.play(); if (p) p.catch(() => {}); }
+              if (on && shown()) playFromStart(v);
               else v.pause();
             });
             item.querySelectorAll('img[loading="lazy"]').forEach(img => { if (Math.abs(k - index) <= 1) img.loading = 'eager'; });
@@ -1462,12 +1466,15 @@ sol = net.simulate("fault");</code></pre>
           if (Math.abs(dx) > 40 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
           x0 = y0 = null;
         });
-        // Videos play only while their tab is open
+        // Videos play only while their tab is open, from the start each time the tab is opened
+        let wasShown = shown();
         document.addEventListener('guilda-tabchange', () => {
           fitHeight();
+          const now = shown();
           items[index].querySelectorAll('video').forEach(v => {
-            if (shown() && !reduceMotion.matches) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+            if (now && !wasShown) playFromStart(v); else if (!now) v.pause();
           });
+          wasShown = now;
         });
         go(0);
       });
