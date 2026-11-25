@@ -261,8 +261,8 @@ net.get_pf_condition()</code></pre>
             <figcaption lang="en">The largest mismatch <span class="lec-math-inline" data-tex="\max(|\Delta P_i|, |\Delta Q_i|)"></span> of the IEEE 9-bus system at each Newton iteration <span class="lec-math-inline" data-tex="k"></span> from the flat start, computed and drawn with GUILDA (<code>plot_convergence</code>, log scale). It drops below the tolerance 10⁻⁸ pu (dashed) after four iterations.</figcaption>
             <figcaption lang="ja">IEEE 9 母線系統をフラットスタートからニュートン法で解いたときの、反復 <span class="lec-math-inline" data-tex="k"></span> ごとの不平衡量の最大値 <span class="lec-math-inline" data-tex="\max(|\Delta P_i|, |\Delta Q_i|)"></span> です（GUILDA の <code>plot_convergence</code> で描画、対数目盛）。4 回の反復で許容値 10⁻⁸ pu（破線）を下回ります。</figcaption>
           </figure>
-          <p lang="en">GUILDA's power flow calculation uses Newton's method by default and stops when the largest mismatch is below the tolerance. Other methods can be chosen as an option; their details are left to the Live Script. To solve the IEEE 9-bus system from the flat start and draw the mismatch at each iteration:</p>
-          <p lang="ja">GUILDA の潮流計算は、既定ではニュートン法を使い、不平衡量の最大値が許容値を下回ったところで止まります。オプションでほかの計算方法も選べますが、詳しくはライブスクリプトで扱います。IEEE 9 母線系統をフラットスタートから解き、反復ごとの不平衡量を図にするには次のようにします。</p>
+          <p lang="en">GUILDA's power flow calculation uses Newton's method by default and stops when the largest mismatch is below the tolerance. Its unknowns are the real and imaginary parts of the bus voltages (rectangular coordinates) instead of the angles and magnitudes above: the same method in other coordinates. Other methods can be chosen as an option; their details are left to the Live Script. To solve the IEEE 9-bus system from the flat start and draw the mismatch at each iteration:</p>
+          <p lang="ja">GUILDA の潮流計算は、既定ではニュートン法を使い、不平衡量の最大値が許容値を下回ったところで止まります。未知数は、上の位相角と大きさではなく、母線電圧の実部と虚部（直交座標）です。考え方は同じで、座標が違うだけです。オプションでほかの計算方法も選べますが、詳しくはライブスクリプトで扱います。IEEE 9 母線系統をフラットスタートから解き、反復ごとの不平衡量を図にするには次のようにします。</p>
           <pre class="lec-cmd"><code>net = network.IEEE9bus();
 result = net.calculate_powerflow(WarmStart=false);
 result.plot_convergence();</code></pre>
