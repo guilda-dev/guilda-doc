@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <style>
     .lec-svg .lec7-hollow { fill: var(--surface); stroke: var(--gem-1); stroke-width: 2; }
@@ -69,7 +70,13 @@
           <div class="lec-math" data-tex="P = \frac{EV}{X}\sin\delta, \qquad Q = \frac{EV\cos\delta - V^2}{X}"></div>
           <p lang="en">Eliminating <span class="lec-math-inline" data-tex="\delta"></span> with <span class="lec-math-inline" data-tex="\sin^2\delta + \cos^2\delta = 1"></span> gives the load voltage for a given load:</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="\sin^2\delta + \cos^2\delta = 1"></span> を使って <span class="lec-math-inline" data-tex="\delta"></span> を消すと、負荷を決めたときの負荷の電圧が求まります。</p>
-          <div class="lec-math" data-tex="V^2 = \frac{E^2}{2} - QX \pm \sqrt{\frac{E^4}{4} - X^2P^2 - E^2XQ}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="V^2 = \frac{E^2}{2} - QX \annot{1}{\pm} \sqrt{\annot{2}{\frac{E^4}{4} - X^2P^2 - E^2XQ}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">+ is the upper branch, − the lower branch</span><span lang="ja">+ が上側の枝、− が下側の枝</span></li>
+              <li><span lang="en">This becomes 0 at the nose! Below 0, no solution</span><span lang="ja">ノーズ点でこれが 0！ 負なら解がない</span></li>
+            </ol>
+          </figure>
           <p lang="en">For a load of fixed power factor, <span class="lec-math-inline" data-tex="Q = P\tan\varphi"></span>, this traces the PV curve as <span class="lec-math-inline" data-tex="P"></span> grows: the sign + gives the upper branch, the sign − the lower branch.</p>
           <p lang="ja">力率が一定の負荷（<span class="lec-math-inline" data-tex="Q = P\tan\varphi"></span>）で <span class="lec-math-inline" data-tex="P"></span> を大きくしていくと、この式が PV カーブを描きます。符号 + が上側の枝、符号 − が下側の枝です。</p>
 
@@ -199,7 +206,13 @@
           <h2><span lang="en">Why reactive power matters for the voltage</span><span lang="ja">電圧にとって無効電力が大切な理由</span></h2>
           <p lang="en">On transmission lines, which are mostly reactive, active power flows with the angle difference and reactive power with the voltage difference. In the two-bus system above, when the angle difference is small (<span class="lec-math-inline" data-tex="\cos\delta \approx 1"></span>), the reactive power that reaches the load becomes</p>
           <p lang="ja">ほぼリアクタンスだけでできている送電線では、有効電力は位相差で、無効電力は電圧の大きさの差で流れます。上の 2 母線の系統で位相差が小さいとき（<span class="lec-math-inline" data-tex="\cos\delta \approx 1"></span>）、負荷に届く無効電力は次のようになります。</p>
-          <div class="lec-math" data-tex="Q \approx \frac{V}{X}\,(E - V)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{Q} \approx \frac{V}{X}\,\annot{2}{(E - V)}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Reactive power reaching the load</span><span lang="ja">負荷に届く無効電力</span></li>
+              <li><span lang="en">Needs the load voltage to be lower than the sending end!</span><span lang="ja">負荷の電圧が送電端より低い分だけ届く！</span></li>
+            </ol>
+          </figure>
           <p lang="en">To deliver reactive power to a load, the voltage at the load must be lower than at the sending end. The more reactive power the load takes, the lower its voltage. Reactive power is also hard to send far: the line itself consumes reactive power in its reactance, and this loss grows with the square of the current. Reactive power is therefore best supplied close to where it is used.</p>
           <p lang="ja">負荷に無効電力を届けるには、負荷の電圧が送電端より低くなければなりません。負荷が使う無効電力が多いほど、その電圧は下がります。さらに、無効電力は遠くへ送りにくい電力です。送電線そのものがリアクタンスで無効電力を消費し、その量は電流の 2 乗で増えるからです。そのため、無効電力は使う場所の近くで供給するのがよいとされます。</p>
 
@@ -221,7 +234,13 @@
           <p lang="ja">PV カーブは、負荷を少しずつ増やしながら潮流計算を何度も解けば描けそうです。しかし、ノーズ点の近くではうまくいきません。ふつうの潮流計算は負荷を決めて電圧を求めますが、ノーズ点の近くでは、ニュートン法がたどる傾き（ヤコビアン）がある向きにほとんど平らになり、一歩一歩が当てにならなくなります。ノーズ点の先には解がそもそもないので、下側の枝にはたどり着けません。</p>
           <p lang="en">The <strong>continuation power flow</strong> (CPF) avoids this. It scales the chosen loads with one parameter <span class="lec-math-inline" data-tex="\lambda"></span>: for each chosen load bus <span class="lec-math-inline" data-tex="i"></span>, with the loads <span class="lec-math-inline" data-tex="P_{\mathrm{L}i}^0"></span>, <span class="lec-math-inline" data-tex="Q_{\mathrm{L}i}^0"></span> of the starting point (<span class="lec-math-inline" data-tex="\lambda = 0"></span>),</p>
           <p lang="ja"><strong>連続潮流計算</strong>（CPF）は、これを避ける方法です。選んだ負荷を 1 つのパラメータ <span class="lec-math-inline" data-tex="\lambda"></span> で大きくしていきます。選んだ負荷母線 <span class="lec-math-inline" data-tex="i"></span> の出発点（<span class="lec-math-inline" data-tex="\lambda = 0"></span>）の負荷を <span class="lec-math-inline" data-tex="P_{\mathrm{L}i}^0"></span>、<span class="lec-math-inline" data-tex="Q_{\mathrm{L}i}^0"></span> として、次のようにします。</p>
-          <div class="lec-math" data-tex="P_{\mathrm{L}i}(\lambda) = (1+\lambda)\,P_{\mathrm{L}i}^0, \qquad Q_{\mathrm{L}i}(\lambda) = (1+\lambda)\,Q_{\mathrm{L}i}^0"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="P_{\mathrm{L}i}(\lambda) = \annot{1}{(1+\lambda)}\,\annot{2}{P_{\mathrm{L}i}^0}, \qquad Q_{\mathrm{L}i}(\lambda) = (1+\lambda)\,Q_{\mathrm{L}i}^0"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the loading parameter λ!</span><span lang="ja">これが負荷を増やすパラメータ λ！</span></li>
+              <li><span lang="en">The load at the start (λ = 0)</span><span lang="ja">出発点（λ = 0）の負荷</span></li>
+            </ol>
+          </figure>
           <p lang="en">and treats <span class="lec-math-inline" data-tex="\lambda"></span> as one more unknown. The power flow equations <span class="lec-math-inline" data-tex="f(\theta, V, \lambda) = 0"></span> then have one unknown more than equations, so their solutions form a curve, the path. Each step along it has two parts:</p>
           <p lang="ja">そして <span class="lec-math-inline" data-tex="\lambda"></span> も未知数の 1 つとして扱います。すると電力方程式 <span class="lec-math-inline" data-tex="f(\theta, V, \lambda) = 0"></span> は式より未知数が 1 つ多くなり、その解は 1 本の曲線（経路）になります。経路に沿った 1 歩は 2 つの段階からなります。</p>
           <ul>
@@ -232,7 +251,13 @@
           </ul>
           <p lang="en">With <span class="lec-math-inline" data-tex="x = (\theta, V, \lambda)"></span> collecting all the unknowns, <span class="lec-math-inline" data-tex="x_k"></span> the current point and <span class="lec-math-inline" data-tex="h"></span> the step length, the corrector solves</p>
           <p lang="ja">未知数をまとめて <span class="lec-math-inline" data-tex="x = (\theta, V, \lambda)"></span>、今の点を <span class="lec-math-inline" data-tex="x_k"></span>、歩幅を <span class="lec-math-inline" data-tex="h"></span> とすると、修正子が解く式は次のとおりです。</p>
-          <div class="lec-math" data-tex="f(x) = 0, \qquad \lVert x - x_k \rVert^2 = h^2"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{f(x) = 0}, \qquad \annot{2}{\lVert x - x_k \rVert^2 = h^2}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The power equations, with λ as one more unknown</span><span lang="ja">電力方程式（λ も未知数）</span></li>
+              <li><span lang="en">Arc-length condition: one step of length h from the present point</span><span lang="ja">弧長の条件：今の点から歩幅 h だけ進む</span></li>
+            </ol>
+          </figure>
           <p lang="en">The second equation (the arc-length condition) replaces "the load is fixed". GUILDA's continuation power flow uses this condition in its corrector.</p>
           <p lang="ja">2 つ目の式（弧長の条件）が、「負荷を決める」条件の代わりです。GUILDA の連続潮流計算も、修正子でこの条件を使っています。</p>
 
@@ -381,7 +406,13 @@ D.animate();         % one frame per step</code></pre>
           <h2><span lang="en">Keeping the voltage up</span><span lang="ja">電圧を支える対策</span></h2>
           <p lang="en">Since the nose is decided largely by reactive power, the main countermeasure is to supply reactive power close to the loads. Equipment for this is called <strong>reactive power compensation</strong> equipment (調相設備 in Japanese). The simplest is a shunt capacitor of susceptance <span class="lec-math-inline" data-tex="B_\mathrm{C}"></span> at the load bus, which supplies the reactive power</p>
           <p lang="ja">ノーズ点の位置は無効電力で大きく決まるので、いちばんの対策は、負荷の近くで無効電力を供給することです。そのための設備を<strong>調相設備</strong>といいます。いちばん簡単なのは、負荷の母線に付けるサセプタンス <span class="lec-math-inline" data-tex="B_\mathrm{C}"></span> の電力用コンデンサで、次の無効電力を供給します。</p>
-          <div class="lec-math" data-tex="Q_\mathrm{C} = B_\mathrm{C}V^2"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{Q_\mathrm{C}} = B_\mathrm{C}\annot{2}{V^2}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Reactive power supplied on the spot</span><span lang="ja">その場で供給する無効電力</span></li>
+              <li><span lang="en">Square of the voltage: less help when the voltage falls</span><span lang="ja">電圧の 2 乗：電圧が下がると助けが減る</span></li>
+            </ol>
+          </figure>
           <p lang="en">so the line has to carry only <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span> of the reactive power of the load.</p>
           <p lang="ja">そのため、送電線が運ぶ無効電力は、負荷の無効電力のうち <span class="lec-math-inline" data-tex="Q - B_\mathrm{C}V^2"></span> だけになります。</p>
 
