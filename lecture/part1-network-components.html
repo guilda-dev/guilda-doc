@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec1- ; shared lecture CSS (lec-*) is in style.css. -->
   <style>
@@ -165,7 +166,14 @@
           <h2><span lang="en">Per-unit values</span><span lang="ja">単位法</span></h2>
           <p lang="en">One network contains voltages from hundreds of kilovolts down to a few kilovolts, and powers from a few megawatts to thousands. To compare them easily, each quantity is divided by a chosen <strong>base value</strong>. The result is the <strong>per-unit value</strong> (pu): a quantity <span class="lec-math-inline" data-tex="x"></span> with the base <span class="lec-math-inline" data-tex="x_\mathrm{base}"></span> becomes <span class="lec-math-inline" data-tex="x_\mathrm{pu}"></span>.</p>
           <p lang="ja">1 つの系統の中には、数百 kV から数 kV までの電圧と、数 MW から数千 MW までの電力が混ざっています。比べやすくするため、それぞれの量を決めておいた<strong>基準値</strong>で割って表します。これを<strong>単位法</strong>（per unit、pu）といいます。量 <span class="lec-math-inline" data-tex="x"></span> を基準値 <span class="lec-math-inline" data-tex="x_\mathrm{base}"></span> で割ったものが、単位法の値 <span class="lec-math-inline" data-tex="x_\mathrm{pu}"></span> です。</p>
-          <div class="lec-math" data-tex="x_\mathrm{pu} = \frac{x}{x_\mathrm{base}}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{x_\mathrm{pu}} = \frac{\annot{2}{x}}{\annot{3}{x_\mathrm{base}}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the per-unit value!</span><span lang="ja">これが単位法の値！</span></li>
+              <li data-at="above"><span lang="en">The actual value (kV, MW, …)</span><span lang="ja">実際の値（kV や MW など）</span></li>
+              <li><span lang="en">The base value, e.g. the rated voltage</span><span lang="ja">基準値（定格電圧など）</span></li>
+            </ol>
+          </figure>
           <p lang="en">One base power <span class="lec-math-inline" data-tex="S_\mathrm{base}"></span> (three-phase) is used for the whole network (100 MVA or 1000 MVA are common), and each voltage level has its own base voltage <span class="lec-math-inline" data-tex="V_\mathrm{base}"></span> (line-to-line), usually its rated voltage. The base current and the base impedance follow from these two:</p>
           <p lang="ja">基準の電力 <span class="lec-math-inline" data-tex="S_\mathrm{base}"></span>（三相分）は系統全体で 1 つ（100 MVA や 1000 MVA がよく使われます）、基準の電圧 <span class="lec-math-inline" data-tex="V_\mathrm{base}"></span>（線間電圧）は電圧の階級ごとに、ふつうはその定格電圧に決めます。基準の電流と基準のインピーダンスは、この 2 つから決まります。</p>
           <div class="lec-math" data-tex="I_\mathrm{base} = \frac{S_\mathrm{base}}{\sqrt{3}\,V_\mathrm{base}}, \qquad Z_\mathrm{base} = \frac{V_\mathrm{base}}{\sqrt{3}\,I_\mathrm{base}} = \frac{V_\mathrm{base}^2}{S_\mathrm{base}}"></div>
@@ -194,7 +202,13 @@
 
           <p lang="en">With the series admittance <span class="lec-math-inline" data-tex="y = 1/(R + jX)"></span>, the currents <span class="lec-math-inline" data-tex="I_{ij}"></span> and <span class="lec-math-inline" data-tex="I_{ji}"></span> that flow into the line at bus <span class="lec-math-inline" data-tex="i"></span> and at bus <span class="lec-math-inline" data-tex="j"></span> follow from the end voltages <span class="lec-math-inline" data-tex="V_i"></span>, <span class="lec-math-inline" data-tex="V_j"></span> (complex phasors in pu):</p>
           <p lang="ja">直列のアドミタンスを <span class="lec-math-inline" data-tex="y = 1/(R + jX)"></span> とすると、母線 <span class="lec-math-inline" data-tex="i"></span> の端と母線 <span class="lec-math-inline" data-tex="j"></span> の端から線路に流れ込む電流 <span class="lec-math-inline" data-tex="I_{ij}"></span>、<span class="lec-math-inline" data-tex="I_{ji}"></span> は、両端の電圧 <span class="lec-math-inline" data-tex="V_i"></span>、<span class="lec-math-inline" data-tex="V_j"></span>（単位法の複素数のフェーザ）から次のように決まります。</p>
-          <div class="lec-math" data-tex="\begin{bmatrix} I_{ij} \\ I_{ji} \end{bmatrix} = \begin{bmatrix} y + j\dfrac{B}{2} &amp; -y \\ -y &amp; y + j\dfrac{B}{2} \end{bmatrix} \begin{bmatrix} V_i \\ V_j \end{bmatrix}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{bmatrix} I_{ij} \\ I_{ji} \end{bmatrix} = \begin{bmatrix} \annot{1}{y} + \annot{2}{j\dfrac{B}{2}} &amp; -y \\ -y &amp; \annot{1}{y} + \annot{2}{j\dfrac{B}{2}} \end{bmatrix} \begin{bmatrix} V_i \\ V_j \end{bmatrix}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Current through the series impedance <span class="lec-math-inline" data-tex="R + jX"></span></span><span lang="ja">直列インピーダンス <span class="lec-math-inline" data-tex="R + jX"></span> を流れる分</span></li>
+              <li><span lang="en">Half of the line charging, at each end</span><span lang="ja">両端に半分ずつ置いた対地静電容量</span></li>
+            </ol>
+          </figure>
           <p lang="en">The term <span class="lec-math-inline" data-tex="y(V_i - V_j)"></span> is the current through the series impedance, and <span class="lec-math-inline" data-tex="jB/2 \cdot V_i"></span> the charging current at one end. (In GUILDA, the <code>pi</code> branch takes the shunt value of one end, <span class="lec-math-inline" data-tex="C = B/2"></span>.)</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="y(V_i - V_j)"></span> は直列インピーダンスを流れる電流、<span class="lec-math-inline" data-tex="jB/2 \cdot V_i"></span> は片端の充電電流です（GUILDA の <code>pi</code> ブランチは、片端の値 <span class="lec-math-inline" data-tex="C = B/2"></span> を指定します）。</p>
 
@@ -259,7 +273,14 @@
           <h2><span lang="en">The admittance matrix: I = YV</span><span lang="ja">アドミタンス行列：I = YV</span></h2>
           <p lang="en">Putting the branches together gives the whole network. The current <span class="lec-math-inline" data-tex="I_i"></span> that the equipment at bus <span class="lec-math-inline" data-tex="i"></span> injects into the network must flow out through the branches at that bus and its shunt element (Kirchhoff's current law). With the matrix of each branch above, this gives one linear equation per bus:</p>
           <p lang="ja">ブランチをつなぎ合わせると、系統全体になります。母線 <span class="lec-math-inline" data-tex="i"></span> の機器が送電網に注入する電流 <span class="lec-math-inline" data-tex="I_i"></span> は、その母線につながるブランチと並列の素子へ流れ出ます（キルヒホッフの電流則）。上のブランチの行列を使うと、母線ごとに 1 本の線形の式になります。</p>
-          <div class="lec-math" data-tex="I_i = \sum_{j=1}^{n} Y_{ij} V_j \quad (i = 1, \dots, n) \quad \Longleftrightarrow \quad I = Y V"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="I_i = \sum_{j=1}^{n} Y_{ij} V_j \quad (i = 1, \dots, n) \quad \Longleftrightarrow \quad \annot{1}{I} = \annot{2}{Y} \annot{3}{V}"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">Currents the equipment injects</span><span lang="ja">機器が注入する電流</span></li>
+              <li data-at="above"><span lang="en">This is the network itself! (the bus admittance matrix)</span><span lang="ja">これが送電網そのもの！（母線アドミタンス行列）</span></li>
+              <li><span lang="en">Bus voltages</span><span lang="ja">母線の電圧</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="n"></span> is the number of buses, and <span class="lec-math-inline" data-tex="Y"></span> is the <strong>bus admittance matrix</strong>. For a network of π lines, with <span class="lec-math-inline" data-tex="y_{ik}"></span> and <span class="lec-math-inline" data-tex="B_{ik}"></span> the series admittance and line charging of the line between buses <span class="lec-math-inline" data-tex="i"></span> and <span class="lec-math-inline" data-tex="k"></span>, and <span class="lec-math-inline" data-tex="y_{\mathrm{sh},i}"></span> the shunt admittance at bus <span class="lec-math-inline" data-tex="i"></span>, its elements are</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> は母線の数、<span class="lec-math-inline" data-tex="Y"></span> は<strong>母線アドミタンス行列</strong>です。π 型の送電線だけの系統では、母線 <span class="lec-math-inline" data-tex="i"></span> と <span class="lec-math-inline" data-tex="k"></span> を結ぶ線路の直列アドミタンスを <span class="lec-math-inline" data-tex="y_{ik}"></span>、対地静電容量のサセプタンスを <span class="lec-math-inline" data-tex="B_{ik}"></span>、母線 <span class="lec-math-inline" data-tex="i"></span> の並列アドミタンスを <span class="lec-math-inline" data-tex="y_{\mathrm{sh},i}"></span> とすると、要素は次のようになります。</p>
           <div class="lec-math" data-tex="Y_{ii} = \sum_{k \in \mathcal{N}_i} \left( y_{ik} + j\frac{B_{ik}}{2} \right) + y_{\mathrm{sh},i}, \qquad Y_{ik} = -y_{ik} \;\; (k \in \mathcal{N}_i)"></div>
@@ -414,7 +435,15 @@ Y = net.get_admittance_matrix()</code></pre>
 
           <p lang="en">This is the <strong>swing equation</strong>, the core of every generator model. With the rotor angle <span class="lec-math-inline" data-tex="\delta"></span> (rad), the speed deviation <span class="lec-math-inline" data-tex="\omega"></span> from the rated speed (pu) and the rated frequency <span class="lec-math-inline" data-tex="f_0"></span> (Hz), the form used in GUILDA is</p>
           <p lang="ja">これを式にしたものが<strong>動揺方程式</strong>で、どの発電機モデルにも含まれる中心の式です。回転子の角度を <span class="lec-math-inline" data-tex="\delta"></span>（rad）、定格の速さからのずれを <span class="lec-math-inline" data-tex="\omega"></span>（pu）、定格周波数を <span class="lec-math-inline" data-tex="f_0"></span>（Hz）とすると、GUILDA で使う形は次のとおりです。</p>
-          <div class="lec-math" data-tex="\frac{\mathrm{d}\delta}{\mathrm{d}t} = 2\pi f_0\,\omega, \qquad M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = P_\mathrm{m} - P_\mathrm{e} - D\,\omega"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\frac{\mathrm{d}\delta}{\mathrm{d}t} = 2\pi f_0\,\omega, \qquad \annot{1}{M}\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \annot{2}{P_\mathrm{m}} - \annot{3}{P_\mathrm{e}} - \annot{4}{D\,\omega}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the inertia of the rotor!</span><span lang="ja">これが回転子の慣性！</span></li>
+              <li><span lang="en">Mechanical input from the turbine</span><span lang="ja">タービンからの機械入力</span></li>
+              <li data-at="above"><span lang="en">Electrical output to the network</span><span lang="ja">送電網へ送り出す電気出力</span></li>
+              <li><span lang="en">Damping that calms the swings</span><span lang="ja">揺れを静める制動</span></li>
+            </ol>
+          </figure>
           <p lang="en"><span class="lec-math-inline" data-tex="M"></span> (s) is the <strong>inertia constant</strong>, <span class="lec-math-inline" data-tex="M = 2H"></span>, where <span class="lec-math-inline" data-tex="H"></span> (s) is the kinetic energy stored in the rotor at rated speed divided by the rated power: the heavier the rotor, the more slowly its speed changes for the same power difference. <span class="lec-math-inline" data-tex="D"></span> (pu) stands for damping that calms the swings. The inertia of all the generators together is what holds the frequency for the first seconds after a disturbance.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="M"></span>（s）は<strong>慣性定数</strong>で、定格の速さで回転子にたまる運動エネルギーを定格出力で割った値 <span class="lec-math-inline" data-tex="H"></span>（s、単位慣性定数）を使うと <span class="lec-math-inline" data-tex="M = 2H"></span> です。回転子が重いほど、同じ電力の差でも速さがゆっくり変わります。<span class="lec-math-inline" data-tex="D"></span>（pu）は揺れを静める制動の大きさを表します。外乱の後の最初の数秒間、周波数を支えているのは、すべての発電機の慣性を合わせたものです。</p>
           <p lang="en">The swing equation describes only the rotation. Inside the generator there are also windings whose magnetic flux changes with time: the field winding, fed by the exciter, and damper windings. A model can include more or fewer of them. A more detailed model is closer to a real machine but needs more parameters and more computation. GUILDA has five levels:</p>
@@ -442,7 +471,13 @@ Y = net.get_admittance_matrix()</code></pre>
           <h2><span lang="en">Load models</span><span lang="ja">負荷モデル</span></h2>
           <p lang="en">A load in an analysis stands for everything behind one substation: lighting, motors, heaters and electronic devices together. What matters for the network is how the power it draws changes when the voltage changes. Three simple types are used. Each consumes <span class="lec-math-inline" data-tex="P_0"></span> at the operating voltage <span class="lec-math-inline" data-tex="|V_0|"></span>, and</p>
           <p lang="ja">解析での負荷は、1 つの変電所の先にある照明・モーター・電熱器・電子機器などをまとめて表したものです。送電網にとって大切なのは、電圧が変わったときに負荷の消費電力がどう変わるかです。基本になるのは次の 3 つの型です。運転点の電圧 <span class="lec-math-inline" data-tex="|V_0|"></span> で <span class="lec-math-inline" data-tex="P_0"></span> を消費するとして、消費電力は次の式で表せます。</p>
-          <div class="lec-math" data-tex="P = P_0 \left( \frac{|V|}{|V_0|} \right)^{k}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="P = P_0 \left( \annot{1}{\frac{|V|}{|V_0|}} \right)^{\annot{2}{k}}"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">The voltage relative to the operating point</span><span lang="ja">運転点の電圧との比</span></li>
+              <li data-at="above"><span lang="en">This decides the load type! 0: power, 1: current, 2: impedance</span><span lang="ja">これが負荷の型を決める！ 0: 定電力、1: 定電流、2: 定インピーダンス</span></li>
+            </ol>
+          </figure>
           <p lang="en">with <span class="lec-math-inline" data-tex="k = 0"></span> for constant power, <span class="lec-math-inline" data-tex="k = 1"></span> for constant current and <span class="lec-math-inline" data-tex="k = 2"></span> for constant impedance. The reactive power follows the same rule with <span class="lec-math-inline" data-tex="Q_0"></span>.</p>
           <p lang="ja">定電力は <span class="lec-math-inline" data-tex="k = 0"></span>、定電流は <span class="lec-math-inline" data-tex="k = 1"></span>、定インピーダンスは <span class="lec-math-inline" data-tex="k = 2"></span> です。無効電力も、<span class="lec-math-inline" data-tex="Q_0"></span> を使って同じ式で表します。</p>
 
