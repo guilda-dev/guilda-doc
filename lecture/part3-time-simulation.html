@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec3- ; shared lecture CSS (lec-*) is in style.css. -->
   <style>
@@ -153,7 +154,15 @@
 
           <p lang="en">The <strong>swing equation</strong> writes this down. The generator models of GUILDA (classical, one-axis, two-axis and Park) use exactly this form:</p>
           <p lang="ja">これを式にしたものが<strong>動揺方程式</strong>です。GUILDA の発電機のモデル（古典・1 軸・2 軸・Park）は、どれもこの形を使っています。</p>
-          <div class="lec-math" data-tex="\begin{aligned} M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} &= P_\mathrm{m} - P_\mathrm{e} - D\,\omega \\ \frac{\mathrm{d}\delta}{\mathrm{d}t} &= 2\pi f_0\,\omega \end{aligned}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{aligned} \annot{1}{M}\,\frac{\mathrm{d}\omega}{\mathrm{d}t} &amp;= \annot{2}{P_\mathrm{m} - P_\mathrm{e}} - \annot{3}{D\,\omega} \\ \frac{\mathrm{d}\delta}{\mathrm{d}t} &amp;= \annot{4}{2\pi f_0\,\omega} \end{aligned}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the inertia of the rotor!</span><span lang="ja">これが回転子の慣性！</span></li>
+              <li data-at="above"><span lang="en">Power in minus power out</span><span lang="ja">入る電力と出る電力の差</span></li>
+              <li data-at="above"><span lang="en">Damping</span><span lang="ja">制動</span></li>
+              <li><span lang="en">A faster rotor moves its angle ahead</span><span lang="ja">速さのずれが角度を進める</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="\omega"></span> is the deviation of the rotor speed from the rated speed in per unit (0 at the rated speed), <span class="lec-math-inline" data-tex="\delta"></span> [rad] is the rotor angle measured against a frame that turns at the rated frequency <span class="lec-math-inline" data-tex="f_0"></span> [Hz], <span class="lec-math-inline" data-tex="M = 2H"></span> [s] is the inertia (<span class="lec-math-inline" data-tex="H"></span> is the inertia constant), <span class="lec-math-inline" data-tex="D"></span> [pu] is the damping coefficient, and the powers are in per unit.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="\omega"></span> は回転の速さの定格からのずれ（単位法、定格の速さで 0）、<span class="lec-math-inline" data-tex="\delta"></span> [rad] は定格の周波数 <span class="lec-math-inline" data-tex="f_0"></span> [Hz] で回る基準から測った回転子の角度、<span class="lec-math-inline" data-tex="M = 2H"></span> [s] は慣性（<span class="lec-math-inline" data-tex="H"></span> は慣性定数）、<span class="lec-math-inline" data-tex="D"></span> [pu] は制動係数で、電力は単位法の値です。</p>
           <dl class="lec-terms">
@@ -179,7 +188,13 @@
           <h2><span lang="en">Synchronizing power and damping</span><span lang="ja">同期化力と制動</span></h2>
           <p lang="en">The electrical output depends on the rotor angle. Model the generator as a constant internal voltage <span class="lec-math-inline" data-tex="E"></span> behind a reactance, and connect it through a lossless line to a network so large that its voltage <span class="lec-math-inline" data-tex="V"></span> and frequency do not change (an infinite bus). If <span class="lec-math-inline" data-tex="X"></span> is the total reactance between the two voltages and <span class="lec-math-inline" data-tex="\delta"></span> the angle of <span class="lec-math-inline" data-tex="E"></span> ahead of <span class="lec-math-inline" data-tex="V"></span>, the output is</p>
           <p lang="ja">電気出力は、回転子の角度によって変わります。発電機を、リアクタンスの奥にある一定の内部電圧 <span class="lec-math-inline" data-tex="E"></span> で表し、損失のない送電線で、電圧 <span class="lec-math-inline" data-tex="V"></span> と周波数が変わらないほど大きな系統（無限大母線）につなぎます。2 つの電圧の間のリアクタンスの合計を <span class="lec-math-inline" data-tex="X"></span>、<span class="lec-math-inline" data-tex="V"></span> から見た <span class="lec-math-inline" data-tex="E"></span> の進みの角度を <span class="lec-math-inline" data-tex="\delta"></span> とすると、電気出力は次の式になります。</p>
-          <div class="lec-math" data-tex="P_\mathrm{e} = \frac{E\,V}{X}\,\sin\delta = P_\mathrm{max}\sin\delta"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="P_\mathrm{e} = \frac{E\,V}{X}\,\sin\delta = \annot{1}{P_\mathrm{max}}\annot{2}{\sin\delta}"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">This is the most power the generator can send!</span><span lang="ja">これが送れる最大の電力！</span></li>
+              <li data-at="above"><span lang="en">Changes with the rotor angle</span><span lang="ja">回転子の角度で変わる</span></li>
+            </ol>
+          </figure>
           <p lang="en">Drawing this <strong>power–angle curve</strong> together with the mechanical power gives two crossings, <span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span> and <span class="lec-math-inline" data-tex="\delta_\mathrm{u} = \pi - \delta_\mathrm{s}"></span>. At both, input equals output, but they behave differently.</p>
           <p lang="ja">この<strong>電力相差角曲線</strong>と機械入力を同じ図に描くと、<span class="lec-math-inline" data-tex="\delta_\mathrm{s}"></span> と <span class="lec-math-inline" data-tex="\delta_\mathrm{u} = \pi - \delta_\mathrm{s}"></span> の 2 か所で交わります。どちらも入力と出力が等しい点ですが、ふるまいは異なります。</p>
 
@@ -193,7 +208,13 @@
 
           <p lang="en">At the left crossing, if the angle grows a little, the electrical output becomes larger than the mechanical input, so the rotor slows down and the angle returns. If the angle shrinks, the opposite happens. This restoring effect is the <strong>synchronizing power</strong>; it is what keeps the generators turning together, like a spring between them. Its strength is the slope of the curve, the synchronizing power coefficient</p>
           <p lang="ja">左の交点では、角度が少し増えると電気出力が機械入力より大きくなるので、回転子が減速して角度は戻ります。角度が減ると逆のことが起きます。この引き戻す働きが<strong>同期化力</strong>で、発電機どうしを、ばねのようにつないで同じ速さで回らせています。その強さは曲線の傾き、つまり次の同期化力係数です。</p>
-          <div class="lec-math" data-tex="K_\mathrm{s} = \frac{\mathrm{d}P_\mathrm{e}}{\mathrm{d}\delta} = \frac{E\,V}{X}\,\cos\delta"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{K_\mathrm{s}} = \frac{\mathrm{d}P_\mathrm{e}}{\mathrm{d}\delta} = \frac{E\,V}{X}\,\annot{2}{\cos\delta}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the strength of the spring between generators!</span><span lang="ja">これが発電機どうしをつなぐばねの強さ！</span></li>
+              <li><span lang="en">Negative beyond 90°</span><span lang="ja">90° を超えると負になる</span></li>
+            </ol>
+          </figure>
           <p lang="en">It is positive below 90° and negative above. Around the right crossing the effect therefore has the wrong sign, which is the "hill top" of the valley picture.</p>
           <p lang="ja">これは 90° より小さい角度で正、大きい角度で負です。そのため右の交点のまわりでは、引き戻す働きの向きが逆になります。これが谷のたとえの「山の頂上」です。</p>
           <p lang="en">A spring alone would make the angle oscillate forever, as the dashed curves of the previous figure do. What makes the swing die out is <strong>damping</strong>: the term <span class="lec-math-inline" data-tex="D\,\omega"></span> and, in real machines, the damper windings and controllers such as the power system stabilizer (PSS). Synchronizing power decides whether the rotor is pulled back; damping decides how quickly the oscillation fades.</p>
@@ -311,7 +332,14 @@ result.plot_trajectory(Quantity="delta");</code></pre>
 
           <p lang="en">During the fault (from <span class="lec-math-inline" data-tex="\delta_0"></span> to the clearing angle <span class="lec-math-inline" data-tex="\delta_\mathrm{c}"></span>) the input is larger than the output <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{F}"></span>, and the rotor gains the energy of area <span class="lec-math-inline" data-tex="A_1"></span>. After clearing the output <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{post}"></span> is larger, and the rotor loses energy as the angle grows. By the equation above, it stops (<span class="lec-math-inline" data-tex="\omega = 0"></span>) and turns back at the angle <span class="lec-math-inline" data-tex="\delta_\mathrm{max}"></span> where the two areas are equal:</p>
           <p lang="ja">事故の間（<span class="lec-math-inline" data-tex="\delta_0"></span> から除去の角度 <span class="lec-math-inline" data-tex="\delta_\mathrm{c}"></span> まで）は入力が出力 <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{F}"></span> より大きく、回転子は面積 <span class="lec-math-inline" data-tex="A_1"></span> のエネルギーを得ます。除去の後は出力 <span class="lec-math-inline" data-tex="P_\mathrm{e}^\mathrm{post}"></span> のほうが大きく、角度が増えるにつれてエネルギーを失います。上の式から、2 つの面積が等しくなる角度 <span class="lec-math-inline" data-tex="\delta_\mathrm{max}"></span> で回転子は止まり（<span class="lec-math-inline" data-tex="\omega = 0"></span>）、折り返します。</p>
-          <div class="lec-math" data-tex="A_1 = \int_{\delta_0}^{\delta_\mathrm{c}} \bigl(P_\mathrm{m} - P_\mathrm{e}^\mathrm{F}\bigr)\,\mathrm{d}\delta \;=\; A_2 = \int_{\delta_\mathrm{c}}^{\delta_\mathrm{max}} \bigl(P_\mathrm{e}^\mathrm{post} - P_\mathrm{m}\bigr)\,\mathrm{d}\delta"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{A_1} = \int_{\delta_0}^{\delta_\mathrm{c}} \bigl(P_\mathrm{m} - \annot{3}{P_\mathrm{e}^\mathrm{F}}\bigr)\,\mathrm{d}\delta \;=\; \annot{2}{A_2} = \int_{\delta_\mathrm{c}}^{\delta_\mathrm{max}} \bigl(P_\mathrm{e}^\mathrm{post} - P_\mathrm{m}\bigr)\,\mathrm{d}\delta"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Accelerating area: energy gained during the fault</span><span lang="ja">加速面積：事故の間に得るエネルギー</span></li>
+              <li data-at="above"><span lang="en">Decelerating area: energy given back after clearing</span><span lang="ja">減速面積：除去の後に失うエネルギー</span></li>
+              <li><span lang="en">Output during the fault: very small</span><span lang="ja">事故の間の出力（とても小さい）</span></li>
+            </ol>
+          </figure>
           <div class="lec-callout is-key">
             <p lang="en">The system is stable if an area <span class="lec-math-inline" data-tex="A_2"></span> as large as <span class="lec-math-inline" data-tex="A_1"></span> fits before the hill top <span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span> of the post-fault curve, that is, if <span class="lec-math-inline" data-tex="\delta_\mathrm{max} \lt \delta_\mathrm{u}"></span>. A later clearing makes <span class="lec-math-inline" data-tex="A_1"></span> larger and leaves less room for <span class="lec-math-inline" data-tex="A_2"></span>. The clearing angle at which the two just fit is the critical clearing angle (73° for the curves of the figure), and the time to reach it is the critical clearing time.</p>
             <p lang="ja">除去の後の曲線の山の頂上 <span class="lec-math-inline" data-tex="\delta_\mathrm{u}"></span> に届く前に、<span class="lec-math-inline" data-tex="A_1"></span> と同じ大きさの <span class="lec-math-inline" data-tex="A_2"></span> をとれれば、つまり <span class="lec-math-inline" data-tex="\delta_\mathrm{max} \lt \delta_\mathrm{u}"></span> なら安定です。除去が遅れると <span class="lec-math-inline" data-tex="A_1"></span> が大きくなり、<span class="lec-math-inline" data-tex="A_2"></span> をとれる余地が減ります。ちょうど等しくとれる除去の角度が臨界除去角（図の曲線では 73°）で、そこに達するまでの時間が臨界除去時間です。</p>
@@ -325,7 +353,15 @@ result.plot_trajectory(Quantity="delta");</code></pre>
           <h2><span lang="en">Frequency after a disturbance: inertia and governors</span><span lang="ja">周波数の変化（慣性とガバナ）</span></h2>
           <p lang="en">Not every disturbance shakes the generators apart. When a generator trips or a large load is connected, all the rotors slow down together, because the missing power is drawn from their common kinetic energy. The <strong>frequency</strong> of the whole system falls. Treating the whole system as one generator (the swing equation with all inertias added up), a loss of generation <span class="lec-math-inline" data-tex="\Delta P_\mathrm{L}"></span> gives</p>
           <p lang="ja">外乱がいつも発電機どうしを引き離すわけではありません。発電機が止まったり、大きな負荷がつながったりすると、足りない電力が全体の運動エネルギーから取り出されるので、すべての回転子がそろって遅くなります。系統全体の<strong>周波数</strong>が下がります。系統全体を 1 台の発電機とみなすと（すべての慣性を足し合わせた動揺方程式）、発電が <span class="lec-math-inline" data-tex="\Delta P_\mathrm{L}"></span> だけ不足したとき、次の式になります。</p>
-          <div class="lec-math" data-tex="M\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \Delta P_\mathrm{m} - \Delta P_\mathrm{L} - D\,\omega, \qquad \Delta f = f_0\,\omega"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{M}\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \annot{2}{\Delta P_\mathrm{m}} - \annot{3}{\Delta P_\mathrm{L}} - \annot{4}{D\,\omega}, \qquad \Delta f = f_0\,\omega"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The inertia of the whole system</span><span lang="ja">系統全体の慣性</span></li>
+              <li><span lang="en">Extra mechanical input from the governors</span><span lang="ja">ガバナが増やす機械入力</span></li>
+              <li data-at="above"><span lang="en">The lost generation: the disturbance</span><span lang="ja">不足した発電（外乱）</span></li>
+              <li><span lang="en">Loads that use less at a lower frequency</span><span lang="ja">周波数が下がると減る負荷の消費</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="M"></span> is the total inertia, <span class="lec-math-inline" data-tex="\Delta P_\mathrm{m}"></span> the increase of the mechanical power by the governors, and <span class="lec-math-inline" data-tex="D"></span> mainly the frequency dependence of the loads (their power falls a little with the frequency). The course of the frequency has three parts.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="M"></span> は全体の慣性、<span class="lec-math-inline" data-tex="\Delta P_\mathrm{m}"></span> はガバナによる機械入力の増加、<span class="lec-math-inline" data-tex="D"></span> は主に負荷の周波数特性（周波数が下がると消費が少し減ること）です。周波数の経過は 3 つに分けられます。</p>
 
