@@ -62,20 +62,12 @@
     return el;
   }
 
-  // Box of a KaTeX term: union of its visible leaves (KaTeX's struts and the
-  // spans of an inline element do not follow the glyphs).
+  // Box of a term relative to origin. The term is an inline-block (annotate.css), so
+  // its box covers the whole term, fractions included.
   function termBox(term, origin) {
-    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
-    const leaves = [term, ...term.querySelectorAll('*')].filter((el) =>
-      (el.children.length === 0 || el.tagName.toLowerCase() === 'svg') &&
-      !el.closest('.pstrut, .strut, .vlist-s, .katex-mathml') && !(el.parentElement?.closest('svg')));
-    leaves.forEach((el) => {
-      const rc = el.getBoundingClientRect();
-      if (rc.width < 0.5 || rc.height < 0.5) return;
-      l = Math.min(l, rc.left); t = Math.min(t, rc.top); r = Math.max(r, rc.right); b = Math.max(b, rc.bottom);
-    });
-    if (!Number.isFinite(l)) return null;
-    return { left: l - origin.left, top: t - origin.top, right: r - origin.left, bottom: b - origin.top };
+    const rc = term.getBoundingClientRect();
+    if (rc.width < 0.5 || rc.height < 0.5) return null;
+    return { left: rc.left - origin.left, top: rc.top - origin.top, right: rc.right - origin.left, bottom: rc.bottom - origin.top };
   }
 
   // Places labels of one side in a row near the x of their terms; null when they do not fit.
@@ -100,6 +92,8 @@
       fig.prepend(layer);
     }
     layer.replaceChildren();
+    layer.setAttribute('width', 0);
+    layer.setAttribute('height', 0);
     fig.classList.remove('is-arrows');
     fig.style.paddingTop = fig.style.paddingBottom = '';
     notes.forEach((li) => { li.style.left = li.style.top = ''; });
@@ -132,6 +126,9 @@
       fig.style.paddingBottom = hBelow ? (hBelow + ARROW_GAP) + 'px' : '';
     }
 
+    // The term boxes and numbers are CSS on the terms (annotate.css), so they scroll
+    // with a wide equation; this layer holds only the arrows of the wide layout.
+    if (!arrows) return;
     // Measure after the paddings are set.
     const origin = fig.getBoundingClientRect();
     layer.setAttribute('width', fig.clientWidth);
@@ -145,28 +142,14 @@
     const mathBox = math.getBoundingClientRect();
     const mathTop = mathBox.top - origin.top, mathBottom = mathBox.bottom - origin.top;
 
+    // The arrow goes to the occurrence of the term nearest to the label's side.
     items.forEach((it) => {
-      if (!it.term) return;
-      math.querySelectorAll('.lec-annot-t' + it.k).forEach((term, j) => {
+      math.querySelectorAll('.lec-annot-t' + it.k).forEach((term) => {
         const box = termBox(term, origin);
-        if (!box) return;
-        const pad = 3;
-        layer.appendChild(svgEl('rect', { class: 'lec-annot-box lec-annot-c' + it.k,
-          x: box.left - pad, y: box.top - pad, width: box.right - box.left + 2 * pad, height: box.bottom - box.top + 2 * pad, rx: 3 }));
-        // The arrow goes to the occurrence nearest to the label's side.
-        if (!it.box || (it.at === 'above' ? box.top < it.box.top - 1 : box.bottom > it.box.bottom + 1)) it.box = box;
-        if (!arrows && j === 0) {
-          const g = svgEl('g', { class: 'lec-annot-badge lec-annot-c' + it.k });
-          g.appendChild(svgEl('circle', { cx: box.right + pad, cy: box.top - pad, r: 7 }));
-          const t = svgEl('text', { x: box.right + pad, y: box.top - pad, 'text-anchor': 'middle', 'dominant-baseline': 'central' });
-          t.textContent = it.k;
-          g.appendChild(t);
-          layer.appendChild(g);
-        }
+        if (box && (!it.box || (it.at === 'above' ? box.top < it.box.top - 1 : box.bottom > it.box.bottom + 1))) it.box = box;
       });
     });
 
-    if (!arrows) return;
     items.forEach((it) => {
       if (!it.box) return;
       const above = it.at === 'above';
@@ -205,7 +188,6 @@
     } else {
       window.addEventListener('resize', schedule);
     }
-    figs.forEach((fig) => fig.querySelector('.lec-math')?.addEventListener('scroll', schedule, { passive: true }));
   }
 
   function init() {

@@ -13,7 +13,8 @@
    Term k and label k take var(--gem-k) (style.css :root); arrows stay grey.
    Wide screens: labels sit above/below with arrows (.is-arrows, set by lecture.js).
    Otherwise (narrow screens, labels that do not fit, print, no JS): labels stack below
-   the equation, numbered, and the terms carry the same numbers. */
+   the equation, numbered, and the terms carry the same numbers.
+   The term boxes and numbers are CSS on the terms; lecture.js draws only the arrows. */
 
 .lec-annot { position: relative; margin: 20px 0 24px; padding: 0; }
 .lec-annot > .lec-math { position: relative; z-index: 1; margin: 0; padding: 8px 0; font-size: 1.1em; }
@@ -27,10 +28,17 @@
 .lec-annot-t6, .lec-annot-notes > li:nth-child(6), .lec-annot-c6 { --annot-c: var(--gem-6); }
 .lec-annot-t7, .lec-annot-notes > li:nth-child(7), .lec-annot-c7 { --annot-c: var(--gem-7); }
 
-/* Term highlight and its number, drawn in the layer behind the equation */
-.lec-annot-box { fill: color-mix(in srgb, var(--annot-c) 13%, transparent); stroke: var(--annot-c); stroke-width: 1.5; }
-.lec-annot-badge circle { fill: var(--annot-c); stroke: var(--surface); stroke-width: 1.5; }
-.lec-annot-badge text { fill: #FFFFFF; font: 700 10px/1 var(--font-sans); }
+/* Term highlight: CSS on the KaTeX \htmlClass span itself, so it moves with the
+   equation when a wide equation scrolls. inline-block makes the box cover the whole
+   term (fractions, sums); box-shadow draws the outline without changing the layout. */
+.lec-annot .lec-annot-term { position: relative; display: inline-block; padding: 1px 2px; margin: 0 1px; border-radius: 3px; background: color-mix(in srgb, var(--annot-c) 13%, transparent); box-shadow: 0 0 0 1.5px var(--annot-c); }
+/* Number of the term: only when the labels are stacked (no arrows) */
+.lec-annot.is-arrows .lec-annot-term::after { display: none; }
+.lec-annot .lec-annot-term::after { position: absolute; top: -7px; right: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--annot-c); box-shadow: 0 0 0 1.5px var(--surface); color: #FFFFFF; font: 700 10px/14px var(--font-sans); text-align: center; }
+.lec-annot-t1::after { content: "1"; } .lec-annot-t2::after { content: "2"; } .lec-annot-t3::after { content: "3"; }
+.lec-annot-t4::after { content: "4"; } .lec-annot-t5::after { content: "5"; } .lec-annot-t6::after { content: "6"; }
+.lec-annot-t7::after { content: "7"; }
+/* Arrows of the wide layout, drawn by lecture.js in the layer */
 .lec-annot-arrow { fill: none; stroke: var(--muted); stroke-width: 1.4; }
 .lec-annot-head { fill: var(--muted); }
 
@@ -55,7 +63,8 @@
 @media print {
   .lec-annot { padding: 0 !important; break-inside: avoid; }
   .lec-annot-layer { display: none; }
-  .lec-annot .lec-annot-term { color: var(--annot-c); }
+  .lec-annot.is-arrows .lec-annot-term::after { display: block; }
+  .lec-annot .lec-annot-term, .lec-annot .lec-annot-term::after { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .lec-annot.is-arrows .lec-annot-notes { display: flex; margin-top: 8px; }
   .lec-annot.is-arrows .lec-annot-notes > li { position: relative; left: auto !important; top: auto !important; max-width: 100%; }
   .lec-annot.is-arrows .lec-annot-notes > li::before { display: inline-block; }

@@ -2060,7 +2060,3 @@ img, video { height: auto; }
   /* a figure that scrolls sideways says so */
   .lec-figure.is-scroll .lec-scroll { position: relative; padding-bottom: 4px; scrollbar-width: thin; }
 }
-
-/* Annotated equations (lecture/annotate.css): a highlight of a term of a wide equation that
-   scrolls sideways is not drawn past the edge of the page */
-.lec-annot { overflow-x: clip; }
