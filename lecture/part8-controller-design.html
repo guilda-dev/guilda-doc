@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec8- ; shared lecture CSS (lec-*) is in style.css. -->
   <style>
@@ -66,7 +67,14 @@
           <p lang="ja">電力系統の負荷はいつも変わり、事故や解列も予告なしに起こります。発電機だけでは、これらに対して電圧や回転の速さを一定に保てません。それを行うのが<b>制御器</b>で、ループの形で働きます。ある量を測り、目標の値と比べ、その差が小さくなるように発電機の入力を変えます。測った結果を戻して次の動きを決めるので、これを<b>フィードバック</b>といいます。</p>
           <p lang="en">In its simplest form, with the target <span class="lec-math-inline" data-tex="r"></span>, the measured output <span class="lec-math-inline" data-tex="y"></span> and a gain <span class="lec-math-inline" data-tex="K"></span> (a proportional controller), the controller computes the error <span class="lec-math-inline" data-tex="e"></span> and the input <span class="lec-math-inline" data-tex="u"></span> as</p>
           <p lang="ja">いちばん簡単な形（比例制御）では、目標値を <span class="lec-math-inline" data-tex="r"></span>、測った出力を <span class="lec-math-inline" data-tex="y"></span>、ゲインを <span class="lec-math-inline" data-tex="K"></span> として、制御器はずれ <span class="lec-math-inline" data-tex="e"></span> と入力 <span class="lec-math-inline" data-tex="u"></span> を次のように計算します。</p>
-          <div class="lec-math" data-tex="e(t) = r - y(t), \qquad u(t) = K\,e(t)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="e(t) = \annot{1}{r} - \annot{2}{y(t)}, \qquad u(t) = \annot{3}{K}\,e(t)"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The target value</span><span lang="ja">目標値</span></li>
+              <li><span lang="en">The measured output</span><span lang="ja">測った出力</span></li>
+              <li data-at="above"><span lang="en">This is the gain: how strongly it reacts!</span><span lang="ja">これがゲイン：反応の強さ！</span></li>
+            </ol>
+          </figure>
           <p lang="en">Real controllers add filters and states of their own (for example the integral of <span class="lec-math-inline" data-tex="e"></span>), but they keep this loop.</p>
           <p lang="ja">実際の制御器はフィルタや自分の状態（たとえば <span class="lec-math-inline" data-tex="e"></span> の積分）を加えますが、このループの形は同じです。</p>
 
@@ -182,12 +190,26 @@
           <h3><span lang="en">Why a PSS is needed</span><span lang="ja">PSS が必要になる理由</span></h3>
           <p lang="en">When a rotor swings by a small angle Δδ around its equilibrium, the electrical torque of the generator changes. For a swing of one frequency, the change can be split into two parts: one in phase with the angle, the <b>synchronizing torque</b>, which pulls the rotor back like a spring, and one in phase with the speed, the <b>damping torque</b>, which brakes the swing like friction.</p>
           <p lang="ja">回転子が平衡点のまわりで小さな角度 Δδ だけ揺れると、発電機の電気的なトルクが変わります。ある 1 つの周波数の揺れについて、その変化は 2 つに分けられます。角度と同じ位相の<b>同期化トルク</b>はばねのように回転子を引き戻し、速さと同じ位相の<b>制動トルク</b>は摩擦のように揺れにブレーキをかけます。</p>
-          <div class="lec-math" data-tex="\Delta T_\mathrm{e} = K_\mathrm{S}\,\Delta\delta + K_\mathrm{D}\,\Delta\omega"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\Delta T_\mathrm{e} = \annot{1}{K_\mathrm{S}\,\Delta\delta} + \annot{2}{K_\mathrm{D}\,\Delta\omega}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Synchronizing torque: pulls back like a spring</span><span lang="ja">同期化トルク：ばねのように引き戻す</span></li>
+              <li><span lang="en">Damping torque: brakes the swing like friction</span><span lang="ja">制動トルク：摩擦のように揺れを止める</span></li>
+            </ol>
+          </figure>
           <p lang="en">The coefficients <span class="lec-math-inline" data-tex="K_\mathrm{S}"></span> and <span class="lec-math-inline" data-tex="K_\mathrm{D}"></span> depend on the frequency of the swing and on the operating point.</p>
           <p lang="ja">係数 <span class="lec-math-inline" data-tex="K_\mathrm{S}"></span>、<span class="lec-math-inline" data-tex="K_\mathrm{D}"></span> は、揺れの周波数と運転点によって変わります。</p>
           <p lang="en">Both K<sub>S</sub> and K<sub>D</sub> must be positive for the swing to die out. A fast AVR with a high gain keeps the voltage steady and raises K<sub>S</sub>, which helps against large faults. But the field responds with a lag, and its contribution to K<sub>D</sub> can become negative: the stronger the AVR, the weaker the damping of the electromechanical modes, until a mode grows. This was explained by deMello and Concordia [4]. A PSS fixes it: it shifts the phase of the speed signal with lead-lag filters so that the torque it creates through the AVR is in phase with Δω, which is pure damping torque. GUILDA's PSS <code>pss-PSS1</code> has this structure: a washout filter, which passes only changes of <span class="lec-math-inline" data-tex="\omega"></span>, and two lead-lag blocks. From <span class="lec-math-inline" data-tex="\omega"></span> to its output (<span class="lec-math-inline" data-tex="s"></span> is the Laplace variable; the output limits are left out),</p>
           <p lang="ja">揺れが収まるには、K<sub>S</sub> と K<sub>D</sub> の両方が正である必要があります。ゲインの高い速い AVR は電圧をしっかり保ち、K<sub>S</sub> を大きくするので、大きな事故に強くなります。ところが界磁は遅れて応答するので、K<sub>D</sub> への寄与が負になることがあります。AVR を強くするほど電気機械モードの減衰が弱くなり、ついにはモードが大きくなっていきます。これを説明したのが deMello と Concordia です [4]。PSS はこれを直します。進み遅れのフィルタで速さの信号の位相をずらし、AVR を通してつくるトルクが Δω と同じ位相、つまり純粋な制動トルクになるようにします。GUILDA の PSS <code>pss-PSS1</code> もこの形で、<span class="lec-math-inline" data-tex="\omega"></span> の変化だけを通すウォッシュアウトフィルタと、2 段の進み遅れのブロックからなります。<span class="lec-math-inline" data-tex="\omega"></span> から出力までの伝達関数は次のとおりです（<span class="lec-math-inline" data-tex="s"></span> はラプラス変換の変数。出力の上下限は省いています）。</p>
-          <div class="lec-math" data-tex="V_\mathrm{pss}(s) = k_\mathrm{pss}\,\frac{t_\mathrm{WS}s}{1 + t_\mathrm{WS}s}\,\frac{1 + t_\mathrm{n1}s}{1 + t_\mathrm{d1}s}\,\frac{1 + t_\mathrm{n2}s}{1 + t_\mathrm{d2}s}\,\omega(s)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="V_\mathrm{pss}(s) = \annot{1}{k_\mathrm{pss}}\,\annot{2}{\frac{t_\mathrm{WS}s}{1 + t_\mathrm{WS}s}}\,\annot{3}{\frac{1 + t_\mathrm{n1}s}{1 + t_\mathrm{d1}s}\,\frac{1 + t_\mathrm{n2}s}{1 + t_\mathrm{d2}s}}\,\annot{4}{\omega(s)}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Gain</span><span lang="ja">ゲイン</span></li>
+              <li><span lang="en">Washout: ignores a steady deviation</span><span lang="ja">ウォッシュアウト：一定のずれには反応しない</span></li>
+              <li data-at="above"><span lang="en">Lead-lag: shifts the phase to make damping torque</span><span lang="ja">進み遅れ：位相を進めて制動トルクにする</span></li>
+              <li><span lang="en">Input: the speed deviation</span><span lang="ja">入力：回転速度のずれ</span></li>
+            </ol>
+          </figure>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -257,7 +279,13 @@
 
           <p lang="en">The droop of primary control is written with the droop <span class="lec-math-inline" data-tex="R"></span> (in per unit, typically a few percent). After the valve and the turbine have settled, a governor changes the mechanical power by</p>
           <p lang="ja">一次制御の垂下特性は、調定率 <span class="lec-math-inline" data-tex="R"></span>（単位法、数 % 程度が目安）で表します。弁とタービンの動きが落ち着いた後、ガバナは機械入力を次のだけ変えます。</p>
-          <div class="lec-math" data-tex="\Delta P_\mathrm{mech} = -\frac{P_\mathrm{rate}}{R}\,\Delta\omega, \qquad \Delta\omega = \frac{\Delta f}{f_0}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\Delta P_\mathrm{mech} = -\annot{1}{\frac{P_\mathrm{rate}}{R}}\,\annot{2}{\Delta\omega}, \qquad \Delta\omega = \frac{\Delta f}{f_0}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Rating ÷ droop: the smaller R, the stronger the response</span><span lang="ja">定格 ÷ 調定率：R が小さいほど強く応答</span></li>
+              <li><span lang="en">The speed (frequency) deviation</span><span lang="ja">回転速度（周波数）のずれ</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="P_\mathrm{rate}"></span> is the rating of the unit and <span class="lec-math-inline" data-tex="\Delta\omega"></span> the speed deviation in per unit (the frequency deviation <span class="lec-math-inline" data-tex="\Delta f"></span> divided by the rated frequency <span class="lec-math-inline" data-tex="f_0"></span>). GUILDA's governor <code>gov-LPT1</code> takes the droop in percent (<code>droop</code> = 100<span class="lec-math-inline" data-tex="R"></span>).</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="P_\mathrm{rate}"></span> はユニットの定格、<span class="lec-math-inline" data-tex="\Delta\omega"></span> は単位法の回転速度のずれ（周波数のずれ <span class="lec-math-inline" data-tex="\Delta f"></span> を定格周波数 <span class="lec-math-inline" data-tex="f_0"></span> で割ったもの）です。GUILDA のガバナ <code>gov-LPT1</code> では、調定率を % で与えます（<code>droop</code> = 100<span class="lec-math-inline" data-tex="R"></span>）。</p>
           <p lang="en">Because the output changes only while Δf is not zero, primary control cannot bring the frequency all the way back. The AGC adds an integral: as long as a deviation remains, the integral keeps growing and keeps pushing the outputs, so the only steady state is Δf = 0.</p>
@@ -266,10 +294,24 @@
           <h3><span lang="en">The AGC</span><span lang="ja">AGC</span></h3>
           <p lang="en">An AGC acts on the <b>area control error</b> (ACE). For an area connected to its neighbours by tie lines, with <span class="lec-math-inline" data-tex="\Delta P_\mathrm{tie}"></span> the deviation of the power exported over the tie lines from its schedule and <span class="lec-math-inline" data-tex="B \gt 0"></span> the frequency bias of the area, a PI controller sets the change <span class="lec-math-inline" data-tex="\Delta P_\mathrm{ref}"></span> of the output settings of the generators:</p>
           <p lang="ja">AGC は<b>地域要求量</b>（ACE、area control error）にもとづいて働きます。隣の地域と連系線でつながった地域で、連系線で送り出す電力の計画からのずれを <span class="lec-math-inline" data-tex="\Delta P_\mathrm{tie}"></span>、その地域の周波数バイアスを <span class="lec-math-inline" data-tex="B \gt 0"></span> とすると、PI 制御で発電機の出力の設定の変化 <span class="lec-math-inline" data-tex="\Delta P_\mathrm{ref}"></span> を決めます。</p>
-          <div class="lec-math" data-tex="\mathrm{ACE} = \Delta P_\mathrm{tie} + B\,\Delta f, \qquad \Delta P_\mathrm{ref} = -\Bigl(K_\mathrm{P}\,\mathrm{ACE} + K_\mathrm{I}\int_0^t \mathrm{ACE}\,\mathrm{d}\tau\Bigr)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\mathrm{ACE} = \annot{1}{\Delta P_\mathrm{tie}} + \annot{2}{B\,\Delta f}, \qquad \Delta P_\mathrm{ref} = -\Bigl(K_\mathrm{P}\,\mathrm{ACE} + \annot{3}{K_\mathrm{I}\int_0^t \mathrm{ACE}\,\mathrm{d}\tau}\Bigr)"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">Tie-line power off its schedule</span><span lang="ja">連系線の電力の計画からのずれ</span></li>
+              <li data-at="above"><span lang="en">Frequency deviation, times the bias <span class="lec-math-inline" data-tex="B"></span></span><span lang="ja">周波数のずれ（バイアス <span class="lec-math-inline" data-tex="B"></span> 倍）</span></li>
+              <li data-at="above"><span lang="en">Integral: keeps moving until ACE = 0!</span><span lang="ja">積分：ACE = 0 まで動き続ける！</span></li>
+            </ol>
+          </figure>
           <p lang="en">The integral keeps changing as long as the ACE is not zero, so the only steady state is ACE = 0; for a single area without tie lines this means <span class="lec-math-inline" data-tex="\Delta f = 0"></span>. GUILDA's AGC <code>agc-PI</code> is of this single-area kind: it integrates a weighted sum <span class="lec-math-inline" data-tex="w"></span> of the speed deviations <span class="lec-math-inline" data-tex="\omega_i"></span> of the controlled generators and adds a share of one PI command to the mechanical power of each,</p>
           <p lang="ja">ACE が 0 でない限り積分は変わり続けるので、落ち着く先は ACE = 0 だけです。連系線のない 1 つの地域なら、これは <span class="lec-math-inline" data-tex="\Delta f = 0"></span> のことです。GUILDA の AGC <code>agc-PI</code> はこの 1 地域の形で、制御する発電機の回転速度のずれ <span class="lec-math-inline" data-tex="\omega_i"></span> の重み付きの和 <span class="lec-math-inline" data-tex="w"></span> を積分し、1 つの PI の指令を分けて各発電機の機械入力に加えます。</p>
-          <div class="lec-math" data-tex="w = \sum_i \beta_i\,\omega_i, \qquad \dot{\xi} = w, \qquad P_{\mathrm{mech},i} = -\alpha_i\,\bigl(k_\mathrm{P}\,w + k_\mathrm{I}\,\xi\bigr)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="w = \annot{1}{\sum_i \beta_i\,\omega_i}, \qquad \annot{2}{\dot{\xi} = w}, \qquad P_{\mathrm{mech},i} = -\annot{3}{\alpha_i}\,\bigl(k_\mathrm{P}\,w + k_\mathrm{I}\,\xi\bigr)"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">Weighted sum of the speed deviations</span><span lang="ja">回転速度のずれの重み付きの和</span></li>
+              <li data-at="above"><span lang="en">Integral: grows while a deviation remains</span><span lang="ja">積分：ずれが残る限り増え続ける</span></li>
+              <li><span lang="en">Share of the command for generator <span class="lec-math-inline" data-tex="i"></span></span><span lang="ja">発電機 <span class="lec-math-inline" data-tex="i"></span> への指令の割り当て</span></li>
+            </ol>
+          </figure>
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
               <img src="../images/lecture/part8/frequency-control.png" alt="Speed deviations of the generators of IEEE 9-bus after a loss of 0.1 pu of mechanical power, drawn by GUILDA's plot_trajectory: (a) without control they keep falling; (b) with governors they stop at about -1.3e-3 pu; (c) with governors and AGC they return to 0 within about 40 s" width="1287" height="527">
@@ -342,10 +384,22 @@ result.plot_trajectory(Quantity="omega");</code></pre>
           <h3><span lang="en">The idea of the LQR</span><span lang="ja">LQR の考え方</span></h3>
           <p lang="en">With many inputs and many measurements, choosing every gain by hand becomes hard. The <b>linear quadratic regulator</b> (LQR) chooses all of them at once from the linear model <span class="lec-math-inline" data-tex="\dot{x} = Ax + Bu"></span> of the system. We state what we care about as a cost: how large the deviations <span class="lec-math-inline" data-tex="x"></span> are, weighted by a matrix <span class="lec-math-inline" data-tex="Q"></span>, and how much input <span class="lec-math-inline" data-tex="u"></span> we spend, weighted by <span class="lec-math-inline" data-tex="R"></span>. The LQR is the state feedback <span class="lec-math-inline" data-tex="u = -Kx"></span> that makes this cost the smallest:</p>
           <p lang="ja">入力と計測が多いと、ゲインを 1 つずつ手で選ぶのは難しくなります。<b>LQR</b>（線形二次レギュレータ）は、系統の線形モデル <span class="lec-math-inline" data-tex="\dot{x} = Ax + Bu"></span> から、すべてのゲインを一度に選びます。気にすることを「評価」の形で書きます。状態のずれ <span class="lec-math-inline" data-tex="x"></span> の大きさ（重み <span class="lec-math-inline" data-tex="Q"></span>）と、使う入力 <span class="lec-math-inline" data-tex="u"></span> の大きさ（重み <span class="lec-math-inline" data-tex="R"></span>）です。LQR は、この評価を最も小さくする状態フィードバック <span class="lec-math-inline" data-tex="u = -Kx"></span> です。</p>
-          <div class="lec-math" data-tex="J = \int_0^{\infty} \left( x^{\top} Q\, x + u^{\top} R\, u \right) dt"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="J = \int_0^{\infty} \left( \annot{1}{x^{\top} Q\, x} + \annot{2}{u^{\top} R\, u} \right) dt"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Weight on the state deviation: settle the swings fast</span><span lang="ja">状態のずれへの重み：揺れを早く収めたい</span></li>
+              <li><span lang="en">Weight on the input: keep the input gentle</span><span lang="ja">入力への重み：入力を穏やかにしたい</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="Q"></span> is positive semidefinite and <span class="lec-math-inline" data-tex="R"></span> positive definite. A larger <span class="lec-math-inline" data-tex="Q"></span> asks for swings that die out faster; a larger <span class="lec-math-inline" data-tex="R"></span> asks for gentler inputs. The optimal gain is</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="Q"></span> は半正定、<span class="lec-math-inline" data-tex="R"></span> は正定の行列です。<span class="lec-math-inline" data-tex="Q"></span> を大きくすると揺れを早く収めることを、<span class="lec-math-inline" data-tex="R"></span> を大きくすると入力を穏やかにすることを求めることになります。最適なゲインは次のとおりです。</p>
-          <div class="lec-math" data-tex="K = R^{-1}B^{\top}S, \qquad A^{\top}S + SA - SBR^{-1}B^{\top}S + Q = 0"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{K} = R^{-1}B^{\top}S, \qquad \annot{2}{A^{\top}S + SA - SBR^{-1}B^{\top}S + Q = 0}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the optimal gain!</span><span lang="ja">これが最適なゲイン！</span></li>
+              <li><span lang="en">The Riccati equation, solved for <span class="lec-math-inline" data-tex="S"></span></span><span lang="ja">リッカチ方程式：これを解いて <span class="lec-math-inline" data-tex="S"></span> を求める</span></li>
+            </ol>
+          </figure>
           <p lang="en">where <span class="lec-math-inline" data-tex="S"></span> is the positive semidefinite solution of the second equation, the algebraic <b>Riccati equation</b>; MATLAB solves it with the function <code>lqr</code> [5]. If <span class="lec-math-inline" data-tex="(A, B)"></span> is stabilizable and <span class="lec-math-inline" data-tex="(A, Q^{1/2})"></span> is detectable, the closed loop <span class="lec-math-inline" data-tex="\dot{x} = (A - BK)x"></span> is stable, so as long as the model is right, the LQR gives a stable closed loop. Its weak points are also clear: it needs every state x, so either all of them are measured or they are estimated, and it needs a model of the whole system, which for a large power system is big and changes with the operating point.</p>
           <p lang="ja">ここで <span class="lec-math-inline" data-tex="S"></span> は 2 つ目の式（<b>リッカチ方程式</b>）の半正定の解で、MATLAB では関数 <code>lqr</code> で求められます [5]。<span class="lec-math-inline" data-tex="(A, B)"></span> が可安定で <span class="lec-math-inline" data-tex="(A, Q^{1/2})"></span> が可検出なら、閉ループ <span class="lec-math-inline" data-tex="\dot{x} = (A - BK)x"></span> は安定です。つまりモデルが正しければ、LQR は安定な閉ループを与えます。弱点もはっきりしています。すべての状態 x が必要なので、すべてを測るか推定しなければならず、また系統全体のモデルが必要です。大きな電力系統では、このモデルは大きく、運転点によっても変わります。</p>
 
@@ -436,10 +490,23 @@ result.plot_trajectory(Quantity="omega");</code></pre>
           <h3><span lang="en">Retrofit control in GUILDA</span><span lang="ja">GUILDA の Retrofit 制御</span></h3>
           <p lang="en">GUILDA's retrofit controller <code>pss-retrofit</code> (class <code>controller.pss.Retrofit</code>) is the retrofit power system stabilizer of the textbook [3]. Its subsystem is one generator. It goes in the place of a PSS under the Static AVR <code>avr-static</code> and drives its input <span class="lec-math-inline" data-tex="V_\mathrm{pss}"></span>, so that the field voltage is <span class="lec-math-inline" data-tex="V_\mathrm{field} = V_\mathrm{fd,ref} + V_\mathrm{pss}"></span>. It observes all the states <span class="lec-math-inline" data-tex="x"></span> of the generator and keeps a copy <span class="lec-math-inline" data-tex="\hat{x}"></span> of them, computed from the model of the generator with its inputs at the equilibrium <span class="lec-math-inline" data-tex="u^*"></span>:</p>
           <p lang="ja">GUILDA の Retrofit 制御器 <code>pss-retrofit</code>（クラス <code>controller.pss.Retrofit</code>）は、教科書 [3] の Retrofit 制御による系統安定化装置です。部分系は 1 台の発電機です。Static の AVR <code>avr-static</code> の下に PSS の代わりに付き、その入力 <span class="lec-math-inline" data-tex="V_\mathrm{pss}"></span> を動かします。界磁電圧は <span class="lec-math-inline" data-tex="V_\mathrm{field} = V_\mathrm{fd,ref} + V_\mathrm{pss}"></span> になります。発電機のすべての状態 <span class="lec-math-inline" data-tex="x"></span> を観測し、入力を平衡点の値 <span class="lec-math-inline" data-tex="u^*"></span> に固定した発電機のモデルで、その写し <span class="lec-math-inline" data-tex="\hat{x}"></span> を計算し続けます。</p>
-          <div class="lec-math" data-tex="E\,\dot{\hat{x}} = f(x, V, u^*) - A_\mathrm{d}\,(x - \hat{x}), \qquad V_\mathrm{pss} = -K\,(x - \hat{x})"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="E\,\dot{\hat{x}} = \annot{1}{f(x, V, u^*)} - A_\mathrm{d}\,(x - \hat{x}), \qquad V_\mathrm{pss} = -\annot{2}{K}\,\annot{3}{(x - \hat{x})}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The generator model with its inputs fixed at equilibrium</span><span lang="ja">入力を平衡点に固定した発電機のモデル</span></li>
+              <li data-at="above"><span lang="en">LQR gain from the generator model alone</span><span lang="ja">発電機だけのモデルで求めた LQR のゲイン</span></li>
+              <li><span lang="en">The state minus its copy: the error <span class="lec-math-inline" data-tex="e"></span></span><span lang="ja">実際の状態と写しの差（誤差 <span class="lec-math-inline" data-tex="e"></span>）</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="E\,\dot{x} = f(x, V, u)"></span> is the model of the generator with its bus voltage <span class="lec-math-inline" data-tex="V"></span> and inputs <span class="lec-math-inline" data-tex="u = (P_\mathrm{mech}, V_\mathrm{field})"></span>, <span class="lec-math-inline" data-tex="A_\mathrm{d} = \partial f/\partial x"></span> and <span class="lec-math-inline" data-tex="B = \partial f/\partial V_\mathrm{field}"></span> at the equilibrium, and <span class="lec-math-inline" data-tex="K"></span> the LQR gain of the generator alone, <code>lqr(E\A_d, E\B, Q, R)</code>. The copy <span class="lec-math-inline" data-tex="\hat{x}"></span> plays the part of the output rectifier. Because <span class="lec-math-inline" data-tex="f"></span> is linear in <span class="lec-math-inline" data-tex="V_\mathrm{field}"></span>, the error <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span> follows exactly</p>
           <p lang="ja">ここで <span class="lec-math-inline" data-tex="E\,\dot{x} = f(x, V, u)"></span> は、母線電圧 <span class="lec-math-inline" data-tex="V"></span> と入力 <span class="lec-math-inline" data-tex="u = (P_\mathrm{mech}, V_\mathrm{field})"></span> を持つ発電機のモデル、<span class="lec-math-inline" data-tex="A_\mathrm{d} = \partial f/\partial x"></span> と <span class="lec-math-inline" data-tex="B = \partial f/\partial V_\mathrm{field}"></span> は平衡点での値、<span class="lec-math-inline" data-tex="K"></span> は発電機だけのモデルから求めた LQR のゲイン <code>lqr(E\A_d, E\B, Q, R)</code> です。写し <span class="lec-math-inline" data-tex="\hat{x}"></span> が出力の補正器の役をします。<span class="lec-math-inline" data-tex="f"></span> は <span class="lec-math-inline" data-tex="V_\mathrm{field}"></span> について線形なので、誤差 <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span> は厳密に次の式に従います。</p>
-          <div class="lec-math" data-tex="E\,\dot{e} = (A_\mathrm{d} - BK)\,e"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="E\,\dot{\annot{2}{e}} = \annot{1}{(A_\mathrm{d} - BK)}\,e"></div>
+            <ol class="lec-annot-notes">
+              <li><span lang="en">Nothing from the rest of the system: stable whatever it does!</span><span lang="ja">系統の残りを含まない：だから環境によらず安定！</span></li>
+              <li data-at="above"><span lang="en">The error <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span></span><span lang="ja">誤差 <span class="lec-math-inline" data-tex="e = x - \hat{x}"></span></span></li>
+            </ol>
+          </figure>
           <p lang="en">The error therefore decays whatever the rest of the network does, and the eigenvalues of the linearized network are those without the controller together with those of <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span>. At the equilibrium <span class="lec-math-inline" data-tex="\hat{x} = x"></span> and <span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span>, so attaching it does not move the operating point. To try it, give generator 2 of IEEE 9-bus the Static AVR and the retrofit controller, push its internal voltage <span class="lec-math-inline" data-tex="E_q"></span> by 0.1 pu at <span class="lec-math-inline" data-tex="t = 0"></span>, and draw the speed deviations:</p>
           <p lang="ja">したがって誤差は、系統の残りがどう動いても減衰し、線形化した系統の固有値は、制御器がないときの固有値と <span class="lec-math-inline" data-tex="E^{-1}(A_\mathrm{d} - BK)"></span> の固有値を合わせたものになります。平衡点では <span class="lec-math-inline" data-tex="\hat{x} = x"></span>、<span class="lec-math-inline" data-tex="V_\mathrm{pss} = 0"></span> なので、付けても運転点は動きません。GUILDA で確かめるときは、IEEE 9 母線系統の発電機 2 を Static の AVR と Retrofit 制御器にし、<span class="lec-math-inline" data-tex="t = 0"></span> でその内部電圧 <span class="lec-math-inline" data-tex="E_q"></span> を 0.1 pu ずらして、回転速度のずれを描きます。</p>
           <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
