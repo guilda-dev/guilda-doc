@@ -9,7 +9,8 @@
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
-    a.tab-button.tab-link::after { content: " \2197"; font-weight: 400; }
+    .tab-ext { margin-left: -3px; font-weight: 400; }
+    @media (max-width: 560px) { .tab-ext { display: none; } }
     /* About sections whose bullets wrap too much beside a figure: text above, figure below */
     .about-section.index-stacked { grid-template-columns: minmax(0, 1fr); }
     .about-section.index-stacked .about-text { max-width: 760px; }
@@ -39,12 +40,12 @@
       <img src="./images/GUILDAicon.png" alt="GUILDA Logo" class="header-logo">
       
       <div class="tabs">
-        <button class="tab-button active" onclick="openTab('tab-home')"><span lang="en">Home</span><span lang="ja">ホーム</span></button>
-        <button class="tab-button" onclick="openTab('tab-about')"><span lang="en">About</span><span lang="ja">概要</span></button>
-        <button class="tab-button" onclick="openTab('tab-getting-started')"><span lang="en">Getting Started</span><span lang="ja">はじめに</span></button>
-        <button class="tab-button" onclick="openTab('tab-tutorial')"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></button>
-        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-reference"><span lang="en">Reference</span><span lang="ja">リファレンス</span></a>
-        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-developer"><span lang="en">For Developer</span><span lang="ja">開発者向け</span></a>
+        <button class="tab-button active" onclick="openTab('tab-home')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M6.5 12q2.75-5.5 5.5 0t5.5 0"/></svg><span lang="en">Home</span><span lang="ja">ホーム</span></button>
+        <button class="tab-button" onclick="openTab('tab-about')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About</span><span lang="ja">概要</span></button>
+        <button class="tab-button" onclick="openTab('tab-getting-started')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Getting Started</span><span lang="ja">はじめに</span></button>
+        <button class="tab-button" onclick="openTab('tab-tutorial')"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></button>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-reference"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/><path d="M1.5 12h2M20.5 12h2"/></svg><span lang="en">Reference</span><span lang="ja">リファレンス</span><span class="tab-ext" aria-hidden="true">↗</span></a>
+        <a class="tab-button tab-link" href="https://guilda-dev.github.io/guilda/_GUILDAdoc/index.html#tab-developer"><svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="7" y="6.5" width="10" height="11" rx="1.5"/><path d="M1.5 12H7M4.5 9.5 7 12l-2.5 2.5M17 12h5.5M20 9.5l2.5 2.5-2.5 2.5M9.5 12h5M11 9.5h2M10.5 14.5h3"/></svg><span lang="en">For Developer</span><span lang="ja">開発者向け</span><span class="tab-ext" aria-hidden="true">↗</span></a>
       </div>
     </div>
   </header>
@@ -56,14 +57,43 @@
           <h1 class="hero-title"><span lang="en">GUILDA Documentation</span><span lang="ja">GUILDA ドキュメント</span></h1>
           <p class="hero-subtitle">Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</p>
         </div>
+        <div class="hero-mark" aria-hidden="true"><img src="./images/GUILDA-logo-square.png" alt="" width="128" height="128"></div>
       </div>
 
       <p class="home-intro" lang="en">A MATLAB power-system simulator for students and researchers in systems and control. Combine blocks into models, then analyse and share them.</p>
       <p class="home-intro" lang="ja">システム制御を学ぶ学生や研究者に向けた、MATLAB で動く電力系統シミュレータです。部品を組み合わせてモデルを作り、解析したり共有したりできます。</p>
       <div class="home-actions">
-        <a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><span lang="en">Getting Started</span><span lang="ja">はじめに</span></a>
-        <a href="#tab-about" onclick="openTab('tab-about'); return false;"><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
+        <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
+        <a class="btn" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial and lecture notes</span><span lang="ja">チュートリアルと講義ノート</span></a>
+        <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
       </div>
+
+      <!-- Home animation: a power-flow diagram whose network spells "GUILDA" (images/home/guilda-network.gif, 1200x400).
+           With reduced motion the still poster (guilda-network.png) is shown instead. -->
+      <figure class="home-network">
+        <picture>
+          <source media="(prefers-reduced-motion: reduce)" srcset="./images/home/guilda-network.png">
+          <img src="./images/home/guilda-network.gif" width="1200" height="400" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
+        </picture>
+        <figcaption><span lang="en">A network that spells GUILDA, with its power flow animated.</span><span lang="ja">GUILDA の文字を描く系統と、その潮流のアニメーションです。</span></figcaption>
+      </figure>
+
+      <section class="home-try" aria-labelledby="home-try-title">
+        <h2 id="home-try-title"><span lang="en">Try it in a few lines</span><span lang="ja">数行で試す</span></h2>
+        <div class="home-try-grid">
+          <div class="home-try-text">
+            <p lang="en">After starting GUILDA, load a bundled network, add a fault to a scenario and simulate it. The same network object also gives the linear model.</p>
+            <p lang="ja">GUILDA を起動したら、同梱の系統モデルを読み込み、シナリオに事故を加えてシミュレーションします。同じネットワークのオブジェクトから、線形モデルも得られます。</p>
+            <a class="btn btn-chevron" href="#basic-workflow" onclick="openTab('tab-tutorial', 'basic-workflow'); return false;"><span lang="en">See the basic workflow</span><span lang="ja">基本的な流れを見る</span></a>
+          </div>
+<pre class="home-try-code"><code>net = network.IEEE14bus;
+sc = net.add_scenario("fault", Time=[0, 10]);
+sc.add_fault("B008", [1, 1.05]);
+res = net.simulate("fault");   % time response
+res.plot_trajectory(Quantity="omega");
+sys = net.get_sys();           % linearized model</code></pre>
+        </div>
+      </section>
 
       <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
       <ol class="analysis-list">
@@ -169,6 +199,8 @@
         </li>
       </ol>
 
+      <hr class="line-divider">
+
       <h2><span lang="en">License</span><span lang="ja">ライセンス</span></h2>
       <p lang="en">GUILDA is released under the MIT License. Details: the <a href="https://github.com/guilda-dev/guilda/blob/main/LICENSE" target="_blank"><code>LICENSE</code></a> file at the repository root.</p>
       <p lang="ja">GUILDA は MIT ライセンスで公開しています。詳細はリポジトリのルートにある <a href="https://github.com/guilda-dev/guilda/blob/main/LICENSE" target="_blank"><code>LICENSE</code></a> ファイルを参照してください。</p>
@@ -220,10 +252,6 @@
         .ab-glyph { display: block; width: 40px; height: 40px; }
         .ab-glyph .g { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
         .ab-glyph .gf { fill: var(--ink); }
-        .ab-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 16px 0; }
-        .ab-gallery figure { margin: 0; }
-        .ab-gallery img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #FFFFFF; }
-        .ab-gallery figcaption { margin-top: 6px; color: var(--muted); font-size: 0.85rem; }
         .ab-row pre { margin: 0; }
         .about-fig { margin: 0; }
         .ab-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -257,10 +285,8 @@
         .about-fig figcaption { margin-top: 8px; color: var(--muted); font-size: 0.88rem; }
         @media (max-width: 760px) {
           .ab-row, .ab-cards, .ab-cards.is-two { grid-template-columns: minmax(0, 1fr); }
-          .ab-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 480px) {
-          .ab-gallery { grid-template-columns: minmax(0, 1fr); }
               .about-fig text.nm { font-size: 17px; }
           .about-fig text.mu { font-size: 14px; }
           .about-fig .sym { font-size: 22px; }
@@ -586,33 +612,121 @@ res = net.simulate("fault");   % time response
 sys = net.get_sys();           % linearized model</code></pre>
       </div>
 
-      <h2 id="about-output"><span lang="en">Output of GUILDA</span><span lang="ja">GUILDA の出力例</span></h2>
-      <p lang="en">Output of the IEEE 14-bus example above, with a fault at bus B008 from 1 s to 1.05 s.</p>
-      <p lang="ja">上の IEEE 14 母線系統の例の出力です。母線 B008 で 1 秒から 1.05 秒まで事故が起きています。</p>
-      <div class="ab-gallery">
-        <figure>
-          <img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625" loading="lazy">
-          <figcaption><span lang="en">Frequency deviation of the generators</span><span lang="ja">発電機の周波数偏差</span></figcaption>
-        </figure>
-        <figure>
-          <img src="./images/about/output-voltage.png" alt="Voltage magnitudes of the 14 buses: they drop during the fault at 1 s and recover within about 1 s" data-alt-ja="14 母線の電圧の大きさ。1 秒の事故で下がり、約 1 秒で回復します。" width="1029" height="622" loading="lazy">
-          <figcaption><span lang="en">Bus voltage magnitudes</span><span lang="ja">母線電圧の大きさ</span></figcaption>
-        </figure>
-        <figure>
-          <img src="./images/about/output-network-diagram.png" alt="Network diagram of the IEEE 14-bus system at t = 1.02 s, with branches colored by the current magnitude" data-alt-ja="t = 1.02 秒の IEEE 14 母線系統のネットワーク図。ブランチは電流の大きさで色分けされています。" width="877" height="802" loading="lazy">
-          <figcaption><span lang="en">Network diagram during the fault</span><span lang="ja">事故中のネットワーク図</span></figcaption>
-        </figure>
-        <figure>
-          <img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy">
-          <figcaption><span lang="en">Eigenvalues of the linearized model</span><span lang="ja">近似線形化モデルの固有値</span></figcaption>
-        </figure>
-        <figure>
-          <img src="./images/about/output-model-gui.png" alt="Model GUI of the network: add buttons and the table of buses on the left, the parameter tab on the right" data-alt-ja="ネットワークのモデル GUI。左に追加ボタンと母線の表、右にパラメータのタブがあります。" width="720" height="460" loading="lazy">
-          <figcaption><span lang="en">Model GUI</span><span lang="ja">モデルの GUI</span></figcaption>
-        </figure>
-      </div>
-      <p lang="en">Other figures include the network diagram in 3D, an animation of the power flow on the 2D diagram, PV curves of the continuation power flow, and the dispatch and locational marginal prices of the optimal power flow. Figures with several time samples can be played back, and linked figures move together.</p>
-      <p lang="ja">ほかに、3D のネットワーク図、2D のネットワーク図上の電力の流れのアニメーション、連続潮流計算の PV 曲線、最適潮流計算の出力配分と地点別限界価格も描けます。複数の時刻を持つ図は再生でき、つないだ図は一緒に動きます。</p>
+      <h2 id="about-output"><span lang="en">Visualization built into the analyses</span><span lang="ja">解析結果を伝える可視化機能</span></h2>
+      <p lang="en">Every analysis comes with its own figures, and they are made with care. The <code>plot_*</code> methods return GraphBase objects, not bare MATLAB figures: you can restyle them afterwards with <code>set_style</code>, play figures with several time samples back as animations, link figures so that they move together, and explore them interactively. The examples below are the output of the commands shown under each one.</p>
+      <p lang="ja">どの解析にも、結果を伝えるための図が用意されており、その図も丁寧に作り込んでいます。<code>plot_*</code> メソッドは MATLAB の図をそのまま返すのではなく、GraphBase のオブジェクトを返します。あとから <code>set_style</code> で見た目を変えられ、複数の時刻を持つ図はアニメーションとして再生でき、図どうしをつないで一緒に動かし、対話的に調べられます。下の例は、それぞれの下に示したコマンドの出力です。</p>
+
+      <!-- Carousel of GUILDA's figures (script: wireCarousels() at the end of this file).
+           To add an item, copy one <li class="vc-item"> block into the list below, in the order you want:
+
+           <li class="vc-item">
+             <figure>
+               <div class="vc-media">
+                 still image or GIF:  <img src="./images/about/carousel/NAME.gif" alt="English description" data-alt-ja="日本語の説明" width="W" height="H" loading="lazy">
+                 or video:            <video src="./images/about/carousel/NAME.mp4" poster="./images/about/carousel/NAME-poster.png" width="W" height="H" autoplay muted loop playsinline preload="metadata" aria-label="English description"></video>
+               </div>
+               <figcaption>
+                 <span class="vc-caption"><span lang="en">Caption</span><span lang="ja">キャプション</span></span>
+                 <pre class="vc-cmd"><code>res.plot_xxx(...)</code></pre>
+               </figcaption>
+             </figure>
+           </li>
+
+           The dots, the counter and the keyboard and swipe handling are made by the script; nothing else needs
+           editing. Media are shown whole inside a 16:10 frame (object-fit: contain). Only the video of the item
+           on screen plays; the others are paused, and with reduced motion videos do not play by themselves. -->
+      <section class="vc" aria-roledescription="carousel" aria-labelledby="about-output">
+        <div class="vc-viewport">
+          <ol class="vc-track">
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Frequency deviation of the generators after a fault at bus B008 (IEEE 14-bus system)</span><span lang="ja">母線 B008 の事故の後の、発電機の周波数偏差（IEEE 14 母線系統）</span></span>
+                  <pre class="vc-cmd"><code>res = net.simulate("fault");
+res.plot_trajectory(Quantity="omega");</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/lecture/part4/swing-no-governor.mp4" poster="./images/lecture/part4/swing-no-governor-poster.png" width="1274" height="600" autoplay muted loop playsinline preload="metadata" aria-label="Spring-mass picture of the 6-bus system: after two motors take more power at t = 1 s, the whole picture starts to turn and keeps turning; on the right, the omega of the four machines"></video></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">The spring-mass model in motion: the frequency falls when the load grows and no governor responds (lecture notes Part 4)</span><span lang="ja">動くばね質点モデル。負荷が増え、ガバナが働かないと周波数が下がり続けます（講義ノート Part 4）</span></span>
+                  <pre class="vc-cmd"><code>[G, G_chart] = result.plot_spring_model();
+G.animate();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-network-diagram.png" alt="Network diagram of the IEEE 14-bus system at t = 1.02 s, with branches colored by the current magnitude" data-alt-ja="t = 1.02 秒の IEEE 14 母線系統のネットワーク図。ブランチは電流の大きさで色分けされています。" width="877" height="802" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Network diagram during the fault, branches coloured by the current</span><span lang="ja">事故中のネットワーク図。ブランチを電流の大きさで色分けしています</span></span>
+                  <pre class="vc-cmd"><code>G = res.plot_diagram();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-voltage.png" alt="Voltage magnitudes of the 14 buses: they drop during the fault at 1 s and recover within about 1 s" data-alt-ja="14 母線の電圧の大きさ。1 秒の事故で下がり、約 1 秒で回復します。" width="1029" height="622" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Bus voltage magnitudes during and after the fault</span><span lang="ja">事故中と事故後の母線電圧の大きさ</span></span>
+                  <pre class="vc-cmd"><code>res.plot_trajectory();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/lecture/part4/swing-out-of-step.mp4" poster="./images/lecture/part4/swing-out-of-step-poster.png" width="1284" height="600" autoplay muted loop playsinline preload="metadata" aria-label="Spring-mass picture of the 6-bus system: two motors fall behind, slip around the circle and stop; on the right, the omega of the four machines"></video></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Loss of synchronism: two motors slip around the circle (lecture notes Part 4)</span><span lang="ja">脱調。2 台の電動機が円を回って滑ります（講義ノート Part 4）</span></span>
+                  <pre class="vc-cmd"><code>[G, G_chart] = result.plot_spring_model();
+G.animate();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-eigenvalues.png" alt="Eigenvalues of the linearized model in the complex plane" data-alt-ja="近似線形化モデルの固有値を複素平面に描いた図" width="1022" height="672" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Eigenvalues of the linearized model at the operating point</span><span lang="ja">動作点で近似線形化したモデルの固有値</span></span>
+                  <pre class="vc-cmd"><code>sys = net.get_sys();
+sys.plot_eigenvalue();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/lecture/part4/swing-voltage-collapse.mp4" poster="./images/lecture/part4/swing-voltage-collapse-poster.png" width="1216" height="800" autoplay muted loop playsinline preload="metadata" aria-label="Voltage collapse on the funnel z = log|V|: the load bus moves inwards and down the slope and finally falls to the bottom, beside the phasor plane and the bus voltages"></video></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">Voltage collapse as a mass falling down the funnel z = log|V|, linked with the phasor plane and the trajectories (lecture notes Part 4)</span><span lang="ja">漏斗 z = log|V| を落ちていく質点として見る電圧崩壊。フェーザの平面と時間応答のグラフが一緒に動きます（講義ノート Part 4）</span></span>
+                  <pre class="vc-cmd"><code>G2 = result.plot_spring_model(Dimension=2);
+G3 = result.plot_spring_model(Dimension=3);</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><img src="./images/about/output-model-gui.png" alt="Model GUI of the network: add buttons and the table of buses on the left, the parameter tab on the right" data-alt-ja="ネットワークのモデル GUI。左に追加ボタンと母線の表、右にパラメータのタブがあります。" width="720" height="460" loading="lazy"></div>
+                <figcaption>
+                  <span class="vc-caption"><span lang="en">The model GUI: the network as tables of buses, branches and components</span><span lang="ja">モデルの GUI。母線、ブランチ、機器の表で系統モデルを見られます</span></span>
+                  <pre class="vc-cmd"><code>net.launch_gui();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+          </ol>
+        </div>
+        <div class="vc-controls">
+          <button type="button" class="vc-prev" aria-label="Previous" data-aria-label-ja="前へ"><span class="vc-arrow" aria-hidden="true"></span></button>
+          <div class="vc-dots"></div>
+          <span class="vc-count" aria-hidden="true"></span>
+          <button type="button" class="vc-next" aria-label="Next" data-aria-label-ja="次へ"><span class="vc-arrow" aria-hidden="true"></span></button>
+        </div>
+        <p class="vc-status" aria-live="polite"></p>
+      </section>
+      <p lang="en">Other figures include the network diagram in 3D, PV curves of the continuation power flow, and the dispatch and locational marginal prices of the optimal power flow.</p>
+      <p lang="ja">ほかに、3D のネットワーク図、連続潮流計算の PV 曲線、最適潮流計算の出力配分と地点別限界価格も描けます。</p>
 
       <h2 id="about-knowledge"><span lang="en">Sharing research knowledge</span><span lang="ja">研究の知識の共有</span></h2>
       <p lang="en">Research know-how tends to stay with one person and is lost when that person leaves. GUILDA aims to turn it into programs, explicit knowledge that others can reuse and build on.</p>
@@ -861,7 +975,7 @@ sys = net.get_sys();           % linearized model</code></pre>
       <p lang="en">Continue from the tutorial Live Script that just opened (<code>Main.mlx</code>, Step 0): it is the table of contents of the Live Scripts in <code>_GUILDAtutorial</code>, with the usage manual (Steps 1–12) and the texts on the analyses (Parts 0–8). If you are new to GUILDA, start with Step 1. Close it by mistake? <code>GUILDA.tutorial()</code> opens it again. The Tutorial tab introduces what you can analyze with the Live Script of each Part, gives the basic workflow as plain code and lists Steps 1–12.</p>
       <p lang="ja">続きは、起動時に開いたチュートリアルの Live Script（<code>Main.mlx</code>、Step 0）から進めます。これは <code>_GUILDAtutorial</code> にある Live Script の目次で、使い方のマニュアル（Step 1〜12）と、解析を学ぶテキスト（<span class="tutorial-audience-nowrap">Part 0〜8</span>）を並べています。初めて使う人は Step 1 から読んでください。閉じてしまったときは <code>GUILDA.tutorial()</code> でもう一度開けます。チュートリアルタブでは、解析できることを Part ごとの Live Script とあわせて紹介し、基本的な流れのコードと、Step 1〜12 の一覧を見られます。</p>
       <div class="home-actions">
-        <a href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><span lang="en">Go to the Tutorial</span><span lang="ja">チュートリアルへ</span></a>
+        <a class="btn btn-primary btn-chevron" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><span lang="en">Go to the Tutorial</span><span lang="ja">チュートリアルへ</span></a>
       </div>
 
       <h2 id="gs-options"><span lang="en">Options</span><span lang="ja">オプション</span></h2>
@@ -875,31 +989,6 @@ sys = net.get_sys();           % linearized model</code></pre>
       <p lang="en">The window lists the sections in this order: Startup, Message, PowerSystemModel, then the analyses (PowerFlowCalculation, OptimalPowerFlow, ContinuationPowerFlow, TimeSimulation, ApproximateLinearization).</p>
       <p lang="ja">ウィンドウには、Startup、Message、PowerSystemModel、各解析（PowerFlowCalculation、OptimalPowerFlow、ContinuationPowerFlow、TimeSimulation、ApproximateLinearization）の順にセクションが並びます。</p>
       <img src="./images/setting_startup.png" data-alt-ja="GUILDA の設定ウィンドウ（Startup セクション）" alt="GUILDA settings window (Startup section)" class="gs-settings-img">
-
-      <h3 id="gs-setting-command"><span lang="en">Changing Settings by Command</span><span lang="ja">コマンドによる設定の変更</span></h3>
-      <p lang="en">Give a category and Name-Value arguments to change settings without opening the window. The change is saved as with Apply in the window and stays after MATLAB restarts. <code>GUILDA.config</code> reads a setting.</p>
-      <p lang="ja">カテゴリと Name-Value 引数を渡せば、ウィンドウを開かずに設定を変えられます。変更はウィンドウで Apply を押したときと同じように保存され、MATLAB を再起動しても残ります。設定の値は <code>GUILDA.config</code> で読み出せます。</p>
-<pre><code>&gt;&gt; GUILDA.setting("PowerFlowCalculation", Tolerance=1e-10, WhenFailed="ERROR")
-&gt;&gt; GUILDA.config("PowerFlowCalculation", "Tolerance")</code></pre>
-      <ul lang="en">
-        <li>An unknown category or setting, or a value of the wrong type or not among the choices, stops with an error and changes nothing.</li>
-        <li>A new version of GUILDA may reset the settings of a category to the defaults, also the values you changed. GUILDA then prints <code>INFO:</code> with the category at startup.</li>
-      </ul>
-      <ul lang="ja">
-        <li>存在しないカテゴリや設定を指定したり、型の違う値や選択肢にない値を渡したりすると、エラーで止まります。設定は何も変わりません。</li>
-        <li>GUILDA を新しい版にすると、カテゴリの設定が既定値に戻ることがあります。自分で変えた値も戻ります。そのときは、起動時にカテゴリ名を添えた <code>INFO:</code> を表示します。</li>
-      </ul>
-
-      <h3 id="gs-messages"><span lang="en">Warnings and INFO Messages</span><span lang="ja">警告と INFO メッセージ</span></h3>
-      <p lang="en">The <code>Message</code> category of <code>GUILDA.setting()</code> shows or hides the messages of GUILDA. Errors are always shown.</p>
-      <p lang="ja">GUILDA のメッセージを表示するかどうかは、<code>GUILDA.setting()</code> の <code>Message</code> カテゴリで切り替えます。エラーは常に表示します。</p>
-      <table>
-        <thead><tr><th><span lang="en">Setting</span><span lang="ja">設定</span></th><th><span lang="en">Default</span><span lang="ja">既定値</span></th><th><span lang="en">Shows</span><span lang="ja">表示するもの</span></th></tr></thead>
-        <tbody>
-          <tr><td><code>ShowWarning</code></td><td><code>true</code></td><td><span lang="en">The warnings of GUILDA (identifier <code>GUILDA:&lt;Object&gt;:&lt;Key&gt;</code>)</span><span lang="ja">GUILDA の警告（識別子 <code>GUILDA:&lt;Object&gt;:&lt;Key&gt;</code>）</span></td></tr>
-          <tr><td><code>ShowInfo</code></td><td><code>true</code></td><td><span lang="en">The lines that start with <code>INFO:</code>, e.g. the component that takes the remaining power when a slack bus is set</span><span lang="ja"><code>INFO:</code> で始まる行（例: スラック母線を設定したとき、残りの電力を受け持つ機器）</span></td></tr>
-        </tbody>
-      </table>
 
       <h3 id="gs-utility"><span lang="en">Utility Functions</span><span lang="ja">ユーティリティ関数</span></h3>
 <pre><code>&gt;&gt; GUILDA.pwd()         % Get the GUILDA repository path
@@ -927,20 +1016,20 @@ sys = net.get_sys();           % linearized model</code></pre>
           <span class="tutorial-audience-title"><span lang="en">Lecture notes (<span class="tutorial-audience-nowrap">Part 0–8</span>)</span><span lang="ja">講義ノート（<span class="tutorial-audience-nowrap">Part 0〜8</span>）</span></span>
           <span class="tutorial-audience-text" lang="en">The basics of power system engineering. Each Part explains one kind of analysis with figures and comes with a Live Script that computes it in GUILDA. No prior knowledge of power systems is assumed.</span>
           <span class="tutorial-audience-text" lang="ja">電力系統工学の基礎を学べます。各 Part で解析を図で説明し、その内容を GUILDA で計算する Live Script も付いています。電力系統の予備知識は前提にしていません。</span>
-          <span class="tutorial-audience-more"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span></span>
+          <span class="tutorial-audience-more flow-edge"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span></span>
         </a>
         <a class="tutorial-audience-card" href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;">
           <span class="tutorial-audience-label"><span lang="en">To learn to use GUILDA</span><span lang="ja">GUILDA の使い方を学びたい人へ</span></span>
           <span class="tutorial-audience-title"><span lang="en">How to use GUILDA (hands-on <span class="tutorial-audience-nowrap">Step 1–12</span>)</span><span lang="ja">GUILDA の使い方（ハンズオン <span class="tutorial-audience-nowrap">Step 1〜12</span>）</span></span>
           <span class="tutorial-audience-text" lang="en">The usage manual: Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step. The basic workflow, the hands-on Steps and reference material to look things up.</span>
           <span class="tutorial-audience-text" lang="ja">使い方のマニュアルです。<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います。基本的な流れ、ハンズオンの Step、調べものに使う参考資料があります。</span>
-          <span class="tutorial-audience-more"><span lang="en">Go to how to use GUILDA</span><span lang="ja">GUILDA の使い方へ</span></span>
+          <span class="tutorial-audience-more flow-edge"><span lang="en">Go to how to use GUILDA</span><span lang="ja">GUILDA の使い方へ</span></span>
         </a>
       </div>
 
       <h1 id="what-you-can-analyze"><span lang="en">Lecture notes: power system basics</span><span lang="ja">講義ノート：電力系統工学の基礎</span></h1>
-      <p lang="en">For readers who want to learn the basics of power system engineering; no prior knowledge of power systems is assumed. The analyses of power systems, one field per card, each tied to the power system engineering behind it. Each card opens a lecture-note page that explains the field with figures, one page per Part. Each card also gives the command that opens the Live Script of the Part, which computes what the page explains with GUILDA.</p>
-      <p lang="ja">電力系統工学の基礎を学びたい人向けで、電力系統の予備知識は前提にしていません。電力系統の解析を分野ごとに、背景にある電力系統工学の知識と結びつけて紹介します。各カードから、その分野を図で説明する講義ノートのページを開けます。ページは Part ごとに 1 つです。各カードには、ページの内容を GUILDA で計算して確かめる、その Part の Live Script を開くコマンドもあります。</p>
+      <p lang="en">For readers who want to learn the basics of power system engineering; no prior knowledge of power systems is assumed. The analyses of power systems, one field per card, each tied to the power system engineering behind it. Each card opens the lecture notes that explain the field with figures, one set per Part. Each card also gives the command that opens the Live Script of the Part, which computes what the lecture notes explain with GUILDA.</p>
+      <p lang="ja">電力系統工学の基礎を学びたい人向けで、電力系統の予備知識は前提にしていません。電力系統の解析を分野ごとに、背景にある電力系統工学の知識と結びつけて紹介します。各カードから、その分野を図で説明する講義ノートを開けます。講義ノートは Part ごとに 1 つです。各カードには、講義ノートの内容を GUILDA で計算して確かめる、その Part の Live Script を開くコマンドもあります。</p>
       <ol id="lecture-list" class="analysis-cards"></ol>
 
       <hr class="tutorial-divider">
@@ -1072,6 +1161,7 @@ sol = net.simulate("fault");</code></pre>
       const target = targetId ? document.getElementById(targetId) : null;
       if (target) target.scrollIntoView({ block: 'start' });
       else window.scrollTo(0, 0);
+      document.dispatchEvent(new CustomEvent('guilda-tabchange', { detail: { tabId } }));
     }
 
     // Open the tab named by the fragment, or the tab that holds the element it names
@@ -1204,8 +1294,8 @@ sol = net.simulate("fault");</code></pre>
     }
 
     // One card per lecture Part (database/list_Lectures.js) under "What you can analyze with GUILDA",
-    // in one column: the field, the title and what the analysis shows, linking to the lecture page. A Part whose
-    // page is not written yet (ready: false) has no link and is marked "In preparation".
+    // in one column: the field, the title and what the analysis shows, linking to the lecture notes. A Part whose
+    // lecture notes are not written yet (ready: false) has no link and is marked "In preparation".
     // Beside the link, the command that opens the Live Script of the Part (file).
     function renderLectures() {
       const list = document.getElementById('lecture-list');
@@ -1224,7 +1314,7 @@ sol = net.simulate("fault");</code></pre>
             <h3 class="analysis-card-title">${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</h3>
             <p class="analysis-card-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
             ${t.ready
-              ? `<span class="analysis-card-more">${bilingual('Read the page', 'ページを読む')}</span>`
+              ? `<span class="analysis-card-more flow-edge">${bilingual('Open the lecture notes', '講義ノートを開く')}</span>`
               : `<span class="lec-pending">${bilingual('In preparation', '準備中')}</span>`}`;
         const script = t.file ? `
             <div class="analysis-card-script">
@@ -1237,6 +1327,91 @@ sol = net.simulate("fault");</code></pre>
           </li>`;
       }).join('');
       wireCopyButtons(list);
+    }
+
+    // Carousels (section.vc, About tab): one item at a time; prev/next buttons, dots, arrow keys
+    // and a horizontal swipe move between items. There is no autoplay. Only the video of the item
+    // on screen plays, and with prefers-reduced-motion videos do not start by themselves (they show
+    // their poster and controls). Items that are off screen are inert, so Tab skips them.
+    function wireCarousels() {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      document.querySelectorAll('.vc').forEach(root => {
+        const track = root.querySelector('.vc-track');
+        const items = Array.from(root.querySelectorAll('.vc-item'));
+        const dots = root.querySelector('.vc-dots');
+        const count = root.querySelector('.vc-count');
+        const status = root.querySelector('.vc-status');
+        const prev = root.querySelector('.vc-prev');
+        const next = root.querySelector('.vc-next');
+        if (!track || !items.length) return;
+        let index = 0;
+        const shown = () => root.closest('.tab-content')?.classList.contains('active') ?? true;
+        root.tabIndex = 0;
+        items.forEach((item, i) => {
+          item.setAttribute('role', 'group');
+          item.setAttribute('aria-roledescription', 'slide');
+          item.setAttribute('aria-label', `${i + 1} / ${items.length}`);
+        });
+        root.querySelectorAll('video').forEach(v => {
+          v.removeAttribute('autoplay');
+          v.muted = true;
+          v.pause();
+          if (reduceMotion.matches) v.controls = true;
+        });
+        const dotButtons = items.map((item, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'vc-dot';
+          b.setAttribute('aria-label', `${i + 1} / ${items.length}`);
+          b.addEventListener('click', () => go(i));
+          dots.appendChild(b);
+          return b;
+        });
+        function go(i) {
+          index = (i + items.length) % items.length;
+          track.style.transform = `translateX(${-100 * index}%)`;
+          items.forEach((item, k) => {
+            const on = k === index;
+            item.inert = !on;
+            item.setAttribute('aria-hidden', String(!on));
+            item.querySelectorAll('video').forEach(v => {
+              if (on && shown() && !reduceMotion.matches) { const p = v.play(); if (p) p.catch(() => {}); }
+              else v.pause();
+            });
+            item.querySelectorAll('img[loading="lazy"]').forEach(img => { if (Math.abs(k - index) <= 1) img.loading = 'eager'; });
+          });
+          dotButtons.forEach((b, k) => b.setAttribute('aria-current', k === index ? 'true' : 'false'));
+          count.textContent = `${index + 1} / ${items.length}`;
+          const caption = items[index].querySelector('.vc-caption');
+          status.textContent = `${index + 1} / ${items.length}: ${caption ? caption.innerText.trim() : ''}`;
+        }
+        prev.addEventListener('click', () => go(index - 1));
+        next.addEventListener('click', () => go(index + 1));
+        root.addEventListener('keydown', (e) => {
+          if (e.target.closest('pre')) return;
+          if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+          else if (e.key === 'Home') { e.preventDefault(); go(0); }
+          else if (e.key === 'End') { e.preventDefault(); go(items.length - 1); }
+        });
+        // Swipe: a mostly horizontal move of 40 px or more on the media
+        let x0 = null, y0 = null;
+        const viewport = root.querySelector('.vc-viewport');
+        viewport.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+        viewport.addEventListener('touchend', (e) => {
+          if (x0 === null) return;
+          const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
+          x0 = y0 = null;
+        });
+        // Videos play only while their tab is open
+        document.addEventListener('guilda-tabchange', () => {
+          items[index].querySelectorAll('video').forEach(v => {
+            if (shown() && !reduceMotion.matches) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+          });
+        });
+        go(0);
+      });
     }
 
     function escapeHtml(value) {
@@ -1252,6 +1427,7 @@ sol = net.simulate("fault");</code></pre>
       renderTutorials();
       renderLectures();
       wireAnalysisLinks();
+      wireCarousels();
       openFragment();
       applyLanguageAttributes();
       document.addEventListener('guilda-langchange', applyLanguageAttributes);
