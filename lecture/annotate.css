@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/* Annotated equations of the lecture notes: an equation whose terms carry short
+   labels ("This is the rotor inertia!"). Layout is done by lecture.js.
+
+   <figure class="lec-annot">
+     <div class="lec-math" data-tex="\annot{1}{M}\,\dot\omega = \annot{2}{P_\mathrm{m}} - ..."></div>
+     <ol class="lec-annot-notes">
+       <li data-at="above"><span lang="en">…</span><span lang="ja">…</span></li>   <- term 1
+       <li><span lang="en">…</span><span lang="ja">…</span></li>                   <- term 2 (below)
+     </ol>
+   </figure>
+
+   Term k and label k take var(--gem-k) (style.css :root); arrows stay grey.
+   Wide screens: labels sit above/below with arrows (.is-arrows, set by lecture.js).
+   Otherwise (narrow screens, labels that do not fit, print, no JS): labels stack below
+   the equation, numbered, and the terms carry the same numbers. */
+
+.lec-annot { position: relative; margin: 20px 0 24px; padding: 0; }
+.lec-annot > .lec-math { position: relative; z-index: 1; margin: 0; padding: 8px 0; font-size: 1.1em; }
+.lec-annot-layer { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
+
+.lec-annot-t1, .lec-annot-notes > li:nth-child(1), .lec-annot-c1 { --annot-c: var(--gem-1); }
+.lec-annot-t2, .lec-annot-notes > li:nth-child(2), .lec-annot-c2 { --annot-c: var(--gem-2); }
+.lec-annot-t3, .lec-annot-notes > li:nth-child(3), .lec-annot-c3 { --annot-c: var(--gem-3); }
+.lec-annot-t4, .lec-annot-notes > li:nth-child(4), .lec-annot-c4 { --annot-c: var(--gem-4); }
+.lec-annot-t5, .lec-annot-notes > li:nth-child(5), .lec-annot-c5 { --annot-c: var(--gem-5); }
+.lec-annot-t6, .lec-annot-notes > li:nth-child(6), .lec-annot-c6 { --annot-c: var(--gem-6); }
+.lec-annot-t7, .lec-annot-notes > li:nth-child(7), .lec-annot-c7 { --annot-c: var(--gem-7); }
+
+/* Term highlight and its number, drawn in the layer behind the equation */
+.lec-annot-box { fill: color-mix(in srgb, var(--annot-c) 13%, transparent); stroke: var(--annot-c); stroke-width: 1.5; }
+.lec-annot-badge circle { fill: var(--annot-c); stroke: var(--surface); stroke-width: 1.5; }
+.lec-annot-badge text { fill: #FFFFFF; font: 700 10px/1 var(--font-sans); }
+.lec-annot-arrow { fill: none; stroke: var(--muted); stroke-width: 1.4; }
+.lec-annot-head { fill: var(--muted); }
+
+/* Labels: stacked list (default) */
+.lec-annot-notes { counter-reset: lec-annot; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 10px; margin: 10px 0 0; padding: 0; list-style: none; }
+.lec-annot-notes > li { counter-increment: lec-annot; position: relative; z-index: 2; display: flex; align-items: baseline; gap: 6px; box-sizing: border-box; max-width: 100%; margin: 0; padding: 3px 9px 3px 5px; background: color-mix(in srgb, var(--annot-c) 7%, var(--surface)); border: 1.5px solid var(--annot-c); border-radius: 999px; color: var(--ink); font-size: 0.88rem; font-weight: 600; line-height: 1.4; }
+.lec-annot-notes > li::before { content: counter(lec-annot); flex: none; align-self: center; display: inline-block; min-width: 1.45em; height: 1.45em; border-radius: 50%; background: var(--annot-c); color: #FFFFFF; font-size: 0.75rem; font-weight: 700; line-height: 1.45em; text-align: center; }
+.lec-annot-notes .katex { font-size: 1.05em; font-weight: 400; }
+
+/* Labels next to their terms with arrows */
+.lec-annot.is-arrows .lec-annot-notes { display: block; margin: 0; }
+.lec-annot.is-arrows .lec-annot-notes > li { position: absolute; display: inline-flex; width: max-content; max-width: min(28em, 75%); }
+.lec-annot.is-arrows .lec-annot-notes > li::before { display: none; }
+.lec-annot.is-arrows .lec-annot-notes > li { padding-left: 10px; padding-right: 10px; border-radius: 12px; }
+
+@media (max-width: 480px) {
+  .lec-annot > .lec-math { font-size: 0.92em; }
+  .lec-annot-notes { flex-direction: column; align-items: flex-start; }
+  .lec-annot-notes > li { border-radius: 12px; }
+}
+
+@media print {
+  .lec-annot { padding: 0 !important; break-inside: avoid; }
+  .lec-annot-layer { display: none; }
+  .lec-annot .lec-annot-term { color: var(--annot-c); }
+  .lec-annot.is-arrows .lec-annot-notes { display: flex; margin-top: 8px; }
+  .lec-annot.is-arrows .lec-annot-notes > li { position: relative; left: auto !important; top: auto !important; max-width: 100%; }
+  .lec-annot.is-arrows .lec-annot-notes > li::before { display: inline-block; }
+  .lec-annot-notes > li, .lec-annot-notes > li::before { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

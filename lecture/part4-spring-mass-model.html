@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec4- ; shared lecture CSS (lec-*) is in style.css. -->
   <style>
@@ -105,7 +106,14 @@
           <h2><span lang="en">A voltage as a point on a plane</span><span lang="ja">電圧を平面上の点として置く</span></h2>
           <p lang="en">The voltage of each bus is a sine wave at 50 or 60 Hz. In normal operation all buses oscillate at the same frequency; they differ only in their amplitude and in how far their wave is shifted, the <strong>phase</strong>. If we look at the waves from a frame that itself turns at the rated frequency, the oscillation disappears and each voltage becomes a fixed arrow, the <strong>phasor</strong>. Its length is the voltage magnitude |V| and its angle is the phase θ:</p>
           <p lang="ja">各母線の電圧は、50 Hz または 60 Hz の正弦波です。平常の運転では、すべての母線が同じ周波数で振動していて、違うのは振幅と、波のずれ（<strong>位相</strong>）だけです。そこで、定格の周波数で回る座標から波を見ると、振動は消え、各母線の電圧は止まった矢印になります。これが<strong>フェーザ</strong>です。矢印の長さが電圧の大きさ |V|、角度が位相 θ です。</p>
-          <div class="lec-math" data-tex="v_i(t) = \sqrt{2}\,|V_i|\cos\bigl(2\pi f_0 t + \theta_i\bigr) \quad\longleftrightarrow\quad V_i = |V_i|\,e^{j\theta_i}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="v_i(t) = \sqrt{2}\,|V_i|\cos\bigl(\annot{1}{2\pi f_0 t} + \theta_i\bigr) \quad\longleftrightarrow\quad V_i = \annot{2}{|V_i|}\,e^{j\annot{3}{\theta_i}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The rotation at the rated frequency: it disappears in the rotating frame</span><span lang="ja">定格の周波数で回る分：回る座標から見ると消える</span></li>
+              <li><span lang="en">Length of the arrow: the voltage magnitude</span><span lang="ja">矢印の長さ（電圧の大きさ）</span></li>
+              <li data-at="above"><span lang="en">Angle of the arrow: the phase</span><span lang="ja">矢印の角度（位相）</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="v_i(t)"></span> is the instantaneous voltage of bus <span class="lec-math-inline" data-tex="i"></span>, <span class="lec-math-inline" data-tex="|V_i|"></span> its RMS value and <span class="lec-math-inline" data-tex="f_0"></span> the rated frequency.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="v_i(t)"></span> は母線 <span class="lec-math-inline" data-tex="i"></span> の電圧の瞬時値、<span class="lec-math-inline" data-tex="|V_i|"></span> はその実効値、<span class="lec-math-inline" data-tex="f_0"></span> は定格の周波数です。</p>
 
@@ -166,7 +174,14 @@
           <h2><span lang="en">Transmission lines as springs</span><span lang="ja">送電線をばねに見立てる</span></h2>
           <p lang="en">Now connect the points. The current that flows from bus <span class="lec-math-inline" data-tex="i"></span> into the line to bus <span class="lec-math-inline" data-tex="j"></span> is proportional to the difference of the two voltages. Neglect the resistance and the shunt capacitance of the line, so that it is a pure reactance <span class="lec-math-inline" data-tex="X_{ij}"></span> with the admittance <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = -jB_{ij}"></span>, <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>. Then</p>
           <p lang="ja">次に、点どうしをつなぎます。母線 <span class="lec-math-inline" data-tex="i"></span> から母線 <span class="lec-math-inline" data-tex="j"></span> への送電線に流れ込む電流は、2 つの電圧の差に比例します。送電線の抵抗と対地静電容量を無視して、リアクタンス <span class="lec-math-inline" data-tex="X_{ij}"></span> だけでできているとすると、アドミタンスは <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = -jB_{ij}"></span>（<span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>）で、次の式になります。</p>
-          <div class="lec-math" data-tex="I_{ij} = y_{ij}\,(V_i - V_j), \qquad F_{ij} := -j\,I_{ij} = B_{ij}\,(V_j - V_i)"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="I_{ij} = y_{ij}\,(V_i - V_j), \qquad \annot{1}{F_{ij}} := -j\,I_{ij} = \annot{2}{B_{ij}}\,\annot{3}{(V_j - V_i)}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the force of the spring!</span><span lang="ja">これがばねの力！</span></li>
+              <li><span lang="en">Spring constant: the stiffness of the line</span><span lang="ja">ばね係数（送電線の硬さ）</span></li>
+              <li data-at="above"><span lang="en">How far the spring is stretched</span><span lang="ja">ばねの伸び</span></li>
+            </ol>
+          </figure>
           <p lang="en">The second form is Hooke's law: the force of a spring is the spring constant times the stretch, pointing towards the other end. Here the "stretch" is the difference <span class="lec-math-inline" data-tex="V_j - V_i"></span> between the two points, the "spring constant" is the line susceptance <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>, and the "force" <span class="lec-math-inline" data-tex="F_{ij}"></span> is the current turned by −90° (multiplied by <span class="lec-math-inline" data-tex="-j"></span>). <strong>A line is a spring between two points.</strong> A short, strong line (small X) is a stiff spring.</p>
           <p lang="ja">2 つ目の式はフックの法則（ばねの力 ＝ ばね係数 × 伸び、向きは相手の端へ）と同じ形です。「伸び」は 2 つの点の差 <span class="lec-math-inline" data-tex="V_j - V_i"></span>、「ばね係数」は送電線のサセプタンス <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>、「力」<span class="lec-math-inline" data-tex="F_{ij}"></span> は電流を −90° 回したもの（<span class="lec-math-inline" data-tex="-j"></span> を掛けたもの）です。つまり、<strong>送電線は 2 つの点をつなぐばね</strong>です。短くて太い送電線（X が小さい）ほど、硬いばねになります。</p>
           <p lang="en">Split the force into the part along the circle through <span class="lec-math-inline" data-tex="V_i"></span> (tangential) and the part along the radius (radial). With the complex power <span class="lec-math-inline" data-tex="S_{ij} = V_i\,\overline{I_{ij}} = P_{ij} + jQ_{ij}"></span> sent from bus <span class="lec-math-inline" data-tex="i"></span> into the line, the force seen in the direction of <span class="lec-math-inline" data-tex="V_i"></span> is</p>
@@ -231,7 +246,13 @@
           </dl>
           <p lang="en">For two points on circles of radii <span class="lec-math-inline" data-tex="|V_1|"></span> and <span class="lec-math-inline" data-tex="|V_2|"></span> with the angle <span class="lec-math-inline" data-tex="\delta = \theta_1 - \theta_2"></span> between them, the imaginary part of the equation above gives the torque of the spring:</p>
           <p lang="ja">半径 <span class="lec-math-inline" data-tex="|V_1|"></span> と <span class="lec-math-inline" data-tex="|V_2|"></span> の円の上にあり、角度の差が <span class="lec-math-inline" data-tex="\delta = \theta_1 - \theta_2"></span> の 2 つの点では、上の式の虚部から、ばねのトルクは次のようになります。</p>
-          <div class="lec-math" data-tex="P_{12} = B_{12}\,|V_1|\,|V_2|\,\sin\delta"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{P_{12}} = B_{12}\,|V_1|\,|V_2|\,\annot{2}{\sin\delta}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The torque of the spring = the power on the line!</span><span lang="ja">ばねのトルク ＝ 送電線の電力！</span></li>
+              <li><span lang="en">Set by the angle between the two points</span><span lang="ja">2 つの点の角度の差で決まる</span></li>
+            </ol>
+          </figure>
           <p lang="en">This is exactly the familiar formula for the active power sent over a lossless line. The power flows from the point that is ahead to the point that is behind, and the larger the angle between them, the more power the spring carries — up to a limit that we will meet below.</p>
           <p lang="ja">これは、損失のない送電線で送る有効電力のおなじみの式そのものです。電力は角度が進んだ点から遅れた点へ流れ、角度の差が大きいほど、ばねが伝える電力は大きくなります。ただし、後で見るように限界があります。</p>
         </section>
@@ -241,7 +262,13 @@
           <h2><span lang="en">The power flow as a balance of springs</span><span lang="ja">潮流計算はばねのつり合い</span></h2>
           <p lang="en">Equipment at a bus pushes or pulls its point. A generator sends power into the network, so it pushes its point forward along the circle (counterclockwise) with a torque P. A load takes power out, so it pulls its point backward. The springs stretch until their forces cancel these pushes and pulls at every point. With the power <span class="lec-math-inline" data-tex="S_i = P_i + jQ_i"></span> injected at bus <span class="lec-math-inline" data-tex="i"></span> by its equipment, the balance of forces at the bus is</p>
           <p lang="ja">母線につながる機器は、その点を押したり引いたりします。発電機は系統へ電力を送り出すので、点を円に沿って前（反時計回り）へトルク P で押します。負荷は電力を取り出すので、点を後ろへ引きます。ばねは、どの点でも、その押す力・引く力を打ち消すところまで伸びます。母線 <span class="lec-math-inline" data-tex="i"></span> の機器が注入する電力を <span class="lec-math-inline" data-tex="S_i = P_i + jQ_i"></span> とすると、母線での力のつり合いは次の式です。</p>
-          <div class="lec-math" data-tex="f_i + \sum_{j} F_{ij} = 0, \qquad f_i = e^{j\theta_i}\,\frac{Q_i + j\,P_i}{|V_i|}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{f_i} + \annot{2}{\sum_{j} F_{ij}} = 0, \qquad f_i = e^{j\theta_i}\,\frac{Q_i + j\,P_i}{|V_i|}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The push or pull of the equipment at the bus</span><span lang="ja">機器が点を押す・引く力</span></li>
+              <li><span lang="en">The sum of the forces of the springs at the bus</span><span lang="ja">つながるばねの力の合計</span></li>
+            </ol>
+          </figure>
           <p lang="en">By the decomposition of the previous section this is the same as <span class="lec-math-inline" data-tex="S_i = \sum_j S_{ij}"></span>, the power equation of the bus. The <strong>power flow calculation therefore finds the positions where all the springs balance</strong>: the angles and magnitudes of the points are the voltage phasors of the solution.</p>
           <p lang="ja">前の節の分解から、これは母線の電力方程式 <span class="lec-math-inline" data-tex="S_i = \sum_j S_{ij}"></span> と同じです。つまり、<strong>潮流計算は、すべてのばねがつり合う位置を求める計算</strong>です。そのときの点の角度と半径が、潮流計算の解の電圧フェーザです。</p>
 
@@ -311,6 +338,16 @@ net.plot_spring_model();</code></pre>
           <h2><span lang="en">Why the frequency falls, and what inertia is</span><span lang="ja">周波数が下がる理由と慣性</span></h2>
           <p lang="en">So far the generators were just pushes. To see dynamics, give each generator its own point: the <strong>internal voltage</strong> behind its reactance. This point is the rotor of the machine, so it has <strong>mass</strong>: its inertia M. The turbine pushes it forward with the mechanical power, and the spring to its bus pulls it back with the electrical power it delivers. Bus points have no mass; they move to the balanced position at once.</p>
           <p lang="ja">ここまでは、発電機を単に押す力として扱ってきました。動きを見るために、発電機にも自分の点を持たせます。リアクタンスの奥にある<strong>内部電圧</strong>の点です。この点は発電機の回転子に当たるので、<strong>質量</strong>（慣性 M）を持ちます。タービンが機械入力でこの点を前へ押し、母線へのばねが送り出す電気出力の分だけ後ろへ引きます。母線の点には質量がなく、いつでもすぐにつり合いの位置へ移ります。</p>
+          <p lang="en">As an equation, this is the swing equation of <a href="part3-time-simulation.html#swing">Part 3</a>, the form GUILDA uses: the point with mass follows Newton's law of rotation, and its angle <span class="lec-math-inline" data-tex="\delta"></span> on the plane moves with its speed deviation <span class="lec-math-inline" data-tex="\omega"></span>.</p>
+          <p lang="ja">式で書くと、GUILDA が使う <a href="part3-time-simulation.html#swing">Part 3</a> の動揺方程式そのものです。質量を持つ点が回転の運動方程式に従って動き、平面上の角度 <span class="lec-math-inline" data-tex="\delta"></span> が速さのずれ <span class="lec-math-inline" data-tex="\omega"></span> に応じて進みます。</p>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{M}\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \annot{2}{P_\mathrm{m}} - \annot{3}{P_\mathrm{e}} - D\,\omega, \qquad \frac{\mathrm{d}\delta}{\mathrm{d}t} = 2\pi f_0\,\omega"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The mass of the point: the inertia!</span><span lang="ja">点の質量 ＝ 慣性！</span></li>
+              <li><span lang="en">The turbine pushes the point forward</span><span lang="ja">タービンが点を前へ押す力</span></li>
+              <li data-at="above"><span lang="en">The spring to the bus pulls it back</span><span lang="ja">母線へのばねが後ろへ引く力</span></li>
+            </ol>
+          </figure>
           <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
             <div class="lec-scroll">
               <svg class="lec-svg" viewBox="0 0 780 330" role="img" aria-label="Three stages: balanced torques; a larger load makes the whole picture turn backward; a governor pushes harder and the turning slows">
@@ -479,7 +516,13 @@ net.initialize();</code></pre>
           <p lang="ja">定電力負荷は自分の点を持ちません。潮流の節の力 <span class="lec-math-inline" data-tex="f_i"></span> で、つながる母線に働くだけです。円に沿って後ろへ向かうトルク P と、消費する無効電力 Q による、中心へ向かう力 <span class="lec-math-inline" data-tex="Q/|V|"></span> です。後者には危うい性質があります。負荷は電圧がいくらでも同じ Q を求めるので、<strong>電圧が低いほど、点を中心へ引き込む力が強くなる</strong>のです。電圧が下がると引く力が強まり、電圧がさらに下がります。この繰り返しが電圧崩壊の引き金です。</p>
           <p lang="en">On the flat plane this is hard to see, because a force that grows like 1/|V| near the centre does not look like anything familiar. The trick is to give the plane a shape. Lift every point to the height</p>
           <p lang="ja">平らな平面の上では、この様子は見えにくいままです。中心に近づくほど 1/|V| のように強まる力は、身近な何かに似ていないからです。そこで、平面に形を与えます。各点を次の高さに持ち上げます。</p>
-          <div class="lec-math" data-tex="z = \log|V|, \qquad \frac{\mathrm{d}z}{\mathrm{d}|V|} = \frac{1}{|V|}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{z} = \log|V|, \qquad \frac{\mathrm{d}z}{\mathrm{d}|V|} = \annot{2}{\frac{1}{|V|}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the height of the funnel!</span><span lang="ja">これが漏斗の高さ！</span></li>
+              <li><span lang="en">The slope: steeper towards the centre</span><span lang="ja">傾き：中心に近いほど急になる</span></li>
+            </ol>
+          </figure>
           <p lang="en">The points now move on a <strong>funnel</strong>: almost flat at the rim where |V| is around 1, and steeper and steeper towards the bottom (<span class="lec-math-inline" data-tex="\log"></span> is the natural logarithm, so <span class="lec-math-inline" data-tex="z = 0"></span> at <span class="lec-math-inline" data-tex="|V| = 1"></span>). Let the reactive power Q act as a <strong>constant weight</strong>, with the potential energy <span class="lec-math-inline" data-tex="U = Q\,z = Q\log|V|"></span>. The force that this energy produces in the plane is its slope, <span class="lec-math-inline" data-tex="-\mathrm{d}U/\mathrm{d}|V| = -Q/|V|"></span>: exactly the force of the load towards the centre. The steeper the funnel, the stronger the inward push of the same weight.</p>
           <p lang="ja">点は<strong>漏斗</strong>の上を動くことになります。|V| が 1 前後の縁ではほとんど平らで、底に向かうほど急になる曲面です（<span class="lec-math-inline" data-tex="\log"></span> は自然対数で、<span class="lec-math-inline" data-tex="|V| = 1"></span> で <span class="lec-math-inline" data-tex="z = 0"></span>）。無効電力 Q は、位置エネルギー <span class="lec-math-inline" data-tex="U = Q\,z = Q\log|V|"></span> を持つ<strong>一定の重さ</strong>として働かせます。このエネルギーが平面の上に生む力はその傾き <span class="lec-math-inline" data-tex="-\mathrm{d}U/\mathrm{d}|V| = -Q/|V|"></span> で、ちょうど負荷が中心へ引く力と一致します。漏斗が急なところほど、同じ重さでも内向きの力は強くなります。</p>
 

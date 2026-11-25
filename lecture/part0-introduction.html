@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec0- ; shared lecture CSS (lec-*) is in style.css. -->
 </head>
@@ -178,7 +179,14 @@ net.plot_diagram();</code></pre>
           <p lang="ja">ずれを最初の数秒間受け止めるのは、大きな発電機の回転です。重い回転子は交流の周波数に合わせて回っていて、運動エネルギーを持っています。需要が供給より多いと、その差がこの運動エネルギーから取り出されて回転が遅くなり、<strong>周波数が下がります</strong>。供給が需要より多いと回転が速くなり、<strong>周波数が上がります</strong>。</p>
           <p lang="en">Written as an equation for the whole system, without control and without the change of the loads with the frequency, this is approximately</p>
           <p lang="ja">系統全体についての式にすると、制御と、周波数による負荷の変化を除いて、近似的に次のようになります。</p>
-          <div class="lec-math" data-tex="\frac{2H}{f_0}\,\frac{\mathrm{d}f}{\mathrm{d}t} = P_\mathrm{G} - P_\mathrm{D}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{\frac{2H}{f_0}}\,\annot{2}{\frac{\mathrm{d}f}{\mathrm{d}t}} = \annot{3}{P_\mathrm{G} - P_\mathrm{D}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the inertia of the whole system!</span><span lang="ja">これが系統全体の慣性！</span></li>
+              <li><span lang="en">How fast the frequency changes</span><span lang="ja">周波数が変わる速さ</span></li>
+              <li><span lang="en">The mismatch of supply and demand</span><span lang="ja">需要と供給のずれ</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here <span class="lec-math-inline" data-tex="f"></span> is the frequency and <span class="lec-math-inline" data-tex="f_0"></span> its rated value (50 or 60 Hz); <span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> is the generation and <span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> the demand including the losses, both in per unit of the rated power of the system; <span class="lec-math-inline" data-tex="H"></span> is the inertia constant, the kinetic energy of all the rotors divided by that rated power, in seconds. The frequency changes at a rate set by the mismatch, and the larger the inertia, the slower it changes.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="f"></span> は周波数、<span class="lec-math-inline" data-tex="f_0"></span> はその定格値（50 Hz または 60 Hz）です。<span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> は発電、<span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> は損失を含む需要で、どちらも系統の定格容量を基準にした単位法の値です。<span class="lec-math-inline" data-tex="H"></span> は慣性定数で、すべての回転子の運動エネルギーをその定格容量で割った値（単位は秒）です。周波数は需給のずれに応じた速さで変わり、慣性が大きいほどゆっくり変わります。</p>
 

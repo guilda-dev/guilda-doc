@@ -7,6 +7,7 @@
   <script src="../doc-lang.js"></script>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="annotate.css">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec6- ; shared lecture CSS (lec-*) is in style.css. -->
 </head>
@@ -63,12 +64,25 @@
           <p lang="ja">潮流計算は「発電機がこの出力を出したら、電圧と潮流はどうなるか」に答えます。しかし運用者は、まず出力そのものを決めなければなりません。同じ需要を何台もの発電機でまかなえ、燃料費は発電機ごとに違います。そこで自然に出てくる問いが、<b>総費用がいちばん小さくなるように需要をどう割り振るか</b>です。</p>
           <p lang="en">The simplest form of this problem ignores the network and only asks that generation equals demand. It is called <b>economic dispatch</b> (economic load dispatch, ELD). The cost of a thermal generator is usually written as a quadratic function C<sub>i</sub>(P<sub>i</sub>) of its output:</p>
           <p lang="ja">ネットワークを考えず、発電の合計が需要に等しいことだけを求めるのが、いちばん簡単な形です。これを<b>経済負荷配分</b>（ELD）といいます。火力発電機の費用は、ふつう出力 P<sub>i</sub> の 2 次関数 C<sub>i</sub>(P<sub>i</sub>) で表します。</p>
-          <div class="lec-math" data-tex="\begin{gathered} \min_{P_1,\dots,P_n} \; \sum_i C_i(P_i) \\ \text{s.t.} \quad \sum_i P_i = P_\mathrm{D}, \quad P_i^\mathrm{min} \le P_i \le P_i^\mathrm{max} \end{gathered}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{gathered} \min_{P_1,\dots,P_n} \; \annot{1}{\sum_i C_i(P_i)} \\ \text{s.t.} \quad \annot{2}{\sum_i P_i = P_\mathrm{D}}, \quad \annot{3}{P_i^\mathrm{min} \le P_i \le P_i^\mathrm{max}} \end{gathered}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the total cost: make it smallest!</span><span lang="ja">これが総費用：いちばん小さくしたい！</span></li>
+              <li><span lang="en">Total generation = demand</span><span lang="ja">発電の合計 ＝ 需要</span></li>
+              <li><span lang="en">Limits of each generator</span><span lang="ja">各発電機の出力の上下限</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here P<sub>D</sub> is the total demand: the total cost is minimized while the outputs add up to it and each stays within its limits. In GUILDA the cost is C<sub>i</sub>(P<sub>i</sub>) = H<sub>P,i</sub>P<sub>i</sub><sup>2</sup> + f<sub>P,i</sub>P<sub>i</sub>.</p>
           <p lang="ja">P<sub>D</sub> は需要の合計です。出力の合計が需要に等しく、各出力が上下限の内にあるという条件の下で、総費用を最小にします。GUILDA では費用を C<sub>i</sub>(P<sub>i</sub>) = H<sub>P,i</sub>P<sub>i</sub><sup>2</sup> + f<sub>P,i</sub>P<sub>i</sub> と書きます。</p>
           <p lang="en">The slope dC<sub>i</sub>/dP<sub>i</sub> is the <b>incremental cost</b> (marginal cost): what one more MW from that generator costs. At the optimum, every generator that is not at a limit has the <b>same</b> incremental cost λ; a generator at its upper limit has an incremental cost of λ or less, and one at its lower limit λ or more. If one of them were cheaper at the margin and could still move, moving a little output to it would lower the total cost, so the point would not be optimal.</p>
           <p lang="ja">傾き dC<sub>i</sub>/dP<sub>i</sub> を<b>増分費用</b>（限界費用）といいます。その発電機でもう 1 MW 増やすのにかかる費用です。最適な配分では、上下限に達していない発電機の増分費用はすべて<b>等しく</b>なり、その値を λ と書きます。上限に達した発電機の増分費用は λ 以下、下限に達した発電機は λ 以上です。もし動かせる発電機の 1 台だけ増分費用が安ければ、その発電機に少し出力を移すと総費用が下がるので、最適ではありません。</p>
-          <div class="lec-math" data-tex="\frac{\mathrm{d}C_i}{\mathrm{d}P_i}(P_i) = \lambda \qquad \text{for every } i \text{ with } P_i^\mathrm{min} \lt P_i \lt P_i^\mathrm{max}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{\frac{\mathrm{d}C_i}{\mathrm{d}P_i}(P_i)} = \annot{2}{\lambda} \qquad \text{for every } i \text{ with } P_i^\mathrm{min} \lt P_i \lt P_i^\mathrm{max}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Incremental cost: the cost of one more MW</span><span lang="ja">増分費用：もう 1 MW 増やす費用</span></li>
+              <li><span lang="en">The same value for every generator!</span><span lang="ja">どの発電機でも同じ値！</span></li>
+            </ol>
+          </figure>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -105,7 +119,14 @@
           </dl>
           <p lang="en">Written out, the AC OPF that GUILDA solves is</p>
           <p lang="ja">式で書くと、GUILDA が解く AC OPF は次のとおりです。</p>
-          <div class="lec-math" data-tex="\begin{aligned} \min_{V,\,P_g,\,Q_g}\;& \sum_g \bigl(H_{P,g} P_g^2 + f_{P,g} P_g + H_{Q,g} Q_g^2 + f_{Q,g} Q_g\bigr) \\ \text{s.t.}\;& \textstyle V_i \sum_k \overline{Y_{ik} V_k} = \sum_{g \in i} (P_g + jQ_g) \quad \text{at every bus } i \\ & P_g^\mathrm{min} \le P_g \le P_g^\mathrm{max}, \quad Q_g^\mathrm{min} \le Q_g \le Q_g^\mathrm{max} \\ &amp; V_i^\mathrm{min} \le |V_i| \le V_i^\mathrm{max} \\ & |P_e| \le P_e^\mathrm{max},\; |Q_e| \le Q_e^\mathrm{max},\; |I_e| \le I_e^\mathrm{max} \\ &amp; P_e^2 + Q_e^2 \le (S_e^\mathrm{max})^2,\; |\theta_\mathrm{from} - \theta_\mathrm{to}| \le \theta^\mathrm{max} \end{aligned}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{aligned} \annot{1}{\min_{V,\,P_g,\,Q_g}}\;&amp; \annot{2}{\sum_g \bigl(H_{P,g} P_g^2 + f_{P,g} P_g + H_{Q,g} Q_g^2 + f_{Q,g} Q_g\bigr)} \\ \text{s.t.}\;&amp; \textstyle V_i \sum_k \overline{Y_{ik} V_k} = \sum_{g \in i} (P_g + jQ_g) \quad \text{at every bus } i \\ &amp; P_g^\mathrm{min} \le P_g \le P_g^\mathrm{max}, \quad Q_g^\mathrm{min} \le Q_g \le Q_g^\mathrm{max} \\ &amp; V_i^\mathrm{min} \le |V_i| \le V_i^\mathrm{max} \\ &amp; |P_e| \le P_e^\mathrm{max},\; |Q_e| \le Q_e^\mathrm{max},\; |I_e| \le I_e^\mathrm{max} \\ &amp; \annot{3}{P_e^2 + Q_e^2 \le (S_e^\mathrm{max})^2,\; |\theta_\mathrm{from} - \theta_\mathrm{to}| \le \theta^\mathrm{max}} \end{aligned}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">Minimized over the bus voltages and the P, Q of the components</span><span lang="ja">動かす変数は母線電圧と機器の P・Q</span></li>
+              <li data-at="above"><span lang="en">The cost: quadratic in P and Q</span><span lang="ja">費用：P と Q の 2 次式</span></li>
+              <li><span lang="en">Branch limits: all written with the bus voltages (magnitude and angle)</span><span lang="ja">ブランチの制約：どれも母線電圧（大きさと角度）の式</span></li>
+            </ol>
+          </figure>
           <p lang="en">V<sub>i</sub> = |V<sub>i</sub>|e<sup>jθ<sub>i</sub></sup> is the voltage phasor of bus i (the angle of the reference bus is fixed), Y the admittance matrix of the network, and the bar the complex conjugate. P<sub>g</sub> and Q<sub>g</sub> are the powers injected by component g, positive for a generator and negative for a load; a load has equal lower and upper limits, so its power is fixed. The first constraint is the power-flow equations of every bus: the power sent into the network equals the sum over the components at that bus. The branch limits hold at both ends e of every branch, and a limit set to infinity is left out. The cost coefficients H and f are given per pu of power, in $/h.</p>
           <p lang="ja">V<sub>i</sub> = |V<sub>i</sub>|e<sup>jθ<sub>i</sub></sup> は母線 i の電圧フェーザ（基準母線の角度は固定）、Y は系統のアドミタンス行列、上の横線は複素共役です。P<sub>g</sub>、Q<sub>g</sub> は機器 g が注入する電力で、発電機は正、負荷は負です。負荷は下限と上限が同じなので、電力が固定されます。1 つ目の制約が各母線の電力方程式で、系統へ送り出す電力が、その母線の機器の合計に等しいことを表します。ブランチの制約はすべてのブランチの両端 e にかかり、上限を無限大にした制約は入りません。費用の係数 H、f は単位法の電力あたりで、単位は $/h です。</p>
           <p lang="en">The chart compares three solutions for the same demand. The AC OPF costs a little more than economic dispatch, because the generators also have to cover the line losses (about 3 MW here). When the capacity of the line between buses 7 and 8 is reduced to 40 MW, the cheap generator G2 next to it can no longer send its power that way. Its output is cut back, and the expensive G3 on the other side makes up the difference, so the cost rises by about 4 %.</p>
@@ -128,7 +149,14 @@
           <h2><span lang="en">Congestion and the locational marginal price</span><span lang="ja">混雑と地点別限界価格（LMP）</span></h2>
           <p lang="en">The λ of economic dispatch has a useful meaning: it is how much the least total cost rises when the demand grows by one unit. The OPF gives such a number for every bus. The <b>locational marginal price</b> (LMP) of a bus is the increase of the least cost when the load at <em>that</em> bus grows by one unit, with all limits still respected:</p>
           <p lang="ja">経済負荷配分の λ には、便利な意味があります。需要が 1 単位増えたときに、最小の総費用がどれだけ増えるかです。OPF は、この数を母線ごとに与えます。ある母線の<b>地点別限界価格</b>（LMP）は、<em>その</em>母線の負荷が 1 単位増えたときに、すべての制約を守ったままの最小費用がどれだけ増えるかです。</p>
-          <div class="lec-math" data-tex="\mathrm{LMP}_i = \frac{\partial C^{*}}{\partial P_{\mathrm{D},i}}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\annot{1}{\mathrm{LMP}_i} = \frac{\partial \annot{2}{C^{*}}}{\partial \annot{3}{P_{\mathrm{D},i}}}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">This is the price of power at bus <span class="lec-math-inline" data-tex="i"></span>!</span><span lang="ja">これが母線 <span class="lec-math-inline" data-tex="i"></span> の電気の値段！</span></li>
+              <li data-at="above"><span lang="en">The least total cost found by the OPF</span><span lang="ja">OPF で求めた最小の総費用</span></li>
+              <li><span lang="en">The load at bus <span class="lec-math-inline" data-tex="i"></span></span><span lang="ja">母線 <span class="lec-math-inline" data-tex="i"></span> の負荷</span></li>
+            </ol>
+          </figure>
           <p lang="en">C<sup>*</sup> is the least total cost found by the OPF, and P<sub>D,i</sub> the active power of the load at bus i; the other loads are held. It equals the Lagrange multiplier of the active-power balance of bus i at the optimum, which is how it is computed.</p>
           <p lang="ja">C<sup>*</sup> は OPF で求めた最小の総費用、P<sub>D,i</sub> は母線 i の負荷の有効電力で、ほかの負荷は変えません。この値は、最適解での母線 i の有効電力のつり合いの式のラグランジュ乗数に等しく、実際にはそこから求めます。</p>
           <p lang="en">Without any binding line limit, the LMPs are almost the same everywhere; they differ mainly by the losses (with a small part from the voltage limits), by at most about 4 % in this example. When a line is full, it is <b>congested</b>: extra load behind it cannot be served by the cheap generator on the other side, and has to come from a more expensive one, or from a mix that moves the flows around the full line. The prices then split. In the figure the cheap side of line 7–8 has about 19 $/MWh and bus 8 about 34 $/MWh. Bus 8 is even more expensive than any generator's incremental cost (at most 31 $/MWh): serving one more MW there needs G3 to rise <em>and</em> G2 to fall, so that the flow on the full line stays at its limit.</p>
@@ -222,7 +250,15 @@
 
           <p lang="en">Step ④ uses the <b>sensitivity</b> of each critical mode m: how much its damping ratio ζ<sub>m</sub> changes when the set points u are moved a little. In GUILDA, u holds the outputs P of the generators (except the one at the reference bus, whose P follows from the power flow) and the voltages |V| of the generator buses, and the slopes ∇ζ<sub>m</sub> are found by moving each of them a little and linearizing again. With them, the damping ratio near the current point u<sub>k</sub> is replaced by a straight line (a plane), and the OPF of the next pass gets the constraints</p>
           <p lang="ja">手順 ④ では、危険なモード m ごとに<b>感度</b>を使います。設定値 u を少し動かしたときに、そのダンピング比 ζ<sub>m</sub> がどれだけ変わるかです。GUILDA では、u は発電機の出力 P（ただし基準母線の発電機は除きます。その P は潮流で決まるからです）と、発電機のある母線の電圧の大きさ |V| で、傾き ∇ζ<sub>m</sub> は、それぞれを少し動かして線形化し直して求めます。これを使って、今の点 u<sub>k</sub> の近くのダンピング比を直線（平面）で置き換え、次の回の OPF に次の制約を加えます。</p>
-          <div class="lec-math" data-tex="\begin{gathered} \zeta_m(u_k) + \nabla\zeta_m(u_k)^{\top}(u - u_k) \;\ge\; \zeta_\mathrm{min} + \zeta_\mathrm{margin} \\ |u_j - u_{k,j}| \le \Delta_{k,j} \end{gathered}"></div>
+          <figure class="lec-annot">
+            <div class="lec-math" data-tex="\begin{gathered} \annot{1}{\zeta_m(u_k)} + \annot{2}{\nabla\zeta_m(u_k)^{\top}(u - u_k)} \;\ge\; \zeta_\mathrm{min} + \annot{3}{\zeta_\mathrm{margin}} \\ |u_j - u_{k,j}| \le \annot{4}{\Delta_{k,j}} \end{gathered}"></div>
+            <ol class="lec-annot-notes">
+              <li data-at="above"><span lang="en">The damping ratio now</span><span lang="ja">今のダンピング比</span></li>
+              <li data-at="above"><span lang="en">Sensitivity × how far the set values move</span><span lang="ja">感度 × 設定値を動かす量</span></li>
+              <li data-at="above"><span lang="en">A small margin for the error of the straight line</span><span lang="ja">直線の誤差を見込んだ余裕</span></li>
+              <li><span lang="en">Trust region: how far this round may move</span><span lang="ja">信頼領域：この回に動かせる幅</span></li>
+            </ol>
+          </figure>
           <p lang="en">Here ζ<sub>min</sub> is the required damping ratio (MinDampingRatio), ζ<sub>margin</sub> a small margin for the error of the straight line (StabilityMargin, 0.005 by default), and Δ<sub>k</sub> the step each set point may move in this pass. The cut is made for every mode within a band above the limit, not only for the modes that break it. This is the same idea as linearization itself, now applied to a damping ratio. Because the straight line is accurate only near u<sub>k</sub>, the step is limited (a <b>trust region</b>; it is halved when a pass makes things worse), the cuts are rebuilt from the latest linearization at every pass, and the loop is repeated until the true eigenvalues at the solution meet the limit. GUILDA also lets each cut be broken by a slack with a large cost, so that the OPF of every pass has a solution and moves as far toward the limit as it can.</p>
           <p lang="ja">ζ<sub>min</sub> は求めるダンピング比（MinDampingRatio）、ζ<sub>margin</sub> は直線の誤差を見込んだ小さな余裕（StabilityMargin、既定 0.005）、Δ<sub>k</sub> はこの回に各設定値を動かせる幅です。制約は、下限を破るモードだけでなく、下限の少し上の幅に入ったモードすべてに作ります。これは、線形化と同じ考え方をダンピング比に当てはめたものです。直線の近似が合うのは u<sub>k</sub> の近くだけなので、動かせる幅を制限し（<b>信頼領域</b>。悪くなった回の次は半分にします）、制約は毎回最新の線形化から作り直し、解での本当の固有値が条件を満たすまで反復を続けます。また GUILDA では、各制約を大きな費用付きのスラック変数で破れるようにしているので、毎回の OPF に必ず解があり、下限に向けて進めるところまで進みます。</p>
 
