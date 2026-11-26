@@ -37,7 +37,7 @@
           <li><a href="#stability-opf"><span lang="en">OPF with eigenvalue limits</span><span lang="ja">固有値の条件付き OPF</span></a></li>
           <li><a href="#guilda"><span lang="en">OPF in GUILDA</span><span lang="ja">GUILDA での OPF</span></a></li>
           <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
-          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#live-scripts"><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></a></li>
           <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
         </ol>
       </nav>
@@ -46,22 +46,123 @@
         <section class="lec-goals" id="goals">
           <h2><span lang="en">What this Part covers</span><span lang="ja">この Part の内容</span></h2>
           <ul>
+            <li lang="en">Who decides the outputs of the generators, and what an OPF solves.</li>
+            <li lang="ja">発電機の出力を誰が決めるか、OPF が何を解くか。</li>
             <li lang="en">How the cheapest way to share the demand among generators is found: economic dispatch and the equal incremental cost.</li>
             <li lang="ja">需要を発電機にいちばん安く割り振る方法。経済負荷配分と等増分費用の考え方。</li>
             <li lang="en">What the optimal power flow (OPF) adds: the power-flow equations and the limits of generation, voltage and line capacity.</li>
             <li lang="ja">最適潮流計算（OPF）が加えるもの。電力方程式と、発電の上下限・電圧・線路容量の制約。</li>
             <li lang="en">Why a full line makes prices differ from bus to bus: congestion and the locational marginal price (LMP).</li>
             <li lang="ja">線路がいっぱいになると母線ごとに価格が変わる理由。混雑と地点別限界価格（LMP）。</li>
-            <li lang="en">Why a cheaper operating point can swing more, and how an OPF with an eigenvalue condition is solved by repeating OPF and linearization, with IEEE 9-bus as the example.</li>
-            <li lang="ja">安い運転ほど揺れやすくなり得る理由と、OPF と線形化を繰り返して固有値の条件を満たす OPF の解き方。IEEE 9 母線系統を例にします。</li>
+            <li lang="en">Why a cheaper operating point can swing more, and how an OPF with an eigenvalue condition is solved by repeating OPF and linearization.</li>
+            <li lang="ja">安い運転ほど揺れやすくなり得る理由と、OPF と線形化を繰り返して固有値の条件を満たす OPF の解き方。</li>
           </ul>
         </section>
 
         <!-- ============================== DISPATCH ============================== -->
         <section id="dispatch">
           <h2><span lang="en">Economic dispatch: sharing the demand at the least cost</span><span lang="ja">経済負荷配分：需要をいちばん安く割り振る</span></h2>
-          <p lang="en">A power flow calculation answers “if the generators produce these outputs, what are the voltages and flows?”. The operator, however, has to decide the outputs first. Several generators can supply the same demand, and their fuel costs differ, so a natural question is: <b>how should the demand be shared so that the total cost is the least?</b></p>
-          <p lang="ja">潮流計算は「発電機がこの出力を出したら、電圧と潮流はどうなるか」に答えます。しかし運用者は、まず出力そのものを決めなければなりません。同じ需要を何台もの発電機でまかなえ、燃料費は発電機ごとに違います。そこで自然に出てくる問いが、<b>総費用がいちばん小さくなるように需要をどう割り振るか</b>です。</p>
+          <p lang="en">A power flow calculation answers “if the generators produce these outputs, what are the voltages and flows?”. The operator, however, has to decide the outputs first. Several generators can supply the same demand, and their fuel costs differ. The question is therefore: <b>how should the demand be shared so that the total cost is the least?</b></p>
+          <p lang="ja">潮流計算は「発電機がこの出力を出したら、電圧と潮流はどうなるか」に答えます。しかし運用者は、まず出力そのものを決めなければなりません。同じ需要を何台もの発電機でまかなえ、燃料費は発電機ごとに違います。そこで問題になるのが、<b>総費用がいちばん小さくなるように需要をどう割り振るか</b>です。</p>
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 340" role="img" aria-label="Concept of the optimal power flow: a system operator receives the generator costs, the demand and the limits of the network, solves the OPF, and sends an output set point to each of three generators with low, medium and high cost; the network has four buses, two loads, a line with a capacity limit and bus voltage limits">
+                <defs>
+                  <marker id="p6-arrow0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- inputs of the operator -->
+                <text lang="en" class="t-strong t-mid" x="50" y="62">costs</text>
+                <text lang="ja" class="t-strong t-mid" x="55" y="62">費用</text>
+                <text lang="en" class="t-muted t-mid" x="50" y="80">per generator</text>
+                <text lang="ja" class="t-muted t-mid" x="55" y="80">発電機ごと</text>
+                <text lang="en" class="t-strong t-mid" x="135" y="62">demand</text>
+                <text lang="ja" class="t-strong t-mid" x="135" y="62">需要</text>
+                <text lang="en" class="t-muted t-mid" x="135" y="80">per bus</text>
+                <text lang="ja" class="t-muted t-mid" x="135" y="80">母線ごと</text>
+                <text lang="en" class="t-strong t-mid" x="210" y="62">limits</text>
+                <text lang="ja" class="t-strong t-mid" x="210" y="62">制約</text>
+                <text lang="en" class="t-muted t-mid" x="210" y="80">of the network</text>
+                <text lang="ja" class="t-muted t-mid" x="210" y="80">系統の上下限</text>
+                <line class="s-ink" x1="55" y1="88" x2="55" y2="126" marker-end="url(#p6-arrow0)"/>
+                <line class="s-ink" x1="135" y1="88" x2="135" y2="126" marker-end="url(#p6-arrow0)"/>
+                <line class="s-ink" x1="210" y1="88" x2="210" y2="126" marker-end="url(#p6-arrow0)"/>
+                <!-- operator -->
+                <rect class="f-card" x="20" y="128" width="250" height="124" rx="8"/>
+                <circle class="f-ink" cx="52" cy="160" r="10"/>
+                <path class="f-ink" d="M34 196 Q34 174 52 174 Q70 174 70 196 Z"/>
+                <text lang="en" class="t-strong" x="84" y="160">System operator</text>
+                <text lang="ja" class="t-strong" x="84" y="160">系統運用者</text>
+                <text lang="en" class="t-muted" x="84" y="180">solves the OPF</text>
+                <text lang="ja" class="t-muted" x="84" y="180">OPF を解く</text>
+                <text lang="en" class="t-small" x="36" y="222">minimize the total cost</text>
+                <text lang="ja" class="t-small" x="36" y="222">総費用を最小にする</text>
+                <text lang="en" class="t-small" x="36" y="240">while meeting every limit</text>
+                <text lang="ja" class="t-small" x="36" y="240">すべての制約を守りながら</text>
+                <!-- set points to the generators (dashed: instructions, not power) -->
+                <path class="s-ink is-dashed" d="M270 150 L410 62" marker-end="url(#p6-arrow0)"/>
+                <path class="s-ink is-dashed" d="M270 232 L410 284" marker-end="url(#p6-arrow0)"/>
+                <path class="s-ink is-dashed" d="M266 128 V22 H690 V42" marker-end="url(#p6-arrow0)"/>
+                <text class="t-strong" x="316" y="96">P<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+                <text class="t-strong" x="316" y="284">P<tspan baseline-shift="sub" font-size="10">3</tspan></text>
+                <text class="t-strong" x="470" y="16">P<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+                <!-- network: buses -->
+                <rect class="f-ink" x="400" y="98" width="60" height="6"/>
+                <rect class="f-ink" x="660" y="98" width="60" height="6"/>
+                <rect class="f-ink" x="660" y="238" width="60" height="6"/>
+                <rect class="f-ink" x="400" y="238" width="60" height="6"/>
+                <!-- lines -->
+                <line class="s-ink" x1="455" y1="101" x2="665" y2="101"/>
+                <line class="s-ink" x1="690" y1="104" x2="690" y2="238"/>
+                <line class="s-ink" x1="455" y1="241" x2="665" y2="241"/>
+                <line class="s-ink" x1="430" y1="104" x2="430" y2="238"/>
+                <!-- generators -->
+                <line class="s-ink" x1="430" y1="76" x2="430" y2="98"/>
+                <circle class="f-card" cx="430" cy="60" r="16"/>
+                <path class="s-ink" d="M420 60 Q425 51 430 60 T440 60"/>
+                <text class="t-strong" x="454" y="56">G1</text>
+                <text lang="en" class="t-muted" x="454" y="74">low cost</text>
+                <text lang="ja" class="t-muted" x="454" y="74">費用：安い</text>
+                <line class="s-ink" x1="690" y1="76" x2="690" y2="98"/>
+                <circle class="f-card" cx="690" cy="60" r="16"/>
+                <path class="s-ink" d="M680 60 Q685 51 690 60 T700 60"/>
+                <text class="t-strong t-end" x="666" y="56">G2</text>
+                <text lang="en" class="t-muted t-end" x="666" y="74">medium cost</text>
+                <text lang="ja" class="t-muted t-end" x="666" y="74">費用：中程度</text>
+                <line class="s-ink" x1="430" y1="244" x2="430" y2="268"/>
+                <circle class="f-card" cx="430" cy="284" r="16"/>
+                <path class="s-ink" d="M420 284 Q425 275 430 284 T440 284"/>
+                <text class="t-strong" x="454" y="282">G3</text>
+                <text lang="en" class="t-muted" x="454" y="300">high cost</text>
+                <text lang="ja" class="t-muted" x="454" y="300">費用：高い</text>
+                <!-- loads -->
+                <line class="s-ink" x1="690" y1="244" x2="690" y2="282" marker-end="url(#p6-arrow0)"/>
+                <text lang="en" class="t-muted" x="702" y="276">load</text>
+                <text lang="ja" class="t-muted" x="702" y="276">負荷</text>
+                <line class="s-ink" x1="704" y1="104" x2="704" y2="134" marker-end="url(#p6-arrow0)"/>
+                <text lang="en" class="t-muted" x="712" y="128">load</text>
+                <text lang="ja" class="t-muted" x="712" y="128">負荷</text>
+                <!-- limits -->
+                <text lang="en" class="t-small t-mid" x="560" y="92">line capacity: |flow| ≤ limit</text>
+                <text lang="ja" class="t-small t-mid" x="560" y="92">線路容量：潮流 ≤ 上限</text>
+                <text lang="en" class="t-small t-mid" x="560" y="232">line capacity</text>
+                <text lang="ja" class="t-small t-mid" x="560" y="232">線路容量</text>
+                <text lang="en" class="t-small t-mid" x="560" y="170">0.9 ≤ |V| ≤ 1.1 pu at every bus</text>
+                <text lang="ja" class="t-small t-mid" x="560" y="170">各母線で 0.9 ≤ |V| ≤ 1.1 pu</text>
+                <text lang="en" class="t-muted t-mid" x="560" y="190">Pmin ≤ P ≤ Pmax for each generator</text>
+                <text lang="ja" class="t-muted t-mid" x="560" y="190">各発電機で Pmin ≤ P ≤ Pmax</text>
+                <!-- legend -->
+                <line class="s-ink is-dashed" x1="20" y1="300" x2="56" y2="300"/>
+                <text lang="en" class="t-muted" x="64" y="304">set point sent to a generator</text>
+                <text lang="ja" class="t-muted" x="64" y="304">発電機へ送る出力の指令値</text>
+                <line class="s-ink" x1="20" y1="324" x2="56" y2="324"/>
+                <text lang="en" class="t-muted" x="64" y="328">line of the network</text>
+                <text lang="ja" class="t-muted" x="64" y="328">送電線</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Who solves what in an OPF (a concept picture, not a particular system). The system operator knows the cost of each generator, the demand and the limits of the network. It decides the output P<sub><i>g</i></sub> of every generator (and the voltages of the generator buses) so that the total cost is the least, the demand is met and no limit is broken, and sends these set points to the generators. Economic dispatch uses only the costs and the total demand; the OPF also uses the network: how the power flows over the lines, the line capacities and the bus voltage limits. The cheap G1 can therefore not always take as much of the demand as its cost alone would suggest.</figcaption>
+            <figcaption lang="ja">OPF で誰が何を解くかを表した概念図です（特定の系統ではありません）。系統運用者は、各発電機の費用、需要、系統の制約を知っています。そのうえで、総費用が最小になり、需要をまかない、どの制約も破らないように各発電機の出力 P<sub><i>g</i></sub>（と発電機母線の電圧）を決め、その指令値を発電機へ送ります。経済負荷配分が使うのは費用と需要の合計だけです。OPF はこれに加えて系統も使います。電力が送電線にどう流れるか、線路容量、母線電圧の上下限です。そのため、安い G1 が費用だけから期待されるほど多くの需要を受け持てるとは限りません。</figcaption>
+          </figure>
+
           <p lang="en">The simplest form of this problem ignores the network and only asks that generation equals demand. It is called <b>economic dispatch</b> (economic load dispatch, ELD). The cost of a thermal generator is usually written as a quadratic function C<sub>i</sub>(P<sub>i</sub>) of its output:</p>
           <p lang="ja">ネットワークを考えず、発電の合計が需要に等しいことだけを求めるのが、いちばん簡単な形です。これを<b>経済負荷配分</b>（ELD）といいます。火力発電機の費用は、ふつう出力 P<sub>i</sub> の 2 次関数 C<sub>i</sub>(P<sub>i</sub>) で表します。</p>
           <figure class="lec-annot">
@@ -84,6 +185,18 @@
             </ol>
           </figure>
 
+          <div class="lec-callout">
+            <p lang="en">The examples on this page use the IEEE 9-bus system of GUILDA shown below (with an AVR and a PSS on each generator, <code>network.IEEE9bus(LocalController=true)</code>), with the generator cost coefficients of the 9-bus case of MATPOWER (in $/h, without the constant terms) and bus voltage limits of 0.9 to 1.1 pu. The numbers depend on these settings; the ideas do not.</p>
+            <p lang="ja">このページの例は、下の図の GUILDA の IEEE 9 母線系統（各発電機に AVR と PSS 付き、<code>network.IEEE9bus(LocalController=true)</code>）に、MATPOWER の 9 母線のケースの発電費用の係数（$/h、定数項を除く）と、母線電圧の上下限 0.9〜1.1 pu を与えたものです。数値はこの設定によりますが、考え方は変わりません。</p>
+          </div>
+          <figure class="lec-figure is-scroll is-compact" id="fig-ieee9" style="--lec-min-w: 280px; --lec-fig-max: 480px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part6/ieee9-single-line.png" alt="Single-line diagram of the IEEE 9-bus system: generators G1, G2 and G3 at buses B001, B002 and B003, each connected through a transformer to B004, B007 and B009; loads at B005, B006 and B008; lines B004-B005, B004-B006, B005-B007, B006-B009, B007-B008 and B008-B009" width="884" height="742">
+            </div>
+            <figcaption lang="en">The IEEE 9-bus system of every OPF on this page, drawn with <code>net.plot_single_line_diagram()</code> (the names G1–G3 are added). Generator G<i>k</i> is at bus B00<i>k</i>; the loads are at B005, B006 and B008 (315 MW in total). The line between B007 and B008 is the one whose capacity is reduced in the next section.</figcaption>
+            <figcaption lang="ja">このページのすべての OPF で使う IEEE 9 母線系統です。<code>net.plot_single_line_diagram()</code> で描き、発電機の名前 G1〜G3 を書き加えました。発電機 G<i>k</i> は母線 B00<i>k</i> にあり、負荷は B005、B006、B008 にあります（合計 315 MW）。B007 と B008 の間の線路が、次の節で容量を下げる線路です。</figcaption>
+          </figure>
+
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
               <img src="../images/lecture/part6/incremental-cost.png" alt="Incremental cost lines of the three generators of IEEE 9-bus and a horizontal line at the common incremental cost of 24.0 dollars per MWh; where it crosses each line gives the output: G1 86.6 MW, G2 134.4 MW, G3 94.1 MW, 315 MW in total" width="1167" height="526">
@@ -91,11 +204,6 @@
             <figcaption lang="en">Economic dispatch of IEEE 9-bus (demand 315 MW). Each line is the incremental cost dC<sub>g</sub>/dP<sub>g</sub> = 2H<sub>P,g</sub>P<sub>g</sub> + f<sub>P,g</sub> of one generator. Raising the horizontal line λ until the three outputs add up to the demand gives the dispatch: all three generators run at the same incremental cost of 24.0 $/MWh, and the total cost is 4131 $/h. Computed with GUILDA (Method "ELD"); the generators of this example have no output limits.</figcaption>
             <figcaption lang="ja">IEEE 9 母線系統（需要 315 MW）の経済負荷配分です。各直線は 1 台の発電機の増分費用 dC<sub>g</sub>/dP<sub>g</sub> = 2H<sub>P,g</sub>P<sub>g</sub> + f<sub>P,g</sub> です。水平な線 λ を、3 台の出力の合計が需要に等しくなる高さまで上げると配分が決まります。3 台とも同じ増分費用 24.0 $/MWh で運転し、総費用は 4131 $/h です。GUILDA（Method "ELD"）で求めました。この例の発電機には出力の上下限がありません。</figcaption>
           </figure>
-
-          <div class="lec-callout">
-            <p lang="en">The examples on this page use the IEEE 9-bus system of GUILDA with the generator cost coefficients of the 9-bus case of MATPOWER (in $/h, without the constant terms) and bus voltage limits of 0.9 to 1.1 pu. The numbers depend on these settings; the ideas do not.</p>
-            <p lang="ja">このページの例は、GUILDA の IEEE 9 母線系統に、MATPOWER の 9 母線のケースの発電費用の係数（$/h、定数項を除く）と、母線電圧の上下限 0.9〜1.1 pu を与えたものです。数値はこの設定によりますが、考え方は変わりません。</p>
-          </div>
         </section>
 
         <!-- ============================== CONSTRAINTS ============================== -->
@@ -129,8 +237,8 @@
           </figure>
           <p lang="en">V<sub>i</sub> = |V<sub>i</sub>|e<sup>jθ<sub>i</sub></sup> is the voltage phasor of bus i (the angle of the reference bus is fixed), Y the admittance matrix of the network, and the bar the complex conjugate. P<sub>g</sub> and Q<sub>g</sub> are the powers injected by component g, positive for a generator and negative for a load; a load has equal lower and upper limits, so its power is fixed. The first constraint is the power-flow equations of every bus: the power sent into the network equals the sum over the components at that bus. The branch limits hold at both ends e of every branch, and a limit set to infinity is left out. The cost coefficients H and f are given per pu of power, in $/h.</p>
           <p lang="ja">V<sub>i</sub> = |V<sub>i</sub>|e<sup>jθ<sub>i</sub></sup> は母線 i の電圧フェーザ（基準母線の角度は固定）、Y は系統のアドミタンス行列、上の横線は複素共役です。P<sub>g</sub>、Q<sub>g</sub> は機器 g が注入する電力で、発電機は正、負荷は負です。負荷は下限と上限が同じなので、電力が固定されます。1 つ目の制約が各母線の電力方程式で、系統へ送り出す電力が、その母線の機器の合計に等しいことを表します。ブランチの制約はすべてのブランチの両端 e にかかり、上限を無限大にした制約は入りません。費用の係数 H、f は単位法の電力あたりで、単位は $/h です。</p>
-          <p lang="en">The chart compares three solutions for the same demand. The AC OPF costs a little more than economic dispatch, because the generators also have to cover the line losses (about 3 MW here). When the capacity of the line between buses 7 and 8 is reduced to 40 MW, the cheap generator G2 next to it can no longer send its power that way. Its output is cut back, and the expensive G3 on the other side makes up the difference, so the cost rises by about 4 %.</p>
-          <p lang="ja">下の図は、同じ需要に対する 3 つの解を比べたものです。AC OPF の費用は経済負荷配分より少し高くなります。発電機が送電線の損失（ここでは約 3 MW）もまかなう必要があるからです。母線 7–8 間の線路容量を 40 MW に下げると、その近くにある安い発電機 G2 は、その線路を通して電力を送れなくなります。G2 の出力は下げられ、反対側にある高い G3 がその分を補うので、費用は約 4% 上がります。</p>
+          <p lang="en">The chart compares three solutions for the same demand on the IEEE 9-bus system of the <a href="#fig-ieee9">single-line diagram above</a>. The AC OPF costs a little more than economic dispatch, because the generators also have to cover the line losses (about 3 MW here). When the capacity of the line between buses 7 and 8 is reduced to 40 MW, the cheap generator G2 next to it can no longer send its power that way. Its output is cut back, and the expensive G3 on the other side makes up the difference, so the cost rises by about 4 %.</p>
+          <p lang="ja">下の図は、<a href="#fig-ieee9">上の単線結線図</a>の IEEE 9 母線系統で、同じ需要に対する 3 つの解を比べたものです。AC OPF の費用は経済負荷配分より少し高くなります。発電機が送電線の損失（ここでは約 3 MW）もまかなう必要があるからです。母線 7–8 間の線路容量を 40 MW に下げると、その近くにある安い発電機 G2 は、その線路を通して電力を送れなくなります。G2 の出力は下げられ、反対側にある高い G3 がその分を補うので、費用は約 4% 上がります。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -147,8 +255,8 @@
         <!-- ============================== LMP ============================== -->
         <section id="lmp">
           <h2><span lang="en">Congestion and the locational marginal price</span><span lang="ja">混雑と地点別限界価格（LMP）</span></h2>
-          <p lang="en">The λ of economic dispatch has a useful meaning: it is how much the least total cost rises when the demand grows by one unit. The OPF gives such a number for every bus. The <b>locational marginal price</b> (LMP) of a bus is the increase of the least cost when the load at <em>that</em> bus grows by one unit, with all limits still respected:</p>
-          <p lang="ja">経済負荷配分の λ には、便利な意味があります。需要が 1 単位増えたときに、最小の総費用がどれだけ増えるかです。OPF は、この数を母線ごとに与えます。ある母線の<b>地点別限界価格</b>（LMP）は、<em>その</em>母線の負荷が 1 単位増えたときに、すべての制約を守ったままの最小費用がどれだけ増えるかです。</p>
+          <p lang="en">The λ of economic dispatch also has a meaning of its own: it is how much the least total cost rises when the demand grows by one unit. The OPF gives such a number for every bus. The <b>locational marginal price</b> (LMP) of a bus is the increase of the least cost when the load at <em>that</em> bus grows by one unit, with all limits still respected:</p>
+          <p lang="ja">経済負荷配分の λ は、需要が 1 単位増えたときに最小の総費用がどれだけ増えるかも表します。OPF は、この数を母線ごとに与えます。ある母線の<b>地点別限界価格</b>（LMP）は、<em>その</em>母線の負荷が 1 単位増えたときに、すべての制約を守ったままの最小費用がどれだけ増えるかです。</p>
           <figure class="lec-annot">
             <div class="lec-math" data-tex="\annot{1}{\mathrm{LMP}_i} = \frac{\partial \annot{2}{C^{*}}}{\partial \annot{3}{P_{\mathrm{D},i}}}"></div>
             <ol class="lec-annot-notes">
@@ -177,10 +285,10 @@
         <!-- ============================== CHEAP AND SWINGING ============================== -->
         <section id="cheap-swing">
           <h2><span lang="en">A cheaper operating point can swing more</span><span lang="ja">安い運転ほど揺れやすくなり得る</span></h2>
-          <p lang="en">The OPF looks only at a single steady state. It does not ask what happens when the system is disturbed. Yet the cheapest point tends to push things to their limits: lines carry much power, the angle differences across them are large, and the output is concentrated on a few cheap generators, possibly far away. Such a point can swing more after a small disturbance.</p>
-          <p lang="ja">OPF が見ているのは、1 つの定常状態だけです。系統が乱されたときにどうなるかは考えていません。ところが、いちばん安い点は物事を限界まで押しやりがちです。送電線は多くの電力を運び、その両端の位相差は大きくなり、出力は安い（ときには遠くの）少数の発電機に集まります。このような運転点は、小さな外乱のあとに揺れやすくなることがあります。</p>
+          <p lang="en">The OPF looks only at a single steady state. It does not ask what happens when the system is disturbed. The cheapest point, however, often lies at the limits: lines carry much power, the angle differences across them are large, and the output is concentrated on a few cheap generators, possibly far away. Such a point can swing more after a small disturbance.</p>
+          <p lang="ja">OPF が見ているのは、1 つの定常状態だけです。系統が乱されたときにどうなるかは考えていません。しかし、いちばん安い運転点は、制約の境界にあることが多くなります。送電線は多くの電力を運び、その両端の位相差は大きくなり、出力は安い（ときには遠くの）少数の発電機に集まります。このような運転点は、小さな外乱のあとに揺れやすくなることがあります。</p>
           <p lang="en">The reason can be seen with the power over a line, P = V<sub>1</sub>V<sub>2</sub>/X · sin δ. Generators are held together by the slope of this curve, like masses by springs. The larger the transfer, the larger δ, and the flatter the curve becomes: the “spring” gets weaker. Heavy transfers also change how the voltage regulators of the generators interact with the swings, which can reduce their damping.</p>
-          <p lang="ja">その理由は、送電線で送る電力 P = V<sub>1</sub>V<sub>2</sub>/X · sin δ の式で分かります。発電機どうしは、この曲線の傾きによって、ばねでつながれた重りのように結び付いています。送る電力が大きいほど δ は大きくなり、曲線は平らになります。つまり「ばね」が弱くなります。また、大きな電力を送っているときは、発電機の電圧調整器（AVR）と揺れとの関係も変わり、減衰が小さくなることがあります。</p>
+          <p lang="ja">その理由は、送電線で送る電力 P = V<sub>1</sub>V<sub>2</sub>/X · sin δ の式で分かります。発電機どうしは、この曲線の傾きによって、ばねでつながれた重りのように結び付いています。送る電力が大きいほど δ は大きくなり、曲線は平らになります。「ばね」が弱くなるということです。また、大きな電力を送っているときは、発電機の電圧調整器（AVR）と揺れとの関係も変わり、減衰が小さくなることがあります。</p>
           <p lang="en">To check this we use the tools of linearization. Around an operating point, a small swing is a sum of <b>modes</b>, one for each <b>eigenvalue</b> λ = σ ± jω of the linear model. The mode dies out if σ &lt; 0, and oscillates with the frequency f = ω/2π. Its <b>damping ratio</b> ζ says how quickly it dies out compared with its oscillation; a small ζ means a swing that rings for a long time:</p>
           <p lang="ja">これを確かめるには、近似線形化の道具を使います。運転点のまわりの小さな揺れは、線形モデルの<b>固有値</b> λ = σ ± jω に 1 つずつ対応する<b>モード</b>の重ね合わせです。σ &lt; 0 ならモードは収まり、周波数 f = ω/2π で振動します。<b>ダンピング比</b> ζ は、振動の速さに比べて揺れがどれだけ早く収まるかを表します。ζ が小さいと、揺れが長く続きます。</p>
           <div class="lec-math" data-tex="\zeta = \frac{-\sigma}{\sqrt{\sigma^2 + \omega^2}}"></div>
@@ -193,15 +301,15 @@
             <figcaption lang="ja">GUILDA の安定度制約付き OPF で求めた、IEEE 9 母線系統（AVR・PSS 付き）の運転点です。横軸はすべての振動モードのうち最小のダンピング比（ζ は上の式）、縦軸は費用で、外側の反復 1 回が 1 点です（result.sct_stability.tab_iteration）。どちらの計算も、制約なしの OPF（丸で囲んだ点）から始まります。青は ζ<sub>min</sub> = 4.2% の計算で、反復 7 回、費用 +0.7% で満たします。橙は ζ<sub>min</sub> = 6% の計算で、既定の 10 回の反復で 5.05% まで届き、費用は +54% です。おおむね、減衰を増やすほど費用がかかります。</figcaption>
           </figure>
 
-          <p lang="en">How much damping is enough is decided by the operator, often as a minimum damping ratio of a few percent for every mode. The trade-off is then a clear question: what is the cheapest operating point that still keeps every mode damped well enough?</p>
-          <p lang="ja">どれだけの減衰があれば十分かは運用者が決め、すべてのモードに数 % 程度の最小のダンピング比を求めることがよくあります。すると、費用と減衰のかね合いは、はっきりした問いになります。すべてのモードの減衰を十分に保ちながら、いちばん安い運転点はどこか、です。</p>
+          <p lang="en">How much damping is enough is decided by the operator, often as a minimum damping ratio of a few percent for every mode. The trade-off can then be stated as a problem: which operating point is the cheapest among those that keep every mode damped well enough?</p>
+          <p lang="ja">どれだけの減衰があれば十分かは運用者が決め、すべてのモードに数 % 程度の最小のダンピング比を求めることがよくあります。すると、費用と減衰のかね合いは次の問題として書けます。すべてのモードの減衰を十分に保つ運転点のうち、いちばん安いものはどれか、です。</p>
         </section>
 
         <!-- ============================== STABILITY-CONSTRAINED OPF ============================== -->
         <section id="stability-opf">
           <h2><span lang="en">An OPF with eigenvalue limits, solved by repetition</span><span lang="ja">固有値の条件を付けた OPF と、その反復</span></h2>
-          <p lang="en">The natural answer is to add the condition “every damping ratio ≥ ζ<sub>min</sub>” (or “every real part ≤ a limit”) to the OPF. This is a <b>small-signal stability-constrained OPF</b>. The difficulty is that a damping ratio is not a simple formula of the outputs: it needs the linear model at the operating point and its eigenvalues. The usual way around this is to repeat a few simple steps, so that the OPF itself never has to compute an eigenvalue:</p>
-          <p lang="ja">素直な答えは、OPF に「すべてのダンピング比 ≥ ζ<sub>min</sub>」（または「すべての実部 ≤ 上限」）という条件を加えることです。これを<b>定態安定度（小信号安定度）制約付き OPF</b> といいます。難しいのは、ダンピング比が出力の簡単な式ではないことです。運転点での線形モデルと、その固有値を求めなければ分かりません。そこでよく使われるのが、次の簡単な手順を繰り返して、OPF そのものには固有値を計算させない方法です。</p>
+          <p lang="en">A direct approach is to add the condition “every damping ratio ≥ ζ<sub>min</sub>” (or “every real part ≤ a limit”) to the OPF. This is a <b>small-signal stability-constrained OPF</b>. The difficulty is that a damping ratio is not a simple formula of the outputs: it needs the linear model at the operating point and its eigenvalues. The usual way around this is to repeat a few simple steps, so that the OPF itself never has to compute an eigenvalue:</p>
+          <p lang="ja">直接的な方法は、OPF に「すべてのダンピング比 ≥ ζ<sub>min</sub>」（または「すべての実部 ≤ 上限」）という条件を加えることです。これを<b>定態安定度（小信号安定度）制約付き OPF</b> といいます。難しいのは、ダンピング比が出力の簡単な式ではないことです。運転点での線形モデルと、その固有値を求めなければ分かりません。そこでよく使われるのが、次の簡単な手順を繰り返して、OPF そのものには固有値を計算させない方法です。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 640px;">
             <div class="lec-scroll">
@@ -271,8 +379,8 @@
           </figure>
 
           <div class="lec-callout is-key">
-            <p lang="en"><b>The idea in one line:</b> an eigenvalue condition is hard to write directly, so it is replaced, again and again, by a straight-line approximation built from a linearization at the latest OPF solution.</p>
-            <p lang="ja"><b>一言でいうと:</b> 固有値の条件は直接は書きにくいので、最新の OPF の解での線形化から作った直線の近似で、何度も置き換えながら解きます。</p>
+            <p lang="en"><b>The point of the method:</b> an eigenvalue condition is hard to write directly, so it is replaced, again and again, by a straight-line approximation built from a linearization at the latest OPF solution.</p>
+            <p lang="ja"><b>この方法の要点:</b> 固有値の条件は直接は書きにくいので、最新の OPF の解での線形化から作った直線の近似で、何度も置き換えながら解きます。</p>
           </div>
           <p lang="en">A stability-constrained OPF covers small disturbances only. Large disturbances, such as a fault on a line, are a matter of transient stability and need time-domain simulations; they are not part of this method.</p>
           <p lang="ja">安定度制約付き OPF が扱うのは、小さな外乱だけです。送電線の事故のような大きな外乱は過渡安定度の問題で、時間シミュレーションが必要です。この方法には含まれません。</p>
@@ -329,15 +437,8 @@ res.sct_stability.tab_iteration</code></pre>
           </ul>
         </section>
 
-        <section id="related">
-          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
-          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
-          <ul class="lec-cards">
-          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b><span lang="en">The power-flow equations that the OPF keeps as constraints.</span><span lang="ja">OPF が制約として持つ電力方程式を扱います。</span></a></li>
-          <li><a class="lec-card is-c2" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b><span lang="en">Eigenvalues, damping ratio and participation factors in detail.</span><span lang="ja">固有値、ダンピング比、参加係数を詳しく扱います。</span></a></li>
-          <li><a class="lec-card is-c3" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b><span lang="en">Another static limit of an operating point: voltage collapse.</span><span lang="ja">運転点のもう 1 つの静的な限界である電圧崩壊を扱います。</span></a></li>
-          </ul>
-          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+        <section id="live-scripts">
+          <h2><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h2>
           <ul class="lec-scripts">
             <li><code>_GUILDAtutorial/Part6_OptimalPowerFlow.mlx</code>: <span lang="en">open it in MATLAB with <code>open Part6_OptimalPowerFlow.mlx</code> (GUILDA on the path). It runs the ELD, the AC OPF, a line limit and the stability-constrained OPF on IEEE 9-bus, with the equations of this page and checks of the results; the whole script takes one to two minutes. The figures on this page can be drawn with this Live Script.</span><span lang="ja">GUILDA をパスに入れた MATLAB で <code>open Part6_OptimalPowerFlow.mlx</code> と実行すると開きます。IEEE 9 母線系統で、経済負荷配分、AC OPF、線路容量の制約、安定度制約付き OPF を、このページの式と結果の確かめとともに実行します。全体の実行には 1〜2 分かかります。このページの図は Part 6 のライブスクリプトで描けます。</span></li>
           </ul>

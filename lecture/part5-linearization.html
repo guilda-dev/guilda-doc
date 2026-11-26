@@ -10,6 +10,16 @@
   <link rel="stylesheet" href="annotate.css?v=20261126e">
   <script src="../vendor/katex/katex.min.js"></script>
   <!-- Page-only CSS goes here with the prefix lec5- ; shared lecture CSS (lec-*) is in style.css. -->
+  <style>
+    .lec5-tablewrap { margin: 16px 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .lec5-tablewrap table { display: table; min-width: 720px; margin: 0; font-size: 0.9rem; }
+    .lec5-tablewrap th, .lec5-tablewrap td { padding: 8px 10px; vertical-align: top; }
+    .lec5-tablewrap th { white-space: nowrap; }
+    .lec5-tablewrap td.lec5-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .lec5-tablewrap code { white-space: nowrap; }
+    .lec5-tablewrap td:first-child { min-width: 6.5em; }
+    .lec5-out { font-size: 0.82rem; }
+  </style>
 </head>
 <body class="lec">
   <main class="lec-main">
@@ -36,10 +46,11 @@
           <li><a href="#complex-plane"><span lang="en">Complex plane and damping</span><span lang="ja">複素平面とダンピング比</span></a></li>
           <li><a href="#modes"><span lang="en">Kinds of oscillation modes</span><span lang="ja">振動モードの種類</span></a></li>
           <li><a href="#participation"><span lang="en">Participation factors</span><span lang="ja">参加係数</span></a></li>
+          <li><a href="#mode-analysis"><span lang="en">Modes of IEEE 9-bus</span><span lang="ja">IEEE 9 母線系統のモード</span></a></li>
           <li><a href="#large-swing"><span lang="en">When the swing is large</span><span lang="ja">大きな揺れのとき</span></a></li>
           <li><a href="#guilda"><span lang="en">Linearization in GUILDA</span><span lang="ja">GUILDA での線形化</span></a></li>
           <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
-          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#live-scripts"><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></a></li>
           <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
         </ol>
       </nav>
@@ -52,8 +63,10 @@
             <li lang="ja">運転点のまわりの小さな揺れが線形モデルで表せる理由と、状態空間モデルの形。</li>
             <li lang="en">That each eigenvalue is one type of swing, and how to read it in the complex plane: stability, frequency and damping ratio.</li>
             <li lang="ja">固有値の 1 つ 1 つが揺れの型であることと、複素平面での読み方（安定かどうか、周波数、ダンピング比）。</li>
-            <li lang="en">The kinds of oscillation modes (local and inter-area), mode shapes and participation factors, with IEEE 9-bus as the example.</li>
-            <li lang="ja">振動モードの種類（局所モード・地域間モード）、モード形、参加係数。IEEE 9 母線系統を例にします。</li>
+            <li lang="en">The kinds of oscillation modes (local and inter-area), mode shapes and participation factors.</li>
+            <li lang="ja">振動モードの種類（局所モード・地域間モード）、モード形、参加係数。</li>
+            <li lang="en">How to read a mode analysis, with IEEE 9-bus as the example: which values of the result to look at and what they say about the system.</li>
+            <li lang="ja">IEEE 9 母線系統を例にした、モード解析の結果の読み方。結果のどの値を見て、そこから系統の何が分かるか。</li>
             <li lang="en">Where the linear model stops being accurate: large swings.</li>
             <li lang="ja">線形モデルが合わなくなるところ（大きな揺れ）。</li>
           </ul>
@@ -63,8 +76,8 @@
           <h2><span lang="en">Small swings can be drawn with straight lines</span><span lang="ja">小さな揺れは直線で近似できる</span></h2>
           <p lang="en">A power system is described by nonlinear equations. The best-known one is the power sent over a line: it follows a sine curve of the phase difference δ between the two ends. Solving such equations needs a time-domain simulation, and its result is a single trajectory for a single disturbance.</p>
           <p lang="ja">電力系統は非線形の式で表されます。よく知られているのが送電線で送る電力で、両端の位相差 δ に対して正弦波の形の曲線になります。このような式を解くには時間シミュレーションが必要で、その結果は 1 つの外乱に対する 1 本の軌道です。</p>
-          <p lang="en">If we only look at a small range around the operating point, the curve is almost a straight line: its tangent. Replacing every curve of the model by its tangent at the operating point is <b>linearization</b>. The linear model holds for small swings only, but it can be studied with the tools of linear algebra, and it tells us how the system swings for <em>any</em> small disturbance at once.</p>
-          <p lang="ja">運転点のまわりの狭い範囲だけを見れば、曲線はほとんど直線（接線）です。モデルのすべての曲線を運転点での接線に置き換えることを<b>線形化</b>といいます。線形モデルが使えるのは小さな揺れだけですが、線形代数の道具で調べられ、<em>どんな</em>小さな外乱に対しても系統がどう揺れるかを一度に教えてくれます。</p>
+          <p lang="en">If we only look at a small range around the operating point, the curve is almost a straight line: its tangent. Replacing every curve of the model by its tangent at the operating point is <b>linearization</b>. The linear model holds for small swings only, but it can be studied with the tools of linear algebra, and it describes at once how the system swings after <em>any</em> small disturbance.</p>
+          <p lang="ja">運転点のまわりの狭い範囲だけを見れば、曲線はほとんど直線（接線）です。モデルのすべての曲線を運転点での接線に置き換えることを<b>線形化</b>といいます。線形モデルが使えるのは小さな揺れだけですが、線形代数の道具で調べられます。また、<em>どんな</em>小さな外乱に対しても系統がどう揺れるかが、一度に分かります。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -195,8 +208,8 @@
               <li data-at="above"><span lang="en">How much the disturbance excites it</span><span lang="ja">外乱がモードを励起する強さ</span></li>
             </ol>
           </figure>
-          <p lang="en">The right eigenvector v<sub>i</sub> tells which states move in that mode and how; the number w<sub>i</sub><sup>T</sup>Δx(0), with the left eigenvector w<sub>i</sub>, tells how strongly the disturbance excites it. An eigenvalue is in general a complex number, λ = σ ± jω, and its pair of terms adds up to a real oscillation e<sup>σt</sup>cos(ωt + φ) in each state, with angular frequency ω and a size that changes as e<sup>σt</sup>. So the eigenvalues alone already tell the <em>type</em> of every swing the system can make: the real part σ says whether it dies out or grows, and the imaginary part ω how fast it oscillates.</p>
-          <p lang="ja">右固有ベクトル v<sub>i</sub> はそのモードでどの状態がどう動くかを表し、左固有ベクトル w<sub>i</sub> を使った数 w<sub>i</sub><sup>T</sup>Δx(0) は、外乱がそのモードをどれだけ強く励起するかを表します。固有値は一般に複素数 λ = σ ± jω で、その対の 2 つの項を合わせると、各状態で e<sup>σt</sup>cos(ωt + φ) の実数の振動になります。角周波数は ω、大きさは e<sup>σt</sup> のように変わります。つまり、固有値だけで、系統が起こし得るすべての揺れの<em>型</em>が分かります。実部 σ は揺れが収まるか大きくなるかを、虚部 ω は振動の速さを表します。</p>
+          <p lang="en">The right eigenvector v<sub>i</sub> tells which states move in that mode and how; the number w<sub>i</sub><sup>T</sup>Δx(0), with the left eigenvector w<sub>i</sub>, tells how strongly the disturbance excites it. An eigenvalue is in general a complex number, λ = σ ± jω, and its pair of terms adds up to a real oscillation e<sup>σt</sup>cos(ωt + φ) in each state, with angular frequency ω and a size that changes as e<sup>σt</sup>. The eigenvalues alone therefore give the <em>type</em> of every swing the system can make: the real part σ says whether it dies out or grows, and the imaginary part ω how fast it oscillates.</p>
+          <p lang="ja">右固有ベクトル v<sub>i</sub> はそのモードでどの状態がどう動くかを表し、左固有ベクトル w<sub>i</sub> を使った数 w<sub>i</sub><sup>T</sup>Δx(0) は、外乱がそのモードをどれだけ強く励起するかを表します。固有値は一般に複素数 λ = σ ± jω で、その対の 2 つの項を合わせると、各状態で e<sup>σt</sup>cos(ωt + φ) の実数の振動になります。角周波数は ω、大きさは e<sup>σt</sup> のように変わります。したがって、固有値だけで、系統が起こし得るすべての揺れの<em>型</em>が分かります。実部 σ は揺れが収まるか大きくなるかを、虚部 ω は振動の速さを表します。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -214,8 +227,8 @@
 
         <section id="complex-plane">
           <h2><span lang="en">Reading the complex plane: frequency and damping ratio</span><span lang="ja">複素平面の読み方とダンピング比</span></h2>
-          <p lang="en">Plotting all eigenvalues in the complex plane gives a map of every swing of the system. For an oscillating pair λ = σ ± jω two numbers are read from it: the <b>frequency</b> f of the oscillation, and the <b>damping ratio</b> ζ, which says how quickly the swing dies out compared with its oscillation.</p>
-          <p lang="ja">すべての固有値を複素平面に描くと、系統の揺れの地図になります。振動する対 λ = σ ± jω からは 2 つの数を読み取ります。振動の<b>周波数</b> f と、振動の速さに比べて揺れがどれだけ早く収まるかを表す<b>ダンピング比</b>（減衰比）ζ です。</p>
+          <p lang="en">Plotting all eigenvalues in the complex plane shows every mode of the system in one figure. For an oscillating pair λ = σ ± jω two numbers are read from it: the <b>frequency</b> f of the oscillation, and the <b>damping ratio</b> ζ, which says how quickly the swing dies out compared with its oscillation.</p>
+          <p lang="ja">すべての固有値を複素平面に描くと、系統のすべてのモードを 1 つの図で見られます。振動する対 λ = σ ± jω からは 2 つの数を読み取ります。振動の<b>周波数</b> f と、振動の速さに比べて揺れがどれだけ早く収まるかを表す<b>ダンピング比</b>（減衰比）ζ です。</p>
           <figure class="lec-annot">
             <div class="lec-math" data-tex="f = \frac{\annot{1}{\omega}}{2\pi}, \qquad \annot{3}{\zeta} = \frac{-\annot{2}{\sigma}}{\sqrt{\sigma^2 + \omega^2}}"></div>
             <ol class="lec-annot-notes">
@@ -227,16 +240,6 @@
           <p lang="en">The higher an eigenvalue, the faster it oscillates. The damping ratio is the angle seen from the origin: eigenvalues on one straight line through the origin have the same ζ. With ζ = 5 %, the swing is still about 73 % of its first size after one period; with ζ = 20 % it is about 28 %. A mode with a small ζ rings for a long time, so operators often ask that every mode keeps at least some minimum damping ratio, for example a few percent; the value depends on the system and the operator.</p>
           <p lang="ja">上にある固有値ほど速く振動します。ダンピング比は原点から見た角度で、原点を通る同じ直線の上にある固有値は ζ が同じです。ζ = 5% では 1 周期たっても振幅は最初の約 73% 残り、ζ = 20% なら約 28% になります。ζ の小さいモードは長く揺れ続けるので、運用ではすべてのモードに一定以上のダンピング比（たとえば数 %）を求めることがあります。値は系統や運用者によって異なります。</p>
 
-          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
-            <div class="lec-scroll">
-              <img src="../images/lecture/part5/eigenvalues-ieee9.png" alt="Eigenvalues of the IEEE 9-bus system near the imaginary axis, with lines of 5 and 10 percent damping ratio; the two electromechanical modes at 1.28 Hz and 0.58 Hz both have a damping ratio of 4.1 percent, and no eigenvalue is right of the imaginary axis" width="1155" height="524">
-            </div>
-            <figcaption lang="en">Eigenvalues of IEEE 9-bus (3 generators with AVR and PSS) at its operating point, drawn with plot_eigenvalue of the result of get_sys (no eigenvalue is unstable, so all are blue), with the lines of 5 % and 10 % damping ratio added; the frequency and the damping ratio are from the equations above. ① and ② are the two pairs of electromechanical modes, both with a damping ratio of about 4.1 %, just inside the 5 % line. The other eigenvalues are real or well damped; nine fast ones lie far to the left of the plot (σ ≈ −20 to −100 s<sup>−1</sup>).</figcaption>
-            <figcaption lang="ja">IEEE 9 母線系統（AVR・PSS 付きの発電機 3 台）の運転点での固有値です。get_sys の結果の plot_eigenvalue で描き（不安定な固有値はないので、すべて青）、ダンピング比 5% と 10% の線を加えました。周波数とダンピング比は上の式から求めました。① と ② は 2 対の電気機械モードで、どちらもダンピング比は約 4.1% で、5% の線のすぐ内側にあります。ほかの固有値は実数か、よく減衰しています。速い 9 個は図のずっと左（σ ≈ −20〜−100 s<sup>−1</sup>）にあります。</figcaption>
-          </figure>
-
-          <p lang="en">The eigenvalue at the origin is not a swing. It belongs to turning all rotor angles by the same amount, which does not change the operating state, because only the differences of the angles matter.</p>
-          <p lang="ja">原点にある固有値は揺れではありません。すべての回転子の角度を同じだけ回す動きに対応し、効くのは角度の差だけなので、運転状態は変わりません。</p>
         </section>
 
         <section id="modes">
@@ -249,7 +252,7 @@
             <dd lang="ja">1 台の発電機（または 1 つの発電所）が、近くの系統の残りに対して揺れます。目安は 1〜2 Hz 程度です。</dd>
             <dt><span lang="en">Inter-area mode</span><span lang="ja">地域間モード</span></dt>
             <dd lang="en">A whole group of generators in one area swings against a group in another area, over long tie lines. Slower, typically about 0.1 to 0.7 Hz, and often poorly damped.</dd>
-            <dd lang="ja">ある地域の発電機の群れ全体が、長い連系線を通して別の地域の群れに対して揺れます。より遅く、目安は 0.1〜0.7 Hz 程度で、減衰が小さくなりやすいモードです。</dd>
+            <dd lang="ja">ある地域の発電機群が、長い連系線を通して別の地域の発電機群に対して揺れます。より遅く、目安は 0.1〜0.7 Hz 程度で、減衰が小さくなりやすいモードです。</dd>
             <dt><span lang="en">Control mode</span><span lang="ja">制御モード</span></dt>
             <dd lang="en">A mode that comes mainly from a controller, such as an AVR or a governor, rather than from the rotors.</dd>
             <dd lang="ja">回転子よりも、AVR やガバナなどの制御器から主に生まれるモードです。</dd>
@@ -296,24 +299,16 @@
                 <path class="s-brand" d="M450 160 H500" marker-start="url(#p5-arrow2)" marker-end="url(#p5-arrow2)"/>
                 <path class="s-c2" d="M660 160 H710" marker-start="url(#p5-arrow2)" marker-end="url(#p5-arrow2)"/>
                 <text lang="en" class="t-muted t-small t-mid" x="580" y="214">group against group, in opposite phase</text>
-                <text lang="ja" class="t-muted t-small t-mid" x="580" y="214">群れどうしが逆向きに揺れる</text>
+                <text lang="ja" class="t-muted t-small t-mid" x="580" y="214">発電機群どうしが逆向きに揺れる</text>
               </svg>
             </div>
             <figcaption lang="en">Two kinds of electromechanical modes. A local mode involves one machine; an inter-area mode moves whole areas against each other.</figcaption>
             <figcaption lang="ja">電気機械モードの 2 つの種類です。局所モードは 1 台の発電機の揺れ、地域間モードは地域全体どうしの揺れです。</figcaption>
           </figure>
 
-          <h3><span lang="en">Mode shapes in IEEE 9-bus</span><span lang="ja">IEEE 9 母線系統のモード形</span></h3>
-          <p lang="en">Which generators swing, and in which direction, is read from the eigenvector of the mode: its <b>mode shape</b>. The figure shows the speed part of the right eigenvectors of modes ① and ②. A bar to the right and a bar to the left mean swinging in opposite phase.</p>
-          <p lang="ja">どの発電機がどちら向きに揺れるかは、そのモードの固有ベクトル（<b>モード形</b>）から読み取ります。図は、モード ① と ② の右固有ベクトルのうち回転速度の成分です。右向きの棒と左向きの棒は、逆向き（逆位相）に揺れることを表します。</p>
+          <p lang="en">Which generators swing, and against which, is read from the right eigenvector v<sub>i</sub> of the mode, its <b>mode shape</b>. Of v<sub>i</sub> we take the entries of the rotor speeds ω of the generators; entries of different kinds of states (an angle and a voltage, say) have different units and are not compared. The magnitude of an entry says how strongly that generator swings in the mode, and its phase (its angle in the complex plane) when: generators whose entries have about the same phase swing together, and generators whose entries are about 180° apart swing against each other. A generator with an entry close to 0 hardly moves in that mode.</p>
+          <p lang="ja">どの発電機がどの発電機に対して揺れるかは、そのモードの右固有ベクトル v<sub>i</sub>（<b>モード形</b>）から読み取ります。v<sub>i</sub> のうち、発電機の回転速度 ω の成分を取り出して比べます（角度と電圧のように種類の違う状態の成分は単位が違うので比べません）。成分の大きさはそのモードでその発電機がどれだけ大きく揺れるかを、位相（複素平面での角度）は揺れのタイミングを表します。位相がほぼ同じ発電機どうしはそろって揺れ、位相が約 180° 違う発電機どうしは互いに逆向きに揺れます。成分が 0 に近い発電機は、そのモードではほとんど動きません。</p>
 
-          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
-            <div class="lec-scroll">
-              <img src="../images/lecture/part5/mode-shapes.png" alt="Mode shapes of IEEE 9-bus: in mode 1 (1.28 Hz) generator 3 (+1.00) swings against generator 2 (−0.22); in mode 2 (0.58 Hz) generators 2 (+1.00) and 3 (+0.83) swing together against generator 1 (−0.50)" width="1281" height="519">
-            </div>
-            <figcaption lang="en">Speed part of the right eigenvectors, divided by its largest entry so that it is 1 (real parts). Mode ① (1.28 Hz): generator 3 against generator 2, close to a local mode. Mode ② (0.58 Hz): generators 2 and 3 together against generator 1, the group-against-group pattern that in a large system becomes an inter-area mode.</figcaption>
-            <figcaption lang="ja">右固有ベクトルの回転速度の成分を、最大の成分が 1 になるように割ったものです（実部）。モード ①（1.28 Hz）は発電機 3 が発電機 2 に対して揺れ、局所モードに近い形です。モード ②（0.58 Hz）は発電機 2 と 3 がそろって発電機 1 に対して揺れます。大きな系統では、このような群れどうしの揺れが地域間モードになります。</figcaption>
-          </figure>
         </section>
 
         <section id="participation">
@@ -331,15 +326,113 @@
           <p lang="en">v<sub>ki</sub> and w<sub>ki</sub> are the entries of state k in the right and left eigenvectors of mode i (A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>, w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>), and p<sub>ki</sub> is the share of state k in mode i: the shares of one mode add up to 1. The product w<sub>ki</sub>v<sub>ki</sub> does not change when a state is measured in other units, so the states of different generators and controllers can be compared directly. The original definition uses w<sub>ki</sub>v<sub>ki</sub> itself with w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1, a complex number; this page uses its magnitude, normalized as above. GUILDA (<code>get_participation</code>) uses the descriptor form E ẋ = A x of the model directly, with A v<sub>i</sub> = λ<sub>i</sub> E v<sub>i</sub> and w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>E, and therefore takes (E v<sub>i</sub>)<sub>k</sub> in place of v<sub>ki</sub> as in the formula above; with E = I this is the same as |w<sub>ki</sub>v<sub>ki</sub>|.</p>
           <p lang="ja">v<sub>ki</sub> と w<sub>ki</sub> は、モード i の右固有ベクトルと左固有ベクトル（A v<sub>i</sub> = λ<sub>i</sub> v<sub>i</sub>、w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>）の状態 k の成分で、p<sub>ki</sub> はモード i に対する状態 k の割合です。1 つのモードについて合計すると 1 になります。積 w<sub>ki</sub>v<sub>ki</sub> は状態を別の単位で測っても変わらないので、別の発電機や制御器の状態どうしをそのまま比べられます。もとの定義は w<sub>i</sub><sup>T</sup>v<sub>i</sub> = 1 とした積 w<sub>ki</sub>v<sub>ki</sub> そのもの（複素数）で、このページではその絶対値を上の式のように正規化して使います。GUILDA（<code>get_participation</code>）は、モデルを E ẋ = A x の形のまま使い（A v<sub>i</sub> = λ<sub>i</sub> E v<sub>i</sub>、w<sub>i</sub><sup>T</sup>A = λ<sub>i</sub> w<sub>i</sub><sup>T</sup>E）、上の式のように v<sub>ki</sub> の代わりに (E v<sub>i</sub>)<sub>k</sub> を使います。E = I なら |w<sub>ki</sub>v<sub>ki</sub>| と同じです。</p>
 
+        </section>
+
+        <section id="mode-analysis">
+          <h2><span lang="en">Reading a mode analysis: IEEE 9-bus</span><span lang="ja">モード解析の結果を読む：IEEE 9 母線系統</span></h2>
+          <p lang="en">This section applies the tools above to one system and reads the result step by step. The system is IEEE 9-bus with an AVR and a PSS on each of its three generators, linearized at the equilibrium found from its power flow. The later examples on this page use the same system.</p>
+          <p lang="ja">この節では、ここまでの道具を 1 つの系統に当てはめ、結果を順に読みます。対象は、3 台の発電機それぞれに AVR と PSS を付けた IEEE 9 母線系統で、潮流計算から求めた平衡点で線形化します。このページのあとの例も、すべてこの系統です。</p>
+
+          <figure class="lec-figure is-scroll is-compact" id="fig-ieee9" style="--lec-min-w: 280px; --lec-fig-max: 480px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/ieee9-single-line.png" alt="Single-line diagram of the IEEE 9-bus system: generators G1, G2 and G3 at buses B001, B002 and B003, each connected through a transformer to B004, B007 and B009; loads at B005, B006 and B008; lines B004-B005, B004-B006, B005-B007, B006-B009, B007-B008 and B008-B009" width="884" height="742">
+            </div>
+            <figcaption lang="en">The IEEE 9-bus system of the examples on this page, drawn with <code>net.plot_single_line_diagram()</code> (the names G1–G3 are added). Generator G<i>k</i> is at bus B00<i>k</i> and is connected to the network through a transformer; the loads are at B005, B006 and B008. In the model, each generator has an AVR and a PSS (<code>network.IEEE9bus(LocalController=true)</code>).</figcaption>
+            <figcaption lang="ja">このページの例で使う IEEE 9 母線系統です。<code>net.plot_single_line_diagram()</code> で描き、発電機の名前 G1〜G3 を書き加えました。発電機 G<i>k</i> は母線 B00<i>k</i> にあり、変圧器を通して系統につながっています。負荷は B005、B006、B008 にあります。モデルでは、各発電機に AVR と PSS が付いています（<code>network.IEEE9bus(LocalController=true)</code>）。</figcaption>
+          </figure>
+
+          <h3><span lang="en">The questions</span><span lang="ja">解析で答える問い</span></h3>
+          <p lang="en">A mode analysis answers four questions about small disturbances at one operating point. Is the operating point stable? Which oscillations remain after a disturbance, at what frequency, and how quickly do they die out? Which generators swing against which in each oscillation? At which generator does a change act most strongly on a poorly damped oscillation? The answers are read from the eigenvalues, the eigenvectors and the participation factors of the linear model.</p>
+          <p lang="ja">モード解析は、1 つの運転点での小さな外乱について、次の 4 つの問いに答えます。運転点は安定か。外乱のあとにどんな振動が残り、その周波数はいくつで、どれくらい速く収まるか。それぞれの振動で、どの発電機がどの発電機に対して揺れるか。減衰の小さい振動に対して、どの発電機を変えると効きやすいか。答えは、線形モデルの固有値、固有ベクトル、参加係数から読み取ります。</p>
+          <p lang="en">In GUILDA, the commands below compute everything this section uses. <code>disp_mode</code> lists the oscillatory modes, <code>get_mode</code> returns the same as a table together with the mode shapes, and <code>get_participation</code> returns the participation factors, also summed by bus.</p>
+          <p lang="ja">GUILDA では、この節で使う値は次のコマンドで求まります。<code>disp_mode</code> は振動するモードを一覧にし、<code>get_mode</code> は同じものを表として、モード形とともに返します。<code>get_participation</code> は参加係数を返し、母線ごとの合計も含みます。</p>
+          <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
+net.initialize();
+sys = net.get_sys();
+sys.plot_eigenvalue();
+sys.disp_mode(MinFrequency=0.1);
+sct = sys.get_mode(MinFrequency=0.1);
+part = sys.get_participation();</code></pre>
+          <p lang="en"><code>disp_mode</code> prints one line per oscillatory mode (of each complex pair, the eigenvalue with Im λ &gt; 0):</p>
+          <p lang="ja"><code>disp_mode</code> は、振動するモードごとに 1 行を表示します（複素共役の対のうち Im λ &gt; 0 の固有値）。</p>
+          <pre class="lec5-out"><code>Modes of PowerNetwork (Type ODE): 2 modes
+  No.      Re [1/s]     Im [1/s]   Freq [Hz]  Damping [%]  Dominant owner
+    1      -0.15023       3.6739      0.5847         4.09  B002SG1
+    2      -0.32656       8.0476       1.281         4.05  B003SG1</code></pre>
+          <p lang="en">The modes are sorted by the real part, the largest first, so No. 1 is mode ② of the figures on this page (0.58 Hz) and No. 2 is mode ① (1.28 Hz). The dominant owner is the element whose states have the largest participation in the mode: B002SG1 is the generator at bus B002 (G2), and B003SG1 the one at B003 (G3).</p>
+          <p lang="ja">モードは実部の大きい順に並ぶので、No. 1 がこのページの図のモード ②（0.58 Hz）、No. 2 がモード ①（1.28 Hz）です。Dominant owner は、そのモードへの参加係数が最も大きい要素です。B002SG1 は母線 B002 の発電機（G2）、B003SG1 は B003 の発電機（G3）です。</p>
+
+          <h3><span lang="en">Which values to look at</span><span lang="ja">見る値と、そこから分かること</span></h3>
+          <p lang="en">The table lists the values in the order in which they are read: where GUILDA returns each of them, what it says, and its value for the two modes of IEEE 9-bus.</p>
+          <p lang="ja">下の表は、読む順に値を並べたものです。GUILDA でそれが入っている場所、その値から分かること、IEEE 9 母線系統の 2 つのモードでの値を示します。</p>
+          <div class="lec5-tablewrap">
+            <table>
+              <thead>
+                <tr><th><span lang="en">Value</span><span lang="ja">値</span></th><th>GUILDA</th><th><span lang="en">What it says</span><span lang="ja">分かること</span></th><th><span lang="en">Mode ② (0.58 Hz)</span><span lang="ja">モード ②（0.58 Hz）</span></th><th><span lang="en">Mode ① (1.28 Hz)</span><span lang="ja">モード ①（1.28 Hz）</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td><span lang="en">Real part σ = Re λ</span><span lang="ja">実部 σ = Re λ</span></td><td><code>Eigenvalue</code></td><td><span lang="en">Stable if σ &lt; 0. The amplitude changes as e<sup>σt</sup>, so it halves after ln 2/|σ|.</span><span lang="ja">σ &lt; 0 なら安定です。振幅は e<sup>σt</sup> で変わるので、ln 2/|σ| で半分になります。</span></td><td class="lec5-num">−0.150 s<sup>−1</sup><br><span lang="en">half after 4.6 s</span><span lang="ja">4.6 s で半分</span></td><td class="lec5-num">−0.327 s<sup>−1</sup><br><span lang="en">half after 2.1 s</span><span lang="ja">2.1 s で半分</span></td></tr>
+                <tr><td><span lang="en">Frequency f = ω/2π</span><span lang="ja">周波数 f = ω/2π</span></td><td><code>Frequency</code></td><td><span lang="en">How fast it oscillates. About 1–2 Hz is typical of a local mode, 0.1–0.7 Hz of an inter-area mode.</span><span lang="ja">振動の速さです。1〜2 Hz 程度は局所モード、0.1〜0.7 Hz 程度は地域間モードによくある値です。</span></td><td class="lec5-num">0.58 Hz</td><td class="lec5-num">1.28 Hz</td></tr>
+                <tr><td><span lang="en">Damping ratio ζ</span><span lang="ja">ダンピング比 ζ</span></td><td><code>DampingRatio</code></td><td><span lang="en">How much the swing decays in one period, whatever the frequency. It is compared with the required minimum.</span><span lang="ja">1 周期あたりにどれだけ減衰するかで、周波数によりません。求められる最小値と比べます。</span></td><td class="lec5-num">4.09 %</td><td class="lec5-num">4.05 %</td></tr>
+                <tr><td><span lang="en">Mode shape (speed entries of v)</span><span lang="ja">モード形（v の回転速度の成分）</span></td><td><code>cm_shape</code><br><code>plot_eigenvector</code></td><td><span lang="en">Which generators swing, and which swing against which (phase about 0° or about 180°).</span><span lang="ja">どの発電機が揺れ、どれとどれが逆向きに揺れるか（位相が約 0° か約 180° か）。</span></td><td><span lang="en">G2 1.00 (0°), G3 0.83 (1°), G1 0.50 (−176°)</span><span lang="ja">G2 1.00（0°）、G3 0.83（1°）、G1 0.50（−176°）</span></td><td><span lang="en">G3 1.00 (0°), G2 0.22 (180°), G1 0.01</span><span lang="ja">G3 1.00（0°）、G2 0.22（180°）、G1 0.01</span></td></tr>
+                <tr><td><span lang="en">Participation factors</span><span lang="ja">参加係数</span></td><td><code>part.tab_bus</code><br><code>plot_participation</code></td><td><span lang="en">Which generators (with their AVR and PSS) make the mode, and so where a change acts on it most.</span><span lang="ja">どの発電機（その AVR・PSS を含む）がそのモードをつくっているか。そこから、どこを変えるとそのモードがよく動くかが分かります。</span></td><td><span lang="en">G2 0.57, G1 0.33, G3 0.10</span><span lang="ja">G2 0.57、G1 0.33、G3 0.10</span></td><td><span lang="en">G3 0.82, G2 0.17, G1 0.00</span><span lang="ja">G3 0.82、G2 0.17、G1 0.00</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3><span lang="en">Step 1: eigenvalues, for stability, frequency and damping</span><span lang="ja">手順 1：固有値から安定性・周波数・減衰を読む</span></h3>
+          <p lang="en">The eigenvalue map answers the first two questions. No eigenvalue lies right of the imaginary axis, so the operating point is small-signal stable. Two pairs lie away from the real axis and close to the imaginary axis: these are the oscillations that remain after a disturbance. The other eigenvalues are real, so their modes decay without oscillating, or form a pair with a large damping ratio (78 % at 0.07 Hz).</p>
+          <p lang="ja">固有値の図からは、最初の 2 つの問いに答えられます。虚軸より右にある固有値はないので、この運転点は小信号安定です。実軸から離れ、虚軸に近い 2 対が、外乱のあとに残る振動です。ほかの固有値は実数（振動せずに減衰するモード）か、ダンピング比の大きい対（0.07 Hz で 78%）です。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/eigenvalues-ieee9.png" alt="Eigenvalues of the IEEE 9-bus system near the imaginary axis, with lines of 5 and 10 percent damping ratio; the two electromechanical modes at 1.28 Hz and 0.58 Hz both have a damping ratio of 4.1 percent, and no eigenvalue is right of the imaginary axis" width="1155" height="524">
+            </div>
+            <figcaption lang="en">Eigenvalues of IEEE 9-bus at its equilibrium: those of the result of get_sys, which plot_eigenvalue draws, here with the lines of 5 % and 10 % damping ratio added. ① and ② are the two pairs of electromechanical modes, both with a damping ratio of about 4.1 %, just inside the 5 % line. Nine fast eigenvalues lie far to the left of the plot (σ ≈ −20 to −100 s<sup>−1</sup>).</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の平衡点での固有値です。get_sys の結果の固有値（plot_eigenvalue が描くもの）に、ダンピング比 5% と 10% の線を加えました。① と ② は 2 対の電気機械モードで、どちらもダンピング比は約 4.1% で、5% の線のすぐ内側にあります。速い 9 個の固有値は、図のずっと左（σ ≈ −20〜−100 s<sup>−1</sup>）にあります。</figcaption>
+          </figure>
+
+          <p lang="en">The eigenvalue at the origin is not a swing. It belongs to turning all rotor angles by the same amount, which does not change the operating state, because only the differences of the angles matter. It does not make the operating point unstable.</p>
+          <p lang="ja">原点にある固有値は揺れではありません。すべての回転子の角度を同じだけ回す動きに対応し、効くのは角度の差だけなので、運転状態は変わりません。この固有値があっても、運転点が不安定なわけではありません。</p>
+          <p lang="en">The two modes have almost the same damping ratio, about 4.1 %: each needs about 2.7 periods for its amplitude to fall to half. In seconds, however, they differ. Mode ② oscillates more slowly, so its 2.7 periods take 4.6 s, while mode ① halves in 2.1 s. Mode ② is the one that is still visible longest after a disturbance. Both lie inside the 5 % line: if an operator required ζ ≥ 5 %, both modes would need more damping.</p>
+          <p lang="ja">2 つのモードのダンピング比はほぼ同じ約 4.1% で、どちらも振幅が半分になるまでに約 2.7 周期かかります。ただし、秒で見ると違います。モード ② はゆっくり振動するので、その 2.7 周期に 4.6 s かかり、モード ① は 2.1 s で半分になります。外乱のあと最も長く揺れが残るのはモード ② です。また、どちらも 5% の線の内側にあるので、運用者が ζ ≥ 5% を求めるなら、どちらのモードも減衰を増やす必要があります。</p>
+
+          <h3><span lang="en">Step 2: mode shapes, for who swings against whom</span><span lang="ja">手順 2：モード形から、誰が誰に対して揺れるかを読む</span></h3>
+          <p lang="en">The figure shows the speed entries of the right eigenvectors of the two modes, divided by the largest entry. The phases of all entries are close to 0° or to 180° (see the table), so the real parts drawn here carry the sign: a bar to the right and a bar to the left mean swinging in opposite directions.</p>
+          <p lang="ja">図は、2 つのモードの右固有ベクトルの回転速度の成分を、最大の成分で割ったものです。どの成分も位相が 0° か 180° に近い（表を参照）ので、ここに描いた実部の符号で向きが分かります。右向きの棒と左向きの棒は、逆向きに揺れることを表します。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part5/mode-shapes.png" alt="Mode shapes of IEEE 9-bus: in mode 1 (1.28 Hz) generator 3 (+1.00) swings against generator 2 (−0.22); in mode 2 (0.58 Hz) generators 2 (+1.00) and 3 (+0.83) swing together against generator 1 (−0.50)" width="1281" height="519">
+            </div>
+            <figcaption lang="en">Speed part of the right eigenvectors of IEEE 9-bus, divided by its largest entry so that it is 1 (real parts). Mode ① (1.28 Hz): generator 3 against generator 2, while generator 1 hardly moves. Mode ② (0.58 Hz): generators 2 and 3 together against generator 1.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統の右固有ベクトルの回転速度の成分を、最大の成分が 1 になるように割ったものです（実部）。モード ①（1.28 Hz）では発電機 3 が発電機 2 に対して揺れ、発電機 1 はほとんど動きません。モード ②（0.58 Hz）では発電機 2 と 3 がそろって発電機 1 に対して揺れます。</figcaption>
+          </figure>
+
+          <p lang="en">In mode ② the two generators G2 and G3, on the left and right of the upper part of the single-line diagram, swing together against G1 at the bottom. This is the group-against-group pattern; in a large system with long tie lines it becomes an inter-area mode. In mode ① G3 swings against G2 and G1 stays still; with 1.28 Hz and essentially one machine swinging, it is close to a local mode of G3.</p>
+          <p lang="ja">モード ② では、単線結線図の上側の左右にある G2 と G3 がそろって、下側の G1 に対して揺れます。発電機群どうしが揺れる形で、長い連系線をもつ大きな系統では地域間モードになる形です。モード ① では G3 が G2 に対して揺れ、G1 は動きません。1.28 Hz で、ほぼ 1 台が揺れるので、G3 の局所モードに近いモードです。</p>
+
+          <h3><span lang="en">Step 3: participation factors, for where to act</span><span lang="ja">手順 3：参加係数から、どこで手を打つかを読む</span></h3>
+          <p lang="en">The participation factors, summed over the states of each generator with its AVR and PSS, say which generator makes each mode.</p>
+          <p lang="ja">参加係数を発電機ごとに（その AVR・PSS の状態も含めて）合計すると、それぞれのモードをどの発電機がつくっているかが分かります。</p>
+
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
               <img src="../images/lecture/part5/participation.png" alt="Participation factors of the generators of IEEE 9-bus: in mode 1 (1.28 Hz) G1 0.00, G2 0.17, G3 0.82; in mode 2 (0.58 Hz) G1 0.33, G2 0.57, G3 0.10" width="1264" height="519">
             </div>
-            <figcaption lang="en">Participation factors of IEEE 9-bus from the equation above, summed over the states of each generator with its AVR and PSS. Mode ① is mostly generator 3; mode ② is mostly generators 2 and 1. A damping controller (a PSS) tends to work best on a generator with a large share in the mode to be damped.</figcaption>
-            <figcaption lang="ja">上の式から求めた IEEE 9 母線系統の参加係数を、発電機ごとに（その AVR・PSS の状態も含めて）合計したものです。モード ① はほとんど発電機 3、モード ② は主に発電機 2 と 1 です。揺れを抑える制御器（PSS）は、抑えたいモードへの参加の大きい発電機に付けると効きやすくなります。</figcaption>
+            <figcaption lang="en">Participation factors of IEEE 9-bus from the equation in the previous section, summed over the states of each generator with its AVR and PSS (the column of the mode in <code>part.tab_bus</code>). Mode ① is mostly generator 3; mode ② is mostly generators 2 and 1.</figcaption>
+            <figcaption lang="ja">前の節の式から求めた IEEE 9 母線系統の参加係数を、発電機ごとに（その AVR・PSS の状態も含めて）合計したものです（<code>part.tab_bus</code> のそのモードの列）。モード ① はほとんど発電機 3、モード ② は主に発電機 2 と 1 です。</figcaption>
           </figure>
 
+          <p lang="en">The participation factors and the mode shape answer different questions. In mode ② G3 swings almost as much as G2 (0.83 against 1.00), but its participation is only 0.10: G3 moves along in this mode, but its own states have little influence on it. A damping controller such as a PSS acts most strongly on a mode at a generator with a large participation in it. For mode ① this is G3 (0.82); for mode ② it is G2 (0.57), and next G1 (0.33).</p>
+          <p lang="ja">参加係数とモード形は、別の問いに答えます。モード ② で G3 は G2 とほぼ同じだけ揺れます（1.00 に対して 0.83）が、参加係数は 0.10 しかありません。G3 はこのモードで一緒に動きますが、G3 自身の状態はこのモードにほとんど影響しません。PSS のように揺れを抑える制御器は、そのモードへの参加係数が大きい発電機で使うと効きやすくなります。モード ① では G3（0.82）、モード ② では G2（0.57）、その次が G1（0.33）です。</p>
+
           <div class="lec-callout is-key">
+            <p lang="en"><b>Conclusion for IEEE 9-bus.</b> The operating point is small-signal stable. Two oscillations remain after a small disturbance, both with a damping ratio of about 4.1 %, below 5 %. Mode ② (0.58 Hz), in which G2 and G3 swing together against G1, lasts longest: its amplitude halves only after 4.6 s, and it is made mainly by G2 (participation 0.57) and G1 (0.33). Mode ① (1.28 Hz), in which G3 swings against G2, halves after 2.1 s and is made almost only by G3 (0.82). To add damping to mode ①, the participation factors point to G3, for example to a retuning of its PSS; for mode ②, they point to G2 and then G1.</p>
+            <p lang="ja"><b>IEEE 9 母線系統についての結論:</b> この運転点は小信号安定です。小さな外乱のあとには 2 つの振動が残り、どちらもダンピング比は約 4.1% で、5% を下回ります。G2 と G3 がそろって G1 に対して揺れるモード ②（0.58 Hz）が最も長く残り、振幅が半分になるまでに 4.6 s かかります。このモードをつくっているのは主に G2（参加係数 0.57）と G1（0.33）です。G3 が G2 に対して揺れるモード ①（1.28 Hz）は 2.1 s で半分になり、ほとんど G3（0.82）だけでつくられています。モード ① の減衰を増やすには G3（たとえばその PSS の調整）が、モード ② には G2、次いで G1 が効きやすい、と参加係数から見当が付きます。</p>
+          </div>
+
+          <div class="lec-callout">
             <p lang="en"><b>Eigenvalues move when the system changes.</b> Changing the output of a generator, a line or a controller gain changes A, and so the eigenvalues. How much an eigenvalue moves for a small change is its <b>sensitivity</b>, and the participation factors give a first idea of where it is large. Stability-constrained OPF (Part 6) uses such sensitivities to keep the damping of every mode while choosing the cheapest operation.</p>
             <p lang="ja"><b>系統が変わると固有値は動きます。</b> 発電機の出力、送電線、制御器のゲインなどを変えると A が変わり、固有値も動きます。小さな変化に対して固有値がどれだけ動くかが<b>感度</b>で、参加係数はそれがどこで大きいかの見当を与えます。定態安定度制約付き OPF（Part 6）は、この感度を使って、すべてのモードの減衰を保ちながら最も安い運転を選びます。</p>
           </div>
@@ -347,8 +440,8 @@
 
         <section id="large-swing">
           <h2><span lang="en">When the swing is large</span><span lang="ja">大きな揺れでは合わなくなる</span></h2>
-          <p lang="en">The linear model is the tangent at one operating point, so it is accurate only while the system stays close to that point. The figure compares the linear model with GUILDA's time-domain simulation of the full nonlinear model of IEEE 9-bus. At the start, the rotor angle of generator 2 is pushed away from its equilibrium, once by a small amount and once by a large amount.</p>
-          <p lang="ja">線形モデルは 1 つの運転点での接線なので、系統がその点の近くにいる間しか正確ではありません。図は、IEEE 9 母線系統の線形モデルと、GUILDA の時間シミュレーションによる非線形モデルの応答を比べたものです。最初に発電機 2 の回転子の角度を平衡点からずらしました（小さくずらした場合と、大きくずらした場合）。</p>
+          <p lang="en">The linear model is the tangent at one operating point, so it is accurate only while the system stays close to that point. The figure compares the linear model with GUILDA's time-domain simulation of the full nonlinear model, for the IEEE 9-bus system of the <a href="#fig-ieee9">single-line diagram above</a>. At the start, the rotor angle of generator 2 is pushed away from its equilibrium, once by a small amount and once by a large amount.</p>
+          <p lang="ja">線形モデルは 1 つの運転点での接線なので、系統がその点の近くにいる間しか正確ではありません。図は、<a href="#fig-ieee9">上の単線結線図</a>の IEEE 9 母線系統について、線形モデルと、GUILDA の時間シミュレーションによる非線形モデルの応答を比べたものです。最初に発電機 2 の回転子の角度を平衡点からずらしました（小さくずらした場合と、大きくずらした場合）。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
@@ -365,8 +458,8 @@
 sc.add_offset("B002SG1", "delta", 1.2, 0);
 res = net.simulate("push");</code></pre>
 
-          <p lang="en">A linear model always answers in proportion: twice the push gives twice the swing, and a stable linear model never loses synchronism. The real system does not behave like this when the swing is large; whether it survives a large disturbance such as a fault (transient stability) has to be checked with a time-domain simulation. The two tools work together: the linear model for the many small disturbances that happen all the time, and the simulation for a few large events.</p>
-          <p lang="ja">線形モデルは常に比例して答えます。2 倍ずらせば 2 倍揺れ、安定な線形モデルは決して脱調しません。揺れが大きいときの実際の系統はそうはなりません。地絡などの大きな外乱に耐えられるか（過渡安定度）は、時間シミュレーションで確かめる必要があります。2 つの道具は補い合います。いつも起きている多くの小さな外乱には線形モデル、少数の大きな出来事には時間シミュレーションを使います。</p>
+          <p lang="en">A linear model always answers in proportion: twice the push gives twice the swing, and a stable linear model never loses synchronism. The real system does not behave like this when the swing is large; whether it survives a large disturbance such as a fault (transient stability) has to be checked with a time-domain simulation. The two are therefore used side by side: the linear model for the many small disturbances that happen all the time, and the simulation for a few large disturbances.</p>
+          <p lang="ja">線形モデルは常に比例して答えます。2 倍ずらせば 2 倍揺れ、安定な線形モデルは決して脱調しません。揺れが大きいときの実際の系統はそうはなりません。地絡などの大きな外乱に耐えられるか（過渡安定度）は、時間シミュレーションで確かめる必要があります。そのため、2 つを使い分けます。いつも起きている多くの小さな外乱には線形モデルを、少数の大きな外乱には時間シミュレーションを使います。</p>
         </section>
 
         <section id="guilda">
@@ -413,20 +506,21 @@ res = net.simulate("push");</code></pre>
             <figcaption lang="ja">GUILDA での線形化の流れです。get_sys は行列を持つ ResultLIN オブジェクトを返します。その plot_eigenvalue は固有値を複素平面に描き（不安定なものは赤）、get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</figcaption>
           </figure>
 
-          <p lang="en">The commands below linearize IEEE 9-bus at its equilibrium. get_sys returns a ResultLIN object that holds the matrices A, B, C, D and E with the names of the states and inputs; plot_eigenvalue draws its eigenvalues in the complex plane (unstable ones in red); eig gives the eigenvalues used on this page; and get_ss gives the model as a state-space object of MATLAB's Control System Toolbox for controller design.</p>
-          <p lang="ja">GUILDA で確かめるときは、次のコマンドで IEEE 9 母線系統を平衡点のまわりで線形化します。get_sys は、行列 A、B、C、D、E と状態・入力の名前を持つ ResultLIN オブジェクトを返します。plot_eigenvalue は固有値を複素平面に描き（不安定なものは赤）、eig はこのページで使った固有値を求め、get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</p>
+          <p lang="en">The commands below linearize IEEE 9-bus at its equilibrium. get_sys returns a ResultLIN object that holds the matrices A, B, C, D and E with the names of the states and inputs; get_eigenvalue returns the eigenvalues, the same as eig(sys.A, sys.E) without the infinite ones; plot_participation and plot_eigenvector draw the participation and the mode shape of a mode picked on the eigenvalue map on the network diagram; and get_ss gives the model as a state-space object of MATLAB's Control System Toolbox for controller design.</p>
+          <p lang="ja">GUILDA で確かめるときは、次のコマンドで IEEE 9 母線系統を平衡点のまわりで線形化します。get_sys は、行列 A、B、C、D、E と状態・入力の名前を持つ ResultLIN オブジェクトを返します。get_eigenvalue は固有値を返します（eig(sys.A, sys.E) から無限大の固有値を除いたものと同じです）。plot_participation と plot_eigenvector は、固有値の図で選んだモードの参加係数とモード形を系統図の上に描きます。get_ss はモデルを MATLAB の Control System Toolbox の状態空間（ss）オブジェクトとして返します。制御器の設計に使えます。</p>
           <pre class="lec-cmd"><code>net = network.IEEE9bus(LocalController=true);
 net.initialize();
 sys = net.get_sys();
-sys.plot_eigenvalue();
-lambda = eig(sys.A, sys.E);
+lambda = sys.get_eigenvalue();
+sys.plot_participation();
+sys.plot_eigenvector();
 sys_ss = sys.get_ss("ODE");</code></pre>
 
           <ul>
             <li lang="en">The linear model can also be taken at another point than the equilibrium, for example at a moment of a time-domain simulation, and for one part of the system alone: a bus, a component or a controller.</li>
             <li lang="ja">線形モデルは、平衡点以外の点（たとえば時間シミュレーションのある時刻）でも求められます。また、母線・機器・制御器など、系統の一部だけについても求められます。</li>
-            <li lang="en">The eigenvalues, mode shapes and participation factors on this page were computed from the matrices A and E of this ResultLIN with MATLAB's eig.</li>
-            <li lang="ja">このページの固有値・モード形・参加係数は、この ResultLIN の行列 A と E から MATLAB の eig で求めました。</li>
+            <li lang="en">The eigenvalues, mode shapes and participation factors on this page are those of get_mode and get_participation of this ResultLIN.</li>
+            <li lang="ja">このページの固有値・モード形・参加係数は、この ResultLIN の get_mode と get_participation の値です。</li>
           </ul>
 
           <h3><span lang="en">Where these ideas are used next</span><span lang="ja">この考え方を使う Part</span></h3>
@@ -444,22 +538,16 @@ sys_ss = sys.get_ss("ODE");</code></pre>
             <li lang="en">From an oscillating pair σ ± jω we read the frequency f = ω/2π and the damping ratio ζ; a small ζ means a swing that lasts long.</li>
             <li lang="ja">振動する対 σ ± jω からは、周波数 f = ω/2π とダンピング比 ζ を読み取ります。ζ が小さいと揺れが長く続きます。</li>
             <li lang="en">Electromechanical modes are local (one machine) or inter-area (group against group). Mode shapes show who swings against whom, and participation factors show which states make the mode.</li>
-            <li lang="ja">電気機械モードには局所モード（1 台）と地域間モード（群れどうし）があります。モード形は誰が誰に対して揺れるかを、参加係数はどの状態がそのモードをつくっているかを表します。</li>
+            <li lang="ja">電気機械モードには局所モード（1 台）と地域間モード（発電機群どうし）があります。モード形は誰が誰に対して揺れるかを、参加係数はどの状態がそのモードをつくっているかを表します。</li>
+            <li lang="en">In IEEE 9-bus with AVRs and PSSs, two modes have a damping ratio of about 4.1 %: at 0.58 Hz G2 and G3 swing against G1 (made mainly by G2), and at 1.28 Hz G3 swings against G2 (made almost only by G3).</li>
+            <li lang="ja">AVR・PSS 付きの IEEE 9 母線系統では、2 つのモードのダンピング比が約 4.1% です。0.58 Hz のモードでは G2 と G3 が G1 に対して揺れ（主に G2 がつくる）、1.28 Hz のモードでは G3 が G2 に対して揺れます（ほとんど G3 がつくる）。</li>
             <li lang="en">The linear model holds for small swings only; large disturbances need a time-domain simulation.</li>
             <li lang="ja">線形モデルが使えるのは小さな揺れだけです。大きな外乱には時間シミュレーションが必要です。</li>
           </ul>
         </section>
 
-        <section id="related">
-          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
-          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
-          <ul class="lec-cards">
-          <li><a class="lec-card is-c2" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b><span lang="en">Large disturbances, which the linear model cannot follow.</span><span lang="ja">線形モデルでは追えない大きな外乱を扱います。</span></a></li>
-          <li><a class="lec-card is-c3" href="part6-optimal-power-flow.html"><small>Part 6</small><b><span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b><span lang="en">Keeps the damping of every mode using eigenvalue sensitivities.</span><span lang="ja">固有値の感度を使って、すべてのモードの減衰を保ちます。</span></a></li>
-          <li><a class="lec-card is-c3" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the Jacobian of the power flow equations</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b><span lang="en">The Jacobian as a sensitivity of the static equations.</span><span lang="ja">静的な式の感度としてのヤコビアンを扱います。</span></a></li>
-          <li><a class="lec-card is-c4" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b><span lang="en">Uses the state-space model to design controllers such as a PSS.</span><span lang="ja">状態空間モデルを使って PSS などの制御器を設計します。</span></a></li>
-          </ul>
-          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+        <section id="live-scripts">
+          <h2><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h2>
           <ul class="lec-scripts">
             <li><code>_GUILDAtutorial/Part5_Linearization.mlx</code>: <span lang="en">open it from the MATLAB Command Window with <code>open Part5_Linearization.mlx</code> (after running <code>GUILDA</code> once to set the path). In Japanese. The graphs on this page can be drawn with the Part 5 Live Script.</span><span lang="ja">MATLAB のコマンド ウィンドウで <code>open Part5_Linearization.mlx</code> と入力すると開きます（先に <code>GUILDA</code> を一度実行してパスを通しておきます）。日本語です。このページの図は Part 5 のライブスクリプトで描けます。</span></li>
           </ul>
