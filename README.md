@@ -1,7 +1,7 @@
 # GUILDA Documentation
 
 Source of the GUILDA documentation site, <https://guilda-dev.github.io/guilda-doc/>:
-Home, About, Getting Started, Tutorial and the lecture notes (`lecture/`).
+Home, About, Getting Started, Tutorial and the "Understanding power systems" pages (`lecture/`).
 
 GUILDA itself is developed in [guilda-dev/guilda](https://github.com/guilda-dev/guilda),
 where this repository is checked out as the submodule `_GUILDAdocPages`. The class reference,

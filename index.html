@@ -16,7 +16,7 @@
     .about-section.index-stacked .about-text { max-width: 760px; }
     .about-section.index-stacked .about-figure { max-width: 720px; }
     .about-cite { font-size: 0.85rem; white-space: pre-wrap; }
-    /* Tutorial tab: the two audience cards at the top (lecture notes / how to use GUILDA) */
+    /* Tutorial tab: the two audience cards at the top (Understanding power systems / how to use GUILDA) */
     .tutorial-audience { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 28px; }
     .tutorial-audience-card { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); text-decoration: none; }
     .tutorial-audience-card:hover, .tutorial-audience-card:focus-visible { border-color: var(--line-strong); color: var(--ink); }
@@ -1056,7 +1056,7 @@ net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
 
     <div id="tab-tutorial" class="tab-content">
       <nav class="tutorial-toc" aria-label="Tutorial tab">
-        <a href="#what-you-can-analyze" onclick="openTab('tab-tutorial', 'what-you-can-analyze'); return false;"><span lang="en">Lecture notes</span><span lang="ja">講義ノート</span></a>
+        <a href="#what-you-can-analyze" onclick="openTab('tab-tutorial', 'what-you-can-analyze'); return false;"><span lang="en">Understanding power systems</span><span lang="ja">電力系統を理解する</span></a>
         <a href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;"><span lang="en">How to use GUILDA</span><span lang="ja">GUILDA の使い方</span></a>
         <a href="#basic-workflow" onclick="openTab('tab-tutorial', 'basic-workflow'); return false;"><span lang="en">Basic workflow</span><span lang="ja">基本的な流れ</span></a>
         <a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;"><span lang="en">Hands-on tutorials</span><span lang="ja">ハンズオンチュートリアル</span></a>
@@ -1066,10 +1066,10 @@ net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
       <div class="tutorial-audience">
         <a class="tutorial-audience-card" href="#what-you-can-analyze" onclick="openTab('tab-tutorial', 'what-you-can-analyze'); return false;">
           <span class="tutorial-audience-label"><span lang="en">To learn power system engineering</span><span lang="ja">電力系統工学を学びたい人へ</span></span>
-          <span class="tutorial-audience-title"><span lang="en">Lecture notes (<span class="tutorial-audience-nowrap">Part 0–8</span>)</span><span lang="ja">講義ノート（<span class="tutorial-audience-nowrap">Part 0〜8</span>）</span></span>
+          <span class="tutorial-audience-title"><span lang="en">Understanding power systems (<span class="tutorial-audience-nowrap">Part 0–8</span>)</span><span lang="ja">電力系統を理解する（<span class="tutorial-audience-nowrap">Part 0〜8</span>）</span></span>
           <span class="tutorial-audience-text" lang="en">The basics of power system engineering. Each Part explains one kind of analysis with figures and comes with a Live Script that computes it in GUILDA. No prior knowledge of power systems is assumed.</span>
           <span class="tutorial-audience-text" lang="ja">電力系統工学の基礎を学べます。各 Part で解析を図で説明し、その内容を GUILDA で計算する Live Script も付いています。電力系統の予備知識は前提にしていません。</span>
-          <span class="tutorial-audience-more flow-edge"><span lang="en">Go to the lecture notes</span><span lang="ja">講義ノートへ</span></span>
+          <span class="tutorial-audience-more flow-edge"><span lang="en">Go to the Parts</span><span lang="ja">Part の一覧へ</span></span>
         </a>
         <a class="tutorial-audience-card" href="#how-to-use" onclick="openTab('tab-tutorial', 'how-to-use'); return false;">
           <span class="tutorial-audience-label"><span lang="en">To learn to use GUILDA</span><span lang="ja">GUILDA の使い方を学びたい人へ</span></span>
@@ -1080,91 +1080,53 @@ net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
         </a>
       </div>
 
-      <h1 id="what-you-can-analyze"><span lang="en">Lecture notes: power system basics</span><span lang="ja">講義ノート：電力系統工学の基礎</span></h1>
-      <p lang="en">For readers who want to learn the basics of power system engineering; no prior knowledge of power systems is assumed. The analyses of power systems, one field per card, each tied to the power system engineering behind it. Each card opens the lecture notes that explain the field with figures, one set per Part. Each card also gives the command that opens the Live Script of the Part, which computes what the lecture notes explain with GUILDA.</p>
-      <p lang="ja">電力系統工学の基礎を学びたい人向けで、電力系統の予備知識は前提にしていません。電力系統の解析を分野ごとに、背景にある電力系統工学の知識と結びつけて紹介します。各カードから、その分野を図で説明する講義ノートを開けます。講義ノートは Part ごとに 1 つです。各カードには、講義ノートの内容を GUILDA で計算して確かめる、その Part の Live Script を開くコマンドもあります。</p>
+      <h1 id="what-you-can-analyze"><span lang="en">Understanding power systems</span><span lang="ja">電力系統を理解する</span></h1>
+      <p lang="en">For readers who want to learn the basics of power system engineering; no prior knowledge of power systems is assumed. The analyses of power systems, one field per card, each tied to the power system engineering behind it. Each card opens the page of one Part, which explains the field with figures, and gives the command that opens the Live Script of the Part, which computes the same with GUILDA.</p>
+      <p lang="ja">電力系統工学の基礎を学びたい人向けで、電力系統の予備知識は前提にしていません。電力系統の解析を分野ごとに、背景にある電力系統工学の知識と結びつけて紹介します。各カードから、その分野を図で説明する Part のページを開けます。各カードには、その内容を GUILDA で計算して確かめる、Part の Live Script を開くコマンドもあります。</p>
       <ol id="lecture-list" class="analysis-cards"></ol>
 
       <hr class="tutorial-divider">
 
       <h1 id="how-to-use"><span lang="en">How to use GUILDA</span><span lang="ja">GUILDA の使い方</span></h1>
-      <p lang="en">For readers who want to learn to use GUILDA. The basic workflow comes first, then the hands-on Steps (Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step) and reference material to look things up.</p>
-      <p lang="ja">GUILDA の使い方を学びたい人向けです。基本的な流れを示したあと、ハンズオンの Step（<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います）と、調べものに使う参考資料を並べています。</p>
+      <p lang="en">For readers who want to learn to use GUILDA: a short overview of the basic workflow, then the hands-on Steps (Live Scripts in <code>_GUILDAtutorial</code>, one feature per Step) and reference material to look things up.</p>
+      <p lang="ja">GUILDA の使い方を学びたい人向けです。基本的な流れを短く示したあと、ハンズオンの Step（<code>_GUILDAtutorial</code> の Live Script で、1 つの Step で 1 つの機能を扱います）と、調べものに使う参考資料を並べています。</p>
 
       <h2 id="basic-workflow"><span lang="en">Basic Workflow</span><span lang="ja">基本的な流れ</span></h2>
-      <p lang="en">A typical analysis: build the network → initialize the operating point → simulate, linearize or evaluate controllers. The examples below follow the verification flow in <code>+DebugScript</code> and assume GUILDA has been started as in <a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">Getting Started</a>.</p>
-      <p lang="ja">典型的な解析では、系統モデルを作り、動作点を初期化してから、時間応答シミュレーション、近似線形化、制御器の評価に進みます。以下の例は <code>+DebugScript</code> の検証手順に沿っています。<a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">はじめに</a>のとおりに GUILDA を起動してあるものとします。</p>
-      <p lang="en">To learn hands-on, see the <a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;" style="font-weight: bold;">Hands-on Tutorial</a> below.</p>
-      <p lang="ja">手を動かしながら学びたい場合は、下の<a href="#hands-on-tutorial" onclick="openTab('tab-tutorial', 'hands-on-tutorial'); return false;" style="font-weight: bold;">ハンズオンチュートリアル</a>に進んでください。</p>
+      <p lang="en">A typical analysis: load or build a network, then simulate it, linearize it or add controllers. The code below assumes GUILDA has been started as in <a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">Getting Started</a>; each step is covered in detail by the hands-on Steps below.</p>
+      <p lang="ja">典型的な解析では、系統モデルを読み込むか作ってから、時間応答シミュレーション、近似線形化、制御器の追加に進みます。以下のコードは、<a href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;">はじめに</a>のとおりに GUILDA を起動してあるものとします。それぞれの手順は、下のハンズオンの Step で詳しく扱います。</p>
       <figure class="tutorial-flow">
         <img lang="ja" src="./images/tutorial/basic-workflow.ja.svg" alt="GUILDA での作業の流れです。系統モデルを定義して制御器を付け、シミュレーションするか、状態空間表現を求めます。" onerror="this.style.display = 'none';">
         <img lang="en" src="./images/tutorial/basic-workflow.en.svg" alt="GUILDA workflow: define the network model, add controllers, then simulate or obtain a state-space model" onerror="this.style.display = 'none';">
       </figure>
 
-      <h3><span lang="en">1. Build or Load a Network</span><span lang="ja">1. 系統モデルの構築・読み込み</span></h3>
-      <p lang="en">For a quick analysis, load a packaged network. To build a model by hand, create a <code>PowerNetwork</code> and add buses, branches and components in that order.</p>
-      <p lang="ja">手早く解析したいときは、同梱の系統モデルを読み込みます。自分で作るときは、<code>PowerNetwork</code> を作成してから、母線、ブランチ、機器の順に追加します。</p>
+      <h3><span lang="en">Load a bundled network</span><span lang="ja">同梱の系統モデルを読み込む</span></h3>
+      <p lang="en">For a quick analysis, load a packaged network.</p>
+      <p lang="ja">手早く解析したいときは、同梱の系統モデルを読み込みます。</p>
 <pre><code>% Load a packaged test network (IEEE 14-bus, MATPOWER case14 data)
-net = network.IEEE14bus;
-% Same network with every transformer tap set to 1
-net = network.IEEE14bus_NoTap;
+net = network.IEEE14bus;</code></pre>
 
-% Minimal structure of a manually assembled network
+      <h3><span lang="en">Build a network by hand</span><span lang="ja">系統モデルを自分で作る</span></h3>
+      <p lang="en">Create a <code>PowerNetwork</code>, add buses, branches and components, and choose the slack bus (GUILDA never selects one).</p>
+      <p lang="ja"><code>PowerNetwork</code> を作り、母線、ブランチ、機器を追加して、スラック母線を指定します（GUILDA はスラック母線を自動では選びません）。</p>
+<pre><code>% Minimal structure of a manually assembled network
 net = PowerNetwork("TestSystem");
 bus1 = net.add_bus();
 bus2 = net.add_bus();
 net.add_branch("pi", [1, 2]);
 bus1.add_component("gen-park");
-bus2.add_component("load-power");</code></pre>
+bus2.add_component("load-power");
+bus1.l_isSlack = true;</code></pre>
 
-      <h3><span lang="en">2. Set and Initialize the Operating Point</span><span lang="ja">2. 動作点の設定と初期化</span></h3>
-      <p lang="en">Set the power-flow parameters on buses and components and choose the slack bus (<code>l_isSlack = true</code>; GUILDA never selects one, and the power flow stops with <code>GUILDA:PowerNetwork:NoSlackBus</code> without it), check the power-flow solution if needed, then initialize the model. Initialization gives each object its equilibrium voltage, current, active power and reactive power.</p>
-      <p lang="ja">まず母線と機器に潮流計算のパラメーターを設定し、スラック母線を指定します（<code>l_isSlack = true</code>。GUILDA はスラック母線を選ばず、指定がないと潮流計算は <code>GUILDA:PowerNetwork:NoSlackBus</code> で停止します）。必要なら潮流計算の解を確かめてから、モデルを初期化します。初期化すると、各オブジェクトに平衡点の電圧、電流、有効電力、無効電力が設定されます。</p>
-<pre><code>% Example power-flow settings
-bus1.tab_parameter.powerflow{:, ["V", "Varg"]} = [1.05, 0.00];
-bus1.a_Component{1}.tab_parameter.powerflow{:, ["P", "Q"]} = [nan, nan];
-bus1.l_isSlack = true;   % the slack bus: GUILDA never selects one
-
-powerflow = net.calculate_powerflow();
-net.initialize();</code></pre>
-
-      <h3 id="tutorial-simulation"><span lang="en">3. Run a Time-Domain Simulation</span><span lang="ja">3. 時間応答シミュレーションの実行</span></h3>
-      <p lang="en">Disturbances go in a <code>Scenario</code>: timed state offsets, input changes, bus faults, unit trips and branch openings. Create the scenario on the network with a tag, then simulate it by that tag.</p>
-      <p lang="ja">外乱は <code>Scenario</code> に書きます。状態のオフセット、入力の変化、母線の地絡、機器の解列、ブランチの開放を、それぞれ時刻を指定して加えられます。シナリオはタグを付けてネットワークに作り、そのタグを指定してシミュレーションを実行します。</p>
+      <h3 id="tutorial-simulation"><span lang="en">Run a time-domain simulation</span><span lang="ja">時間応答シミュレーションを実行する</span></h3>
+      <p lang="en">Disturbances go in a <code>Scenario</code> created on the network with a tag; simulate it by that tag and plot the result.</p>
+      <p lang="ja">外乱は、タグを付けてネットワークに作った <code>Scenario</code> に書きます。そのタグを指定してシミュレーションし、結果を描きます。</p>
 <pre><code>net = network.IEEE14bus;
 sc = net.add_scenario("fault", Time=[0, 50]);
 sc.add_fault("B008", [3, 3.1]);           % ground fault from 3 s to 3.1 s
 sc.add_open_branch("EL013", 3.1);   % then a line opened until the end
 
 sol = net.simulate("fault");              % the Time of the scenario
-verdict = sol.judge_out_of_step();        % "stable", "out-of-step" or "incomplete"
-xsol = sol.odeResults;
-
-figure;
-hold on;
-arrayfun(@(i) plot(xsol.t, xsol.Bus(i).Component(1).X.omega), [1, 2, 3, 6, 8]);</code></pre>
-
-      <h3 id="tutorial-linear-model"><span lang="en">4. Obtain a Linear Model</span><span lang="ja">4. 線形モデルの導出</span></h3>
-      <p lang="en">After initialization, get the linearized interconnected model. Buses without dynamic units are detected automatically.</p>
-      <p lang="ja">初期化が済んだら、近似線形化した相互結合モデルを求めます。動的な機器のない母線は自動で見つけます。</p>
-<pre><code>net = network.IEEE14bus;
-net.initialize();
-
-sys = net.get_sys();
-eig(sys.A)</code></pre>
-
-      <h3><span lang="en">5. Add and Evaluate Controllers</span><span lang="ja">5. 制御器の追加と評価</span></h3>
-      <p lang="en">Local controllers attach to components; global controllers attach to the network. After changing the controller structure, reinitialize the network, then repeat the simulation or linearization.</p>
-      <p lang="ja">ローカル制御器は機器に、グローバル制御器はネットワークに取り付けます。制御器の構成を変えたら、ネットワークを初期化し直してから、シミュレーションや近似線形化をやり直します。</p>
-<pre><code>gen = net.a_Bus{1}.a_Component{1};
-gen.add_local_controller("avr-ST1");
-gen.add_local_controller("pss-PSS1");
-net.initialize();
-
-sc = net.add_scenario("fault", Time=[0, 50]);
-sc.add_fault("B008", [3, 3.01]);
-sol = net.simulate("fault");</code></pre>
-
+sol.plot_trajectory(Quantity="omega");    % frequency deviation of the generators</code></pre>
 
       <h2 id="hands-on-tutorial"><span lang="en">Hands-on Tutorial</span><span lang="ja">ハンズオンチュートリアル</span></h2>
       <p lang="en">The usage manual: Live Scripts in the <code>_GUILDAtutorial</code> folder that cover the features of GUILDA, one Step per feature, in reading order. If you are new to GUILDA, start with Step 1. Each one builds or loads its own network first, so any of them can be opened on its own. Run the command beside each one in MATLAB with the GUILDA folder as the current folder (<code>cd(GUILDA.pwd)</code>).</p>
@@ -1336,15 +1298,15 @@ sol = net.simulate("fault");</code></pre>
     }
 
     // One card per lecture Part (database/list_Lectures.js) under "What you can analyze with GUILDA",
-    // in one column: the field, the title and what the analysis shows, linking to the lecture notes. A Part whose
-    // lecture notes are not written yet (ready: false) has no link and is marked "In preparation".
+    // in one column: the field, the title and what the analysis shows, linking to the page of the Part. A Part whose
+    // page is not written yet (ready: false) has no link and is marked "In preparation".
     // Beside the link, the command that opens the Live Script of the Part (file).
     function renderLectures() {
       const list = document.getElementById('lecture-list');
       if (!list) return;
       const data = typeof lectureData !== 'undefined' && Array.isArray(lectureData) ? lectureData : [];
       if (!data.length) {
-        list.outerHTML = `<p style="color: var(--muted);">${bilingual('No lecture data found.', '講義ノートのデータがありません。')}</p>`;
+        list.outerHTML = `<p style="color: var(--muted);">${bilingual('No Part data found.', 'Part のデータがありません。')}</p>`;
         return;
       }
       list.innerHTML = data.map(t => {
@@ -1356,7 +1318,7 @@ sol = net.simulate("fault");</code></pre>
             <h3 class="analysis-card-title">${bilingual(escapeHtml(t.title), escapeHtml(t.title_ja || t.title))}</h3>
             <p class="analysis-card-summary">${bilingual(escapeHtml(t.summary), escapeHtml(t.summary_ja || t.summary))}</p>
             ${t.ready
-              ? `<span class="analysis-card-more flow-edge">${bilingual('Open the lecture notes', '講義ノートを開く')}</span>`
+              ? `<span class="analysis-card-more flow-edge">${bilingual('Open this Part', 'この Part を開く')}</span>`
               : `<span class="lec-pending">${bilingual('In preparation', '準備中')}</span>`}`;
         const script = t.file ? `
             <div class="analysis-card-script">

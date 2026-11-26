@@ -1,5 +1,5 @@
-// Lecture notes in lecture/, one page per Part, in order; rendered by renderLectures() in index.html
-// as the cards of "What you can analyze with GUILDA" on the Tutorial tab.
+// The "Understanding power systems" pages in lecture/, one page per Part, in order; rendered by renderLectures() in index.html
+// as the cards of "Understanding power systems" on the Tutorial tab.
 // part: Part number; field: the area of analysis shown on the card; title/summary: one line each,
 // *_ja for Japanese, the summary saying what the analysis shows; link: page relative to the site root;
 // file: the Live Script of the Part under _GUILDAtutorial, shown on the card as

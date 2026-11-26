@@ -1,4 +1,4 @@
-// Shared script of the lecture notes (lecture/*.html). Load it at the end of <body>.
+// Shared script of the "Understanding power systems" pages (lecture/*.html). Load it at the end of <body>.
 // - Renders math: an element with data-tex="..." becomes KaTeX (display style for
 //   .lec-math, inline for span.lec-math-inline). KaTeX is bundled in ../vendor/katex/;
 //   a page that uses math loads katex.min.css and katex.min.js before this file.

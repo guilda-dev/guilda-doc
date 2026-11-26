@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-title-ja="GUILDA 講義ノート - Part 0: 導入">GUILDA Lecture Notes - Part 0: Introduction</title>
+  <title data-title-ja="GUILDA 電力系統を理解する - Part 0: 導入">GUILDA Understanding power systems - Part 0: Introduction</title>
   <script src="../doc-lang.js?v=20261126d"></script>
   <link rel="stylesheet" href="../style.css?v=20261126d">
   <link rel="stylesheet" href="../vendor/katex/katex.min.css">
@@ -14,8 +14,8 @@
 <body class="lec">
   <main class="lec-main">
     <div class="lec-topbar">
-      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Lecture notes</span><span lang="ja">← 講義ノート一覧</span></a>
-      <span class="lec-series"><span lang="en">GUILDA lecture notes</span><span lang="ja">GUILDA 講義ノート</span> · Part 0 / 8</span>
+      <a class="lec-back" href="../index.html#tab-tutorial"><span lang="en">← Understanding power systems</span><span lang="ja">← 電力系統を理解する</span></a>
+      <span class="lec-series"><span lang="en">GUILDA: Understanding power systems</span><span lang="ja">GUILDA：電力系統を理解する</span> · Part 0 / 8</span>
     </div>
 
     <header class="lec-hero">
@@ -33,7 +33,7 @@
           <li><a href="#chain"><span lang="en">Plants to consumers</span><span lang="ja">発電所から需要家まで</span></a></li>
           <li><a href="#balance"><span lang="en">Supply must match demand</span><span lang="ja">需要と供給の一致</span></a></li>
           <li><a href="#timescales"><span lang="en">Phenomena and time scales</span><span lang="ja">現象と時間スケール</span></a></li>
-          <li><a href="#analyses"><span lang="en">Analyses and the Part map</span><span lang="ja">解析の種類と講義ノートの地図</span></a></li>
+          <li><a href="#analyses"><span lang="en">Analyses and the Part map</span><span lang="ja">解析の種類と Part の地図</span></a></li>
           <li><a href="#renewables"><span lang="en">More renewable energy</span><span lang="ja">再生可能エネルギーの影響</span></a></li>
           <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
           <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
@@ -48,7 +48,7 @@
             <li><span lang="en">How electricity travels from power plants to homes and factories.</span><span lang="ja">電気が発電所から家庭や工場まで、どのように届くか。</span></li>
             <li><span lang="en">Why supply and demand must match at every moment, and what the frequency and the voltage tell us.</span><span lang="ja">需要と供給を常に一致させる必要がある理由と、周波数と電圧が表すもの。</span></li>
             <li><span lang="en">Which phenomena happen in a power system, and on which time scales.</span><span lang="ja">電力系統で起きる現象と、その時間の長さ。</span></li>
-            <li><span lang="en">Which analysis answers which question, and which Part of these lecture notes covers it.</span><span lang="ja">どの解析がどの問いに答えるか、それを講義ノートのどの Part で扱うか。</span></li>
+            <li><span lang="en">Which analysis answers which question, and which Part covers it.</span><span lang="ja">どの解析がどの問いに答えるか、それをどの Part で扱うか。</span></li>
             <li><span lang="en">What changes when more renewable energy is connected.</span><span lang="ja">再生可能エネルギーが増えると何が変わるか。</span></li>
           </ul>
         </section>
@@ -232,7 +232,7 @@ net.plot_diagram();</code></pre>
 
         <!-- ============================== ANALYSES ============================== -->
         <section id="analyses">
-          <h2><span lang="en">Kinds of analysis and the map of the lecture notes</span><span lang="ja">解析の種類と講義ノートの地図</span></h2>
+          <h2><span lang="en">Kinds of analysis and the map of the Parts</span><span lang="ja">解析の種類と Part の地図</span></h2>
           <p lang="en">Every analysis starts from a model of the network (Part 1). The power flow (Part 2) then finds the steady operating state, which is the starting point for the other analyses: some stay at one moment and ask about cost or limits, others follow the swings in time.</p>
           <p lang="ja">どの解析も、系統のモデル（Part 1）から始まります。次に潮流計算（Part 2）で定常的な運転状態を求めます。これがほかの解析の出発点です。その先には、ある瞬間の状態のまま費用や限界を調べる解析と、時間とともに変わる揺れを追う解析があります。</p>
 
@@ -301,8 +301,8 @@ net.plot_diagram();</code></pre>
                 <text lang="ja" class="t-muted t-small" x="200" y="134">運転状態（平衡点）</text>
               </svg>
             </div>
-            <figcaption lang="en">How the Parts of the lecture notes build on each other. Every Part can also be read on its own, starting from a bundled network.</figcaption>
-            <figcaption lang="ja">講義ノートの各 Part のつながりです。どの Part も、同梱の系統モデルから始めるので、単独で読めます。</figcaption>
+            <figcaption lang="en">How the Parts build on each other. Every Part can also be read on its own, starting from a bundled network.</figcaption>
+            <figcaption lang="ja">各 Part のつながりです。どの Part も、同梱の系統モデルから始めるので、単独で読めます。</figcaption>
           </figure>
 
           <p lang="en">Each analysis answers a different question:</p>

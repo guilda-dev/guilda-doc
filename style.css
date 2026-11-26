@@ -1646,7 +1646,7 @@ body.doc-layout .meta-box table th {
 .analysis-card { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(25em, 1fr); gap: 0 24px; margin: 0; border-bottom: 1px solid var(--line); background: var(--surface); scroll-margin-top: 104px; }
 .analysis-card-link { display: flex; flex-direction: column; flex: 1; gap: 4px; box-sizing: border-box; margin: 6px 0; padding: 10px 12px 12px; border-radius: 4px; color: var(--ink); text-decoration: none; }
 /* A ready Part is one big link: the whole block turns grey on hover and shows a focus ring,
-   and "Open the lecture notes" is drawn as a button with a chevron so the row reads as clickable. */
+   and "Open this Part" is drawn as a button with a chevron so the row reads as clickable. */
 a.analysis-card-link { cursor: pointer; transition: background-color 0.15s ease; }
 a.analysis-card-link:hover, a.analysis-card-link:focus-visible { background: var(--surface-subtle); color: var(--ink); }
 a.analysis-card-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 0; }
@@ -1718,7 +1718,7 @@ a.analysis-card-link:hover .analysis-card-more, a.analysis-card-link:focus-visib
 }
 
 /* =========================================
-   Lecture notes (lecture/*.html, <body class="lec">)
+   Understanding power systems (lecture/*.html, <body class="lec">)
    Knowledge pages that go with the video lectures. Every page has the same parts:
    top bar, hero, goals, sections with figures, summary, related Parts and Live
    Scripts, references, pager. They use the light palette and the layout of the
@@ -1980,7 +1980,7 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
   .vc-track, .vc-dot::before { transition: none; }
 }
 
-/* Lecture notes: the back link and the pager are buttons, the pager sits under a thin rule */
+/* Understanding power systems pages: the back link and the pager are buttons, the pager sits under a thin rule */
 .lec-back { position: relative; display: inline-flex; align-items: center; padding: 5px 12px; border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600; text-decoration: none; }
 .lec-back:hover, .lec-back:focus-visible { border-color: var(--brand); text-decoration: none; }
 .lec-pager { position: relative; }
@@ -2019,7 +2019,7 @@ img, video { height: auto; }
   .handson-copy { padding: 0 8px; }
   .analysis-card-link { margin: 4px -8px; padding: 10px 8px 12px; }
   hr.line-divider, .tutorial-divider { margin: 28px 0; }
-  /* Lecture notes */
+  /* Understanding power systems pages */
   body.lec main.lec-main { padding: 12px 16px 32px; margin-top: 8px; }
   .lec-topbar { margin-bottom: 16px; }
   .lec-series { font-size: 0.82rem; }
