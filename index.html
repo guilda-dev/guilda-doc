@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js?v=20261126c"></script>
-  <link rel="stylesheet" href="style.css?v=20261126c">
+  <script src="doc-lang.js?v=20261126d"></script>
+  <link rel="stylesheet" href="style.css?v=20261126d">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js?v=20261126c"></script>
-  <script src="./database/list_Lectures.js?v=20261126c"></script>
+  <script src="./database/list_Tutorials.js?v=20261126d"></script>
+  <script src="./database/list_Lectures.js?v=20261126d"></script>
 </head>
 <body class="home-layout">
 
@@ -64,25 +64,12 @@
       <p class="home-intro" lang="ja">システム制御を学ぶ学生や研究者に向けた、MATLAB で動く電力系統シミュレータです。部品を組み合わせてモデルを作り、解析したり共有したりできます。</p>
       <div class="home-actions">
         <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
-        <a class="btn" href="#tab-tutorial" onclick="openTab('tab-tutorial'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 8h18M12 3v5M6 8v10M12 8v10M18 8v10M4.5 16.5 6 18l1.5-1.5M10.5 16.5 12 18l1.5-1.5M16.5 16.5 18 18l1.5-1.5"/></svg><span lang="en">Tutorial and lecture notes</span><span lang="ja">チュートリアルと講義ノート</span></a>
         <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
       </div>
 
-      <section class="home-try" aria-labelledby="home-try-title">
-        <h2 id="home-try-title"><span lang="en">Try it in a few lines</span><span lang="ja">数行で試す</span></h2>
-        <div class="home-try-grid">
-          <div class="home-try-text">
-            <p lang="en">After starting GUILDA, load a bundled network, add a fault to a scenario and simulate it. The same network object also gives the linear model.</p>
-            <p lang="ja">GUILDA を起動したら、同梱の系統モデルを読み込み、シナリオに事故を加えてシミュレーションします。同じネットワークのオブジェクトから、線形モデルも得られます。</p>
-            <a class="btn btn-chevron" href="#basic-workflow" onclick="openTab('tab-tutorial', 'basic-workflow'); return false;"><span lang="en">See the basic workflow</span><span lang="ja">基本的な流れを見る</span></a>
-          </div>
-<pre class="home-try-code"><code>net = network.IEEE14bus;
-sc = net.add_scenario("fault", Time=[0, 10]);
-sc.add_fault("B008", [1, 1.05]);
-res = net.simulate("fault");   % time response
-res.plot_trajectory(Quantity="omega");
-sys = net.get_sys();           % linearized model</code></pre>
-        </div>
+      <section class="home-demo" aria-labelledby="home-demo-title">
+        <h2 id="home-demo-title"><span lang="en">GUILDA in use</span><span lang="ja">GUILDA を使った解析</span></h2>
+        <div class="home-demo-media"><video src="./images/home/home-demo.mp4" poster="./images/home/home-demo.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A simple analysis run with GUILDA in MATLAB" data-aria-label-ja="MATLAB で GUILDA を使って簡単な解析を行うようす"></video></div>
       </section>
 
       <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
@@ -99,7 +86,6 @@ sys = net.get_sys();           % linearized model</code></pre>
             <p lang="ja">三相平衡の電力系統を、実効値（RMS）のフェーザで表します。電圧と電流は基本周波数の複素フェーザとして扱い、送電網は代数方程式で表します。動的な振る舞いは、発電機、負荷、制御器のモデルが受け持ちます。</p>
             <p lang="en">Load a standard model, such as the IEEE 9-, 14-, 39- and 68-bus test systems or the IEEJ EAST10, EAST30, WEST10 and WEST30 standard models, or build a network of your own configuration from buses, branches and components.</p>
             <p lang="ja">IEEE 9 母線系統、14 母線系統、39 母線系統、68 母線系統や、電気学会の EAST10/EAST30/WEST10/WEST30 系統モデルを、すぐに読み込めます。母線、ブランチ、機器を自分で組み合わせて、独自の構成の系統を作ることもできます。</p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step1_BuildNetwork.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -111,7 +97,6 @@ sys = net.get_sys();           % linearized model</code></pre>
           <div class="analysis-body">
             <h3><span lang="en">Time-domain simulation</span><span lang="ja">時間応答シミュレーション</span></h3>
             <p><span lang="en">Responses to faults, load and input changes, and initial-value perturbations.</span><span lang="ja">地絡や負荷・入力の変化、初期値の摂動に対して、系統がどう応答するかを計算します。</span></p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step5_SimulationScenario.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -125,7 +110,6 @@ sys = net.get_sys();           % linearized model</code></pre>
             <h3><span lang="en">Linear analysis</span><span lang="ja">線形解析</span></h3>
             <p lang="en">Linearize the network around an operating point into <span class="nowrap">Eẋ = Ax + Bu</span>, <span class="nowrap">y = Cx + Du</span>, and analyse small-signal stability from its eigenvalues. The matrices A, B, C, D and E come with the names of the states, inputs and outputs, so they can be used for further linear analyses such as kernel analysis.</p>
             <p lang="ja">動作点のまわりで系統を近似線形化し、<span class="nowrap">Eẋ = Ax + Bu</span>、<span class="nowrap">y = Cx + Du</span> の形のモデルを得ます。固有値を調べれば、定態安定性を評価できます。行列 A、B、C、D、E には状態・入力・出力の変数名が付いているので、カーネル解析など、ほかの線形解析にもそのまま使えます。</p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step8_Linearization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -140,7 +124,6 @@ sys = net.get_sys();           % linearized model</code></pre>
             <h3><span lang="en">Continuation power flow</span><span lang="ja">連続潮流計算</span></h3>
             <p lang="en">Raise the loads of chosen buses step by step and trace the power-flow solution to draw the nose (PV) curve, then find the maximum loading point to assess voltage stability.</p>
             <p lang="ja">連続潮流計算で PV カーブ（ノーズカーブ）を描けます。選んだ母線の負荷を少しずつ増やしながら潮流解をたどるので、最大負荷点がわかり、電圧安定性の評価に使えます。</p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step10_ContinuationPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -155,7 +138,6 @@ sys = net.get_sys();           % linearized model</code></pre>
           <div class="analysis-body">
             <h3><span lang="en">Optimal power flow</span><span lang="ja">最適潮流計算</span></h3>
             <p><span lang="en">General formulations of OPF problems on the same network.</span><span lang="ja">同じ系統モデルを使って、一般的な形で定式化した最適潮流計算問題を解けます。</span></p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step9_OptimalPowerFlow.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -170,7 +152,6 @@ sys = net.get_sys();           % linearized model</code></pre>
             <h3><span lang="en">Controller design from scripts</span><span lang="ja">スクリプトによる制御器設計</span></h3>
             <p lang="en">Design controllers in MATLAB scripts, for example an LQR gain from the linear model, attach them as local or global controllers, then simulate or linearize the network to evaluate them.</p>
             <p lang="ja">制御器は MATLAB のスクリプトで設計できます。たとえば線形モデルから LQR のゲインを求め、ローカル制御器やグローバル制御器として系統に取り付けます。そのうえでシミュレーションや近似線形化を行い、効果を確かめます。</p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Part8_ControllerDesign.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
         <li class="analysis-item">
@@ -184,7 +165,6 @@ sys = net.get_sys();           % linearized model</code></pre>
           <div class="analysis-body">
             <h3><span lang="en">Graph &amp; animation</span><span lang="ja">グラフとアニメーション</span></h3>
             <p><span lang="en">Network graphs whose node heights and colours follow the response.</span><span lang="ja">応答に合わせてノードの高さと色が変わる、系統のグラフを描けます。</span></p>
-            <p class="analysis-more"><a class="analysis-link" data-tutorial="Step7_Visualization.mlx" href="#tab-tutorial"><span lang="en">Tutorial</span><span lang="ja">チュートリアル</span></a></p>
           </div>
         </li>
       </ol>
@@ -234,7 +214,6 @@ sys = net.get_sys();           % linearized model</code></pre>
         .ab-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 16px 0; }
         .ab-cards.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .ab-card { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-        .ab-cards:not(.is-two) > .ab-card { padding: 0; border: 0; }
         .ab-card h3 { margin: 4px 0 8px; font-size: 1rem; }
         .ab-card p, .ab-card ol, .ab-card ul { margin: 0; font-size: 0.92rem; }
         .ab-card ol, .ab-card ul { padding-left: 1.2em; }
@@ -257,8 +236,6 @@ sys = net.get_sys();           % linearized model</code></pre>
         .about-fig text.sm { font-size: 12px; }
         .about-fig .hl { fill: var(--brand-tint); stroke: none; }
         .about-fig .bx.is-ctrl { stroke: var(--brand); }
-        .ab-card .about-fig { margin: 0 0 10px; }
-        .ab-card .about-fig text.mono { font-size: 11px; }
         .about-fig.is-single { max-width: 560px; margin: 18px 0 12px; }
         .about-fig svg { display: block; width: 100%; height: auto; }
         .about-fig .ln { fill: none; stroke: var(--ink); stroke-width: 1.5; }
@@ -393,158 +370,11 @@ sys = net.get_sys();           % linearized model</code></pre>
       <p lang="en">A control researcher who turns to power systems therefore first spends a long time learning the power domain.</p>
       <p lang="ja">そのため、制御の研究者が電力系統に取り組むと、まず電力分野の知識の習得に時間がかかります。</p>
 
-      <h2 id="about-work"><span lang="en">Work that GUILDA takes over</span><span lang="ja">GUILDA が引き受ける作業</span></h2>
-      <div class="ab-cards is-two">
-        <div class="ab-card">
-          <h3><span lang="en">Simulating a grid from scratch</span><span lang="ja">一から実装する場合</span></h3>
-          <ol lang="en">
-            <li>Write the model of each device as code.</li>
-            <li>Connect the devices and derive the admittance matrix.</li>
-            <li>Write the equations of the whole system.</li>
-            <li>Find the operating point of each device.</li>
-          </ol>
-          <ol lang="ja">
-            <li>各設備のモデルをコードにします。</li>
-            <li>機器を接続し、アドミタンス行列を導きます。</li>
-            <li>系統全体の方程式を書きます。</li>
-            <li>各機器の動作点を求めます。</li>
-          </ol>
-        </div>
-        <div class="ab-card is-accent">
-          <h3><span lang="en">With GUILDA</span><span lang="ja">GUILDA を使う場合</span></h3>
-          <p lang="en">Add buses, branches and components to a network object. GUILDA derives the admittance matrix, the equations of the whole system and the operating point.</p>
-          <p lang="ja">母線、ブランチ、機器をネットワークのオブジェクトに追加します。アドミタンス行列、系統全体の方程式、動作点は GUILDA が求めます。</p>
-        </div>
-      </div>
-
-      <h2 id="about-features"><span lang="en">Main features</span><span lang="ja">主な特長</span></h2>
-      <div class="ab-cards">
-        <div class="ab-card">
-          <figure class="about-fig">
-            <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p1-cap">
-              <rect class="bx" x="120" y="14" width="110" height="110"/>
-              <rect class="bx" x="230" y="14" width="56" height="110"/>
-              <rect class="bx" x="120" y="124" width="110" height="52"/>
-              <rect class="bx" x="230" y="124" width="56" height="52"/>
-              <rect class="hl" x="120" y="34" width="166" height="28"/>
-              <path class="ln" d="M120 34 H286 M120 62 H286"/>
-              <text class="sym" x="175" y="103" text-anchor="middle">A</text>
-              <text class="sym" x="258" y="103" text-anchor="middle">B</text>
-              <text class="sym" x="175" y="157" text-anchor="middle">C</text>
-              <text class="sym" x="258" y="157" text-anchor="middle">D</text>
-              <text class="mono mu" x="114" y="29" text-anchor="end">⋮</text>
-              <text class="mono" x="114" y="45" text-anchor="end">delta_B001SG1</text>
-              <text class="mono" x="114" y="59" text-anchor="end">omega_B001SG1</text>
-              <text class="mono mu" x="114" y="76" text-anchor="end">⋮</text>
-              <text class="mono mu" x="114" y="145" text-anchor="end">outputs</text>
-              <text class="mu" lang="en" x="203" y="188" text-anchor="middle">rows of B001SG1</text>
-              <text class="mu" lang="ja" x="203" y="188" text-anchor="middle">B001SG1 の行</text>
-            </svg>
-            <figcaption id="about-p1-cap" hidden><span lang="en">Named state-space matrices with the rows of one generator highlighted</span><span lang="ja">名前の付いた状態空間行列と、一台の発電機の行</span></figcaption>
-          </figure>
-          <h3><span lang="en">A linear model taken apart by element</span><span lang="ja">要素ごとに分解できる線形モデル</span></h3>
-          <p lang="en">Many tools output state matrices for eigenvalue analysis. In GUILDA the states, inputs and outputs of the linear model have names, and the model can be taken apart:</p>
-          <p lang="ja">固有値解析用の状態空間行列を出力するツールは多くあります。GUILDA の線形モデルは状態・入力・出力に名前が付いており、次のように分解できます。</p>
-          <ul lang="en">
-            <li>into the parts of each generator, controller, branch and bus;</li>
-            <li>into the kernel of the Jacobian, the uniform rotation of all phases, one for each island;</li>
-            <li>into a reduced model without the variables of chosen elements (Schur complement), such as the grid seen from its buses.</li>
-          </ul>
-          <ul lang="ja">
-            <li>発電機、制御器、ブランチ、母線ごとの寄与の和に分けられます。</li>
-            <li>ヤコビ行列の核（すべての位相が一様に回転する方向）を、アイランドごとに求められます。</li>
-            <li>指定した機器の変数をシューア補元で消去できます。たとえば母線だけから見た系統の行列です。</li>
-          </ul>
-        </div>
-        <div class="ab-card">
-          <figure class="about-fig">
-            <svg viewBox="0 0 300 180" role="img" aria-labelledby="about-p2-cap">
-              <defs>
-                <marker id="about-p2-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
-              </defs>
-              <rect class="bx is-ctrl" x="90" y="8" width="120" height="30" rx="3"/>
-              <text x="150" y="28" text-anchor="middle">AGC</text>
-              <path class="ln" d="M120 38 L70 62" marker-end="url(#about-p2-arr)"/>
-              <path class="ln" d="M180 38 L230 62" marker-end="url(#about-p2-arr)"/>
-              <rect class="bx" x="10" y="64" width="130" height="112" rx="4"/>
-              <rect class="bx" x="160" y="64" width="130" height="112" rx="4"/>
-              <text lang="en" x="75" y="84" text-anchor="middle">Generator</text>
-              <text lang="ja" x="75" y="84" text-anchor="middle">発電機</text>
-              <text lang="en" x="225" y="84" text-anchor="middle">Generator</text>
-              <text lang="ja" x="225" y="84" text-anchor="middle">発電機</text>
-              <rect class="blk is-ctrl" x="22" y="94" width="106" height="24" rx="3"/>
-              <rect class="blk is-ctrl" x="36" y="122" width="92" height="22" rx="3"/>
-              <rect class="blk is-ctrl" x="22" y="148" width="106" height="22" rx="3"/>
-              <text class="sm" x="75" y="111" text-anchor="middle">AVR</text>
-              <text class="sm" x="82" y="138" text-anchor="middle">PSS</text>
-              <text class="sm" lang="en" x="75" y="164" text-anchor="middle">Governor</text>
-              <text class="sm" lang="ja" x="75" y="164" text-anchor="middle">ガバナ</text>
-              <rect class="blk is-ctrl" x="172" y="94" width="106" height="24" rx="3"/>
-              <text class="sm" x="225" y="111" text-anchor="middle">AVR</text>
-            </svg>
-            <figcaption id="about-p2-cap" hidden><span lang="en">A global AGC over two generators, each with its own local controllers</span><span lang="ja">2 台の発電機にまたがる AGC と、各発電機のローカル制御器</span></figcaption>
-          </figure>
-          <h3><span lang="en">Controllers in the same network</span><span lang="ja">制御器もネットワークの一部</span></h3>
-          <p lang="en">Local controllers such as AVRs, PSSs and governors are added to a component, and global controllers such as AGC to the network. Each controller is a class, and time simulation and linearization include it.</p>
-          <p lang="ja">AVR、PSS、ガバナなどのローカル制御器は機器に、AGC などのグローバル制御器はネットワークに追加します。制御器はクラスとして実装され、時間応答シミュレーションにも近似線形化にも含まれます。</p>
-        </div>
-        <div class="ab-card">
-          <figure class="about-fig">
-            <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p3-cap">
-              <defs>
-                <marker id="about-p3-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
-              </defs>
-              <rect class="plat" x="8" y="70" width="64" height="44" rx="6"/>
-              <text class="mono" x="40" y="97" text-anchor="middle">net</text>
-              <path class="ln" d="M72 92 L118 21" marker-end="url(#about-p3-arr)"/>
-              <path class="ln" d="M72 92 L118 57" marker-end="url(#about-p3-arr)"/>
-              <path class="ln" d="M72 92 H118" marker-end="url(#about-p3-arr)"/>
-              <path class="ln" d="M72 92 L118 127" marker-end="url(#about-p3-arr)"/>
-              <path class="ln" d="M72 92 L118 163" marker-end="url(#about-p3-arr)"/>
-              <rect class="bx" x="120" y="6" width="172" height="30" rx="3"/>
-              <rect class="bx" x="120" y="42" width="172" height="30" rx="3"/>
-              <rect class="bx" x="120" y="78" width="172" height="30" rx="3"/>
-              <rect class="bx" x="120" y="114" width="172" height="30" rx="3"/>
-              <rect class="bx" x="120" y="150" width="172" height="30" rx="3"/>
-              <g lang="en">
-                <text class="sm" x="128" y="26">Power flow</text>
-                <text class="sm" x="128" y="62">Time simulation</text>
-                <text class="sm" x="128" y="98">Linearization</text>
-                <text class="sm" x="128" y="134">Continuation PF</text>
-                <text class="sm" x="128" y="170">Optimal PF</text>
-              </g>
-              <g lang="ja">
-                <text class="sm" x="128" y="26">潮流計算</text>
-                <text class="sm" x="128" y="62">時間応答</text>
-                <text class="sm" x="128" y="98">近似線形化</text>
-                <text class="sm" x="128" y="134">連続潮流計算</text>
-                <text class="sm" x="128" y="170">最適潮流計算</text>
-              </g>
-              <text class="mu mono" x="286" y="26" text-anchor="end">ResultPF</text>
-              <text class="mu mono" x="286" y="62" text-anchor="end">ResultODE</text>
-              <text class="mu mono" x="286" y="98" text-anchor="end">ResultLIN</text>
-              <text class="mu mono" x="286" y="134" text-anchor="end">ResultCPF</text>
-              <text class="mu mono" x="286" y="170" text-anchor="end">ResultOPF</text>
-            </svg>
-            <figcaption id="about-p3-cap" hidden><span lang="en">One network object and the result of each analysis</span><span lang="ja">一つのネットワークのオブジェクトと各解析の結果</span></figcaption>
-          </figure>
-          <h3><span lang="en">One model from optimization to stability</span><span lang="ja">最適化と安定性を一つのモデルで</span></h3>
-          <p lang="en">One network runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object.</p>
-          <p lang="ja">一つのネットワークで潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。</p>
-          <ul lang="en">
-            <li>The solution of the AC optimal power flow can be the operating point; time simulation and linearization start from it with no data conversion.</li>
-            <li>The optimal power flow can include small-signal stability limits of the same network, such as a lowest damping ratio or a largest real part of the eigenvalues.</li>
-          </ul>
-          <ul lang="ja">
-            <li>AC 最適潮流計算の解を動作点にでき、時間応答シミュレーションや近似線形化はデータを変換せずにその点から始められます。</li>
-            <li>最適潮流計算に、同じネットワークの小信号安定度の制約（減衰比の下限、固有値の実部の上限など）を加えられます。</li>
-          </ul>
-        </div>
-      </div>
-
       <h2 id="about-model"><span lang="en">Building a model</span><span lang="ja">モデルの構成</span></h2>
-      <p lang="en">Buses, branches, generators, loads and controllers are classes. Adding these objects to a <code>PowerNetwork</code> builds the model, which then runs the analyses.</p>
-      <p lang="ja">母線、ブランチ、発電機、負荷、制御器はそれぞれクラスです。これらのオブジェクトを <code>PowerNetwork</code> に追加してモデルを作り、そのまま解析します。</p>
+      <p lang="en">As in most power-system simulators, a model is built by connecting objects. Buses, branches, generators, loads and controllers are classes, and methods such as <code>add_bus</code>, <code>add_branch</code>, <code>add_component</code>, <code>add_local_controller</code> and <code>add_global_controller</code> add them to a <code>PowerNetwork</code>, so a model takes only a few lines. GUILDA derives the admittance matrix, the equations of the whole system and the operating point.</p>
+      <p lang="ja">多くの電力系統シミュレータと同じように、モデルはオブジェクトをつないで作ります。母線、ブランチ、発電機、負荷、制御器はそれぞれクラスで、<code>add_bus</code>、<code>add_branch</code>、<code>add_component</code>、<code>add_local_controller</code>、<code>add_global_controller</code> などのメソッドで <code>PowerNetwork</code> に追加するので、系統のモデルを簡潔に書けます。アドミタンス行列、系統全体の方程式、動作点は GUILDA が求めます。</p>
+      <p lang="en">Bundled networks can also be used as they are: <code>network.IEEE9bus</code>, <code>IEEE14bus</code>, <code>IEEE39Bus</code> and <code>IEEE68bus</code>, and the IEEJ standard models <code>IEEJ_EAST10</code>, <code>IEEJ_EAST30</code>, <code>IEEJ_WEST10</code> and <code>IEEJ_WEST30</code>.</p>
+      <p lang="ja">同梱の系統モデルも、そのまま使えます。<code>network.IEEE9bus</code>、<code>IEEE14bus</code>、<code>IEEE39Bus</code>、<code>IEEE68bus</code> と、電気学会の標準モデル <code>IEEJ_EAST10</code>、<code>IEEJ_EAST30</code>、<code>IEEJ_WEST10</code>、<code>IEEJ_WEST30</code> があります。</p>
       <div class="ab-row">
         <figure class="about-fig">
           <svg viewBox="0 0 360 290" role="img" aria-labelledby="about-oop-cap">
@@ -590,23 +420,187 @@ net = PowerNetwork("TestSystem");
 net.add_bus();
 net.add_bus();
 net.add_branch("pi", [1, 2]);
-net.a_Bus{1}.add_component("gen-park");
+g = net.a_Bus{1}.add_component("gen-park");
 net.a_Bus{2}.add_component("load-power");
 net.a_Bus{1}.l_isSlack = true;
+g.add_local_controller("avr-DC1");          % local controller
+net.add_global_controller("agc-PI", {g});   % global controller
 
-% Use the bundled IEEE 14-bus network
-net = network.IEEE14bus;
-sc = net.add_scenario("fault", Time=[0, 10]);
-sc.add_fault("B008", [1, 1.05]);
-res = net.simulate("fault");   % time response
-sys = net.get_sys();           % linearized model</code></pre>
+% Or use a bundled network as it is
+net = network.IEEE68bus;</code></pre>
       </div>
+      <p lang="en">On top of this usual way of building a model, GUILDA offers the analysis and visualization features below.</p>
+      <p lang="ja">こうした一般的なモデルの作り方に加えて、GUILDA には次のような解析と可視化の特長があります。</p>
 
-      <h2 id="about-output"><span lang="en">Visualization built into the analyses</span><span lang="ja">解析結果を伝える可視化機能</span></h2>
-      <p lang="en">Every analysis comes with its own figures, and they are made with care. The <code>plot_*</code> methods return GraphBase objects, not bare MATLAB figures: you can restyle them afterwards with <code>set_style</code>, play figures with several time samples back as animations, link figures so that they move together, and explore them interactively. The examples below are the output of the commands shown under each one.</p>
-      <p lang="ja">どの解析にも、結果を伝えるための図が用意されており、その図も丁寧に作り込んでいます。<code>plot_*</code> メソッドは MATLAB の図をそのまま返すのではなく、GraphBase のオブジェクトを返します。あとから <code>set_style</code> で見た目を変えられ、複数の時刻を持つ図はアニメーションとして再生でき、図どうしをつないで一緒に動かし、対話的に調べられます。下の例は、それぞれの下に示したコマンドの出力です。</p>
+      <h2 id="about-analysis"><span lang="en">Analysis features</span><span lang="ja">解析の特長</span></h2>
+      <p lang="en">The linear model has named variables and can be taken apart by element, controllers are part of the network, and one network runs every analysis from optimal power flow to stability.</p>
+      <p lang="ja">線形モデルには変数名が付いていて要素ごとに分解でき、制御器もネットワークの一部として扱われます。また、最適潮流計算から安定性の解析までを一つのネットワークで行えます。</p>
 
-      <!-- Carousel of GUILDA's figures (script: wireCarousels() at the end of this file).
+      <!-- Carousel of the analysis features (same component and script as the visualization carousel below).
+           Slides and the videos expected for them (MP4 1280 x 640 with a PNG poster of the same name):
+             A1  images/about/analysis/A1-contribution.mp4        A linear model taken apart by element
+             A2  images/about/analysis/A2-controller-network.mp4  Controllers in the same network
+             A3  images/about/analysis/A3-stability-opf.mp4       One model from optimization to stability
+           Until a video exists the slide shows the illustration; put the commented <video> in place of the svg. -->
+      <section class="vc" aria-roledescription="carousel" aria-labelledby="about-analysis">
+        <div class="vc-viewport">
+          <ol class="vc-track">
+            <li class="vc-item">
+              <figure>
+                <!-- Analysis video (made separately): replace the illustration below with
+                <video src="./images/about/analysis/A1-contribution.mp4" poster="./images/about/analysis/A1-contribution.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
+                <div class="vc-media about-fig">
+                  <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p1-cap">
+                    <rect class="bx" x="120" y="14" width="110" height="110"/>
+                    <rect class="bx" x="230" y="14" width="56" height="110"/>
+                    <rect class="bx" x="120" y="124" width="110" height="52"/>
+                    <rect class="bx" x="230" y="124" width="56" height="52"/>
+                    <rect class="hl" x="120" y="34" width="166" height="28"/>
+                    <path class="ln" d="M120 34 H286 M120 62 H286"/>
+                    <text class="sym" x="175" y="103" text-anchor="middle">A</text>
+                    <text class="sym" x="258" y="103" text-anchor="middle">B</text>
+                    <text class="sym" x="175" y="157" text-anchor="middle">C</text>
+                    <text class="sym" x="258" y="157" text-anchor="middle">D</text>
+                    <text class="mono mu" x="114" y="29" text-anchor="end">⋮</text>
+                    <text class="mono" x="114" y="45" text-anchor="end">delta_B001SG1</text>
+                    <text class="mono" x="114" y="59" text-anchor="end">omega_B001SG1</text>
+                    <text class="mono mu" x="114" y="76" text-anchor="end">⋮</text>
+                    <text class="mono mu" x="114" y="145" text-anchor="end">outputs</text>
+                    <text class="mu" lang="en" x="203" y="188" text-anchor="middle">rows of B001SG1</text>
+                    <text class="mu" lang="ja" x="203" y="188" text-anchor="middle">B001SG1 の行</text>
+                  </svg>
+                  <span id="about-p1-cap" hidden><span lang="en">Named state-space matrices with the rows of one generator highlighted</span><span lang="ja">名前の付いた状態空間行列と、一台の発電機の行</span></span>
+                </div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">A linear model taken apart by element</span><span lang="ja">要素ごとに分解できる線形モデル</span></h3>
+                  <span class="vc-caption"><span lang="en">Many tools output state matrices for eigenvalue analysis. In GUILDA the states, inputs and outputs of the linear model have names, and the model can be taken apart:</span><span lang="ja">固有値解析用の状態空間行列を出力するツールは多くあります。GUILDA の線形モデルは状態・入力・出力に名前が付いており、次のように分解できます。</span></span>
+                  <div class="vc-side">
+                    <ul lang="en">
+                      <li>into the parts of each generator, controller, branch and bus;</li>
+                      <li>into the kernel of the Jacobian, the uniform rotation of all phases, one for each island;</li>
+                      <li>into a reduced model without the variables of chosen elements (Schur complement), such as the grid seen from its buses.</li>
+                    </ul>
+                    <ul lang="ja">
+                      <li>発電機、制御器、ブランチ、母線ごとの寄与の和に分けられます。</li>
+                      <li>ヤコビ行列の核（すべての位相が一様に回転する方向）を、アイランドごとに求められます。</li>
+                      <li>指定した機器の変数をシューア補元で消去できます。たとえば母線だけから見た系統の行列です。</li>
+                    </ul>
+                  </div>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <!-- Analysis video (made separately): replace the illustration below with
+                <video src="./images/about/analysis/A2-controller-network.mp4" poster="./images/about/analysis/A2-controller-network.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
+                <div class="vc-media about-fig">
+                  <svg viewBox="0 0 300 180" role="img" aria-labelledby="about-p2-cap">
+                    <defs>
+                      <marker id="about-p2-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+                    </defs>
+                    <rect class="bx is-ctrl" x="90" y="8" width="120" height="30" rx="3"/>
+                    <text x="150" y="28" text-anchor="middle">AGC</text>
+                    <path class="ln" d="M120 38 L70 62" marker-end="url(#about-p2-arr)"/>
+                    <path class="ln" d="M180 38 L230 62" marker-end="url(#about-p2-arr)"/>
+                    <rect class="bx" x="10" y="64" width="130" height="112" rx="4"/>
+                    <rect class="bx" x="160" y="64" width="130" height="112" rx="4"/>
+                    <text lang="en" x="75" y="84" text-anchor="middle">Generator</text>
+                    <text lang="ja" x="75" y="84" text-anchor="middle">発電機</text>
+                    <text lang="en" x="225" y="84" text-anchor="middle">Generator</text>
+                    <text lang="ja" x="225" y="84" text-anchor="middle">発電機</text>
+                    <rect class="blk is-ctrl" x="22" y="94" width="106" height="24" rx="3"/>
+                    <rect class="blk is-ctrl" x="36" y="122" width="92" height="22" rx="3"/>
+                    <rect class="blk is-ctrl" x="22" y="148" width="106" height="22" rx="3"/>
+                    <text class="sm" x="75" y="111" text-anchor="middle">AVR</text>
+                    <text class="sm" x="82" y="138" text-anchor="middle">PSS</text>
+                    <text class="sm" lang="en" x="75" y="164" text-anchor="middle">Governor</text>
+                    <text class="sm" lang="ja" x="75" y="164" text-anchor="middle">ガバナ</text>
+                    <rect class="blk is-ctrl" x="172" y="94" width="106" height="24" rx="3"/>
+                    <text class="sm" x="225" y="111" text-anchor="middle">AVR</text>
+                  </svg>
+                  <span id="about-p2-cap" hidden><span lang="en">A global AGC over two generators, each with its own local controllers</span><span lang="ja">2 台の発電機にまたがる AGC と、各発電機のローカル制御器</span></span>
+                </div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">Controllers in the same network</span><span lang="ja">制御器もネットワークの一部</span></h3>
+                  <span class="vc-caption"><span lang="en">Local controllers such as AVRs, PSSs and governors are added to a component, and global controllers such as AGC to the network. Each controller is a class, and time simulation and linearization include it.</span><span lang="ja">AVR、PSS、ガバナなどのローカル制御器は機器に、AGC などのグローバル制御器はネットワークに追加します。制御器はクラスとして実装され、時間応答シミュレーションにも近似線形化にも含まれます。</span></span>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <!-- Analysis video (made separately): replace the illustration below with
+                <video src="./images/about/analysis/A3-stability-opf.mp4" poster="./images/about/analysis/A3-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
+                <div class="vc-media about-fig">
+                  <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p3-cap">
+                    <defs>
+                      <marker id="about-p3-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
+                    </defs>
+                    <rect class="plat" x="8" y="70" width="64" height="44" rx="6"/>
+                    <text class="mono" x="40" y="97" text-anchor="middle">net</text>
+                    <path class="ln" d="M72 92 L118 21" marker-end="url(#about-p3-arr)"/>
+                    <path class="ln" d="M72 92 L118 57" marker-end="url(#about-p3-arr)"/>
+                    <path class="ln" d="M72 92 H118" marker-end="url(#about-p3-arr)"/>
+                    <path class="ln" d="M72 92 L118 127" marker-end="url(#about-p3-arr)"/>
+                    <path class="ln" d="M72 92 L118 163" marker-end="url(#about-p3-arr)"/>
+                    <rect class="bx" x="120" y="6" width="172" height="30" rx="3"/>
+                    <rect class="bx" x="120" y="42" width="172" height="30" rx="3"/>
+                    <rect class="bx" x="120" y="78" width="172" height="30" rx="3"/>
+                    <rect class="bx" x="120" y="114" width="172" height="30" rx="3"/>
+                    <rect class="bx" x="120" y="150" width="172" height="30" rx="3"/>
+                    <g lang="en">
+                      <text class="sm" x="128" y="26">Power flow</text>
+                      <text class="sm" x="128" y="62">Time simulation</text>
+                      <text class="sm" x="128" y="98">Linearization</text>
+                      <text class="sm" x="128" y="134">Continuation PF</text>
+                      <text class="sm" x="128" y="170">Optimal PF</text>
+                    </g>
+                    <g lang="ja">
+                      <text class="sm" x="128" y="26">潮流計算</text>
+                      <text class="sm" x="128" y="62">時間応答</text>
+                      <text class="sm" x="128" y="98">近似線形化</text>
+                      <text class="sm" x="128" y="134">連続潮流計算</text>
+                      <text class="sm" x="128" y="170">最適潮流計算</text>
+                    </g>
+                    <text class="mu mono" x="286" y="26" text-anchor="end">ResultPF</text>
+                    <text class="mu mono" x="286" y="62" text-anchor="end">ResultODE</text>
+                    <text class="mu mono" x="286" y="98" text-anchor="end">ResultLIN</text>
+                    <text class="mu mono" x="286" y="134" text-anchor="end">ResultCPF</text>
+                    <text class="mu mono" x="286" y="170" text-anchor="end">ResultOPF</text>
+                  </svg>
+                  <span id="about-p3-cap" hidden><span lang="en">One network object and the result of each analysis</span><span lang="ja">一つのネットワークのオブジェクトと各解析の結果</span></span>
+                </div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">One model from optimization to stability</span><span lang="ja">最適化と安定性を一つのモデルで</span></h3>
+                  <span class="vc-caption"><span lang="en">One network runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object.</span><span lang="ja">一つのネットワークで潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。</span></span>
+                  <div class="vc-side">
+                    <ul lang="en">
+                      <li>The solution of the AC optimal power flow can be the operating point; time simulation and linearization start from it with no data conversion.</li>
+                      <li>The optimal power flow can include small-signal stability limits of the same network, such as a lowest damping ratio or a largest real part of the eigenvalues.</li>
+                    </ul>
+                    <ul lang="ja">
+                      <li>AC 最適潮流計算の解を動作点にでき、時間応答シミュレーションや近似線形化はデータを変換せずにその点から始められます。</li>
+                      <li>最適潮流計算に、同じネットワークの小信号安定度の制約（減衰比の下限、固有値の実部の上限など）を加えられます。</li>
+                    </ul>
+                  </div>
+                </figcaption>
+              </figure>
+            </li>
+          </ol>
+        </div>
+        <div class="vc-controls">
+          <button type="button" class="vc-prev" aria-label="Previous" data-aria-label-ja="前へ"><span class="vc-arrow" aria-hidden="true"></span></button>
+          <div class="vc-dots"></div>
+          <span class="vc-count" aria-hidden="true"></span>
+          <button type="button" class="vc-next" aria-label="Next" data-aria-label-ja="次へ"><span class="vc-arrow" aria-hidden="true"></span></button>
+        </div>
+        <p class="vc-status" aria-live="polite"></p>
+      </section>
+
+      <h2 id="about-output"><span lang="en">Visualization features</span><span lang="ja">可視化の特長</span></h2>
+      <p lang="en">Every analysis has its own figures to convey the result. The <code>plot_*</code> methods return GraphBase objects: restyle them with <code>set_style</code>, play results with several time samples as animations, link figures and explore them interactively. Each slide shows the command that draws it.</p>
+      <p lang="ja">どの解析にも、結果を伝えるための図が用意されています。<code>plot_*</code> メソッドは GraphBase のオブジェクトを返すので、<code>set_style</code> で見た目を変えたり、複数の時刻を持つ結果をアニメーションとして再生したり、図どうしをつないで対話的に調べたりできます。各スライドに、その図を描くコマンドを示しています。</p>
+
+      <!-- Carousel of GUILDA's figures (script: wireCarousel() at the end of this file).
            To add an item, copy one <li class="vc-item"> block into the list below, in the order you want:
 
            <li class="vc-item">
@@ -616,8 +610,9 @@ sys = net.get_sys();           % linearized model</code></pre>
                  or video:            <video src="./images/about/carousel/NAME.mp4" poster="./images/about/carousel/NAME-poster.png" width="W" height="H" autoplay muted loop playsinline preload="metadata" aria-label="English description"></video>
                </div>
                <figcaption>
+                 <h3 class="vc-title"><span lang="en">Short title</span><span lang="ja">短い見出し</span></h3>
                  <span class="vc-caption"><span lang="en">Caption</span><span lang="ja">キャプション</span></span>
-                 (a recording of someone using the figure starts the caption with
+                 (a recording of someone using the figure starts the title with
                  <span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span>)
                  <pre class="vc-cmd"><code>res.plot_xxx(...)</code></pre>
                </figcaption>
@@ -627,7 +622,7 @@ sys = net.get_sys();           % linearized model</code></pre>
            The media and their captions and commands come from images/about/carousel/manifest.md.
            The dots, the counter and the keyboard and swipe handling are made by the script; nothing else needs
            editing. Order: from simple results to richer ones (power flow, time response, linearization, OPF),
-           then the recordings of someone using a figure or the GUI. Media are shown whole inside a 16:10 frame
+           then the recordings of someone using a figure or the GUI. Media are shown whole inside a 2:1 frame
            (object-fit: contain). The video of the item on screen plays from its start whenever that item is shown;
            the others are paused, and with reduced motion videos do not play by themselves. -->
       <section class="vc" aria-roledescription="carousel" aria-labelledby="about-output">
@@ -637,6 +632,7 @@ sys = net.get_sys();           % linearized model</code></pre>
               <figure>
                 <div class="vc-media"><img src="./images/about/carousel/02-single-line-diagram.png" alt="Black-and-white single-line diagram of the IEEE 14-bus system with generator, load and transformer symbols and bus names" data-alt-ja="発電機・負荷・変圧器の記号と母線名を描いた、IEEE 14 母線系統の白黒の単線結線図" loading="lazy"></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">A single-line diagram for a paper</span><span lang="ja">論文用の単線結線図</span></h3>
                   <span class="vc-caption"><span lang="en">A black-and-white single-line diagram for a paper, drawn from a power flow result: generator, load and transformer symbols and bus names, sized for one column of a two-column paper (bus names in 6 pt).</span><span lang="ja">潮流計算の結果から、論文にそのまま使える白黒の単線結線図を描きます。発電機・負荷・変圧器の記号と母線名を、2 段組の 1 列幅に合わせて配置します（母線名は 6 pt）。</span></span>
                   <pre class="vc-cmd"><code>res = network.IEEE14bus().calculate_powerflow();
 G = res.plot_single_line_diagram();
@@ -648,6 +644,7 @@ exportgraphics(G.ax, "ieee14.png", Resolution=300);</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/03-fault-diagram.mp4" poster="./images/about/carousel/03-fault-diagram.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The response of the IEEE 14-bus system to a fault at bus B008, played on the network diagram with moving dots for the active power and a voltage chart whose cursor follows the time"></video></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">The network diagram after a fault</span><span lang="ja">地絡事故後のネットワーク図</span></h3>
                   <span class="vc-caption"><span lang="en">A fault at bus B008 from 1 s to 1.05 s, played on the network diagram. Branch colours show the current, moving dots the direction and size of the active power, and the cursor of the |V| chart follows the time (slow motion during the fault).</span><span lang="ja">母線 B008 で 1 秒から 1.05 秒まで地絡事故が起きたときの応答を、ネットワーク図で再生しています。ブランチの色は電流、流れる点は有効電力の向きと大きさを表し、右のグラフのカーソルが時刻に追従します（事故中はスロー再生）。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE14bus();
 sc = net.add_scenario("fault", Time=[0, 5]);
@@ -662,6 +659,7 @@ G.play();                        % or drag the playback bar</code></pre>
               <figure>
                 <div class="vc-media"><img src="./images/about/output-frequency.png" alt="Frequency deviation omega of the five generators, oscillating after the fault at 1 s and settling by 10 s" data-alt-ja="1 秒の事故の後に振動し、10 秒までに落ち着く 5 台の発電機の周波数偏差 omega" width="1024" height="625" loading="lazy"></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">The time response</span><span lang="ja">時間応答の波形</span></h3>
                   <span class="vc-caption"><span lang="en">The time response itself: the frequency deviation of the generators after a fault at bus B008 (IEEE 14-bus system).</span><span lang="ja">時間応答そのものも描けます。母線 B008 の事故の後の、発電機の周波数偏差です（IEEE 14 母線系統）。</span></span>
                   <pre class="vc-cmd"><code>res = net.simulate("fault");
 res.plot_trajectory(Quantity="omega");</code></pre>
@@ -672,6 +670,7 @@ res.plot_trajectory(Quantity="omega");</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/04-spring-model-3d.mp4" poster="./images/about/carousel/04-spring-model-3d.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The generators of the IEEE 9-bus system swinging after a fault, drawn as masses and springs on the surface z = log|V|, with the frequency deviation of the generators beside it"></video></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">A 3D spring-mass model</span><span lang="ja">3 次元のばね質点モデル</span></h3>
                   <span class="vc-caption"><span lang="en">The swing of the generators after a fault, as a spring-mass picture on the surface z = log|V|. The nodes are voltage phasors, the springs are branches and reactances, and the chart is the frequency deviation omega of the generators.</span><span lang="ja">事故後の発電機の動揺を、曲面 z = log|V| の上のばね質点モデルとして動かしています。ノードは電圧フェーザ、ばねはブランチとリアクタンスで、右のグラフは発電機の角周波数偏差 omega です。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE9bus();
 sc = net.add_scenario("fault", Time=[0, 5]);
@@ -686,6 +685,7 @@ G.export_video("swing.mp4");</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/05-cpf-steps.mp4" poster="./images/about/carousel/05-cpf-steps.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The steps of a continuation power flow on the IEEE 14-bus system, played on the network diagram and the linked PV curves"></video></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">Continuation power flow step by step</span><span lang="ja">連続潮流計算のステップ再生</span></h3>
                   <span class="vc-caption"><span lang="en">Each step of a continuation power flow, played on the network diagram and the linked PV curves. As the load grows the flows change, and the path passes the nose (maximum loading point) onto the lower branch.</span><span lang="ja">連続潮流計算の各ステップを、ネットワーク図と PV 曲線で同時に再生しています。負荷を増やすにつれて潮流が変わり、ノーズ（最大負荷点）を越えて下側の解へ進む様子が分かります。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE14bus();
 net.initialize();
@@ -699,7 +699,8 @@ G.animate();</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/08-eigen-participation.mp4" poster="./images/about/carousel/08-eigen-participation.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Modes are clicked on the eigenvalue map of the linearized IEEE 68-bus system, and the network diagram beside it is recolored with the participation of each bus in that mode"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.</span><span lang="ja">IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。</span></span>
+                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Click an eigenvalue to see the participation</span><span lang="ja">固有値をクリックして参加率を見る</span></h3>
+                  <span class="vc-caption"><span lang="en">The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.</span><span lang="ja">IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE68bus();
 res = net.get_sys();
 sct = res.plot_participation();   % click an eigenvalue, then a bus</code></pre>
@@ -710,6 +711,7 @@ sct = res.plot_participation();   % click an eigenvalue, then a bus</code></pre>
               <figure>
                 <div class="vc-media"><img src="./images/about/carousel/01-opf-lmp.png" alt="Locational marginal prices of the IEEE 14-bus system shown by colour on the network diagram, with the congested branch highlighted" data-alt-ja="IEEE 14 母線系統の地点別限界価格を色で示したネットワーク図。混雑したブランチが強調されています。" loading="lazy"></div>
                 <figcaption>
+                  <h3 class="vc-title"><span lang="en">LMP of an optimal power flow</span><span lang="ja">OPF の LMP</span></h3>
                   <span class="vc-caption"><span lang="en">The locational marginal price (LMP) of each bus from an AC optimal power flow, shown by colour. The branch at its capacity limit is highlighted, so you can see how congestion splits the prices.</span><span lang="ja">最適潮流計算（AC OPF）の結果から、各母線の地点別限界価格（LMP）を色で表しています。送電容量の上限に達したブランチが強調され、混雑によって価格が分かれる様子が分かります。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE14bus();
 net.a_Branch{1}.tab_parameter.operation.Pmax = 1;
@@ -722,7 +724,8 @@ G = res.plot_lmp(LabelMode="bus");</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/06-explore-click.mp4" poster="./images/about/carousel/06-explore-click.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The playback bar of the IEEE 14-bus network diagram is dragged to the fault, and clicked buses are selected in the diagram and in the voltage chart beside it"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Drag the playback bar to the moment of the fault and click buses: a few lines in <code>ElementClickedFcn</code> select the clicked bus both in the diagram and in the |V| chart. The pointer and the blue click rings were drawn onto the recording to show where it was clicked.</span><span lang="ja">再生バーをドラッグして事故の瞬間に移動し、母線をクリックしています。<code>ElementClickedFcn</code> に書いた数行で、クリックした母線がネットワーク図と右の |V| のグラフの両方で選択されます。マウスポインタと青いクリックの輪は、操作した位置を示すために録画に描き加えたものです。</span></span>
+                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Explore the result with the playback bar and clicks</span><span lang="ja">再生バーとクリックで結果を探る</span></h3>
+                  <span class="vc-caption"><span lang="en">Drag the playback bar to the moment of the fault and click buses: a few lines in <code>ElementClickedFcn</code> select the clicked bus both in the diagram and in the |V| chart.</span><span lang="ja">再生バーをドラッグして事故の瞬間に移動し、母線をクリックしています。<code>ElementClickedFcn</code> に書いた数行で、クリックした母線がネットワーク図と右の |V| のグラフの両方で選択されます。</span></span>
                   <pre class="vc-cmd"><code>[G, G_chart] = res.plot_diagram();
 G.ElementClickedFcn = @(G, d) select_bus(G, G_chart, d);
 
@@ -739,7 +742,8 @@ end</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/07-control-panel.mp4" poster="./images/about/carousel/07-control-panel.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The control panel of the IEEE 39-bus network diagram switches the colours, the 3D drawing and the bus height, and the figure is redrawn each time"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The panel of <code>show_controls</code> switches the colour, the bus colour, the 3D drawing and the bus height, and a command sets the marker size. The panel and the properties stay in step: a change from either one redraws the figure. The pointer and the blue click rings were drawn onto the recording.</span><span lang="ja"><code>show_controls</code> で出したパネルから、色、母線の色、3D 表示、母線の高さを切り替え、コマンドでマーカーの大きさを変えています。パネルとプロパティは常に同期しており、どちらで変えても図が更新されます。マウスポインタと青いクリックの輪は、録画に描き加えたものです。</span></span>
+                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The control panel and commands</span><span lang="ja">コントロールパネルとコマンド</span></h3>
+                  <span class="vc-caption"><span lang="en">The panel of <code>show_controls</code> switches the colour, the bus colour, the 3D drawing and the bus height, and a command sets the marker size. The panel and the properties stay in step: a change from either one redraws the figure.</span><span lang="ja"><code>show_controls</code> で出したパネルから、色、母線の色、3D 表示、母線の高さを切り替え、コマンドでマーカーの大きさを変えています。パネルとプロパティは常に同期しており、どちらで変えても図が更新されます。</span></span>
                   <pre class="vc-cmd"><code>res = network.IEEE39Bus().calculate_powerflow();
 G = res.plot_diagram();
 G.show_controls();
@@ -755,7 +759,8 @@ G.BusHeightMode = "V";</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/09-app-gui.mp4" poster="./images/about/carousel/09-app-gui.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="In the GUILDA app, the active power of a load of the IEEE 14-bus system is changed in the model GUI, the power flow is run and the result window is opened, while the log records each action as MATLAB code"></video></div>
                 <figcaption>
-                  <span class="vc-caption"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The GUILDA app opens the IEEE 14-bus system; the load at bus B009 is clicked on the network diagram and its active power P is changed from -0.295 to -0.6 in the model GUI. The Power flow tab then runs the power flow, and Analyze result opens the result window. Every action is kept as MATLAB code in the log below, and Export script writes it out as a script.</span><span lang="ja">GUILDA のアプリで IEEE 14 母線系統を開き、ネットワーク図で母線 B009 の負荷をクリックして、モデルの GUI で有効電力 P を -0.295 から -0.6 に書き換えています。続けて Power flow のタブで潮流計算を実行し、Analyze result で結果の窓を開いています。操作はすべて MATLAB のコードとして下のログに残り、Export script でスクリプトに書き出せます。</span></span>
+                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Edit and analyse in the GUI</span><span lang="ja">GUI で編集して解析する</span></h3>
+                  <span class="vc-caption"><span lang="en">The GUILDA app opens the IEEE 14-bus system; the load at bus B009 is clicked on the network diagram and its active power P is changed from -0.295 to -0.6 in the model GUI. The Power flow tab then runs the power flow, and Analyze result opens the result window. Every action is kept as MATLAB code in the log below, and Export script writes it out as a script.</span><span lang="ja">GUILDA のアプリで IEEE 14 母線系統を開き、ネットワーク図で母線 B009 の負荷をクリックして、モデルの GUI で有効電力 P を -0.295 から -0.6 に書き換えています。続けて Power flow のタブで潮流計算を実行し、Analyze result で結果の窓を開いています。操作はすべて MATLAB のコードとして下のログに残り、Export script でスクリプトに書き出せます。</span></span>
                   <pre class="vc-cmd"><code>h = GUILDA.launch_gui(network.IEEE14bus());
 % the log of the session:
 net.a_Bus{9}.a_Component{1}.tab_parameter.powerflow.P = -0.6;
@@ -1233,17 +1238,6 @@ sol = net.simulate("fault");</code></pre>
       return (filename || 'unknown').replace(/[^a-zA-Z0-9]/g,'_').toLowerCase();
     }
 
-    // Supported Analyses rows link to a tutorial entry (data-tutorial) or a Basic Workflow step (data-section).
-    // A link whose target does not exist is removed.
-    function wireAnalysisLinks() {
-      document.querySelectorAll('.analysis-link').forEach(link => {
-        const targetId = link.dataset.tutorial ? tutorialAnchorId(link.dataset.tutorial) : link.dataset.section;
-        if (!targetId || !document.getElementById(targetId)) { (link.closest('.analysis-more') || link).remove(); return; }
-        link.href = `#${targetId}`;
-        link.addEventListener('click', (e) => { e.preventDefault(); openTab('tab-tutorial', targetId); });
-      });
-    }
-
     // The command that opens a Live Script, with a copy button (wired by wireCopyButtons()).
     function commandBlock(command) {
       return `
@@ -1377,107 +1371,116 @@ sol = net.simulate("fault");</code></pre>
       wireCopyButtons(list);
     }
 
-    // Carousels (section.vc, About tab): one item at a time; prev/next buttons, dots, arrow keys
-    // and a horizontal swipe move between items. The carousel does not advance by itself. The video of
-    // the item on screen plays from its start each time the item (or the About tab) is shown, and the
-    // other videos are paused. With prefers-reduced-motion videos do not start by themselves (they show
-    // their poster and controls). Items that are off screen are inert, so Tab skips them.
-    function wireCarousels() {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      document.querySelectorAll('.vc').forEach(root => {
-        const track = root.querySelector('.vc-track');
-        const items = Array.from(root.querySelectorAll('.vc-item'));
-        const dots = root.querySelector('.vc-dots');
-        const count = root.querySelector('.vc-count');
-        const status = root.querySelector('.vc-status');
-        const prev = root.querySelector('.vc-prev');
-        const next = root.querySelector('.vc-next');
-        if (!track || !items.length) return;
-        let index = 0;
-        const viewport = root.querySelector('.vc-viewport');
-        const shown = () => root.closest('.tab-content')?.classList.contains('active') ?? true;
-        root.tabIndex = 0;
-        items.forEach((item, i) => {
-          item.setAttribute('role', 'group');
-          item.setAttribute('aria-roledescription', 'slide');
-          item.setAttribute('aria-label', `${i + 1} / ${items.length}`);
+    // Videos that play by themselves (the Home demo and the carousel items) start from their first frame,
+    // only while their tab is open. With prefers-reduced-motion they do not start by themselves: they show
+    // their poster and controls. A browser that refuses autoplay keeps the poster.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const tabShown = (el) => el.closest('.tab-content')?.classList.contains('active') ?? true;
+    function holdVideo(v) {
+      v.removeAttribute('autoplay');
+      v.muted = true;
+      v.pause();
+      if (reduceMotion.matches) v.controls = true;
+    }
+    function playFromStart(v) {
+      if (reduceMotion.matches) return;
+      try { v.currentTime = 0; } catch (e) { /* not seekable yet: it starts at 0 anyway */ }
+      const p = v.play();
+      if (p) p.catch(() => {});
+    }
+    // Play each video when its tab is opened (from the start) and pause it when the tab is left;
+    // isCurrent(v) says whether the video is the one meant to play (for a carousel: the item on screen).
+    function followTab(videos, isCurrent) {
+      let wasShown = videos.map(tabShown);
+      document.addEventListener('guilda-tabchange', () => {
+        videos.forEach((v, k) => {
+          const now = tabShown(v);
+          if (!now) v.pause();
+          else if (!wasShown[k] && isCurrent(v)) playFromStart(v);
+          wasShown[k] = now;
         });
-        root.querySelectorAll('video').forEach(v => {
-          v.removeAttribute('autoplay');
-          v.muted = true;
-          v.pause();
-          if (reduceMotion.matches) v.controls = true;
-        });
-        const dotButtons = items.map((item, i) => {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'vc-dot';
-          b.setAttribute('aria-label', `${i + 1} / ${items.length}`);
-          b.addEventListener('click', () => go(i));
-          dots.appendChild(b);
-          return b;
-        });
-        // Play a video from its first frame; a browser that refuses autoplay keeps the poster
-        function playFromStart(v) {
-          if (reduceMotion.matches) return;
-          try { v.currentTime = 0; } catch (e) { /* not seekable yet: it starts at 0 anyway */ }
-          const p = v.play();
-          if (p) p.catch(() => {});
-        }
-        function go(i) {
-          index = (i + items.length) % items.length;
-          track.style.transform = `translateX(${-100 * index}%)`;
-          fitHeight();
-          items.forEach((item, k) => {
-            const on = k === index;
-            item.inert = !on;
-            item.setAttribute('aria-hidden', String(!on));
-            item.querySelectorAll('video').forEach(v => {
-              if (on && shown()) playFromStart(v);
-              else v.pause();
-            });
-            item.querySelectorAll('img[loading="lazy"]').forEach(img => { if (Math.abs(k - index) <= 1) img.loading = 'eager'; });
-          });
-          dotButtons.forEach((b, k) => b.setAttribute('aria-current', k === index ? 'true' : 'false'));
-          count.textContent = `${index + 1} / ${items.length}`;
-          const caption = items[index].querySelector('.vc-caption');
-          status.textContent = `${index + 1} / ${items.length}: ${caption ? caption.innerText.trim() : ''}`;
-        }
-        // The frame takes the height of the item on screen, so a short item leaves no gap
-        function fitHeight() { const h = items[index].offsetHeight; if (h) viewport.style.height = `${h + 2}px`; }
-        window.addEventListener('resize', fitHeight);
-        document.addEventListener('guilda-langchange', fitHeight);
-        items.forEach(item => item.querySelectorAll('img, video').forEach(m => m.addEventListener(m.tagName === 'IMG' ? 'load' : 'loadedmetadata', fitHeight)));
-        prev.addEventListener('click', () => go(index - 1));
-        next.addEventListener('click', () => go(index + 1));
-        root.addEventListener('keydown', (e) => {
-          if (e.target.closest('pre')) return;
-          if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
-          else if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
-          else if (e.key === 'Home') { e.preventDefault(); go(0); }
-          else if (e.key === 'End') { e.preventDefault(); go(items.length - 1); }
-        });
-        // Swipe: a mostly horizontal move of 40 px or more on the media
-        let x0 = null, y0 = null;
-        viewport.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
-        viewport.addEventListener('touchend', (e) => {
-          if (x0 === null) return;
-          const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
-          if (Math.abs(dx) > 40 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
-          x0 = y0 = null;
-        });
-        // Videos play only while their tab is open, from the start each time the tab is opened
-        let wasShown = shown();
-        document.addEventListener('guilda-tabchange', () => {
-          fitHeight();
-          const now = shown();
-          items[index].querySelectorAll('video').forEach(v => {
-            if (now && !wasShown) playFromStart(v); else if (!now) v.pause();
-          });
-          wasShown = now;
-        });
-        go(0);
       });
+    }
+
+    // Home: the demo video loops while the Home tab is open
+    function wireDemoVideos() {
+      const videos = Array.from(document.querySelectorAll('.home-demo video'));
+      videos.forEach(v => { holdVideo(v); if (tabShown(v)) playFromStart(v); });
+      followTab(videos, () => true);
+    }
+
+    // Carousels (section.vc, About tab): one item at a time; prev/next buttons, dots, arrow keys
+    // and a horizontal swipe move between items. Each carousel keeps its own state, so several work
+    // side by side. A carousel does not advance by itself. The video of the item on screen plays from
+    // its start each time the item (or the About tab) is shown, and the other videos are paused.
+    // Items that are off screen are inert, so Tab skips them. The frame keeps one height for all items
+    // (style.css: the items stretch to the tallest one), so moving between items does not shift the page.
+    function wireCarousel(root) {
+      const track = root.querySelector('.vc-track');
+      const items = Array.from(root.querySelectorAll('.vc-item'));
+      const dots = root.querySelector('.vc-dots');
+      const count = root.querySelector('.vc-count');
+      const status = root.querySelector('.vc-status');
+      const prev = root.querySelector('.vc-prev');
+      const next = root.querySelector('.vc-next');
+      const viewport = root.querySelector('.vc-viewport');
+      if (!track || !items.length) return;
+      let index = 0;
+      root.tabIndex = 0;
+      items.forEach((item, i) => {
+        item.setAttribute('role', 'group');
+        item.setAttribute('aria-roledescription', 'slide');
+        item.setAttribute('aria-label', `${i + 1} / ${items.length}`);
+      });
+      const videos = Array.from(root.querySelectorAll('video'));
+      videos.forEach(holdVideo);
+      const dotButtons = items.map((item, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'vc-dot';
+        b.setAttribute('aria-label', `${i + 1} / ${items.length}`);
+        b.addEventListener('click', () => go(i));
+        dots.appendChild(b);
+        return b;
+      });
+      function go(i) {
+        index = (i + items.length) % items.length;
+        track.style.transform = `translateX(${-100 * index}%)`;
+        items.forEach((item, k) => {
+          const on = k === index;
+          item.inert = !on;
+          item.setAttribute('aria-hidden', String(!on));
+          item.querySelectorAll('video').forEach(v => {
+            if (on && tabShown(root)) playFromStart(v);
+            else v.pause();
+          });
+          item.querySelectorAll('img[loading="lazy"]').forEach(img => { if (Math.abs(k - index) <= 1) img.loading = 'eager'; });
+        });
+        dotButtons.forEach((b, k) => b.setAttribute('aria-current', k === index ? 'true' : 'false'));
+        count.textContent = `${index + 1} / ${items.length}`;
+        const title = items[index].querySelector('.vc-title') || items[index].querySelector('.vc-caption');
+        status.textContent = `${index + 1} / ${items.length}: ${title ? title.innerText.trim() : ''}`;
+      }
+      prev.addEventListener('click', () => go(index - 1));
+      next.addEventListener('click', () => go(index + 1));
+      root.addEventListener('keydown', (e) => {
+        if (e.target.closest('pre')) return;
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+        else if (e.key === 'Home') { e.preventDefault(); go(0); }
+        else if (e.key === 'End') { e.preventDefault(); go(items.length - 1); }
+      });
+      // Swipe: a mostly horizontal move of 40 px or more on the media
+      let x0 = null, y0 = null;
+      viewport.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+      viewport.addEventListener('touchend', (e) => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
+        x0 = y0 = null;
+      });
+      followTab(videos, v => v.closest('.vc-item') === items[index]);
+      go(0);
     }
 
     function escapeHtml(value) {
@@ -1492,8 +1495,8 @@ sol = net.simulate("fault");</code></pre>
     window.addEventListener('DOMContentLoaded', () => {
       renderTutorials();
       renderLectures();
-      wireAnalysisLinks();
-      wireCarousels();
+      document.querySelectorAll('.vc').forEach(wireCarousel);
+      wireDemoVideos();
       openFragment();
       applyLanguageAttributes();
       document.addEventListener('guilda-langchange', applyLanguageAttributes);
