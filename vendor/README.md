@@ -8,7 +8,7 @@ repository ([`LICENSE`](../LICENSE), MIT) does not apply to them.
 
 | | |
 |---|---|
-| What | Math typesetting library, used to render math in the lecture notes (`lecture/`) |
+| What | Math typesetting library, used to render math in the "Understanding power systems" pages (`lecture/`) |
 | Version | 0.19.1 (released 2026-10-23) |
 | Source | Official release asset `katex.tar.gz` of <https://github.com/KaTeX/KaTeX/releases/tag/v0.19.1> (SHA-256 `751e29ffb0c5bc184f08692a0aa905ff86a59ced07f635a27e72a7b7bc53036c`) |
 | Files | `katex/katex.min.js`, `katex/katex.min.css`, `katex/fonts/*` (all 60 font files of the release) |

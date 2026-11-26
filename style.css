@@ -432,8 +432,6 @@ html[data-lang="ja"] body [lang="en"] { display: none !important; }
 .analysis-body h3 { margin: 0 0 2px; font-size: 1rem; color: var(--ink); }
 .analysis-body p { margin: 0; color: var(--ink-2); font-size: 0.93rem; line-height: 1.65; }
 .analysis-body p + p { margin-top: 6px; }
-.analysis-more:empty { display: none; }
-.analysis-link { font-size: 0.9rem; white-space: nowrap; }
 .nowrap { white-space: nowrap; }
 .analysis-icon * { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .analysis-icon .ai-axis { stroke: var(--line-strong); }
@@ -1648,7 +1646,7 @@ body.doc-layout .meta-box table th {
 .analysis-card { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(25em, 1fr); gap: 0 24px; margin: 0; border-bottom: 1px solid var(--line); background: var(--surface); scroll-margin-top: 104px; }
 .analysis-card-link { display: flex; flex-direction: column; flex: 1; gap: 4px; box-sizing: border-box; margin: 6px 0; padding: 10px 12px 12px; border-radius: 4px; color: var(--ink); text-decoration: none; }
 /* A ready Part is one big link: the whole block turns grey on hover and shows a focus ring,
-   and "Open the lecture notes" is drawn as a button with a chevron so the row reads as clickable. */
+   and "Open this Part" is drawn as a button with a chevron so the row reads as clickable. */
 a.analysis-card-link { cursor: pointer; transition: background-color 0.15s ease; }
 a.analysis-card-link:hover, a.analysis-card-link:focus-visible { background: var(--surface-subtle); color: var(--ink); }
 a.analysis-card-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 0; }
@@ -1720,7 +1718,7 @@ a.analysis-card-link:hover .analysis-card-more, a.analysis-card-link:focus-visib
 }
 
 /* =========================================
-   Lecture notes (lecture/*.html, <body class="lec">)
+   Understanding power systems (lecture/*.html, <body class="lec">)
    Knowledge pages that go with the video lectures. Every page has the same parts:
    top bar, hero, goals, sections with figures, summary, related Parts and Live
    Scripts, references, pager. They use the light palette and the layout of the
@@ -1916,20 +1914,11 @@ a.lec-card:hover b { color: var(--brand-strong); text-decoration: underline; tex
 .flow-edge { position: relative; }
 hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 
-/* Home: "Try it in a few lines" */
-.home-try { margin: 36px 0 8px; }
-.home-try h2 { margin: 0 0 12px; }
-.home-try-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 16px 28px; align-items: start; }
-.home-try-text p { margin: 0 0 14px; }
-.home-try-code { margin: 0; font-size: 0.85rem; line-height: 1.55; }
-@media (max-width: 760px) { .home-try-grid { grid-template-columns: minmax(0, 1fr); } }
-
-/* Home: the "Tutorial" link of each analysis is a small button */
-.analysis-more { margin-top: 8px !important; }
-.analysis-link { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: 1px solid var(--line-strong); border-radius: 4px; color: var(--brand); font-weight: 600; font-size: 0.85rem; text-decoration: none; }
-.analysis-link::before { content: ""; order: 2; width: 0.38em; height: 0.38em; border: solid currentColor; border-width: 1.6px 1.6px 0 0; transform: rotate(45deg); }
-.analysis-link:hover, .analysis-link:focus-visible { border-color: var(--brand); color: var(--brand-strong); text-decoration: none; }
-.analysis-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+/* Home: one video of GUILDA in use, in place of a description (2:1, shown whole) */
+.home-demo { margin: 32px 0 8px; }
+.home-demo h2 { margin: 0 0 12px; }
+.home-demo-media { aspect-ratio: 2 / 1; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 6px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.06); }
+.home-demo-media > video { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 /* Tutorial tab: the audience cards end in a button-like line */
 .tutorial-audience-card { cursor: pointer; transition: border-color 0.15s ease, background-color 0.15s ease; }
@@ -1940,19 +1929,23 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 .tutorial-audience-card:hover .tutorial-audience-more, .tutorial-audience-card:focus-visible .tutorial-audience-more { border-color: var(--brand); }
 .tutorial-toc a { padding: 2px 0; }
 
-/* About: carousel of figures (.vc) */
-.vc { margin: 18px 0 12px; border-radius: 6px; }
-.vc:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
-.vc-viewport { overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
-.vc-viewport { transition: height 0.3s ease; }
-.vc-track { display: flex; align-items: flex-start; margin: 0; padding: 0; list-style: none; transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1); }
-.vc-item { flex: 0 0 100%; min-width: 0; }
-.vc-item figure { margin: 0; }
-.vc-media { aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; padding: 12px; box-sizing: border-box; background: #FFFFFF; }
-.vc-media > img, .vc-media > video { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-.vc-item figcaption { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 20px; align-items: center; padding: 12px 16px 14px; border-top: 1px solid var(--line); }
+/* About: carousels (.vc). The frame is a tinted card; the media sit on white in a fixed 2:1 area,
+   and every item takes the height of the tallest one, so moving between items never changes the height. */
+.vc { margin: 18px 0 16px; padding: 14px 14px 8px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface-subtle); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.06); }
+.vc:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.vc-viewport { overflow: hidden; }
+.vc-track { display: flex; align-items: stretch; margin: 0; padding: 0; list-style: none; transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1); }
+.vc-item { display: flex; flex: 0 0 100%; min-width: 0; }
+.vc-item figure { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; margin: 0; }
+.vc-media { aspect-ratio: 2 / 1; min-height: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box; border: 1px solid var(--line); border-radius: 4px; background: #FFFFFF; }
+.vc-media > img, .vc-media > video, .vc-media.about-fig > svg { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.vc-item figcaption { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-content: start; gap: 8px 20px; padding: 12px 2px 6px; }
+.vc-title { grid-column: 1 / -1; margin: 0; color: var(--ink); font-size: 1.02rem; font-weight: 600; line-height: 1.45; }
+.vc-caption:last-child { grid-column: 1 / -1; }
+.vc-side ul { margin: 0; padding-left: 1.2em; color: var(--ink-2); font-size: 0.9rem; line-height: 1.55; }
+.vc-side li + li { margin-top: 4px; }
 .vc-caption { color: var(--ink-2); font-size: 0.92rem; line-height: 1.55; }
-.vc-tag { display: inline-flex; align-items: center; gap: 5px; margin: 0 8px 4px 0; padding: 1px 8px; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); font-size: 0.78rem; font-weight: 600; line-height: 1.5; vertical-align: 1px; }
+.vc-tag { display: inline-flex; align-items: center; gap: 5px; margin: 0 8px 2px 0; padding: 1px 8px; border: 1px solid var(--ink); border-radius: 3px; color: var(--ink); font-size: 0.78rem; font-weight: 600; line-height: 1.5; vertical-align: 1px; }
 .vc-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .vc-caption code { font-size: 0.85em; }
 .vc-cmd { margin: 0; padding: 8px 12px; font-size: 0.8rem; line-height: 1.5; white-space: pre; overflow-x: auto; }
@@ -1972,8 +1965,9 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 .vc-count { min-width: 3.2em; color: var(--muted); font-family: var(--font-mono); font-size: 0.82rem; text-align: center; }
 .vc-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 760px) {
-  .vc-item figcaption { grid-template-columns: minmax(0, 1fr); padding: 10px 12px 12px; }
-  .vc-media { aspect-ratio: 4 / 3; padding: 6px; }
+  .vc { padding: 10px 10px 6px; }
+  .vc-item figcaption { grid-template-columns: minmax(0, 1fr); padding: 10px 0 4px; }
+  .vc-media { padding: 4px; }
   .vc-cmd { font-size: 0.76rem; }
   .vc-count { display: none; }
   .vc-controls { gap: 6px; }
@@ -1983,10 +1977,10 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
   .vc-dot[aria-current="true"]::before { width: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .vc-track, .vc-viewport, .vc-dot::before { transition: none; }
+  .vc-track, .vc-dot::before { transition: none; }
 }
 
-/* Lecture notes: the back link and the pager are buttons, the pager sits under a thin rule */
+/* Understanding power systems pages: the back link and the pager are buttons, the pager sits under a thin rule */
 .lec-back { position: relative; display: inline-flex; align-items: center; padding: 5px 12px; border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600; text-decoration: none; }
 .lec-back:hover, .lec-back:focus-visible { border-color: var(--brand); text-decoration: none; }
 .lec-pager { position: relative; }
@@ -1994,12 +1988,12 @@ hr.line-divider + h2, .tutorial-divider + h1 { margin-top: 0; }
 .lec-pager a:hover, .lec-pager a:focus-visible { border-color: var(--brand); }
 .lec-pager a b { text-decoration: none !important; font-weight: 600 !important; }
 @media (prefers-reduced-motion: no-preference) {
-  .lec-back::after, .lec-pager a::after, .analysis-link::after, .vc-prev::after, .vc-next::after {
+  .lec-back::after, .lec-pager a::after, .vc-prev::after, .vc-next::after {
     content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; opacity: 0;
     background: linear-gradient(currentColor, currentColor) no-repeat; background-size: 18px 2px; background-position: -40% 0;
   }
   .lec-back:hover::after, .lec-back:focus-visible::after, .lec-pager a:hover::after, .lec-pager a:focus-visible::after,
-  .analysis-link:hover::after, .analysis-link:focus-visible::after, .vc-prev:hover::after, .vc-next:hover::after,
+  .vc-prev:hover::after, .vc-next:hover::after,
   .vc-prev:focus-visible::after, .vc-next:focus-visible::after { opacity: 0.9; animation: flow-edge 1.1s linear infinite; }
   .lec-pager a::after { color: var(--brand); }
 }
@@ -2025,7 +2019,7 @@ img, video { height: auto; }
   .handson-copy { padding: 0 8px; }
   .analysis-card-link { margin: 4px -8px; padding: 10px 8px 12px; }
   hr.line-divider, .tutorial-divider { margin: 28px 0; }
-  /* Lecture notes */
+  /* Understanding power systems pages */
   body.lec main.lec-main { padding: 12px 16px 32px; margin-top: 8px; }
   .lec-topbar { margin-bottom: 16px; }
   .lec-series { font-size: 0.82rem; }
