@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js?v=20261126e"></script>
-  <link rel="stylesheet" href="style.css?v=20261126e">
+  <script src="doc-lang.js?v=20261126f"></script>
+  <link rel="stylesheet" href="style.css?v=20261126f">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js?v=20261126e"></script>
-  <script src="./database/list_Lectures.js?v=20261126e"></script>
+  <script src="./database/list_Tutorials.js?v=20261126f"></script>
+  <script src="./database/list_Lectures.js?v=20261126f"></script>
 </head>
 <body class="home-layout">
 
@@ -66,11 +66,6 @@
         <a class="btn btn-primary" href="#tab-getting-started" onclick="openTab('tab-getting-started'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 16H7M17.5 16H21.5M9.4 15 17 8.5"/><circle cx="8.25" cy="16" r="1.25"/><circle cx="16.25" cy="16" r="1.25"/></svg><span lang="en">Get started</span><span lang="ja">はじめる</span></a>
         <a class="btn" href="#tab-about" onclick="openTab('tab-about'); return false;"><svg class="btn-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M4 7h16M6 11.5h12M4 7v2.5M20 7v2.5M6 11.5V14M18 11.5V14M9.6 13.5l5.8 8M14.4 13.5l-5.8 8"/></svg><span lang="en">About GUILDA</span><span lang="ja">GUILDA について</span></a>
       </div>
-
-      <section class="home-demo" aria-labelledby="home-demo-title">
-        <h2 id="home-demo-title"><span lang="en">GUILDA in use</span><span lang="ja">GUILDA を使った解析</span></h2>
-        <div class="home-demo-media"><video src="./images/home/home-demo.mp4" poster="./images/home/home-demo.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A simple analysis run with GUILDA in MATLAB" data-aria-label-ja="MATLAB で GUILDA を使って簡単な解析を行うようす"></video></div>
-      </section>
 
       <h2><span lang="en">Supported Analyses</span><span lang="ja">対応する解析</span></h2>
       <ol class="analysis-list">
@@ -435,79 +430,94 @@ net = network.IEEE68bus;</code></pre>
       <h2 id="about-analysis"><span lang="en">Analysis features</span><span lang="ja">解析の特長</span></h2>
       <p lang="en">The linear model has named variables and can be taken apart by element, controllers are part of the network, and one network runs every analysis from optimal power flow to stability, down to linearizing each step of a continuation power flow.</p>
       <p lang="ja">線形モデルには変数名が付いていて要素ごとに分解でき、制御器もネットワークの一部として扱われます。また、最適潮流計算から安定性の解析まで、連続潮流計算の各ステップでの近似線形化も含めて、一つのネットワークで行えます。</p>
+      <p lang="en">Each slide is a MATLAB session: the commands under it are typed, their printed output follows, then the figures they draw. Running the commands gives the same output and figures.</p>
+      <p lang="ja">各スライドは MATLAB での実行のようすです。下のコマンドを入力し、その出力に続いて描かれる図を示しています。同じコマンドを実行すると、同じ出力と図が得られます。</p>
 
       <!-- Carousel of the analysis features (same component and script as the visualization carousel below).
-           Media, headings, captions and commands come from images/about/analysis/manifest.md (01 to 04). -->
+           Media, headings, captions and commands come from images/about/analysis/manifest.md (01 to 07, in that order). -->
       <section class="vc" aria-roledescription="carousel" aria-labelledby="about-analysis">
         <div class="vc-viewport">
           <ol class="vc-track">
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><video src="./images/about/analysis/01-contribution.mp4" poster="./images/about/analysis/01-contribution.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The linear model of the IEEE 68-bus system (with AVRs and PSSs) is split into the parts of its elements, and the network diagram colors how much each element adds to or removes from the damping of the mode clicked on the eigenvalue map. In the 0.41 Hz inter-area mode some generators add damping and others remove it. Clicking a bus lists the values of its generator, AVR and PSS in the table."></video></div>
+                <div class="vc-media"><video src="./images/about/analysis/01-fault-simulation.mp4" poster="./images/about/analysis/01-fault-simulation.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A scenario with a fault at bus B008 of the IEEE 14-bus system from 1 s to 1.05 s is simulated. The result is drawn as the network diagram with the frequency deviation of the generators and played with animate in real time." data-aria-label-ja="IEEE 14 母線系統で、母線 B008 に 1 秒から 1.05 秒まで地絡事故を起こすシナリオを作り、時間応答シミュレーションを実行します。結果をネットワーク図と発電機の角周波数偏差のグラフで描き、animate で実時間で再生します。"></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The damping of a mode, element by element</span><span lang="ja">モードの減衰を要素ごとに分ける</span></h3>
-                  <span class="vc-caption"><span lang="en">The linear model of the IEEE 68-bus system (with AVRs and PSSs) is split into the parts of its elements, and the network diagram colors how much each element adds to or removes from the damping of the mode clicked on the eigenvalue map. In the 0.41 Hz inter-area mode some generators add damping and others remove it. Clicking a bus lists the values of its generator, AVR and PSS in the table.</span><span lang="ja">IEEE 68 母線系統（AVR と PSS 付き）の線形モデルを要素ごとの和に分け、固有値マップでクリックしたモードの減衰に各要素がどれだけ寄与しているかをネットワーク図に色で示します。0.41 Hz の地域間モードでは、減衰を増やす発電機と減らす発電機が分かれます。母線をクリックすると、その母線の発電機・AVR・PSS ごとの値が表に出ます。</span></span>
-                  <pre class="vc-cmd"><code>net = network.IEEE68bus(LocalController=true);   % AVR (avr-ST1) and PSS (pss-PSS1) on every generator
-res = net.get_sys();
-sct = res.plot_contribution();                    % click a mode, then a bus
-res_g = res.get_contribution("B016SG1");          % the part of one generator, as a ResultLIN</code></pre>
+                  <h3 class="vc-title"><span lang="en">A fault simulation in a few commands</span><span lang="ja">数行のコマンドで事故を模擬する</span></h3>
+                  <span class="vc-caption"><span lang="en">A scenario with a fault at bus B008 of the IEEE 14-bus system from 1 s to 1.05 s is simulated. The result is drawn as the network diagram with the frequency deviation of the generators and played with animate in real time.</span><span lang="ja">IEEE 14 母線系統で、母線 B008 に 1 秒から 1.05 秒まで地絡事故を起こすシナリオを作り、時間応答シミュレーションを実行します。結果をネットワーク図と発電機の角周波数偏差のグラフで描き、animate で実時間で再生します。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE14bus();
+sc = net.add_scenario("fault", Time=[0, 5]);
+sc.add_fault("B008", [1, 1.05]);   % fault at bus B008
+res = net.simulate("fault");
+G = res.plot_diagram(Trajectory="omega");
+G.animate();</code></pre>
                 </figcaption>
               </figure>
             </li>
+            <!-- slide 02 Jacobian structure: added with its video (manifest.md) -->
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><video src="./images/about/analysis/02-controller-pss.mp4" poster="./images/about/analysis/02-controller-pss.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. After each addition the network is initialized, linearized and simulated for a fault, and the eigenvalues and the frequency deviation of the generators follow. With AVRs only some eigenvalues are unstable; from the twelfth PSS on, every eigenvalue has a negative real part."></video></div>
+                <div class="vc-media"><video src="./images/about/analysis/03-controller-pss.mp4" poster="./images/about/analysis/03-controller-pss.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. Each pass of the loop initializes, linearizes and simulates a fault, and draws the eigenvalue map and the frequency deviation of the generators again. With AVRs only 14 eigenvalues are unstable; from the twelfth PSS on, none is." data-aria-label-ja="IEEE 68 母線系統で、AVR だけの状態から発電機に PSS を 1 台ずつ追加します。ループの各回で初期化・近似線形化・事故の時間応答シミュレーションを行い、固有値マップと各発電機の角周波数偏差を描き直します。AVR だけでは 14 個の固有値が不安定ですが、12 台目の追加ですべて安定になります。"></video></div>
                 <figcaption>
                   <h3 class="vc-title"><span lang="en">Add a controller and analyze the same model again</span><span lang="ja">制御器を追加して、同じモデルで解析し直す</span></h3>
-                  <span class="vc-caption"><span lang="en">Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. After each addition the network is initialized, linearized and simulated for a fault, and the eigenvalues and the frequency deviation of the generators follow. With AVRs only some eigenvalues are unstable; from the twelfth PSS on, every eigenvalue has a negative real part.</span><span lang="ja">IEEE 68 母線系統で、AVR だけの状態から発電機に PSS を 1 台ずつ追加します。追加のたびに初期化して近似線形化と事故の時間応答シミュレーションを実行し、固有値と各発電機の角周波数偏差の変化を示します。AVR だけでは不安定な固有値がありますが、12 台目の追加ですべての固有値の実部が負になります。</span></span>
+                  <span class="vc-caption"><span lang="en">Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. Each pass of the loop initializes, linearizes and simulates a fault, and draws the eigenvalue map and the frequency deviation of the generators again. With AVRs only 14 eigenvalues are unstable; from the twelfth PSS on, none is.</span><span lang="ja">IEEE 68 母線系統で、AVR だけの状態から発電機に PSS を 1 台ずつ追加します。ループの各回で初期化・近似線形化・事故の時間応答シミュレーションを行い、固有値マップと各発電機の角周波数偏差を描き直します。AVR だけでは 14 個の固有値が不安定ですが、12 台目の追加ですべて安定になります。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE68bus(LocalController=true);
-for i = 1:16                                      % AVRs only: remove the PSSs
+for i = 1:16                                   % AVRs only: remove the PSSs
     gen = net.a_Bus{i}.a_Component{1};
     gen.remove_local_controller(gen.pss.s_tag);
 end
 sc = net.add_scenario("fault", Time=[0, 15]);
 sc.add_fault("B001", [1, 1.05]);
 prm = struct(kpss=25, tWS=10, tn1=0.07, td1=0.02, tn2=0.07, td2=0.02);
-for i = 1:16
-    net.a_Bus{i}.a_Component{1}.add_local_controller("pss-PSS1", parameter=prm);
+fig = figure(Position=[100 100 1280 500]);
+for i = 0:16
+    if i &gt; 0
+        net.a_Bus{i}.a_Component{1}.add_local_controller("pss-PSS1", parameter=prm);
+    end
     net.initialize();
-    lin = net.get_sys();  lin.plot_eigenvalue();
-    sim = net.simulate("fault");  sim.plot_trajectory(Quantity="omega");
+    lin = net.get_sys();
+    sim = net.simulate("fault");
+    clf(fig);
+    lin.plot_eigenvalue(Parent=uipanel(fig, Position=[0 0 0.5 1]));
+    sim.plot_trajectory(Quantity="omega", Parent=uipanel(fig, Position=[0.5 0 0.5 1]));
+    fprintf("%2d PSSs: %2d unstable eigenvalues\n", i, sum(real(lin.get_eigenvalue()) &gt; 1e-6));
 end</code></pre>
                 </figcaption>
               </figure>
             </li>
+            <!-- slide 04 user-written controller: added with its video (manifest.md) -->
+            <!-- slide 05 OPF formulation: added with its video (manifest.md) -->
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><video src="./images/about/analysis/03-stability-opf.mp4" poster="./images/about/analysis/03-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. The network is linearized at the solution of each outer iteration: the operating point moves (dispatch and voltages on the right) until the electromechanical eigenvalues cross the dashed line of damping ratio 0.048. Gray: the eigenvalues of the OPF without the limit. At the fourth iteration the smallest damping ratio is 0.0481 and the cost rises from 8081.5 to 8566.7."></video></div>
+                <div class="vc-media"><video src="./images/about/analysis/06-stability-opf.mp4" poster="./images/about/analysis/06-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. Over the outer iterations the smallest damping ratio rises from 0.0447 to 0.0481 and the cost from 8081.5 to 8566.7. The network is then initialized at the solution and linearized: every electromechanical mode has a damping ratio of 4.8 % or more." data-aria-label-ja="IEEE 14 母線系統の AC 最適潮流計算に、最小減衰比 0.048 の制約を加えます。外側の反復で最小減衰比は 0.0447 から 0.0481 に、コストは 8081.5 から 8566.7 に上がります。その解を動作点として初期化して近似線形化すると、電気機械モードの減衰比はすべて 4.8 % 以上です。"></video></div>
                 <figcaption>
                   <h3 class="vc-title"><span lang="en">An optimal power flow that meets a damping-ratio limit</span><span lang="ja">減衰比の下限を満たす最適潮流</span></h3>
-                  <span class="vc-caption"><span lang="en">A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. The network is linearized at the solution of each outer iteration: the operating point moves (dispatch and voltages on the right) until the electromechanical eigenvalues cross the dashed line of damping ratio 0.048. Gray: the eigenvalues of the OPF without the limit. At the fourth iteration the smallest damping ratio is 0.0481 and the cost rises from 8081.5 to 8566.7.</span><span lang="ja">IEEE 14 母線系統の AC 最適潮流計算に、最小減衰比 0.048 の制約を加えます。外側の反復ごとに解で近似線形化し、電気機械モードの固有値が減衰比 0.048 の線（破線）を越えるまで動作点が変わる様子を、右の発電出力・電圧とともに示します。灰色は制約なしの最適潮流の固有値です。4 回目の反復で最小減衰比は 0.0481 になり、コストは 8081.5 から 8566.7 に上がります。</span></span>
+                  <span class="vc-caption"><span lang="en">A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. Over the outer iterations the smallest damping ratio rises from 0.0447 to 0.0481 and the cost from 8081.5 to 8566.7. The network is then initialized at the solution and linearized: every electromechanical mode has a damping ratio of 4.8 % or more.</span><span lang="ja">IEEE 14 母線系統の AC 最適潮流計算に、最小減衰比 0.048 の制約を加えます。外側の反復で最小減衰比は 0.0447 から 0.0481 に、コストは 8081.5 から 8566.7 に上がります。その解を動作点として初期化して近似線形化すると、電気機械モードの減衰比はすべて 4.8 % 以上です。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE14bus();
-net.initialize();
-[res, flag] = net.calculate_optimal_powerflow(Method="AC OPF", MinDampingRatio=0.048);
-res.sct_stability.tab_iteration                   % cost and smallest damping ratio of each outer iteration
+res = net.calculate_optimal_powerflow(Method="AC OPF", MinDampingRatio=0.048);
+res.sct_stability.tab_iteration(:, ["Iteration", "Cost", "MinDampingRatio"])
 res.plot_dispatch();
 net.initialize(Method="OPF", MinDampingRatio=0.048);   % the solution as the operating point
 lin = net.get_sys();
+lin.disp_mode(MinFrequency=0.1)
 lin.plot_eigenvalue();</code></pre>
                 </figcaption>
               </figure>
             </li>
             <li class="vc-item">
               <figure>
-                <div class="vc-media"><video src="./images/about/analysis/04-cpf-eigenvalue.mp4" poster="./images/about/analysis/04-cpf-eigenvalue.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at the operating point of each step. The eigenvalue map, the PV curves and the chart of the largest real part and the smallest damping ratio follow the same step. In this model (constant field voltage and mechanical input) a real eigenvalue becomes positive at λ = 3.11, before the nose at λ = 5.21."></video></div>
+                <div class="vc-media"><video src="./images/about/analysis/07-cpf-eigenvalue.mp4" poster="./images/about/analysis/07-cpf-eigenvalue.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at steps 1 to 140 (up to λ = 4.15). Played linked with the PV curve, a real eigenvalue turns positive (red) at step 104 (λ = 3.11), before the nose at λ = 5.21. The field voltage and the mechanical input of this model are constant." data-aria-label-ja="IEEE 14 母線系統で母線 B009 と B014 の負荷を増やす連続潮流計算を行い、ステップ 1〜140（λ = 4.15 まで）の動作点で近似線形化します。固有値マップを PV 曲線と連動させて再生すると、ノーズ（λ = 5.21）より手前のステップ 104（λ = 3.11）で実固有値が正になり、赤で示されます。このモデルの界磁電圧と機械入力は一定です。"></video></div>
                 <figcaption>
                   <h3 class="vc-title"><span lang="en">Small-signal stability while the load grows</span><span lang="ja">負荷を増やしながら小信号安定性を調べる</span></h3>
-                  <span class="vc-caption"><span lang="en">A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at the operating point of each step. The eigenvalue map, the PV curves and the chart of the largest real part and the smallest damping ratio follow the same step. In this model (constant field voltage and mechanical input) a real eigenvalue becomes positive at λ = 3.11, before the nose at λ = 5.21.</span><span lang="ja">IEEE 14 母線系統で母線 B009 と B014 の負荷を増やす連続潮流計算を行い、各ステップの動作点で近似線形化します。固有値マップ、PV 曲線、固有値の最大実部と最小減衰比のグラフが同じステップに連動します。このモデル（界磁電圧と機械入力が一定）では、ノーズ（λ = 5.21）より手前の λ = 3.11 で実固有値が正になります。</span></span>
+                  <span class="vc-caption"><span lang="en">A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at steps 1 to 140 (up to λ = 4.15). Played linked with the PV curve, a real eigenvalue turns positive (red) at step 104 (λ = 3.11), before the nose at λ = 5.21. The field voltage and the mechanical input of this model are constant.</span><span lang="ja">IEEE 14 母線系統で母線 B009 と B014 の負荷を増やす連続潮流計算を行い、ステップ 1〜140（λ = 4.15 まで）の動作点で近似線形化します。固有値マップを PV 曲線と連動させて再生すると、ノーズ（λ = 5.21）より手前のステップ 104（λ = 3.11）で実固有値が正になり、赤で示されます。このモデルの界磁電圧と機械入力は一定です。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE14bus();
 net.initialize();
 cpf = net.calculate_continuation_powerflow(LoadBus=["B009", "B014"]);
-lin = net.get_sys({cpf, 1:cpf.r_noseStep});       % one section per step
-G = lin.plot_eigenvalue();
-G.link(cpf.plot_pvcurve());
-G.link(lin.plot_eigenvalue_path());
-G.set_time(104);                                  % the step where Re λ first exceeds 0</code></pre>
+cpf.r_lambdaMax
+lin = net.get_sys({cpf, 1:140});                 % linearize at steps 1 to 140
+fig = figure(Position=[100 100 1280 640]);
+G = lin.plot_eigenvalue(Parent=uipanel(fig, Position=[0 0 0.5 1]));
+G.link(cpf.plot_pvcurve(Parent=uipanel(fig, Position=[0.5 0 0.5 1])));
+G.animate(TimeStep=1, Speed=20);</code></pre>
                 </figcaption>
               </figure>
             </li>
@@ -538,8 +548,6 @@ G.set_time(104);                                  % the step where Re λ first e
                <figcaption>
                  <h3 class="vc-title"><span lang="en">Short title</span><span lang="ja">短い見出し</span></h3>
                  <span class="vc-caption"><span lang="en">Caption</span><span lang="ja">キャプション</span></span>
-                 (a recording of someone using the figure starts the title with
-                 <span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span>)
                  <pre class="vc-cmd"><code>res.plot_xxx(...)</code></pre>
                </figcaption>
              </figure>
@@ -625,7 +633,7 @@ G.animate();</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/08-eigen-participation.mp4" poster="./images/about/carousel/08-eigen-participation.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Modes are clicked on the eigenvalue map of the linearized IEEE 68-bus system, and the network diagram beside it is recolored with the participation of each bus in that mode"></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Click an eigenvalue to see the participation</span><span lang="ja">固有値をクリックして参加率を見る</span></h3>
+                  <h3 class="vc-title"><span lang="en">Click an eigenvalue to see the participation</span><span lang="ja">固有値をクリックして参加率を見る</span></h3>
                   <span class="vc-caption"><span lang="en">The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.</span><span lang="ja">IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。</span></span>
                   <pre class="vc-cmd"><code>net = network.IEEE68bus();
 res = net.get_sys();
@@ -650,7 +658,7 @@ G = res.plot_lmp(LabelMode="bus");</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/06-explore-click.mp4" poster="./images/about/carousel/06-explore-click.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The playback bar of the IEEE 14-bus network diagram is dragged to the fault, and clicked buses are selected in the diagram and in the voltage chart beside it"></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Explore the result with the playback bar and clicks</span><span lang="ja">再生バーとクリックで結果を探る</span></h3>
+                  <h3 class="vc-title"><span lang="en">Explore the result with the playback bar and clicks</span><span lang="ja">再生バーとクリックで結果を探る</span></h3>
                   <span class="vc-caption"><span lang="en">Drag the playback bar to the moment of the fault and click buses: a few lines in <code>ElementClickedFcn</code> select the clicked bus both in the diagram and in the |V| chart.</span><span lang="ja">再生バーをドラッグして事故の瞬間に移動し、母線をクリックしています。<code>ElementClickedFcn</code> に書いた数行で、クリックした母線がネットワーク図と右の |V| のグラフの両方で選択されます。</span></span>
                   <pre class="vc-cmd"><code>[G, G_chart] = res.plot_diagram();
 G.ElementClickedFcn = @(G, d) select_bus(G, G_chart, d);
@@ -668,7 +676,7 @@ end</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/07-control-panel.mp4" poster="./images/about/carousel/07-control-panel.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The control panel of the IEEE 39-bus network diagram switches the colours, the 3D drawing and the bus height, and the figure is redrawn each time"></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The control panel and commands</span><span lang="ja">コントロールパネルとコマンド</span></h3>
+                  <h3 class="vc-title"><span lang="en">The control panel and commands</span><span lang="ja">コントロールパネルとコマンド</span></h3>
                   <span class="vc-caption"><span lang="en">The panel of <code>show_controls</code> switches the colour, the bus colour, the 3D drawing and the bus height, and a command sets the marker size. The panel and the properties stay in step: a change from either one redraws the figure.</span><span lang="ja"><code>show_controls</code> で出したパネルから、色、母線の色、3D 表示、母線の高さを切り替え、コマンドでマーカーの大きさを変えています。パネルとプロパティは常に同期しており、どちらで変えても図が更新されます。</span></span>
                   <pre class="vc-cmd"><code>res = network.IEEE39Bus().calculate_powerflow();
 G = res.plot_diagram();
@@ -685,7 +693,7 @@ G.BusHeightMode = "V";</code></pre>
               <figure>
                 <div class="vc-media"><video src="./images/about/carousel/09-app-gui.mp4" poster="./images/about/carousel/09-app-gui.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="In the GUILDA app, the active power of a load of the IEEE 14-bus system is changed in the model GUI, the power flow is run and the result window is opened, while the log records each action as MATLAB code"></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">Edit and analyse in the GUI</span><span lang="ja">GUI で編集して解析する</span></h3>
+                  <h3 class="vc-title"><span lang="en">Edit and analyse in the GUI</span><span lang="ja">GUI で編集して解析する</span></h3>
                   <span class="vc-caption"><span lang="en">The GUILDA app opens the IEEE 14-bus system; the load at bus B009 is clicked on the network diagram and its active power P is changed from -0.295 to -0.6 in the model GUI. The Power flow tab then runs the power flow, and Analyze result opens the result window. Every action is kept as MATLAB code in the log below, and Export script writes it out as a script.</span><span lang="ja">GUILDA のアプリで IEEE 14 母線系統を開き、ネットワーク図で母線 B009 の負荷をクリックして、モデルの GUI で有効電力 P を -0.295 から -0.6 に書き換えています。続けて Power flow のタブで潮流計算を実行し、Analyze result で結果の窓を開いています。操作はすべて MATLAB のコードとして下のログに残り、Export script でスクリプトに書き出せます。</span></span>
                   <pre class="vc-cmd"><code>h = GUILDA.launch_gui(network.IEEE14bus());
 % the log of the session:
@@ -1259,7 +1267,7 @@ sol.plot_trajectory(Quantity="omega");    % frequency deviation of the generator
       wireCopyButtons(list);
     }
 
-    // Videos that play by themselves (the Home demo and the carousel items) start from their first frame,
+    // Videos that play by themselves (the carousel items) start from their first frame,
     // only while their tab is open. With prefers-reduced-motion they do not start by themselves: they show
     // their poster and controls. A browser that refuses autoplay keeps the poster.
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1288,13 +1296,6 @@ sol.plot_trajectory(Quantity="omega");    % frequency deviation of the generator
           wasShown[k] = now;
         });
       });
-    }
-
-    // Home: the demo video loops while the Home tab is open
-    function wireDemoVideos() {
-      const videos = Array.from(document.querySelectorAll('.home-demo video'));
-      videos.forEach(v => { holdVideo(v); if (tabShown(v)) playFromStart(v); });
-      followTab(videos, () => true);
     }
 
     // Carousels (section.vc, About tab): one item at a time; prev/next buttons, dots, arrow keys
@@ -1384,7 +1385,6 @@ sol.plot_trajectory(Quantity="omega");    % frequency deviation of the generator
       renderTutorials();
       renderLectures();
       document.querySelectorAll('.vc').forEach(wireCarousel);
-      wireDemoVideos();
       openFragment();
       applyLanguageAttributes();
       document.addEventListener('guilda-langchange', applyLanguageAttributes);
