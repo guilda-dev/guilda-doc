@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js?v=20261126d"></script>
-  <link rel="stylesheet" href="style.css?v=20261126d">
+  <script src="doc-lang.js?v=20261126e"></script>
+  <link rel="stylesheet" href="style.css?v=20261126e">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js?v=20261126d"></script>
-  <script src="./database/list_Lectures.js?v=20261126d"></script>
+  <script src="./database/list_Tutorials.js?v=20261126e"></script>
+  <script src="./database/list_Lectures.js?v=20261126e"></script>
 </head>
 <body class="home-layout">
 
@@ -433,155 +433,81 @@ net = network.IEEE68bus;</code></pre>
       <p lang="ja">こうした一般的なモデルの作り方に加えて、GUILDA には次のような解析と可視化の特長があります。</p>
 
       <h2 id="about-analysis"><span lang="en">Analysis features</span><span lang="ja">解析の特長</span></h2>
-      <p lang="en">The linear model has named variables and can be taken apart by element, controllers are part of the network, and one network runs every analysis from optimal power flow to stability.</p>
-      <p lang="ja">線形モデルには変数名が付いていて要素ごとに分解でき、制御器もネットワークの一部として扱われます。また、最適潮流計算から安定性の解析までを一つのネットワークで行えます。</p>
+      <p lang="en">The linear model has named variables and can be taken apart by element, controllers are part of the network, and one network runs every analysis from optimal power flow to stability, down to linearizing each step of a continuation power flow.</p>
+      <p lang="ja">線形モデルには変数名が付いていて要素ごとに分解でき、制御器もネットワークの一部として扱われます。また、最適潮流計算から安定性の解析まで、連続潮流計算の各ステップでの近似線形化も含めて、一つのネットワークで行えます。</p>
 
       <!-- Carousel of the analysis features (same component and script as the visualization carousel below).
-           Slides and the videos expected for them (MP4 1280 x 640 with a PNG poster of the same name):
-             A1  images/about/analysis/A1-contribution.mp4        A linear model taken apart by element
-             A2  images/about/analysis/A2-controller-network.mp4  Controllers in the same network
-             A3  images/about/analysis/A3-stability-opf.mp4       One model from optimization to stability
-           Until a video exists the slide shows the illustration; put the commented <video> in place of the svg. -->
+           Media, headings, captions and commands come from images/about/analysis/manifest.md (01 to 04). -->
       <section class="vc" aria-roledescription="carousel" aria-labelledby="about-analysis">
         <div class="vc-viewport">
           <ol class="vc-track">
             <li class="vc-item">
               <figure>
-                <!-- Analysis video (made separately): replace the illustration below with
-                <video src="./images/about/analysis/A1-contribution.mp4" poster="./images/about/analysis/A1-contribution.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
-                <div class="vc-media about-fig">
-                  <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p1-cap">
-                    <rect class="bx" x="120" y="14" width="110" height="110"/>
-                    <rect class="bx" x="230" y="14" width="56" height="110"/>
-                    <rect class="bx" x="120" y="124" width="110" height="52"/>
-                    <rect class="bx" x="230" y="124" width="56" height="52"/>
-                    <rect class="hl" x="120" y="34" width="166" height="28"/>
-                    <path class="ln" d="M120 34 H286 M120 62 H286"/>
-                    <text class="sym" x="175" y="103" text-anchor="middle">A</text>
-                    <text class="sym" x="258" y="103" text-anchor="middle">B</text>
-                    <text class="sym" x="175" y="157" text-anchor="middle">C</text>
-                    <text class="sym" x="258" y="157" text-anchor="middle">D</text>
-                    <text class="mono mu" x="114" y="29" text-anchor="end">⋮</text>
-                    <text class="mono" x="114" y="45" text-anchor="end">delta_B001SG1</text>
-                    <text class="mono" x="114" y="59" text-anchor="end">omega_B001SG1</text>
-                    <text class="mono mu" x="114" y="76" text-anchor="end">⋮</text>
-                    <text class="mono mu" x="114" y="145" text-anchor="end">outputs</text>
-                    <text class="mu" lang="en" x="203" y="188" text-anchor="middle">rows of B001SG1</text>
-                    <text class="mu" lang="ja" x="203" y="188" text-anchor="middle">B001SG1 の行</text>
-                  </svg>
-                  <span id="about-p1-cap" hidden><span lang="en">Named state-space matrices with the rows of one generator highlighted</span><span lang="ja">名前の付いた状態空間行列と、一台の発電機の行</span></span>
-                </div>
+                <div class="vc-media"><video src="./images/about/analysis/01-contribution.mp4" poster="./images/about/analysis/01-contribution.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The linear model of the IEEE 68-bus system (with AVRs and PSSs) is split into the parts of its elements, and the network diagram colors how much each element adds to or removes from the damping of the mode clicked on the eigenvalue map. In the 0.41 Hz inter-area mode some generators add damping and others remove it. Clicking a bus lists the values of its generator, AVR and PSS in the table."></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span lang="en">A linear model taken apart by element</span><span lang="ja">要素ごとに分解できる線形モデル</span></h3>
-                  <span class="vc-caption"><span lang="en">Many tools output state matrices for eigenvalue analysis. In GUILDA the states, inputs and outputs of the linear model have names, and the model can be taken apart:</span><span lang="ja">固有値解析用の状態空間行列を出力するツールは多くあります。GUILDA の線形モデルは状態・入力・出力に名前が付いており、次のように分解できます。</span></span>
-                  <div class="vc-side">
-                    <ul lang="en">
-                      <li>into the parts of each generator, controller, branch and bus;</li>
-                      <li>into the kernel of the Jacobian, the uniform rotation of all phases, one for each island;</li>
-                      <li>into a reduced model without the variables of chosen elements (Schur complement), such as the grid seen from its buses.</li>
-                    </ul>
-                    <ul lang="ja">
-                      <li>発電機、制御器、ブランチ、母線ごとの寄与の和に分けられます。</li>
-                      <li>ヤコビ行列の核（すべての位相が一様に回転する方向）を、アイランドごとに求められます。</li>
-                      <li>指定した機器の変数をシューア補元で消去できます。たとえば母線だけから見た系統の行列です。</li>
-                    </ul>
-                  </div>
+                  <h3 class="vc-title"><span class="vc-tag"><span lang="en">Interactive</span><span lang="ja">操作のようす</span></span><span lang="en">The damping of a mode, element by element</span><span lang="ja">モードの減衰を要素ごとに分ける</span></h3>
+                  <span class="vc-caption"><span lang="en">The linear model of the IEEE 68-bus system (with AVRs and PSSs) is split into the parts of its elements, and the network diagram colors how much each element adds to or removes from the damping of the mode clicked on the eigenvalue map. In the 0.41 Hz inter-area mode some generators add damping and others remove it. Clicking a bus lists the values of its generator, AVR and PSS in the table.</span><span lang="ja">IEEE 68 母線系統（AVR と PSS 付き）の線形モデルを要素ごとの和に分け、固有値マップでクリックしたモードの減衰に各要素がどれだけ寄与しているかをネットワーク図に色で示します。0.41 Hz の地域間モードでは、減衰を増やす発電機と減らす発電機が分かれます。母線をクリックすると、その母線の発電機・AVR・PSS ごとの値が表に出ます。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE68bus(LocalController=true);   % AVR (avr-ST1) and PSS (pss-PSS1) on every generator
+res = net.get_sys();
+sct = res.plot_contribution();                    % click a mode, then a bus
+res_g = res.get_contribution("B016SG1");          % the part of one generator, as a ResultLIN</code></pre>
                 </figcaption>
               </figure>
             </li>
             <li class="vc-item">
               <figure>
-                <!-- Analysis video (made separately): replace the illustration below with
-                <video src="./images/about/analysis/A2-controller-network.mp4" poster="./images/about/analysis/A2-controller-network.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
-                <div class="vc-media about-fig">
-                  <svg viewBox="0 0 300 180" role="img" aria-labelledby="about-p2-cap">
-                    <defs>
-                      <marker id="about-p2-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
-                    </defs>
-                    <rect class="bx is-ctrl" x="90" y="8" width="120" height="30" rx="3"/>
-                    <text x="150" y="28" text-anchor="middle">AGC</text>
-                    <path class="ln" d="M120 38 L70 62" marker-end="url(#about-p2-arr)"/>
-                    <path class="ln" d="M180 38 L230 62" marker-end="url(#about-p2-arr)"/>
-                    <rect class="bx" x="10" y="64" width="130" height="112" rx="4"/>
-                    <rect class="bx" x="160" y="64" width="130" height="112" rx="4"/>
-                    <text lang="en" x="75" y="84" text-anchor="middle">Generator</text>
-                    <text lang="ja" x="75" y="84" text-anchor="middle">発電機</text>
-                    <text lang="en" x="225" y="84" text-anchor="middle">Generator</text>
-                    <text lang="ja" x="225" y="84" text-anchor="middle">発電機</text>
-                    <rect class="blk is-ctrl" x="22" y="94" width="106" height="24" rx="3"/>
-                    <rect class="blk is-ctrl" x="36" y="122" width="92" height="22" rx="3"/>
-                    <rect class="blk is-ctrl" x="22" y="148" width="106" height="22" rx="3"/>
-                    <text class="sm" x="75" y="111" text-anchor="middle">AVR</text>
-                    <text class="sm" x="82" y="138" text-anchor="middle">PSS</text>
-                    <text class="sm" lang="en" x="75" y="164" text-anchor="middle">Governor</text>
-                    <text class="sm" lang="ja" x="75" y="164" text-anchor="middle">ガバナ</text>
-                    <rect class="blk is-ctrl" x="172" y="94" width="106" height="24" rx="3"/>
-                    <text class="sm" x="225" y="111" text-anchor="middle">AVR</text>
-                  </svg>
-                  <span id="about-p2-cap" hidden><span lang="en">A global AGC over two generators, each with its own local controllers</span><span lang="ja">2 台の発電機にまたがる AGC と、各発電機のローカル制御器</span></span>
-                </div>
+                <div class="vc-media"><video src="./images/about/analysis/02-controller-pss.mp4" poster="./images/about/analysis/02-controller-pss.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. After each addition the network is initialized, linearized and simulated for a fault, and the eigenvalues and the frequency deviation of the generators follow. With AVRs only some eigenvalues are unstable; from the twelfth PSS on, every eigenvalue has a negative real part."></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span lang="en">Controllers in the same network</span><span lang="ja">制御器もネットワークの一部</span></h3>
-                  <span class="vc-caption"><span lang="en">Local controllers such as AVRs, PSSs and governors are added to a component, and global controllers such as AGC to the network. Each controller is a class, and time simulation and linearization include it.</span><span lang="ja">AVR、PSS、ガバナなどのローカル制御器は機器に、AGC などのグローバル制御器はネットワークに追加します。制御器はクラスとして実装され、時間応答シミュレーションにも近似線形化にも含まれます。</span></span>
+                  <h3 class="vc-title"><span lang="en">Add a controller and analyze the same model again</span><span lang="ja">制御器を追加して、同じモデルで解析し直す</span></h3>
+                  <span class="vc-caption"><span lang="en">Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. After each addition the network is initialized, linearized and simulated for a fault, and the eigenvalues and the frequency deviation of the generators follow. With AVRs only some eigenvalues are unstable; from the twelfth PSS on, every eigenvalue has a negative real part.</span><span lang="ja">IEEE 68 母線系統で、AVR だけの状態から発電機に PSS を 1 台ずつ追加します。追加のたびに初期化して近似線形化と事故の時間応答シミュレーションを実行し、固有値と各発電機の角周波数偏差の変化を示します。AVR だけでは不安定な固有値がありますが、12 台目の追加ですべての固有値の実部が負になります。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE68bus(LocalController=true);
+for i = 1:16                                      % AVRs only: remove the PSSs
+    gen = net.a_Bus{i}.a_Component{1};
+    gen.remove_local_controller(gen.pss.s_tag);
+end
+sc = net.add_scenario("fault", Time=[0, 15]);
+sc.add_fault("B001", [1, 1.05]);
+prm = struct(kpss=25, tWS=10, tn1=0.07, td1=0.02, tn2=0.07, td2=0.02);
+for i = 1:16
+    net.a_Bus{i}.a_Component{1}.add_local_controller("pss-PSS1", parameter=prm);
+    net.initialize();
+    lin = net.get_sys();  lin.plot_eigenvalue();
+    sim = net.simulate("fault");  sim.plot_trajectory(Quantity="omega");
+end</code></pre>
                 </figcaption>
               </figure>
             </li>
             <li class="vc-item">
               <figure>
-                <!-- Analysis video (made separately): replace the illustration below with
-                <video src="./images/about/analysis/A3-stability-opf.mp4" poster="./images/about/analysis/A3-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="..."></video> -->
-                <div class="vc-media about-fig">
-                  <svg viewBox="0 0 300 190" role="img" aria-labelledby="about-p3-cap">
-                    <defs>
-                      <marker id="about-p3-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="hd" d="M0 1 L10 5 L0 9 Z"/></marker>
-                    </defs>
-                    <rect class="plat" x="8" y="70" width="64" height="44" rx="6"/>
-                    <text class="mono" x="40" y="97" text-anchor="middle">net</text>
-                    <path class="ln" d="M72 92 L118 21" marker-end="url(#about-p3-arr)"/>
-                    <path class="ln" d="M72 92 L118 57" marker-end="url(#about-p3-arr)"/>
-                    <path class="ln" d="M72 92 H118" marker-end="url(#about-p3-arr)"/>
-                    <path class="ln" d="M72 92 L118 127" marker-end="url(#about-p3-arr)"/>
-                    <path class="ln" d="M72 92 L118 163" marker-end="url(#about-p3-arr)"/>
-                    <rect class="bx" x="120" y="6" width="172" height="30" rx="3"/>
-                    <rect class="bx" x="120" y="42" width="172" height="30" rx="3"/>
-                    <rect class="bx" x="120" y="78" width="172" height="30" rx="3"/>
-                    <rect class="bx" x="120" y="114" width="172" height="30" rx="3"/>
-                    <rect class="bx" x="120" y="150" width="172" height="30" rx="3"/>
-                    <g lang="en">
-                      <text class="sm" x="128" y="26">Power flow</text>
-                      <text class="sm" x="128" y="62">Time simulation</text>
-                      <text class="sm" x="128" y="98">Linearization</text>
-                      <text class="sm" x="128" y="134">Continuation PF</text>
-                      <text class="sm" x="128" y="170">Optimal PF</text>
-                    </g>
-                    <g lang="ja">
-                      <text class="sm" x="128" y="26">潮流計算</text>
-                      <text class="sm" x="128" y="62">時間応答</text>
-                      <text class="sm" x="128" y="98">近似線形化</text>
-                      <text class="sm" x="128" y="134">連続潮流計算</text>
-                      <text class="sm" x="128" y="170">最適潮流計算</text>
-                    </g>
-                    <text class="mu mono" x="286" y="26" text-anchor="end">ResultPF</text>
-                    <text class="mu mono" x="286" y="62" text-anchor="end">ResultODE</text>
-                    <text class="mu mono" x="286" y="98" text-anchor="end">ResultLIN</text>
-                    <text class="mu mono" x="286" y="134" text-anchor="end">ResultCPF</text>
-                    <text class="mu mono" x="286" y="170" text-anchor="end">ResultOPF</text>
-                  </svg>
-                  <span id="about-p3-cap" hidden><span lang="en">One network object and the result of each analysis</span><span lang="ja">一つのネットワークのオブジェクトと各解析の結果</span></span>
-                </div>
+                <div class="vc-media"><video src="./images/about/analysis/03-stability-opf.mp4" poster="./images/about/analysis/03-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. The network is linearized at the solution of each outer iteration: the operating point moves (dispatch and voltages on the right) until the electromechanical eigenvalues cross the dashed line of damping ratio 0.048. Gray: the eigenvalues of the OPF without the limit. At the fourth iteration the smallest damping ratio is 0.0481 and the cost rises from 8081.5 to 8566.7."></video></div>
                 <figcaption>
-                  <h3 class="vc-title"><span lang="en">One model from optimization to stability</span><span lang="ja">最適化と安定性を一つのモデルで</span></h3>
-                  <span class="vc-caption"><span lang="en">One network runs power flow, time simulation, linearization, continuation power flow and optimal power flow, and each returns a result object.</span><span lang="ja">一つのネットワークで潮流計算、時間応答シミュレーション、近似線形化、連続潮流計算、最適潮流計算を実行でき、それぞれ結果のオブジェクトを返します。</span></span>
-                  <div class="vc-side">
-                    <ul lang="en">
-                      <li>The solution of the AC optimal power flow can be the operating point; time simulation and linearization start from it with no data conversion.</li>
-                      <li>The optimal power flow can include small-signal stability limits of the same network, such as a lowest damping ratio or a largest real part of the eigenvalues.</li>
-                    </ul>
-                    <ul lang="ja">
-                      <li>AC 最適潮流計算の解を動作点にでき、時間応答シミュレーションや近似線形化はデータを変換せずにその点から始められます。</li>
-                      <li>最適潮流計算に、同じネットワークの小信号安定度の制約（減衰比の下限、固有値の実部の上限など）を加えられます。</li>
-                    </ul>
-                  </div>
+                  <h3 class="vc-title"><span lang="en">An optimal power flow that meets a damping-ratio limit</span><span lang="ja">減衰比の下限を満たす最適潮流</span></h3>
+                  <span class="vc-caption"><span lang="en">A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. The network is linearized at the solution of each outer iteration: the operating point moves (dispatch and voltages on the right) until the electromechanical eigenvalues cross the dashed line of damping ratio 0.048. Gray: the eigenvalues of the OPF without the limit. At the fourth iteration the smallest damping ratio is 0.0481 and the cost rises from 8081.5 to 8566.7.</span><span lang="ja">IEEE 14 母線系統の AC 最適潮流計算に、最小減衰比 0.048 の制約を加えます。外側の反復ごとに解で近似線形化し、電気機械モードの固有値が減衰比 0.048 の線（破線）を越えるまで動作点が変わる様子を、右の発電出力・電圧とともに示します。灰色は制約なしの最適潮流の固有値です。4 回目の反復で最小減衰比は 0.0481 になり、コストは 8081.5 から 8566.7 に上がります。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE14bus();
+net.initialize();
+[res, flag] = net.calculate_optimal_powerflow(Method="AC OPF", MinDampingRatio=0.048);
+res.sct_stability.tab_iteration                   % cost and smallest damping ratio of each outer iteration
+res.plot_dispatch();
+net.initialize(Method="OPF", MinDampingRatio=0.048);   % the solution as the operating point
+lin = net.get_sys();
+lin.plot_eigenvalue();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/about/analysis/04-cpf-eigenvalue.mp4" poster="./images/about/analysis/04-cpf-eigenvalue.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at the operating point of each step. The eigenvalue map, the PV curves and the chart of the largest real part and the smallest damping ratio follow the same step. In this model (constant field voltage and mechanical input) a real eigenvalue becomes positive at λ = 3.11, before the nose at λ = 5.21."></video></div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">Small-signal stability while the load grows</span><span lang="ja">負荷を増やしながら小信号安定性を調べる</span></h3>
+                  <span class="vc-caption"><span lang="en">A continuation power flow of the IEEE 14-bus system increases the loads at buses B009 and B014, and the network is linearized at the operating point of each step. The eigenvalue map, the PV curves and the chart of the largest real part and the smallest damping ratio follow the same step. In this model (constant field voltage and mechanical input) a real eigenvalue becomes positive at λ = 3.11, before the nose at λ = 5.21.</span><span lang="ja">IEEE 14 母線系統で母線 B009 と B014 の負荷を増やす連続潮流計算を行い、各ステップの動作点で近似線形化します。固有値マップ、PV 曲線、固有値の最大実部と最小減衰比のグラフが同じステップに連動します。このモデル（界磁電圧と機械入力が一定）では、ノーズ（λ = 5.21）より手前の λ = 3.11 で実固有値が正になります。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE14bus();
+net.initialize();
+cpf = net.calculate_continuation_powerflow(LoadBus=["B009", "B014"]);
+lin = net.get_sys({cpf, 1:cpf.r_noseStep});       % one section per step
+G = lin.plot_eigenvalue();
+G.link(cpf.plot_pvcurve());
+G.link(lin.plot_eigenvalue_path());
+G.set_time(104);                                  % the step where Re λ first exceeds 0</code></pre>
                 </figcaption>
               </figure>
             </li>
