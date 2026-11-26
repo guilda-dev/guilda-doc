@@ -22,7 +22,7 @@
       <p class="lec-kicker">Part 0</p>
       <h1><span lang="en">Introduction</span><span lang="ja">導入</span></h1>
       <p class="lec-lead" lang="en">What a power system does, why supply and demand must match at every moment, and which analysis each Part covers.</p>
-      <p class="lec-lead" lang="ja">電力系統の役割、需要と供給を常に一致させる理由、各 Part で扱う解析の地図を説明します。</p>
+      <p class="lec-lead" lang="ja">電力系統の役割と、需要と供給を常に一致させる理由を説明し、各 Part で扱う解析のマップを示します。</p>
     </header>
 
     <div class="lec-layout">
@@ -33,10 +33,10 @@
           <li><a href="#chain"><span lang="en">Plants to consumers</span><span lang="ja">発電所から需要家まで</span></a></li>
           <li><a href="#balance"><span lang="en">Supply must match demand</span><span lang="ja">需要と供給の一致</span></a></li>
           <li><a href="#timescales"><span lang="en">Phenomena and time scales</span><span lang="ja">現象と時間スケール</span></a></li>
-          <li><a href="#analyses"><span lang="en">Analyses and the Part map</span><span lang="ja">解析の種類と Part の地図</span></a></li>
+          <li><a href="#analyses"><span lang="en">Analyses and the Part map</span><span lang="ja">解析の種類と Part のマップ</span></a></li>
           <li><a href="#renewables"><span lang="en">More renewable energy</span><span lang="ja">再生可能エネルギーの影響</span></a></li>
           <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
-          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#scripts"><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></a></li>
           <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
         </ol>
       </nav>
@@ -47,6 +47,7 @@
           <ul>
             <li><span lang="en">How electricity travels from power plants to homes and factories.</span><span lang="ja">電気が発電所から家庭や工場まで、どのように届くか。</span></li>
             <li><span lang="en">Why supply and demand must match at every moment, and what the frequency and the voltage tell us.</span><span lang="ja">需要と供給を常に一致させる必要がある理由と、周波数と電圧が表すもの。</span></li>
+            <li><span lang="en">How generators, each with its own swing equation, synchronize to one frequency, and which value that frequency takes.</span><span lang="ja">それぞれ自分の動揺方程式に従う発電機が、どのように 1 つの周波数に同期し、その周波数がどの値になるか。</span></li>
             <li><span lang="en">Which phenomena happen in a power system, and on which time scales.</span><span lang="ja">電力系統で起きる現象と、その時間の長さ。</span></li>
             <li><span lang="en">Which analysis answers which question, and which Part covers it.</span><span lang="ja">どの解析がどの問いに答えるか、それをどの Part で扱うか。</span></li>
             <li><span lang="en">What changes when more renewable energy is connected.</span><span lang="ja">再生可能エネルギーが増えると何が変わるか。</span></li>
@@ -172,29 +173,183 @@ net.plot_diagram();</code></pre>
               <text lang="ja" class="t-c3 t-small t-mid" x="430" y="252">周波数が下がる</text>
             </svg>
             </div>
-            <figcaption lang="en">The frequency works like the pointer of a balance between supply and demand.</figcaption>
-            <figcaption lang="ja">周波数は、需要と供給をのせた天びんの針のような役割を持ちます。</figcaption>
+            <figcaption lang="en">Supply and demand drawn as a balance. When they do not balance, the frequency, drawn as the pointer, moves.</figcaption>
+            <figcaption lang="ja">需要と供給を天びんにたとえた図です。つり合いが崩れると、針にあたる周波数が動きます。</figcaption>
           </figure>
-          <p lang="en">What absorbs a mismatch for the first few seconds is the rotation of the large generators. Their heavy rotors spin in step with the AC frequency and hold kinetic energy. When demand exceeds supply, the difference is drawn from this kinetic energy, the rotors slow down, and the <strong>frequency falls</strong>. When supply exceeds demand, the rotors speed up and the <strong>frequency rises</strong>.</p>
-          <p lang="ja">ずれを最初の数秒間受け止めるのは、大きな発電機の回転です。重い回転子は交流の周波数に合わせて回っていて、運動エネルギーを持っています。需要が供給より多いと、その差がこの運動エネルギーから取り出されて回転が遅くなり、<strong>周波数が下がります</strong>。供給が需要より多いと回転が速くなり、<strong>周波数が上がります</strong>。</p>
-          <p lang="en">Written as an equation for the whole system, without control and without the change of the loads with the frequency, this is approximately</p>
-          <p lang="ja">系統全体についての式にすると、制御と、周波数による負荷の変化を除いて、近似的に次のようになります。</p>
+          <p lang="en">For the first few seconds, a mismatch is covered by the kinetic energy stored in the rotating masses of the synchronous generators and the turbines coupled to them. When demand exceeds supply, the difference is drawn from this energy, the rotors slow down, and the <strong>frequency falls</strong>. When supply exceeds demand, the rotors speed up and the <strong>frequency rises</strong>.</p>
+          <p lang="ja">需給のずれを最初の数秒間まかなうのは、同期発電機の回転子と、それにつながるタービンに蓄えられた運動エネルギーです。需要が供給より多いと、その差がこの運動エネルギーから取り出されて回転子が減速し、<strong>周波数が下がります</strong>。供給が需要より多いと回転子が加速し、<strong>周波数が上がります</strong>。</p>
+
+          <h3 id="swing"><span lang="en">One swing equation for each generator</span><span lang="ja">発電機ごとの動揺方程式</span></h3>
+          <p lang="en">A power system has many synchronous generators, and each has its own rotor. The motion of the rotor of generator <span class="lec-math-inline" data-tex="i"></span> (<span class="lec-math-inline" data-tex="i = 1, \dots, m"></span>) is described by its own swing equation (Part 1):</p>
+          <p lang="ja">電力系統には多くの同期発電機があり、それぞれが自分の回転子を持っています。発電機 <span class="lec-math-inline" data-tex="i"></span>（<span class="lec-math-inline" data-tex="i = 1, \dots, m"></span>）の回転子の動きは、その発電機の動揺方程式（Part 1）で表されます。</p>
           <figure class="lec-annot">
-            <div class="lec-math" data-tex="\annot{1}{\frac{2H}{f_0}}\,\annot{2}{\frac{\mathrm{d}f}{\mathrm{d}t}} = \annot{3}{P_\mathrm{G} - P_\mathrm{D}}"></div>
+            <div class="lec-math" data-tex="\frac{\mathrm{d}\delta_i}{\mathrm{d}t} = 2\pi f_0\,\omega_i, \qquad \annot{1}{M_i}\,\frac{\mathrm{d}\omega_i}{\mathrm{d}t} = \annot{2}{P_{\mathrm{m},i}} - \annot{3}{P_{\mathrm{e},i}} - D_i\,\omega_i"></div>
             <ol class="lec-annot-notes">
-              <li data-at="above"><span lang="en">This is the inertia of the whole system!</span><span lang="ja">これが系統全体の慣性！</span></li>
-              <li><span lang="en">How fast the frequency changes</span><span lang="ja">周波数が変わる速さ</span></li>
-              <li><span lang="en">The mismatch of supply and demand</span><span lang="ja">需要と供給のずれ</span></li>
+              <li><span lang="en">Inertia of generator <span class="lec-math-inline" data-tex="i"></span></span><span lang="ja">発電機 <span class="lec-math-inline" data-tex="i"></span> の慣性</span></li>
+              <li><span lang="en">Mechanical input from its turbine</span><span lang="ja">タービンからの機械入力</span></li>
+              <li data-at="above"><span lang="en">Electrical output, set by the whole network</span><span lang="ja">電気出力。系統全体の状態で決まる</span></li>
             </ol>
           </figure>
-          <p lang="en">Here <span class="lec-math-inline" data-tex="f"></span> is the frequency and <span class="lec-math-inline" data-tex="f_0"></span> its rated value (50 or 60 Hz); <span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> is the generation and <span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> the demand including the losses, both in per unit of the rated power of the system; <span class="lec-math-inline" data-tex="H"></span> is the inertia constant, the kinetic energy of all the rotors divided by that rated power, in seconds. The frequency changes at a rate set by the mismatch, and the larger the inertia, the slower it changes.</p>
-          <p lang="ja"><span class="lec-math-inline" data-tex="f"></span> は周波数、<span class="lec-math-inline" data-tex="f_0"></span> はその定格値（50 Hz または 60 Hz）です。<span class="lec-math-inline" data-tex="P_\mathrm{G}"></span> は発電、<span class="lec-math-inline" data-tex="P_\mathrm{D}"></span> は損失を含む需要で、どちらも系統の定格容量を基準にした単位法の値です。<span class="lec-math-inline" data-tex="H"></span> は慣性定数で、すべての回転子の運動エネルギーをその定格容量で割った値（単位は秒）です。周波数は需給のずれに応じた速さで変わり、慣性が大きいほどゆっくり変わります。</p>
+          <p lang="en"><span class="lec-math-inline" data-tex="\delta_i"></span> is the rotor angle (rad), measured from a reference that rotates at the rated frequency <span class="lec-math-inline" data-tex="f_0"></span>; <span class="lec-math-inline" data-tex="\omega_i"></span> is the speed deviation (pu): the rotor turns at <span class="lec-math-inline" data-tex="1 + \omega_i"></span> times its rated speed. <span class="lec-math-inline" data-tex="M_i"></span> (s) is the inertia constant and <span class="lec-math-inline" data-tex="D_i"></span> (pu) the damping. The electrical output <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span> is the power that generator <span class="lec-math-inline" data-tex="i"></span> sends into the network. It follows from the network equations (Part 1) and depends on the rotor angles and internal voltages of all the generators and on the loads. This is how the generators are coupled: the equation of one generator cannot be solved without the others.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="\delta_i"></span> は回転子の角度（rad）で、定格周波数 <span class="lec-math-inline" data-tex="f_0"></span> で回る基準から測ります。<span class="lec-math-inline" data-tex="\omega_i"></span> は速さのずれ（pu）で、回転子は定格の速さの <span class="lec-math-inline" data-tex="1 + \omega_i"></span> 倍で回っています。<span class="lec-math-inline" data-tex="M_i"></span>（s）は慣性定数、<span class="lec-math-inline" data-tex="D_i"></span>（pu）は制動の大きさです。電気出力 <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span> は、発電機 <span class="lec-math-inline" data-tex="i"></span> が送電網に送り出す電力です。これは送電網の方程式（Part 1）から決まり、すべての発電機の回転子の角度と内部電圧、そして負荷によって変わります。発電機どうしは、このように送電網を通して結び付いています。1 台の発電機の式だけを取り出して解くことはできません。</p>
 
-          <p lang="en">The frequency is thus a measure of the balance of the whole system, the same everywhere in one synchronous system. Operators keep it close to its rated value by adjusting the output of generators.</p>
-          <p lang="ja">このように、周波数は系統全体の需給のつり合いを表す目盛りで、同じ交流でつながった系統の中ではどこでも同じ値になります。発電機の出力を調整して、周波数を定格の値の近くに保ちます。</p>
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 312" role="img" aria-label="Three generators, each with its own swing equation, connected to buses that are joined by lines; a load hangs on the lower bus">
+                <defs>
+                  <marker id="p0-arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- swing equations -->
+                <rect class="f-card" x="15" y="14" width="230" height="60" rx="5"/>
+                <rect class="f-card" x="275" y="14" width="230" height="60" rx="5"/>
+                <rect class="f-card" x="535" y="14" width="230" height="60" rx="5"/>
+                <text lang="en" class="t-strong t-mid" x="130" y="37">Generator 1</text>
+                <text lang="ja" class="t-strong t-mid" x="130" y="37">発電機 1</text>
+                <text lang="en" class="t-strong t-mid" x="390" y="37">Generator 2</text>
+                <text lang="ja" class="t-strong t-mid" x="390" y="37">発電機 2</text>
+                <text lang="en" class="t-strong t-mid" x="650" y="37">Generator 3</text>
+                <text lang="ja" class="t-strong t-mid" x="650" y="37">発電機 3</text>
+                <text class="t-mid" x="130" y="61">M₁ dω₁/dt = Pm₁ − Pe₁ − D₁ω₁</text>
+                <text class="t-mid" x="390" y="61">M₂ dω₂/dt = Pm₂ − Pe₂ − D₂ω₂</text>
+                <text class="t-mid" x="650" y="61">M₃ dω₃/dt = Pm₃ − Pe₃ − D₃ω₃</text>
+                <!-- generators -->
+                <path class="s-line is-dashed" d="M130 74 V98 M390 74 V98 M650 74 V98"/>
+                <circle class="s-ink" cx="130" cy="120" r="20"/>
+                <circle class="s-ink" cx="390" cy="120" r="20"/>
+                <circle class="s-ink" cx="650" cy="120" r="20"/>
+                <path class="s-ink" d="M117 120 C 122 108, 126 108, 130 120 S 138 132, 143 120 M377 120 C 382 108, 386 108, 390 120 S 398 132, 403 120 M637 120 C 642 108, 646 108, 650 120 S 658 132, 663 120"/>
+                <text class="t-muted" x="158" y="125">δ₁, ω₁</text>
+                <text class="t-muted" x="418" y="125">δ₂, ω₂</text>
+                <text class="t-muted" x="678" y="125">δ₃, ω₃</text>
+                <path class="s-ink" d="M130 140 V162 M390 140 V162 M650 140 V162"/>
+                <!-- buses and lines -->
+                <rect class="f-ink" x="80" y="162" width="100" height="6" rx="1"/>
+                <rect class="f-ink" x="340" y="162" width="100" height="6" rx="1"/>
+                <rect class="f-ink" x="600" y="162" width="100" height="6" rx="1"/>
+                <rect class="f-ink" x="340" y="232" width="100" height="6" rx="1"/>
+                <path class="s-ink" d="M180 165 H340 M440 165 H600 M150 168 L362 232 M630 168 L418 232 M390 168 V232"/>
+                <line class="s-ink" x1="390" y1="238" x2="390" y2="272" marker-end="url(#p0-arrow3)"/>
+                <text lang="en" class="t-muted" x="402" y="266">load</text>
+                <text lang="ja" class="t-muted" x="402" y="266">負荷</text>
+                <text lang="en" class="t-muted t-mid" x="260" y="156">network</text>
+                <text lang="ja" class="t-muted t-mid" x="260" y="156">送電網</text>
+                <text lang="en" class="t-muted t-mid" x="390" y="302">Pe₁, Pe₂, Pe₃ depend on the angles and voltages of all the generators and on the loads</text>
+                <text lang="ja" class="t-muted t-mid" x="390" y="302">Pe₁・Pe₂・Pe₃ は、すべての発電機の角度・電圧と負荷で決まる</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Each generator follows its own swing equation. The equations are coupled through the network, because the electrical outputs depend on the state of all the generators and on the loads.</figcaption>
+            <figcaption lang="ja">発電機はそれぞれ自分の動揺方程式に従います。電気出力がすべての発電機の状態と負荷で決まるため、これらの式は送電網を通して結び付いています。</figcaption>
+          </figure>
 
-          <p lang="en">The <strong>voltage</strong> must also stay within a range. Unlike the frequency, the voltage differs from bus to bus. It depends mainly on the balance of <strong>reactive power</strong>, a part of AC power that does no net work but is needed to keep up the voltage; generators, capacitors and other equipment supply it near where it is needed.</p>
-          <p lang="ja"><strong>電圧</strong>も、決められた範囲に保つ必要があります。周波数と違い、電圧は母線ごとに異なる値になります。電圧は主に<strong>無効電力</strong>のつり合いで決まります。無効電力は交流の電力のうち、正味の仕事はしないものの電圧を保つのに必要な成分で、発電機やコンデンサなどの設備が、必要な場所の近くで供給します。</p>
+          <h3 id="bus-frequency"><span lang="en">The frequency of each bus, and synchronism</span><span lang="ja">母線ごとの周波数と同期</span></h3>
+          <p lang="en">The voltage of bus <span class="lec-math-inline" data-tex="k"></span> is a sinusoid close to the rated frequency. With its phase angle <span class="lec-math-inline" data-tex="\theta_k(t)"></span>, measured from the same reference as the rotor angles, the voltage and its frequency <span class="lec-math-inline" data-tex="f_k"></span> are</p>
+          <p lang="ja">母線 <span class="lec-math-inline" data-tex="k"></span> の電圧は、定格周波数に近い正弦波です。回転子の角度と同じ基準から測った位相角を <span class="lec-math-inline" data-tex="\theta_k(t)"></span> とすると、電圧とその周波数 <span class="lec-math-inline" data-tex="f_k"></span> は次のように書けます。</p>
+          <div class="lec-math" data-tex="v_k(t) = \sqrt{2}\,|V_k| \cos\bigl(2\pi f_0 t + \theta_k(t)\bigr), \qquad f_k = f_0 + \frac{1}{2\pi}\,\frac{\mathrm{d}\theta_k}{\mathrm{d}t}"></div>
+          <p lang="en">So each bus has its own frequency, the rate of change of its phase angle; it is what a frequency meter at that bus measures. While the generators swing after a disturbance, the bus frequencies differ from one another and from the speeds of the generators.</p>
+          <p lang="ja">このように、母線はそれぞれ自分の周波数を持ち、それは位相角の変化の速さで決まります。その母線で周波数計が測るのがこの値です。外乱の後に発電機が揺れている間は、母線の周波数は母線ごとに異なり、発電機の速さとも一致しません。</p>
+          <p lang="en">The network pulls the generators towards a common speed. In normal operation, a generator whose rotor angle runs ahead of the others sends more power into the network, which slows it down, and one that falls behind sends less and speeds up. If the system is stable, the swings die out and the system reaches a <strong>synchronized</strong> state, in which all the generators turn at the same speed and all the phase angles change at the same rate:</p>
+          <p lang="ja">送電網は、発電機を共通の速さに引き寄せるように働きます。通常の運転状態では、回転子の角度がほかより進んだ発電機は送電網へ送り出す電力が増えて減速し、遅れた発電機は送り出す電力が減って加速します。系統が安定であれば揺れは収まり、すべての発電機が同じ速さで回り、すべての位相角が同じ速さで変わる<strong>同期</strong>した状態になります。</p>
+          <div class="lec-math" data-tex="\omega_1 = \omega_2 = \cdots = \omega_m = \omega_\mathrm{s}, \qquad f_1 = f_2 = \cdots = f_n = f_0\,(1 + \omega_\mathrm{s})"></div>
+          <p lang="en">Here <span class="lec-math-inline" data-tex="n"></span> is the number of buses. In a synchronized state the frequency is therefore the same at every bus, and this common value <span class="lec-math-inline" data-tex="f = f_0 (1 + \omega_\mathrm{s})"></span> is the <strong>system frequency</strong>. The differences between the phase angles stay constant, so the power on each line is constant as well.</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> は母線の数です。同期した状態では、どの母線で測っても周波数は同じ値になります。この共通の値 <span class="lec-math-inline" data-tex="f = f_0 (1 + \omega_\mathrm{s})"></span> が<strong>系統周波数</strong>です。位相角の差は一定に保たれるので、各送電線を流れる電力も一定になります。</p>
+
+          <h3 id="common-frequency"><span lang="en">The common frequency when supply and demand do not balance</span><span lang="ja">需給がつり合わないときの共通の周波数</span></h3>
+          <p lang="en">The value of <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> follows from the swing equations. In a synchronized steady state <span class="lec-math-inline" data-tex="\mathrm{d}\omega_i/\mathrm{d}t = 0"></span> for every generator, and the sum of the <span class="lec-math-inline" data-tex="m"></span> swing equations gives</p>
+          <p lang="ja"><span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> の値は、動揺方程式から決まります。同期した定常状態では、どの発電機でも <span class="lec-math-inline" data-tex="\mathrm{d}\omega_i/\mathrm{d}t = 0"></span> です。<span class="lec-math-inline" data-tex="m"></span> 本の動揺方程式を足し合わせると、次の式が得られます。</p>
+          <div class="lec-math" data-tex="0 = \sum_{i=1}^{m} P_{\mathrm{m},i} - \sum_{i=1}^{m} P_{\mathrm{e},i} - \Bigl(\sum_{i=1}^{m} D_i\Bigr)\,\omega_\mathrm{s} \quad\Longrightarrow\quad \omega_\mathrm{s} = \frac{\sum_i P_{\mathrm{m},i} - \sum_i P_{\mathrm{e},i}}{\sum_i D_i}"></div>
+          <p lang="en">The sum of the electrical outputs is the power consumed by the loads plus the losses. If the mechanical input of the generators is smaller than this, <span class="lec-math-inline" data-tex="\omega_\mathrm{s} < 0"></span>: the generators synchronize at a common frequency <strong>below the rated value</strong>, and the frequency does not return to <span class="lec-math-inline" data-tex="f_0"></span> by itself. Governors increase the mechanical input as the frequency falls; this makes the deviation smaller but leaves part of it. AGC integrates the frequency deviation and changes the inputs until the frequency is back at <span class="lec-math-inline" data-tex="f_0"></span> (Part 8).</p>
+          <p lang="ja">電気出力の和は、負荷が消費する電力と損失の和です。発電機の機械入力の和がこれより小さければ <span class="lec-math-inline" data-tex="\omega_\mathrm{s} < 0"></span> となり、発電機は<strong>定格より低い</strong>共通の周波数で同期します。周波数がひとりでに <span class="lec-math-inline" data-tex="f_0"></span> に戻ることはありません。ガバナは周波数が下がると機械入力を増やすので、ずれは小さくなりますが、一部は残ります。AGC は周波数のずれを積分し、周波数が <span class="lec-math-inline" data-tex="f_0"></span> に戻るまで入力を変えます（Part 8）。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 290" role="img" aria-label="Concept: after demand increases, three bus frequencies fall and swing differently, then converge to one common value below the rated frequency">
+                <defs>
+                  <marker id="p0-arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker>
+                </defs>
+                <!-- axes -->
+                <line class="s-ink" x1="80" y1="252" x2="756" y2="252" marker-end="url(#p0-arrow4)"/>
+                <line class="s-ink" x1="80" y1="252" x2="80" y2="22" marker-end="url(#p0-arrow4)"/>
+                <text lang="en" class="t-muted t-end" x="756" y="274">time</text>
+                <text lang="ja" class="t-muted t-end" x="756" y="274">時間</text>
+                <text lang="en" class="t-muted" x="90" y="30">frequency</text>
+                <text lang="ja" class="t-muted" x="90" y="30">周波数</text>
+                <!-- rated and common values -->
+                <line class="s-line is-dashed" x1="80" y1="70" x2="740" y2="70"/>
+                <line class="s-line is-dashed" x1="80" y1="200" x2="740" y2="200"/>
+                <text class="t-strong t-end" x="72" y="75">f₀</text>
+                <text class="t-strong t-end" x="72" y="205">fₛ</text>
+                <text lang="en" class="t-muted t-end" x="740" y="62">rated value</text>
+                <text lang="ja" class="t-muted t-end" x="740" y="62">定格値</text>
+                <text lang="en" class="t-muted t-end" x="740" y="222">common value, below f₀</text>
+                <text lang="ja" class="t-muted t-end" x="740" y="222">共通の値（f₀ より低い）</text>
+                <!-- step -->
+                <line class="s-line is-dashed" x1="150" y1="40" x2="150" y2="252"/>
+                <text lang="en" class="t-small" x="156" y="48">demand increases</text>
+                <text lang="ja" class="t-small" x="156" y="48">需要が増える</text>
+                <!-- bus frequencies -->
+                <path class="s-gem1" d="M80 70.0 L150 70.0 L156 72.8 L161 76.8 L165 82.6 L170 90.1 L175 98.7 L180 107.9 L185 117.0 L190 125.2 L195 132.2 L200 137.8 L205 141.8 L210 144.7 L215 146.8 L219 148.4 L224 150.0 L229 151.8 L234 154.1 L239 156.8 L244 159.9 L249 163.1 L254 166.3 L259 169.4 L264 172.0 L269 174.3 L273 176.1 L278 177.4 L283 178.5 L288 179.4 L293 180.2 L298 181.0 L303 181.9 L308 183.0 L313 184.1 L318 185.2 L323 186.4 L328 187.6 L332 188.6 L337 189.5 L342 190.2 L347 190.8 L352 191.3 L357 191.7 L362 192.1 L367 192.5 L372 192.8 L377 193.2 L382 193.7 L386 194.1 L391 194.5 L396 195.0 L401 195.4 L406 195.7 L411 196.0 L416 196.3 L421 196.5 L426 196.7 L431 196.8 L436 197.0 L440 197.2 L445 197.3 L450 197.5 L455 197.6 L460 197.8 L465 198.0 L470 198.1 L475 198.3 L480 198.4 L485 198.5 L490 198.6 L494 198.7 L499 198.7 L504 198.8 L509 198.9 L514 198.9 L519 199.0 L524 199.1 L529 199.1 L534 199.2 L539 199.2 L544 199.3 L548 199.3 L553 199.4 L558 199.4 L563 199.5 L568 199.5 L573 199.5 L578 199.5 L583 199.6 L588 199.6 L593 199.6 L598 199.6 L602 199.7 L607 199.7 L612 199.7 L617 199.7 L622 199.8 L627 199.8 L632 199.8 L637 199.8 L642 199.8 L647 199.8 L652 199.8 L657 199.8 L661 199.8 L666 199.9 L671 199.9 L676 199.9 L681 199.9 L686 199.9 L691 199.9 L696 199.9 L701 199.9 L706 199.9 L711 199.9 L715 199.9 L720 199.9 L725 199.9 L730 199.9 L735 199.9 L740 199.9"/>
+                <path class="s-gem2" d="M80 70.0 L150 70.0 L156 89.6 L161 104.0 L165 112.3 L170 115.2 L175 114.4 L180 112.3 L185 111.0 L190 112.1 L195 116.2 L200 123.0 L205 131.4 L210 140.2 L215 148.0 L219 154.0 L224 157.8 L229 159.7 L234 160.1 L239 160.0 L244 160.1 L249 161.0 L254 162.8 L259 165.6 L264 169.0 L269 172.5 L273 175.7 L278 178.2 L283 180.0 L288 181.0 L293 181.5 L298 181.7 L303 182.0 L308 182.5 L313 183.4 L318 184.6 L323 186.0 L328 187.4 L332 188.7 L337 189.8 L342 190.6 L347 191.1 L352 191.4 L357 191.6 L362 191.9 L367 192.2 L372 192.6 L377 193.1 L382 193.6 L386 194.2 L391 194.8 L396 195.2 L401 195.6 L406 195.9 L411 196.0 L416 196.2 L421 196.3 L426 196.5 L431 196.6 L436 196.9 L440 197.1 L445 197.4 L450 197.6 L455 197.8 L460 198.0 L465 198.1 L470 198.2 L475 198.2 L480 198.3 L485 198.4 L490 198.5 L494 198.6 L499 198.7 L504 198.8 L509 198.9 L514 199.0 L519 199.1 L524 199.1 L529 199.2 L534 199.2 L539 199.2 L544 199.3 L548 199.3 L553 199.4 L558 199.4 L563 199.4 L568 199.5 L573 199.5 L578 199.6 L583 199.6 L588 199.6 L593 199.6 L598 199.6 L602 199.7 L607 199.7 L612 199.7 L617 199.7 L622 199.7 L627 199.8 L632 199.8 L637 199.8 L642 199.8 L647 199.8 L652 199.8 L657 199.8 L661 199.8 L666 199.9 L671 199.9 L676 199.9 L681 199.9 L686 199.9 L691 199.9 L696 199.9 L701 199.9 L706 199.9 L711 199.9 L715 199.9 L720 199.9 L725 199.9 L730 199.9 L735 199.9 L740 199.9"/>
+                <path class="s-gem3" d="M80 70.0 L150 70.0 L156 85.1 L161 95.7 L165 101.4 L170 103.4 L175 104.2 L180 106.4 L185 111.0 L190 118.2 L195 126.6 L200 134.6 L205 140.7 L210 144.6 L215 146.5 L219 147.6 L224 148.9 L229 151.2 L234 154.6 L239 158.8 L244 162.9 L249 166.4 L254 168.8 L259 170.3 L264 171.1 L269 172.0 L273 173.2 L278 174.9 L283 177.0 L288 179.1 L293 181.0 L298 182.4 L303 183.4 L308 184.1 L313 184.6 L318 185.3 L323 186.1 L328 187.2 L332 188.3 L337 189.3 L342 190.1 L347 190.7 L352 191.2 L357 191.5 L362 191.9 L367 192.3 L372 192.9 L377 193.4 L382 194.0 L386 194.5 L391 194.8 L396 195.1 L401 195.3 L406 195.5 L411 195.8 L416 196.0 L421 196.3 L426 196.6 L431 196.9 L436 197.1 L440 197.3 L445 197.4 L450 197.5 L455 197.7 L460 197.8 L465 198.0 L470 198.1 L475 198.3 L480 198.4 L485 198.5 L490 198.6 L494 198.6 L499 198.7 L504 198.8 L509 198.9 L514 198.9 L519 199.0 L524 199.1 L529 199.1 L534 199.2 L539 199.2 L544 199.3 L548 199.3 L553 199.4 L558 199.4 L563 199.5 L568 199.5 L573 199.5 L578 199.6 L583 199.6 L588 199.6 L593 199.6 L598 199.6 L602 199.7 L607 199.7 L612 199.7 L617 199.7 L622 199.8 L627 199.8 L632 199.8 L637 199.8 L642 199.8 L647 199.8 L652 199.8 L657 199.8 L661 199.9 L666 199.9 L671 199.9 L676 199.9 L681 199.9 L686 199.9 L691 199.9 L696 199.9 L701 199.9 L706 199.9 L711 199.9 L715 199.9 L720 199.9 L725 199.9 L730 199.9 L735 199.9 L740 199.9"/>
+                <!-- legend -->
+                <line class="s-gem1" x1="560" y1="102" x2="588" y2="102"/>
+                <line class="s-gem2" x1="560" y1="122" x2="588" y2="122"/>
+                <line class="s-gem3" x1="560" y1="142" x2="588" y2="142"/>
+                <text lang="en" class="t-small" x="596" y="106">bus 1</text>
+                <text lang="ja" class="t-small" x="596" y="106">母線 1</text>
+                <text lang="en" class="t-small" x="596" y="126">bus 2</text>
+                <text lang="ja" class="t-small" x="596" y="126">母線 2</text>
+                <text lang="en" class="t-small" x="596" y="146">bus 3</text>
+                <text lang="ja" class="t-small" x="596" y="146">母線 3</text>
+                <!-- phases -->
+                <text lang="en" class="t-muted t-mid" x="290" y="244">swings: the frequencies differ</text>
+                <text lang="ja" class="t-muted t-mid" x="290" y="244">動揺：周波数は母線ごとに異なる</text>
+                <text lang="en" class="t-muted t-mid" x="560" y="244">synchronized: one frequency</text>
+                <text lang="ja" class="t-muted t-mid" x="560" y="244">同期：周波数は 1 つ</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Concept sketch of the bus frequencies after demand increases (no governor or AGC). They first fall at different rates and swing against each other; as the swings die out, they converge to one common value <span class="lec-math-inline" data-tex="f_\mathrm{s}"></span> below the rated value <span class="lec-math-inline" data-tex="f_0"></span>.</figcaption>
+            <figcaption lang="ja">需要が増えた後の母線の周波数を模式的に描いた図です（ガバナと AGC なし）。はじめは母線ごとに異なる速さで下がりながら揺れ合い、揺れが収まると、定格値 <span class="lec-math-inline" data-tex="f_0"></span> より低い 1 つの値 <span class="lec-math-inline" data-tex="f_\mathrm{s}"></span> にそろいます。</figcaption>
+          </figure>
+
+          <p lang="en">A time-domain simulation in GUILDA shows the same behaviour. The bundled network <code>Tutorial6bus</code> has four machines with the classical model (Part 1), lossless lines and no governors; machines 3 and 4 run as synchronous motors, that is, they take power from the network. A constant-power load is added at bus 6, and from <span class="lec-math-inline" data-tex="t = 1"></span> s it draws 0.1 pu:</p>
+          <p lang="ja">GUILDA の時間シミュレーションでも、同じことを確かめられます。同梱の系統 <code>Tutorial6bus</code> は、古典モデル（Part 1）の同期機 4 台、損失のない送電線からなり、ガバナはありません。同期機 3 と 4 は同期電動機として運転していて、送電網から電力を受け取ります。この系統の母線 6 に定電力負荷を加え、<span class="lec-math-inline" data-tex="t = 1"></span> 秒から 0.1 pu を消費させます。</p>
+          <pre class="lec-cmd"><code>net = network.Tutorial6bus();
+ld  = net.a_Bus{6}.add_component("load-power", P=0, Q=0);
+net.initialize();
+sc  = net.add_scenario("step", Time=[0, 15]);
+sc.add_input(ld.s_tag, "Pload", -0.1, [1, 15]);
+res = net.simulate("step");
+res.plot_trajectory(Quantity="omega");</code></pre>
+
+          <figure class="lec-figure is-compact" style="--lec-fig-max: 340px;">
+            <img src="../images/lecture/part0/tutorial6-diagram.png" alt="Single-line diagram of Tutorial6bus with the added load: machines at buses B001 to B004, joined through buses B005 and B006; the load is at bus B006" lang="en" width="906" height="829">
+            <img src="../images/lecture/part0/tutorial6-diagram.png" alt="負荷を加えた Tutorial6bus の単線結線図。母線 B001〜B004 に同期機があり、母線 B005 と B006 を通してつながる。負荷は母線 B006 にある" lang="ja" width="906" height="829">
+            <figcaption lang="en">The network of this example: <code>Tutorial6bus</code> with the load added at bus 6, drawn with <code>net.plot_single_line_diagram</code>.</figcaption>
+            <figcaption lang="ja">この例の系統です。負荷を母線 6 に加えた <code>Tutorial6bus</code> を、<code>net.plot_single_line_diagram</code> で描きました。</figcaption>
+          </figure>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 480px;">
+            <div class="lec-scroll">
+              <img lang="en" src="../images/lecture/part0/frequency-sync.en.png" alt="Speed deviation of the four machines and frequency deviation of the six buses after the load step at t = 1 s: they swing differently at first and all settle at -0.005 pu within about 10 s" width="1279" height="769">
+              <img lang="ja" src="../images/lecture/part0/frequency-sync.ja.png" alt="t = 1 秒の負荷の増加の後の、同期機 4 台の速さのずれと 6 つの母線の周波数のずれ。はじめは異なる揺れ方をし、10 秒ほどで全員が -0.005 pu にそろう" width="1284" height="769">
+            </div>
+            <figcaption lang="en">Result of the code above: the speed deviation <span class="lec-math-inline" data-tex="\omega_i"></span> of the four machines (coloured) and the frequency deviation <span class="lec-math-inline" data-tex="(f_k - f_0)/f_0"></span> of the six buses (thin dark lines), in pu. After the step they swing differently; within about 10 s they all settle at <span class="lec-math-inline" data-tex="\omega_\mathrm{s} = -0.1/(D_1 + D_2 + D_3 + D_4) = -0.005"></span> pu (<span class="lec-math-inline" data-tex="D_i = 5"></span>), that is 49.75 Hz in this 50 Hz system. The lines are lossless, so the electrical outputs add up to the load and the formula above gives the steady value exactly.</figcaption>
+            <figcaption lang="ja">上のコードの結果です。色の線は同期機 4 台の速さのずれ <span class="lec-math-inline" data-tex="\omega_i"></span>、細い濃い線は 6 つの母線の周波数のずれ <span class="lec-math-inline" data-tex="(f_k - f_0)/f_0"></span> で、どちらも単位法の値です。負荷が増えた直後は揺れ方が異なりますが、10 秒ほどで、すべてが <span class="lec-math-inline" data-tex="\omega_\mathrm{s} = -0.1/(D_1 + D_2 + D_3 + D_4) = -0.005"></span> pu（<span class="lec-math-inline" data-tex="D_i = 5"></span>）にそろいます。50 Hz の系統なので 49.75 Hz です。送電線に損失がないため電気出力の和は負荷に等しく、定常値は上の式の値とちょうど一致します。</figcaption>
+          </figure>
+
+          <h3 id="coi"><span lang="en">The centre-of-inertia frequency</span><span lang="ja">慣性中心の周波数</span></h3>
+          <p lang="en">The sum of the swing equations can also be written with the average of the speeds weighted by the inertia, the speed of the <strong>centre of inertia</strong> (COI):</p>
+          <p lang="ja">動揺方程式の和は、慣性で重み付けした速さの平均、つまり<strong>慣性中心</strong>（COI）の速さを使っても書けます。</p>
+          <div class="lec-math" data-tex="\omega_\mathrm{COI} = \frac{1}{M_\mathrm{T}} \sum_{i=1}^{m} M_i\,\omega_i, \quad M_\mathrm{T} = \sum_{i=1}^{m} M_i, \qquad M_\mathrm{T}\,\frac{\mathrm{d}\omega_\mathrm{COI}}{\mathrm{d}t} = \sum_{i=1}^{m} P_{\mathrm{m},i} - \sum_{i=1}^{m} P_{\mathrm{e},i} - \sum_{i=1}^{m} D_i\,\omega_i"></div>
+          <p lang="en">This equation follows exactly from the swing equations, but it is not a model of the whole system. It is one equation for <span class="lec-math-inline" data-tex="m"></span> generators; the sum of the electrical outputs depends on all the angles and voltages, through the losses and the voltage-dependent loads; and the damping term equals <span class="lec-math-inline" data-tex="(\sum_i D_i)\,\omega_\mathrm{COI}"></span> only when <span class="lec-math-inline" data-tex="D_i / M_i"></span> is the same for all the generators or when they are synchronized. It does not describe the swings of the individual generators or the differences between the bus frequencies. What it does show is the effect of the total inertia: when the demand rises suddenly by <span class="lec-math-inline" data-tex="\Delta P"></span> and the generators take it up at once (exactly so for a constant-power load in a lossless network), the frequency of the centre of inertia starts to fall at the rate <span class="lec-math-inline" data-tex="\mathrm{d}\omega_\mathrm{COI}/\mathrm{d}t = -\Delta P / M_\mathrm{T}"></span>. The larger the total inertia <span class="lec-math-inline" data-tex="M_\mathrm{T}"></span>, the slower the first fall.</p>
+          <p lang="ja">この式は動揺方程式から正確に導けますが、系統全体のモデルではありません。<span class="lec-math-inline" data-tex="m"></span> 台の発電機に対して式は 1 本だけです。電気出力の和は、損失や電圧で変わる負荷を通して、すべての角度と電圧に依存します。制動の項が <span class="lec-math-inline" data-tex="(\sum_i D_i)\,\omega_\mathrm{COI}"></span> に等しくなるのは、<span class="lec-math-inline" data-tex="D_i / M_i"></span> がすべての発電機で等しいときか、発電機が同期しているときだけです。個々の発電機の揺れや、母線ごとの周波数の違いは、この式からは分かりません。この式から分かるのは、慣性の合計の効果です。需要が急に <span class="lec-math-inline" data-tex="\Delta P"></span> 増え、それを発電機がすぐに受け持つとき（損失のない送電網と定電力負荷ではちょうどそうなります）、慣性中心の周波数は <span class="lec-math-inline" data-tex="\mathrm{d}\omega_\mathrm{COI}/\mathrm{d}t = -\Delta P / M_\mathrm{T}"></span> の速さで下がり始めます。慣性の合計 <span class="lec-math-inline" data-tex="M_\mathrm{T}"></span> が大きいほど、最初の低下はゆっくりになります。</p>
+
+          <p lang="en">In operation, the frequency is kept close to its rated value by adjusting the output of the generators: governors act within seconds, and AGC over tens of seconds to minutes (see the next section and Part 8).</p>
+          <p lang="ja">実際の運用では、発電機の出力を調整して周波数を定格値の近くに保ちます。数秒のうちに働くのがガバナ、数十秒から数分かけて働くのが AGC です（次の節と Part 8）。</p>
+
+          <h3 id="voltage"><span lang="en">Voltage</span><span lang="ja">電圧</span></h3>
+          <p lang="en">The <strong>voltage</strong> must also stay within a range. Unlike the frequency of a synchronized system, the voltage magnitude differs from bus to bus. It depends mainly on the balance of <strong>reactive power</strong>, a part of AC power that does no net work but is needed to keep up the voltage; generators, capacitors and other equipment supply it near where it is needed.</p>
+          <p lang="ja"><strong>電圧</strong>も、決められた範囲に保つ必要があります。同期した系統の周波数と違い、電圧の大きさは母線ごとに異なる値になります。電圧は主に<strong>無効電力</strong>のつり合いで決まります。無効電力は交流の電力のうち、正味の仕事はしないものの電圧を保つのに必要な成分で、発電機やコンデンサなどの設備が、必要な場所の近くで供給します。</p>
           <div class="lec-callout is-key">
             <p lang="en">Why keep them within range? Motors, electronics and the generators themselves are designed for the rated frequency and voltage. Large deviations can damage equipment or make protection relays disconnect generators and loads, which can enlarge the disturbance and, in the worst case, lead to a blackout.</p>
             <p lang="ja">なぜ範囲内に保つのでしょうか。モーターや電子機器、発電機そのものが、定格の周波数と電圧で動くように作られているからです。大きくずれると機器が傷んだり、保護装置が発電機や負荷を切り離したりします。それが外乱をさらに大きくし、最悪の場合は大停電につながります。</p>
@@ -232,7 +387,7 @@ net.plot_diagram();</code></pre>
 
         <!-- ============================== ANALYSES ============================== -->
         <section id="analyses">
-          <h2><span lang="en">Kinds of analysis and the map of the Parts</span><span lang="ja">解析の種類と Part の地図</span></h2>
+          <h2><span lang="en">Kinds of analysis and the map of the Parts</span><span lang="ja">解析の種類と Part のマップ</span></h2>
           <p lang="en">Every analysis starts from a model of the network (Part 1). The power flow (Part 2) then finds the steady operating state, which is the starting point for the other analyses: some stay at one moment and ask about cost or limits, others follow the swings in time.</p>
           <p lang="ja">どの解析も、系統のモデル（Part 1）から始まります。次に潮流計算（Part 2）で定常的な運転状態を求めます。これがほかの解析の出発点です。その先には、ある瞬間の状態のまま費用や限界を調べる解析と、時間とともに変わる揺れを追う解析があります。</p>
 
@@ -321,8 +476,8 @@ net.plot_diagram();</code></pre>
             <dt><a href="part8-controller-design.html"><span lang="en">Control</span><span lang="ja">制御</span></a></dt>
             <dd><span lang="en">How can we measure the system and act on it so that the swings die out quickly?</span><span lang="ja">系統をどう測り、どう働きかければ、揺れを早く収められるか。</span></dd>
           </dl>
-          <p lang="en">Part 4 does not add a new analysis. It shows the results of the power flow and the time-domain simulation as a picture of masses connected by springs, so that the numbers become something you can see.</p>
-          <p lang="ja">Part 4 は新しい解析を加えるのではなく、潮流計算と時間シミュレーションの結果を、ばねでつながった質点の図として見せます。数値の結果を、目で見て分かる形にするためです。</p>
+          <p lang="en">Part 4 does not add a new analysis. It draws the results of the power flow and the time-domain simulation as masses connected by springs.</p>
+          <p lang="ja">Part 4 では新しい解析は加えません。潮流計算と時間シミュレーションの結果を、ばねでつながった質点の図として描きます。</p>
         </section>
 
         <!-- ============================== RENEWABLES ============================== -->
@@ -331,49 +486,48 @@ net.plot_diagram();</code></pre>
           <p lang="en">Solar panels and most wind turbines connect to the network through inverters, power electronic converters, instead of a large rotor that turns in step with the grid. When they replace conventional power plants, the system changes in several ways:</p>
           <p lang="ja">太陽光発電や多くの風力発電は、系統と同じ速さで回る大きな回転子ではなく、<strong>インバータ</strong>（パワーエレクトロニクスの変換器）を通して系統につながります。これらが従来の発電所に置き換わると、系統はいくつかの点で変わります。</p>
           <ul>
-            <li><span lang="en"><strong>Lower inertia.</strong> Fewer heavy rotors means less stored kinetic energy. After a large generator trips, the frequency falls faster and lower before the governors can respond.</span><span lang="ja"><strong>慣性が小さくなる。</strong>重い回転子が減ると、蓄えられた運動エネルギーも減ります。大きな発電機が脱落したとき、ガバナが働くまでの間に、周波数がより速く、より深く下がります。</span></li>
+            <li><span lang="en"><strong>Lower inertia.</strong> Fewer heavy rotors means less stored kinetic energy. After a large generator trips, the frequency falls faster and lower before the governors can respond; the initial rate of fall of the centre-of-inertia frequency is inversely proportional to the total inertia, as shown above.</span><span lang="ja"><strong>慣性が小さくなる。</strong>重い回転子が減ると、蓄えられた運動エネルギーも減ります。大きな発電機が脱落したとき、ガバナが働くまでの間に、周波数がより速く、より深く下がります。上で見たとおり、慣性中心の周波数が下がり始める速さは、慣性の合計に反比例します。</span></li>
             <li><span lang="en"><strong>Output that follows the weather.</strong> The output changes with sunlight and wind, so the other generators and storage have to adjust more often to keep the balance.</span><span lang="ja"><strong>出力が天候で変わる。</strong>日射や風によって出力が変わるため、需給のつり合いを保つために、ほかの発電機や蓄電池がより頻繁に調整します。</span></li>
             <li><span lang="en"><strong>Behaviour set by control.</strong> How an inverter reacts to a disturbance is decided by its control design, not by physics alone, so the dynamics of the whole system depend more on controllers.</span><span lang="ja"><strong>ふるまいを制御が決める。</strong>インバータが外乱にどう応えるかは、物理だけでなく制御の設計で決まります。そのため、系統全体の動きが制御器に左右される度合いが大きくなります。</span></li>
           </ul>
+
+          <p lang="en">The figures below compare two cases of the IEEE 9-bus system, whose single-line diagram is shown first.</p>
+          <p lang="ja">次の図では、IEEE 9 母線系統で 2 つの場合を比べます。先にその単線結線図を示します。</p>
+          <figure class="lec-figure is-compact" id="fig-ieee9" style="--lec-fig-max: 340px;">
+            <img src="../images/lecture/part0/ieee9-diagram.png" alt="Single-line diagram of the IEEE 9-bus system: generators at buses B001, B002 and B003, each behind a transformer; loads at buses B005, B006 and B008" lang="en" width="917" height="829">
+            <img src="../images/lecture/part0/ieee9-diagram.png" alt="IEEE 9 母線系統の単線結線図。母線 B001・B002・B003 に変圧器を介して発電機があり、母線 B005・B006・B008 に負荷がある" lang="ja" width="917" height="829">
+            <figcaption lang="en">The IEEE 9-bus system (<code>network.IEEE9bus</code>), drawn with <code>net.plot_single_line_diagram</code>.</figcaption>
+            <figcaption lang="ja">IEEE 9 母線系統（<code>network.IEEE9bus</code>）を <code>net.plot_single_line_diagram</code> で描いた図です。</figcaption>
+          </figure>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
               <img src="../images/lecture/part0/frequency-after-trip.png" alt="Frequency deviation omega of the three generators of the IEEE 9-bus system after the mechanical power of generator 2 falls by 0.1 pu at t = 1 s, with governors and AGC: with the inertia as bundled it falls to about -2e-3 pu; with a third of the inertia it falls faster, to about -3.3e-3 pu; in both cases it returns to 0" width="1294" height="528">
             </div>
-            <figcaption lang="en">GUILDA's time-domain simulation of the IEEE 9-bus system with a governor on each generator and AGC: at <span class="lec-math-inline" data-tex="t = 1"></span> s the mechanical power of generator 2 falls by 0.1 pu, as when part of its output is lost. Left: the inertia <span class="lec-math-inline" data-tex="M"></span> of the generators as bundled. Right: <span class="lec-math-inline" data-tex="M"></span> divided by 3, as when inverter-based sources replace part of the rotating machines. The vertical axis is the frequency deviation of each generator in per unit. With less inertia the first drop is faster and deeper; the governors stop the fall and AGC brings the frequency back.</figcaption>
-            <figcaption lang="ja">GUILDA の時間シミュレーションで、各発電機にガバナ、全体に AGC を付けた IEEE 9 母線系統を計算しました。<span class="lec-math-inline" data-tex="t = 1"></span> 秒で発電機 2 の機械入力が 0.1 pu 減ります（出力の一部が失われた場合に相当）。左は発電機の慣性 <span class="lec-math-inline" data-tex="M"></span> が同梱のままの場合、右は <span class="lec-math-inline" data-tex="M"></span> を 3 分の 1 にした場合（回転機の一部がインバータの電源に置き換わった場合に相当）です。縦軸は各発電機の周波数のずれ（単位法）です。慣性が小さいと、最初の低下が速く、深くなります。ガバナが低下を止め、AGC が周波数を元に戻します。</figcaption>
+            <figcaption lang="en">GUILDA's time-domain simulation of the IEEE 9-bus system above, with a governor on each generator and AGC: at <span class="lec-math-inline" data-tex="t = 1"></span> s the mechanical power of generator 2 falls by 0.1 pu, as when part of its output is lost. Left: the inertia <span class="lec-math-inline" data-tex="M"></span> of the generators as bundled. Right: <span class="lec-math-inline" data-tex="M"></span> divided by 3, as when inverter-based sources replace part of the rotating machines. The vertical axis is the frequency deviation of each generator in per unit. With less inertia the first drop is faster and deeper; the governors stop the fall and AGC brings the frequency back.</figcaption>
+            <figcaption lang="ja">上の IEEE 9 母線系統の各発電機にガバナ、全体に AGC を付け、GUILDA の時間シミュレーションで計算しました。<span class="lec-math-inline" data-tex="t = 1"></span> 秒で発電機 2 の機械入力が 0.1 pu 減ります（出力の一部が失われた場合に相当）。左は発電機の慣性 <span class="lec-math-inline" data-tex="M"></span> が同梱のままの場合、右は <span class="lec-math-inline" data-tex="M"></span> を 3 分の 1 にした場合（回転機の一部がインバータの電源に置き換わった場合に相当）です。縦軸は各発電機の周波数のずれ（単位法）です。慣性が小さいと、最初の低下が速く、深くなります。ガバナが低下を止め、AGC が周波数を元に戻します。</figcaption>
           </figure>
-          <p lang="en">To keep such systems stable, inverters that imitate the response of inertia, batteries and new control methods are being studied and introduced. The analyses in this lecture, especially the time-domain simulation, linearization and controller design, are the tools for checking such ideas.</p>
-          <p lang="ja">このような系統を安定に保つために、慣性のようにふるまうインバータの制御や蓄電池、新しい制御方式が研究され、導入されています。この講義で扱う解析、特に時間シミュレーション、近似線形化、制御器の設計は、こうした考えを確かめるための道具です。</p>
+          <p lang="en">To keep such systems stable, inverters that imitate the response of inertia, batteries and new control methods are being studied and introduced. The analyses in this series, especially the time-domain simulation, linearization and controller design, are the tools for checking such ideas.</p>
+          <p lang="ja">このような系統を安定に保つために、慣性のようにふるまうインバータの制御や蓄電池、新しい制御方式が研究され、導入されています。「電力系統を理解する」で扱う解析、特に時間シミュレーション、近似線形化、制御器の設計は、こうした考えを確かめるための道具です。</p>
         </section>
 
         <section class="lec-summary" id="summary">
           <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
           <ul>
             <li><span lang="en">A power system generates, transmits and distributes electricity to consumers; the network is a mesh of buses and branches.</span><span lang="ja">電力系統は、電気をつくり（発電）、運び（送電）、配って（配電）需要家に届けます。送電網は母線とブランチの網の目です。</span></li>
-            <li><span lang="en">Supply and demand must match at every moment. The frequency shows the balance of active power for the whole system; the voltage depends on reactive power and differs from bus to bus.</span><span lang="ja">需要と供給は常に一致させる必要があります。周波数は系統全体の有効電力のつり合いを表し、電圧は無効電力に左右されて母線ごとに異なります。</span></li>
+            <li><span lang="en">Supply and demand must match at every moment. Each generator follows its own swing equation, and each bus has its own frequency.</span><span lang="ja">需要と供給は常に一致させる必要があります。発電機はそれぞれ自分の動揺方程式に従い、母線はそれぞれ自分の周波数を持ちます。</span></li>
+            <li><span lang="en">Coupled through the network, the generators synchronize, and the frequency becomes the same at every bus. When the mechanical input is smaller than the demand, this common frequency is below the rated value until governors and AGC change the generation.</span><span lang="ja">送電網で結ばれた発電機は同期し、周波数はどの母線でも同じ値になります。機械入力が需要より小さいと、この共通の周波数は定格値より低くなり、ガバナと AGC が発電を変えるまでそのままです。</span></li>
+            <li><span lang="en">The voltage depends on reactive power and differs from bus to bus.</span><span lang="ja">電圧は無効電力に左右され、母線ごとに異なります。</span></li>
             <li><span lang="en">Phenomena range from microseconds to a day. Each analysis looks at one range.</span><span lang="ja">現象の時間スケールはマイクロ秒から一日まで広がっていて、解析ごとに注目する範囲が異なります。</span></li>
             <li><span lang="en">The power flow finds the operating state, which is the starting point of the time-domain simulation, linearization, optimal power flow and continuation power flow.</span><span lang="ja">潮流計算で求めた運転状態が、時間シミュレーション、近似線形化、最適潮流計算、連続潮流計算の出発点になります。</span></li>
             <li><span lang="en">With more inverter-based renewable energy, the inertia falls and controllers matter more.</span><span lang="ja">インバータでつながる再生可能エネルギーが増えると、慣性が小さくなり、制御器の役割が大きくなります。</span></li>
           </ul>
         </section>
 
-        <section id="related">
-          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
-          <h3><span lang="en">The other Parts</span><span lang="ja">ほかの Part</span></h3>
-          <ul class="lec-cards">
-          <li><a class="lec-card" href="part1-network-components.html"><small>Part 1</small><b><span lang="en">Building a power system and its equipment</span><span lang="ja">電力系統の作成と機器の種類</span></b></a></li>
-          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b></a></li>
-          <li><a class="lec-card" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b></a></li>
-          <li><a class="lec-card" href="part4-spring-mass-model.html"><small>Part 4</small><b><span lang="en">Visualization: the spring-mass model</span><span lang="ja">可視化機能：ばね質点モデル</span></b></a></li>
-          <li><a class="lec-card" href="part5-linearization.html"><small>Part 5</small><b><span lang="en">Approximate linearization</span><span lang="ja">近似線形化</span></b></a></li>
-          <li><a class="lec-card" href="part6-optimal-power-flow.html"><small>Part 6</small><b><span lang="en">Optimal power flow and stability-constrained OPF</span><span lang="ja">最適潮流計算と定態安定度制約付き OPF</span></b></a></li>
-          <li><a class="lec-card" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b></a></li>
-          <li><a class="lec-card" href="part8-controller-design.html"><small>Part 8</small><b><span lang="en">Designing and writing controllers</span><span lang="ja">制御器の設計と自作の方法</span></b></a></li>
-          </ul>
-          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+        <section id="scripts">
+          <h2><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h2>
           <ul class="lec-scripts">
-            <li><span lang="en"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> (in Japanese). With GUILDA on the path, open it in MATLAB with <code>open Part0_Introduction.mlx</code>. The graphs on this page can be drawn by running this Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> です。GUILDA をパスに追加した状態で、MATLAB で <code>open Part0_Introduction.mlx</code> を実行すると開きます。このページのグラフは、Part 0 のライブスクリプトを実行すると描けます。</span></li>
+            <li><span lang="en"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> (in Japanese). With GUILDA on the path, open it in MATLAB with <code>open Part0_Introduction.mlx</code>. Running it draws the time-scale figure and the comparison of the inertia on this page.</span><span lang="ja"><code>_GUILDAtutorial/Part0_Introduction.mlx</code> です。GUILDA をパスに追加した状態で、MATLAB で <code>open Part0_Introduction.mlx</code> を実行すると開きます。実行すると、このページの時間スケールの図と、慣性を比べた図を描けます。</span></li>
           </ul>
         </section>
 
