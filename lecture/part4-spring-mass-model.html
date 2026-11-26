@@ -56,7 +56,7 @@
           <li><a href="#funnel"><span lang="en">Voltage collapse in 3D</span><span lang="ja">3D で見る電圧崩壊</span></a></li>
           <li><a href="#guilda"><span lang="en">Drawing it in GUILDA</span><span lang="ja">GUILDA で描く</span></a></li>
           <li><a href="#summary"><span lang="en">Summary</span><span lang="ja">まとめ</span></a></li>
-          <li><a href="#related"><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></a></li>
+          <li><a href="#related"><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></a></li>
           <li><a href="#references"><span lang="en">References</span><span lang="ja">参考文献</span></a></li>
         </ol>
       </nav>
@@ -173,18 +173,18 @@
         <!-- ============================== SPRINGS ============================== -->
         <section id="springs">
           <h2><span lang="en">Transmission lines as springs</span><span lang="ja">送電線をばねに見立てる</span></h2>
-          <p lang="en">Now connect the points. The current that flows from bus <span class="lec-math-inline" data-tex="i"></span> into the line to bus <span class="lec-math-inline" data-tex="j"></span> is proportional to the difference of the two voltages. Neglect the resistance and the shunt capacitance of the line, so that it is a pure reactance <span class="lec-math-inline" data-tex="X_{ij}"></span> with the admittance <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = -jB_{ij}"></span>, <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>. Then</p>
-          <p lang="ja">次に、点どうしをつなぎます。母線 <span class="lec-math-inline" data-tex="i"></span> から母線 <span class="lec-math-inline" data-tex="j"></span> への送電線に流れ込む電流は、2 つの電圧の差に比例します。送電線の抵抗と対地静電容量を無視して、リアクタンス <span class="lec-math-inline" data-tex="X_{ij}"></span> だけでできているとすると、アドミタンスは <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = -jB_{ij}"></span>（<span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>）で、次の式になります。</p>
+          <p lang="en">Now connect the points. The current that flows from bus <span class="lec-math-inline" data-tex="i"></span> into the line to bus <span class="lec-math-inline" data-tex="j"></span> is proportional to the difference of the two voltages. Neglect the resistance and the shunt capacitance of the line, so that it is a pure reactance <span class="lec-math-inline" data-tex="X_{ij}"></span>. Its admittance is <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = j\,b_{ij}"></span>, where <span class="lec-math-inline" data-tex="b_{ij} = \operatorname{Im} y_{ij} = -1/X_{ij}"></span> is the susceptance of the line; it is negative for a reactance. Then</p>
+          <p lang="ja">次に、点どうしをつなぎます。母線 <span class="lec-math-inline" data-tex="i"></span> から母線 <span class="lec-math-inline" data-tex="j"></span> への送電線に流れ込む電流は、2 つの電圧の差に比例します。送電線の抵抗と対地静電容量を無視して、リアクタンス <span class="lec-math-inline" data-tex="X_{ij}"></span> だけでできているとします。アドミタンスは <span class="lec-math-inline" data-tex="y_{ij} = 1/(jX_{ij}) = j\,b_{ij}"></span> で、<span class="lec-math-inline" data-tex="b_{ij} = \operatorname{Im} y_{ij} = -1/X_{ij}"></span> が送電線のサセプタンスです（リアクタンスでは負の値になります）。このとき次の式が成り立ちます。</p>
           <figure class="lec-annot">
-            <div class="lec-math" data-tex="I_{ij} = y_{ij}\,(V_i - V_j), \qquad \annot{1}{F_{ij}} := -j\,I_{ij} = \annot{2}{B_{ij}}\,\annot{3}{(V_j - V_i)}"></div>
+            <div class="lec-math" data-tex="I_{ij} = y_{ij}\,(V_i - V_j), \qquad \annot{1}{F_{ij}} := -j\,I_{ij} = \annot{2}{(-b_{ij})}\,\annot{3}{(V_j - V_i)}"></div>
             <ol class="lec-annot-notes">
               <li data-at="above"><span lang="en">This is the force of the spring!</span><span lang="ja">これがばねの力！</span></li>
-              <li><span lang="en">Spring constant: the stiffness of the line</span><span lang="ja">ばね係数（送電線の硬さ）</span></li>
+              <li><span lang="en">Spring constant −b<sub>ij</sub> = 1/X<sub>ij</sub>: the stiffness of the line</span><span lang="ja">ばね係数 −b<sub>ij</sub> ＝ 1/X<sub>ij</sub>（送電線の硬さ）</span></li>
               <li data-at="above"><span lang="en">How far the spring is stretched</span><span lang="ja">ばねの伸び</span></li>
             </ol>
           </figure>
-          <p lang="en">The second form is Hooke's law: the force of a spring is the spring constant times the stretch, pointing towards the other end. Here the "stretch" is the difference <span class="lec-math-inline" data-tex="V_j - V_i"></span> between the two points, the "spring constant" is the line susceptance <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>, and the "force" <span class="lec-math-inline" data-tex="F_{ij}"></span> is the current turned by −90° (multiplied by <span class="lec-math-inline" data-tex="-j"></span>). <strong>A line is a spring between two points.</strong> A short, strong line (small X) is a stiff spring.</p>
-          <p lang="ja">2 つ目の式はフックの法則（ばねの力 ＝ ばね係数 × 伸び、向きは相手の端へ）と同じ形です。「伸び」は 2 つの点の差 <span class="lec-math-inline" data-tex="V_j - V_i"></span>、「ばね係数」は送電線のサセプタンス <span class="lec-math-inline" data-tex="B_{ij} = 1/X_{ij}"></span>、「力」<span class="lec-math-inline" data-tex="F_{ij}"></span> は電流を −90° 回したもの（<span class="lec-math-inline" data-tex="-j"></span> を掛けたもの）です。つまり、<strong>送電線は 2 つの点をつなぐばね</strong>です。短くて太い送電線（X が小さい）ほど、硬いばねになります。</p>
+          <p lang="en">The second form is Hooke's law: the force of a spring is the spring constant times the stretch, pointing towards the other end. Here the "stretch" is the difference <span class="lec-math-inline" data-tex="V_j - V_i"></span> between the two points, the "spring constant" is minus the line susceptance, <span class="lec-math-inline" data-tex="-b_{ij} = 1/X_{ij} &gt; 0"></span>, and the "force" <span class="lec-math-inline" data-tex="F_{ij}"></span> is the current turned by −90° (multiplied by <span class="lec-math-inline" data-tex="-j"></span>). <strong>A line is a spring between two points.</strong> The smaller its reactance X, the stiffer the spring. In the admittance matrix of <a href="part2-power-flow.html">Part 2</a>, the spring constant is the imaginary part <span class="lec-math-inline" data-tex="B_{ij} = \operatorname{Im} Y_{ij}"></span> of the off-diagonal element <span class="lec-math-inline" data-tex="Y_{ij} = -y_{ij}"></span>.</p>
+          <p lang="ja">2 つ目の式はフックの法則（ばねの力 ＝ ばね係数 × 伸び、向きは相手の端へ）と同じ形です。「伸び」は 2 つの点の差 <span class="lec-math-inline" data-tex="V_j - V_i"></span>、「ばね係数」は送電線のサセプタンスの符号を変えた <span class="lec-math-inline" data-tex="-b_{ij} = 1/X_{ij} &gt; 0"></span>、「力」<span class="lec-math-inline" data-tex="F_{ij}"></span> は電流を −90° 回したもの（<span class="lec-math-inline" data-tex="-j"></span> を掛けたもの）です。<strong>送電線は 2 つの点をつなぐばね</strong>で、リアクタンス X が小さいほど硬いばねになります。<a href="part2-power-flow.html">Part 2</a> のアドミタンス行列では、このばね係数は非対角要素 <span class="lec-math-inline" data-tex="Y_{ij} = -y_{ij}"></span> の虚部 <span class="lec-math-inline" data-tex="B_{ij} = \operatorname{Im} Y_{ij}"></span> に当たります。</p>
           <p lang="en">Split the force into the part along the circle through <span class="lec-math-inline" data-tex="V_i"></span> (tangential) and the part along the radius (radial). With the complex power <span class="lec-math-inline" data-tex="S_{ij} = V_i\,\overline{I_{ij}} = P_{ij} + jQ_{ij}"></span> sent from bus <span class="lec-math-inline" data-tex="i"></span> into the line, the force seen in the direction of <span class="lec-math-inline" data-tex="V_i"></span> is</p>
           <p lang="ja">この力を、<span class="lec-math-inline" data-tex="V_i"></span> を通る円に沿う成分（接線方向）と、半径に沿う成分（半径方向）に分けます。母線 <span class="lec-math-inline" data-tex="i"></span> から送電線へ送り出す複素電力を <span class="lec-math-inline" data-tex="S_{ij} = V_i\,\overline{I_{ij}} = P_{ij} + jQ_{ij}"></span> とすると、<span class="lec-math-inline" data-tex="V_i"></span> の向きから見た力は次のようになります。</p>
           <div class="lec-math" data-tex="e^{-j\theta_i}\,F_{ij} = -\,\frac{Q_{ij} + j\,P_{ij}}{|V_i|}"></div>
@@ -231,10 +231,10 @@
             <figcaption lang="ja">ばねは母線 1 を母線 2 の方へ引きます。その力のうち円に沿う成分は点を中心のまわりに回そうとし、有効電力に対応します。中心へ向かう成分は電圧の大きさを変えようとし、無効電流に対応します。</figcaption>
           </figure>
 
-          <p lang="en">This gives the whole dictionary between the electrical and the mechanical picture:</p>
-          <p lang="ja">これで、電気の世界と機械の世界の対応表ができます。</p>
+          <p lang="en">The electrical quantities correspond to the mechanical ones as follows:</p>
+          <p lang="ja">電気の量と機械の量は、次のように対応します。</p>
           <dl class="lec-terms">
-            <dt><span lang="en">Line susceptance B</span><span lang="ja">送電線のサセプタンス B</span></dt>
+            <dt><span lang="en">Minus the line susceptance, −b = 1/X</span><span lang="ja">送電線のサセプタンスの符号を変えた −b ＝ 1/X</span></dt>
             <dd><span lang="en">Spring constant</span><span lang="ja">ばね係数</span></dd>
             <dt><span lang="en">Voltage phasor V</span><span lang="ja">電圧フェーザ V</span></dt>
             <dd><span lang="en">Position of the point on the plane</span><span lang="ja">平面上の点の位置（座標）</span></dd>
@@ -248,14 +248,14 @@
           <p lang="en">For two points on circles of radii <span class="lec-math-inline" data-tex="|V_1|"></span> and <span class="lec-math-inline" data-tex="|V_2|"></span> with the angle <span class="lec-math-inline" data-tex="\delta = \theta_1 - \theta_2"></span> between them, the imaginary part of the equation above gives the torque of the spring:</p>
           <p lang="ja">半径 <span class="lec-math-inline" data-tex="|V_1|"></span> と <span class="lec-math-inline" data-tex="|V_2|"></span> の円の上にあり、角度の差が <span class="lec-math-inline" data-tex="\delta = \theta_1 - \theta_2"></span> の 2 つの点では、上の式の虚部から、ばねのトルクは次のようになります。</p>
           <figure class="lec-annot">
-            <div class="lec-math" data-tex="\annot{1}{P_{12}} = B_{12}\,|V_1|\,|V_2|\,\annot{2}{\sin\delta}"></div>
+            <div class="lec-math" data-tex="\annot{1}{P_{12}} = -b_{12}\,|V_1|\,|V_2|\,\annot{2}{\sin\delta} = \frac{|V_1|\,|V_2|}{X_{12}}\,\sin\delta"></div>
             <ol class="lec-annot-notes">
               <li data-at="above"><span lang="en">The torque of the spring = the power on the line!</span><span lang="ja">ばねのトルク ＝ 送電線の電力！</span></li>
               <li><span lang="en">Set by the angle between the two points</span><span lang="ja">2 つの点の角度の差で決まる</span></li>
             </ol>
           </figure>
-          <p lang="en">This is exactly the familiar formula for the active power sent over a lossless line. The power flows from the point that is ahead to the point that is behind, and the larger the angle between them, the more power the spring carries — up to a limit that we will meet below.</p>
-          <p lang="ja">これは、損失のない送電線で送る有効電力のおなじみの式そのものです。電力は角度が進んだ点から遅れた点へ流れ、角度の差が大きいほど、ばねが伝える電力は大きくなります。ただし、後で見るように限界があります。</p>
+          <p lang="en">This is the well-known formula for the active power sent over a lossless line. The power flows from the point that is ahead to the point that is behind, and the larger the angle between them, the more power the spring carries — up to a limit that we will meet below.</p>
+          <p lang="ja">これは、損失のない送電線で送る有効電力のよく知られた式です。電力は角度が進んだ点から遅れた点へ流れ、角度の差が大きいほど、ばねが伝える電力は大きくなります。ただし、後で見るように限界があります。</p>
         </section>
 
         <!-- ============================== POWER FLOW ============================== -->
@@ -271,7 +271,7 @@
             </ol>
           </figure>
           <p lang="en">By the decomposition of the previous section this is the same as <span class="lec-math-inline" data-tex="S_i = \sum_j S_{ij}"></span>, the power equation of the bus. The <strong>power flow calculation therefore finds the positions where all the springs balance</strong>: the angles and magnitudes of the points are the voltage phasors of the solution.</p>
-          <p lang="ja">前の節の分解から、これは母線の電力方程式 <span class="lec-math-inline" data-tex="S_i = \sum_j S_{ij}"></span> と同じです。つまり、<strong>潮流計算は、すべてのばねがつり合う位置を求める計算</strong>です。そのときの点の角度と半径が、潮流計算の解の電圧フェーザです。</p>
+          <p lang="ja">前の節の分解から、これは母線の電力方程式 <span class="lec-math-inline" data-tex="S_i = \sum_j S_{ij}"></span> と同じです。<strong>潮流計算は、すべてのばねがつり合う位置を求める計算</strong>です。そのときの点の角度と半径が、潮流計算の解の電圧フェーザです。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 620px;">
             <div class="lec-scroll">
@@ -319,18 +319,30 @@
 
           <p lang="en">One thing the springs cannot decide: if the whole picture is turned by the same angle, every spring keeps its length and every force stays balanced. This <strong>rotational symmetry</strong> is why a power flow needs a <strong>slack bus</strong> whose angle is fixed (usually at 0). It sets the reference direction of the picture; nothing physical changes.</p>
           <p lang="ja">ばねだけでは決まらないことが 1 つあります。絵全体を同じ角度だけ回しても、どのばねの長さも変わらず、力のつり合いもそのままです。この<strong>回転対称性</strong>があるので、潮流計算では角度を固定する（ふつうは 0 にする）<strong>slack 母線</strong>が必要になります。slack 母線は絵の基準の向きを決めるだけで、物理的には何も変えません。</p>
-          <p lang="en">GUILDA draws this picture for a whole network. For the bundled IEEE 9-bus system:</p>
-          <p lang="ja">GUILDA は、系統全体についてこの絵を描きます。同梱の IEEE 9 母線系統で確かめるときは、次のようにします。</p>
-          <pre class="lec-cmd"><code>net = network.IEEE9bus();
+          <p lang="en">GUILDA draws this picture for a whole network. The examples on this page use the bundled network <code>network.Tutorial6bus</code>, shown in the figure below. It has six buses joined by five lossless lines, and four classical generators G1–G4 at buses B001–B004 (the internal voltage behind the reactance has a constant magnitude; inertia M = 10, 8, 6, 6, damping D = 5). G1 and G2 generate. G3 and G4 have a negative output: they run as synchronous motors that drive a mechanical load. B001 is the slack bus.</p>
+          <p lang="ja">GUILDA は、系統全体についてこの絵を描きます。このページの例では、下の図の同梱の系統 <code>network.Tutorial6bus</code> を使います。6 つの母線を損失のない 5 本の送電線でつなぎ、母線 B001〜B004 に古典モデルの同期機 G1〜G4 がつながっています（リアクタンスの奥の内部電圧の大きさは一定。慣性 M = 10, 8, 6, 6、制動 D = 5）。G1 と G2 は発電機です。G3 と G4 は出力が負で、機械の負荷を回す同期電動機として運転しています。slack 母線は B001 です。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 300px; --lec-fig-max: 380px;">
+            <div class="lec-scroll">
+              <img src="../images/lecture/part4/tutorial6bus-single-line.png" alt="Single-line diagram of network.Tutorial6bus: buses B001 and B002 are joined to B005, B003 and B004 to B006, and B005 to B006; a generator is connected to each of B001 to B004" width="1025" height="940">
+            </div>
+            <figcaption lang="en">Single-line diagram of <code>network.Tutorial6bus</code> drawn by GUILDA with <code>plot_single_line_diagram</code>. The circles with a sine wave are the synchronous machines G1–G4 at B001–B004.</figcaption>
+            <figcaption lang="ja"><code>network.Tutorial6bus</code> の単線結線図です（GUILDA の <code>plot_single_line_diagram</code> で描画）。正弦波の入った丸が、B001〜B004 の同期機 G1〜G4 です。</figcaption>
+          </figure>
+
+          <p lang="en">Its equilibrium as a spring-mass picture:</p>
+          <p lang="ja">この系統の平衡点を、ばね質点の絵として描きます。</p>
+          <pre class="lec-cmd"><code>net = network.Tutorial6bus();
+net.plot_single_line_diagram();
 net.initialize();
 net.plot_spring_model();</code></pre>
 
-          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 320px; --lec-fig-max: 400px;">
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 320px; --lec-fig-max: 420px;">
             <div class="lec-scroll">
-              <img src="../images/lecture/part4/power-flow-ieee9.png" alt="Spring-mass picture of the IEEE 9-bus system at its equilibrium: three generator nodes joined by springs to a cluster of nine bus nodes near the real axis" width="932" height="859">
+              <img src="../images/lecture/part4/power-flow-tutorial6.png" alt="Spring-mass picture of the equilibrium of Tutorial6bus on the phasor plane: G1 and G2 are ahead of their buses with positive P, G3 and G4 lie behind their buses with negative P, and the six buses are joined by springs" width="715" height="818">
             </div>
-            <figcaption lang="en">Output of GUILDA: the equilibrium of the IEEE 9-bus system on the phasor plane (enlarged around the points; bus labels hidden). The black squares are the nine buses; the large circles are the internal voltages of the three generators (B001SG1 blue, B002SG1 orange, B003SG1 green), each joined to its bus by the spring of the machine reactance. Pink arrows show the active power P, purple arrows the reactive current Iq.</figcaption>
-            <figcaption lang="ja">GUILDA の出力です。IEEE 9 母線系統の平衡点を、フェーザの平面に描いています（点の付近を拡大し、母線の名前は省略）。黒い四角が 9 つの母線、大きな丸が 3 台の発電機（B001SG1 が青、B002SG1 が橙、B003SG1 が緑）の内部電圧で、発電機のリアクタンスのばねで母線とつながっています。桃色の矢印が有効電力 P、紫の矢印が無効電流 Iq です。</figcaption>
+            <figcaption lang="en">Equilibrium of <code>network.Tutorial6bus</code> on the phasor plane, drawn by GUILDA (enlarged around the points). Large circles: internal voltages of G1 (red), G2 (blue), G3 (green) and G4 (black). Small squares: buses, in the colour of the machine connected to them (B005 and B006 black). Red arrows: active power P; purple arrows: reactive current Iq, with their values in pu.</figcaption>
+            <figcaption lang="ja"><code>network.Tutorial6bus</code> の平衡点をフェーザの平面に描いた GUILDA の出力です（点の付近を拡大）。大きな丸は G1（赤）、G2（青）、G3（緑）、G4（黒）の内部電圧、小さな四角は母線で、つながる同期機の色で示します（B005 と B006 は黒）。赤い矢印が有効電力 P、紫の矢印が無効電流 Iq で、数値の単位は pu です。</figcaption>
           </figure>
         </section>
 
@@ -411,8 +423,8 @@ net.plot_spring_model();</code></pre>
             <figcaption lang="ja">大きな青い丸が質量を持つ発電機、黒い小さな点が母線で、いちばん下の点に負荷がつながっています。緑はタービンが押す力、橙は負荷が引く力です。負荷が増えると絵全体が後ろへ回り、これが周波数の低下です。</figcaption>
           </figure>
 
-          <p lang="en">GUILDA shows what happens when the load grows. The bundled network <code>network.Tutorial6bus</code> has six buses and four classical generators G1–G4 at buses 1–4 (the internal voltage behind the reactance has a constant magnitude; inertia M = 10, 8, 6, 6, damping D = 5). G1 and G2 generate. G3 and G4 have a negative output: they run as synchronous motors that drive a mechanical load. At t = 1 s, G3 and G4 take 0.1 pu more each (their mechanical power is lowered by 0.1 pu). There are no governors yet:</p>
-          <p lang="ja">負荷が増えたときに何が起きるかを、GUILDA で見てみます。同梱の系統 <code>network.Tutorial6bus</code> は、6 つの母線と、母線 1〜4 につながる古典モデルの同期機 G1〜G4 でできています（リアクタンスの奥の内部電圧の大きさが一定。慣性 M = 10, 8, 6, 6、制動 D = 5）。G1 と G2 は発電機です。G3 と G4 は出力が負で、機械の負荷を回す同期電動機として運転しています。t = 1 s に、G3 と G4 の消費をそれぞれ 0.1 pu 増やします（機械入力を 0.1 pu 下げます）。まだガバナはありません。</p>
+          <p lang="en">In the Tutorial6bus system above, let G3 and G4 take 0.1 pu more each at t = 1 s (their mechanical power is lowered by 0.1 pu). There are no governors yet:</p>
+          <p lang="ja">上の Tutorial6bus の系統で、t = 1 s に G3 と G4 の消費をそれぞれ 0.1 pu 増やします（機械入力を 0.1 pu 下げます）。まだガバナはありません。</p>
           <pre class="lec-cmd"><code>net = network.Tutorial6bus();
 sc = net.add_scenario("step", Time=[0, 20]);
 sc.add_input("B003SG1", "Pmech", -0.1, [1, 20]);
@@ -423,10 +435,10 @@ G.animate();</code></pre>
 
           <figure class="lec-figure is-compact is-scroll" style="--lec-fig-max: 760px; --lec-min-w: 600px;">
             <div class="lec-scroll">
-              <video class="lec4-video" src="../images/lecture/part4/swing-no-governor.mp4" poster="../images/lecture/part4/swing-no-governor-poster.png" width="1274" height="600" autoplay loop muted playsinline aria-label="Animation of the 6-bus system after G3 and G4 take 0.1 pu more at t = 1 s, without governors: the whole picture starts to turn clockwise and keeps turning; on the right, the omega of the four machines falls to -0.01 pu and stays there"></video>
+              <video class="lec4-video" src="../images/lecture/part4/swing-no-governor.mp4" poster="../images/lecture/part4/swing-no-governor-poster.png" width="1274" height="600" controls autoplay loop muted playsinline aria-label="Animation of the 6-bus system after G3 and G4 take 0.1 pu more at t = 1 s, without governors: the whole picture starts to turn clockwise and keeps turning; on the right, the omega of the four machines falls to -0.01 pu and stays there"></video>
             </div>
-            <figcaption lang="en">Output of GUILDA as an animation in real time: the picture and the chart that <code>[G, G_chart] = result.plot_spring_model()</code> draws side by side. Left: the spring-mass picture, with the time in the title. The large circles are the internal voltages of G1–G4 (their size grows with the inertia M), the small squares are the buses, the red arrows the active power P of each machine point (with its value), and the dashed circles the constant magnitudes of the internal voltages. Right: the side chart <code>G_chart</code>, the rotor speed deviation omega [pu] of the four machines, with a cursor at the time shown (omega = −0.01 pu is −0.5 Hz at 50 Hz). At t = 1 s the mechanical power of G3 and G4 drops by 0.1 pu. Their pull now wins over the push of G1 and G2, so the whole picture starts to turn clockwise: the frequency falls. The heavy machine points start smoothly, and the bus points follow them at once. Without governors, the mechanical power of G1 and G2 does not change. The turning settles at the speed at which the damping of the four machines takes up the extra 0.2 pu: −0.2 / (4 × 5) = −0.01 pu, that is −0.5 Hz, and it does not come back.</figcaption>
-            <figcaption lang="ja">GUILDA の出力を、実際の速さのアニメーションにしたものです。<code>[G, G_chart] = result.plot_spring_model()</code> が左右に並べて描く絵とグラフです。左がばね質点の絵で、題名に時刻を示します。大きな丸が G1〜G4 の内部電圧（大きさは慣性 M に比例）、小さな四角が母線、赤い矢印が各同期機の点の有効電力 P（数値つき）、破線の円が一定に保たれる内部電圧の大きさです。右は横のグラフ <code>G_chart</code> で、4 台の回転速度のずれ omega [pu] を示し、縦線が表示中の時刻を示します（50 Hz の系統では omega = −0.01 pu が −0.5 Hz です）。t = 1 s に G3 と G4 の機械入力が 0.1 pu 下がると、その引く力が G1 と G2 の押す力に勝ち、絵全体が時計回りに回り始めます。周波数の低下です。重い同期機の点は滑らかに動き出し、母線の点はすぐに後を追います。ガバナがないので、G1 と G2 の機械入力は変わりません。回転は、4 台の制動が増えた 0.2 pu を受け持つ速さ −0.2 / (4 × 5) = −0.01 pu、つまり −0.5 Hz に落ち着き、元には戻りません。</figcaption>
+            <figcaption lang="en"><code>network.Tutorial6bus</code>: G3 and G4 take 0.1 pu more each from t = 1 s; no governors. Output of <code>[G, G_chart] = result.plot_spring_model()</code>, played at half speed. Left: the spring-mass picture, with the time in the title. Large circles: internal voltages of G1–G4 (size proportional to the inertia M); small squares: buses; red arrows: active power P of each machine, with its value; dashed circles: the constant magnitudes of the internal voltages. Right: the rotor speed deviation omega [pu] of G1–G4; the vertical line marks the time shown (omega = −0.01 pu is −0.5 Hz at 50 Hz).</figcaption>
+            <figcaption lang="ja"><code>network.Tutorial6bus</code> で、t = 1 s から G3 と G4 の消費をそれぞれ 0.1 pu 増やした場合です。ガバナはありません。<code>[G, G_chart] = result.plot_spring_model()</code> の出力を 1/2 の速さで再生しています。左はばね質点の絵で、題名が時刻です。大きな丸が G1〜G4 の内部電圧（大きさは慣性 M に比例）、小さな四角が母線、赤い矢印が各同期機の有効電力 P（数値つき）、破線の円が一定に保たれる内部電圧の大きさです。右は G1〜G4 の回転速度のずれ omega [pu] で、縦線が表示中の時刻です（50 Hz の系統では omega = −0.01 pu が −0.5 Hz）。</figcaption>
           </figure>
 
           <p lang="en">Two of the three questions from the beginning now have a mechanical answer.</p>
@@ -437,8 +449,8 @@ G.animate();</code></pre>
             <dt><span lang="en">What is inertia?</span><span lang="ja">慣性とは？</span></dt>
             <dd><span lang="en">It is the mass of the generator points. A heavy point cannot be set in motion suddenly, so the turning starts smoothly and the frequency falls slowly at first. The more inertia the system has in total, the slower the first fall.</span><span lang="ja">発電機の点が持つ質量のことです。重い点は急には動き出せないので、回転は滑らかに始まり、周波数は最初ゆっくり下がります。系統全体の慣性が大きいほど、最初の下がり方はゆるやかになります。</span></dd>
           </dl>
-          <p lang="en">The rotation does not stop by itself. Without control, the picture keeps turning at a steady speed set by the damping. A <strong>governor</strong> senses the frequency deviation and increases the mechanical power, so the push grows and the turning slows. A droop governor alone leaves a small deviation; adding the integral of the deviation (the role of the AGC) brings the frequency back to the rated value. In GUILDA, the governor <code>gov-LPT3</code> (here a 5 % droop through a lag of 3 s) and the integral <code>agc-PI</code> are added to G1 and G2:</p>
-          <p lang="ja">回転はひとりでには止まりません。制御がなければ、絵は制動で決まる一定の速さで回り続けます。<strong>ガバナ</strong>は周波数のずれを検出して機械入力を増やすので、押す力が強まり、回転がゆっくりになります。垂下特性のガバナだけでは少しのずれが残ります。ずれの積分（AGC の役目）を加えると、周波数は定格の値へ戻ります。GUILDA では、ガバナ <code>gov-LPT3</code>（ここでは垂下率 5 %、時定数 3 s の遅れ）と積分の <code>agc-PI</code> を G1 と G2 に付けます。</p>
+          <p lang="en">The rotation does not stop by itself. Without control, the picture keeps turning at a steady speed set by the damping: in the animation above, the four dampings take up the extra 0.2 pu at ω = −0.2 / (4 × 5) = −0.01 pu, that is −0.5 Hz at 50 Hz. A <strong>governor</strong> senses the frequency deviation and increases the mechanical power, so the push grows and the turning slows. A droop governor alone leaves a small deviation; adding the integral of the deviation (the role of the AGC) brings the frequency back to the rated value. In GUILDA, the governor <code>gov-LPT3</code> (here a 5 % droop through a lag of 3 s) and the integral <code>agc-PI</code> are added to G1 and G2:</p>
+          <p lang="ja">回転はひとりでには止まりません。制御がなければ、絵は制動で決まる一定の速さで回り続けます。上のアニメーションでは、4 台の制動が増えた 0.2 pu を受け持つ ω = −0.2 / (4 × 5) = −0.01 pu（50 Hz の系統で −0.5 Hz）です。<strong>ガバナ</strong>は周波数のずれを検出して機械入力を増やすので、押す力が強まり、回転がゆっくりになります。垂下特性のガバナだけでは少しのずれが残ります。ずれの積分（AGC の役目）を加えると、周波数は定格の値へ戻ります。GUILDA では、ガバナ <code>gov-LPT3</code>（ここでは垂下率 5 %、時定数 3 s の遅れ）と積分の <code>agc-PI</code> を G1 と G2 に付けます。</p>
           <pre class="lec-cmd"><code>net = network.Tutorial6bus();
 sct_gov = struct(Prate=1, PLM=1000, droop=5, Tg=0, Ts=3, rate_max=Inf, rate_min=-Inf, pos_max=Inf, pos_min=-Inf);
 for i = 1:2
@@ -452,10 +464,10 @@ net.initialize();</code></pre>
 
           <figure class="lec-figure is-compact is-scroll" style="--lec-fig-max: 760px; --lec-min-w: 600px;">
             <div class="lec-scroll">
-              <video class="lec4-video" src="../images/lecture/part4/swing-governor.mp4" poster="../images/lecture/part4/swing-governor-poster.png" width="1278" height="600" autoplay loop muted playsinline aria-label="Animation of the same case with governors and an integral on G1 and G2: the picture turns clockwise for a few seconds, then stops; on the right, the omega of the four machines falls to about -0.0055 pu and comes back towards 0"></video>
+              <video class="lec4-video" src="../images/lecture/part4/swing-governor.mp4" poster="../images/lecture/part4/swing-governor-poster.png" width="1278" height="600" controls autoplay loop muted playsinline aria-label="Animation of the same case with governors and an integral on G1 and G2: the picture turns clockwise for a few seconds, then stops; on the right, the omega of the four machines falls and comes back towards 0"></video>
             </div>
-            <figcaption lang="en">Output of GUILDA for the same increase with governors and the integral on G1 and G2, in real time, drawn in the same way (omega of the four machines on the right). After t = 1 s the picture starts to turn clockwise as before, and omega falls to about −0.0055 pu (about −0.28 Hz) at t ≈ 2.2–2.7 s. Meanwhile the governors raise the mechanical power of G1 and G2. Once their push matches the pull of the motors, the turning stops, and the integral brings omega back towards 0 (about −0.0003 pu, −0.01 Hz, at 20 s). The points then stand still at new places: G1 and G2 push harder, with P from 0.5 and 1.0 to about 0.6 and 1.1 pu.</figcaption>
-            <figcaption lang="ja">同じ消費の増加について、G1 と G2 にガバナと積分を付けた場合の GUILDA の出力です（実際の速さ。描き方は同じで、右が 4 台の omega）。t = 1 s の後、絵は前と同じように時計回りに回り始め、omega は t ≈ 2.2〜2.7 s に約 −0.0055 pu（約 −0.28 Hz）まで下がります。その間にガバナが G1 と G2 の機械入力を上げます。その押す力が電動機の引く力に追いつくと回転は止まり、積分が omega を 0 へ戻していきます（20 s で約 −0.0003 pu、−0.01 Hz）。そのあと点は新しい位置で止まります。G1 と G2 はより強く押し、P は 0.5 と 1.0 から約 0.6 と 1.1 pu になります。</figcaption>
+            <figcaption lang="en">The same increase with the governors <code>gov-LPT3</code> and the integral <code>agc-PI</code> on G1 and G2, drawn in the same way and played at half speed.</figcaption>
+            <figcaption lang="ja">同じ消費の増加について、G1 と G2 にガバナ <code>gov-LPT3</code> と積分 <code>agc-PI</code> を付けた場合です。描き方は上と同じで、1/2 の速さで再生しています。</figcaption>
           </figure>
         </section>
 
@@ -509,20 +521,20 @@ net.initialize();</code></pre>
 
           <figure class="lec-figure is-compact is-scroll" style="--lec-fig-max: 760px; --lec-min-w: 600px;">
             <div class="lec-scroll">
-              <video class="lec4-video" src="../images/lecture/part4/swing-out-of-step.mp4" poster="../images/lecture/part4/swing-out-of-step-poster.png" width="1284" height="600" autoplay loop muted playsinline aria-label="Animation of the 6-bus system when G3 and G4 take 0.3 pu more at t = 1 s: G3 and G4 fall behind, slip around the circle and slow down until they stop and disappear at about 7.6 s; on the right, the omega of G3 and G4 falls to -1 pu while that of G1 and G2 rises"></video>
+              <video class="lec4-video" src="../images/lecture/part4/swing-out-of-step.mp4" poster="../images/lecture/part4/swing-out-of-step-poster.png" width="1286" height="600" controls autoplay loop muted playsinline aria-label="Animation of the 6-bus system when G3 and G4 take 0.3 pu more at t = 1 s: G3 and G4 fall behind, slip around the circle and slow down until they stop and disappear; on the right, the omega of G3 and G4 falls to -1 pu while that of G1 and G2 rises"></video>
             </div>
-            <figcaption lang="en">Output of GUILDA in real time, from t = 0 to 8 s, drawn in the same way (omega of the four machines on the right): at t = 1 s G3 and G4 take 0.3 pu more each; G1 and G2 have the governors without the integral, and the damping of G3 and G4 is set to 0. The angle between the motors and the generators opens beyond what the springs can hold: at t ≈ 2.1 s (G4) and 2.2 s (G3) the rotor angles are more than 180° apart from those of G1 and G2, and G3 and G4 slip around the circle (loss of synchronism). They keep slowing down until their omega reaches −1 pu (−50 Hz), that is standstill, at about 7.6 s. Each stopped motor is then disconnected (<code>add_trip</code> of the scenario) and leaves the picture. G1 and G2, which have lost their load, speed up: their omega rises to about 0.075 pu (G1 0.074 pu at t ≈ 3.6 s, G2 0.076 pu at t ≈ 4.0 s) and then comes down towards a value above the rated one, set by the droop of their governors (about 0.02 pu, 1 Hz, at 8 s).</figcaption>
-            <figcaption lang="ja">GUILDA の出力です（実際の速さ、t = 0〜8 s。描き方は同じで、右が 4 台の omega）。t = 1 s に G3 と G4 の消費をそれぞれ 0.3 pu 増やします。G1 と G2 には積分なしのガバナを付け、G3 と G4 の制動は 0 にしています。電動機と発電機の間の角度がばねの支えられる範囲を超えて開き、回転子の角度の G1・G2 との差は、t ≈ 2.1 s（G4）と 2.2 s（G3）に 180° を超えます。G3 と G4 は円を回って滑ります（脱調）。2 台は減速を続け、約 7.6 s に omega が −1 pu（−50 Hz）、つまり停止に達します。止まった電動機はそこで系統から切り離し（シナリオの <code>add_trip</code>）、絵から消えます。負荷を失った G1 と G2 は速くなり、omega は約 0.075 pu（G1 は t ≈ 3.6 s に 0.074 pu、G2 は t ≈ 4.0 s に 0.076 pu）まで上がったあと、ガバナの垂下特性で決まる、定格より高い値へ向かって下がっていきます（8 s で約 0.02 pu、1 Hz）。</figcaption>
+            <figcaption lang="en"><code>network.Tutorial6bus</code>: G3 and G4 take 0.3 pu more each from t = 1 s; G1 and G2 have the governors without the integral, and the damping of G3 and G4 is 0. Drawn in the same way, t = 0–8 s, played at half speed. A motor leaves the picture when it has stopped (omega = −1 pu); the scenario trips it there with <code>add_trip</code>.</figcaption>
+            <figcaption lang="ja"><code>network.Tutorial6bus</code> で、t = 1 s から G3 と G4 の消費をそれぞれ 0.3 pu 増やした場合です。G1 と G2 には積分なしのガバナを付け、G3 と G4 の制動は 0 です。描き方は上と同じで、t = 0〜8 s を 1/2 の速さで再生しています。電動機は止まったとき（omega = −1 pu）にシナリオの <code>add_trip</code> で切り離され、絵から消えます。</figcaption>
           </figure>
         </section>
 
         <!-- ============================== FUNNEL ============================== -->
         <section id="funnel">
           <h2><span lang="en">Voltage collapse in 3D: sliding down a funnel</span><span lang="ja">3D で見る電圧崩壊：漏斗を滑り落ちる</span></h2>
-          <p lang="en">A constant-power load does not get a point of its own. It only acts on its bus with the force <span class="lec-math-inline" data-tex="f_i"></span> of the power-flow section: a torque P backward along the circle, and a force <span class="lec-math-inline" data-tex="Q/|V|"></span> towards the centre for the reactive power Q it consumes. The second force has a dangerous property. The load asks for the same Q whatever the voltage, so <strong>the lower the voltage, the stronger it pulls the point towards the centre</strong>. A lower voltage leads to a stronger pull, which lowers the voltage further. This feedback is what triggers a voltage collapse.</p>
-          <p lang="ja">定電力負荷は自分の点を持ちません。潮流の節の力 <span class="lec-math-inline" data-tex="f_i"></span> で、つながる母線に働くだけです。円に沿って後ろへ向かうトルク P と、消費する無効電力 Q による、中心へ向かう力 <span class="lec-math-inline" data-tex="Q/|V|"></span> です。後者には危うい性質があります。負荷は電圧がいくらでも同じ Q を求めるので、<strong>電圧が低いほど、点を中心へ引き込む力が強くなる</strong>のです。電圧が下がると引く力が強まり、電圧がさらに下がります。この繰り返しが電圧崩壊の引き金です。</p>
-          <p lang="en">On the flat plane this is hard to see, because a force that grows like 1/|V| near the centre does not look like anything familiar. The trick is to give the plane a shape. Lift every point to the height</p>
-          <p lang="ja">平らな平面の上では、この様子は見えにくいままです。中心に近づくほど 1/|V| のように強まる力は、身近な何かに似ていないからです。そこで、平面に形を与えます。各点を次の高さに持ち上げます。</p>
+          <p lang="en">A constant-power load does not get a point of its own. It only acts on its bus with the force <span class="lec-math-inline" data-tex="f_i"></span> of the power-flow section: a torque P backward along the circle, and a force <span class="lec-math-inline" data-tex="Q/|V|"></span> towards the centre for the reactive power Q it consumes. The second force has the following property. The load asks for the same Q whatever the voltage, so <strong>the lower the voltage, the stronger it pulls the point towards the centre</strong>. A lower voltage leads to a stronger pull, which lowers the voltage further. This feedback is what triggers a voltage collapse.</p>
+          <p lang="ja">定電力負荷は自分の点を持ちません。潮流の節の力 <span class="lec-math-inline" data-tex="f_i"></span> で、つながる母線に働くだけです。円に沿って後ろへ向かうトルク P と、消費する無効電力 Q による、中心へ向かう力 <span class="lec-math-inline" data-tex="Q/|V|"></span> です。後者には次の性質があります。負荷は電圧がいくらでも同じ Q を求めるので、<strong>電圧が低いほど、点を中心へ引き込む力が強くなる</strong>のです。電圧が下がると引く力が強まり、電圧がさらに下がります。この繰り返しが電圧崩壊の引き金です。</p>
+          <p lang="en">On the flat plane this is hard to see, because a force that grows like 1/|V| near the centre has no familiar mechanical counterpart. Give the plane a shape instead: lift every point to the height</p>
+          <p lang="ja">平らな平面の上では、この様子は見えにくいままです。中心に近づくほど 1/|V| のように強まる力には、身近な機械の例がないからです。そこで、平面に形を与え、各点を次の高さに持ち上げます。</p>
           <figure class="lec-annot">
             <div class="lec-math" data-tex="\annot{1}{z} = \log|V|, \qquad \frac{\mathrm{d}z}{\mathrm{d}|V|} = \annot{2}{\frac{1}{|V|}}"></div>
             <ol class="lec-annot-notes">
@@ -568,19 +580,19 @@ net.initialize();</code></pre>
             <figcaption lang="ja">漏斗 z = log|V| の断面です。無効電力はどこでも同じ下向きの重さ Q（紫）ですが、斜面の上で生じる内向きの力（橙）は Q/|V| になり、電圧が半分なら 2 倍の強さになります。</figcaption>
           </figure>
 
-          <p lang="en">Now a voltage collapse becomes a picture. As the load at a bus grows, its springs stretch and the point slides a little down the slope, until the springs balance it again. The further it slides, the steeper the slope and the stronger the inward push of its reactive power. At some load the springs can no longer hold it: the balance disappears, and the point would accelerate down into the funnel. <strong>Voltage collapse is not just "the equations have no solution"; it is a mass that the springs can no longer hold on the funnel.</strong></p>
-          <p lang="ja">これで電圧崩壊を絵として見られます。ある母線の負荷が増えると、ばねが伸び、点はばねで再びつり合うところまで斜面を少し滑り下ります。下りるほど斜面は急になり、無効電力が内向きに押す力も強まります。ある負荷を超えると、ばねはもう点を支えきれず、つり合いがなくなって、点は漏斗の底へ加速しながら落ちていこうとします。<strong>電圧崩壊は「方程式の解がなくなる」というだけのことではなく、漏斗の上の質点をばねが支えきれなくなることとして見ることができます。</strong></p>
+          <p lang="en">On this surface a voltage collapse looks as follows. As the load at a bus grows, its springs stretch and the point slides a little down the slope, until the springs balance it again. The further it slides, the steeper the slope and the stronger the inward push of its reactive power. At some load the springs can no longer hold it: the balance disappears, and the point would accelerate down into the funnel. The power flow equations then have no solution. <strong>A voltage collapse is a mass on the funnel that the springs can no longer hold.</strong></p>
+          <p lang="ja">この曲面の上で、電圧崩壊は次のように見えます。ある母線の負荷が増えると、ばねが伸び、点はばねで再びつり合うところまで斜面を少し滑り下ります。下りるほど斜面は急になり、無効電力が内向きに押す力も強まります。ある負荷を超えると、ばねはもう点を支えきれず、つり合いがなくなって、点は漏斗の底へ加速しながら落ちていこうとします。このとき電力方程式の解はなくなります。<strong>電圧崩壊は、漏斗の上の質点をばねが支えきれなくなることです。</strong></p>
 
           <figure class="lec-figure is-compact is-scroll" style="--lec-fig-max: 760px; --lec-min-w: 600px;">
             <div class="lec-scroll">
-              <video class="lec4-video" src="../images/lecture/part4/swing-voltage-collapse.mp4" poster="../images/lecture/part4/swing-voltage-collapse-poster.png" width="1216" height="800" autoplay loop muted playsinline aria-label="Animation of the 6-bus system with a load L4 at bus 4 whose consumption grows from t = 1 s; upper left the phasor plane, right the funnel surface, lower left the voltage magnitudes of the buses and the power at bus 4; the load bus moves inwards and down the slope, and after about 7.3 s it falls down the funnel to its bottom while the springs stretch towards it"></video>
+              <video class="lec4-video" src="../images/lecture/part4/swing-voltage-collapse.mp4" poster="../images/lecture/part4/swing-voltage-collapse-poster.png" width="1216" height="800" controls autoplay loop muted playsinline aria-label="Animation of the 6-bus system with a load L4 at bus 4 whose consumption grows from t = 1 s; upper left the phasor plane, right the funnel surface, lower left the voltage magnitudes of the buses and the power at bus 4; the load bus moves inwards and down the slope, and then it falls down the funnel to its bottom while the springs stretch towards it"></video>
             </div>
-            <figcaption lang="en">Output of GUILDA in real time. Upper left: the phasor plane; right: the funnel z = log|V|. They are the same result drawn by <code>plot_spring_model</code> with <code>Dimension=2</code> and <code>Dimension=3</code>, linked so that they move together; the title shows the time and |V| of bus 4. Lower left: two charts of <code>plot_trajectory</code> with a cursor at the time shown: |V| of every bus (bus 4 in black) and the active power P injected at bus 4, which is the power L4 receives with a minus sign. G4 is replaced by a load L4 at bus 4 (P = −0.8, Q = −0.2 pu), and G1 and G2 have the governors and the integral. From t = 1 s, G3 and L4 take more and more (0.3 pu more each in 19 s). The springs stretch and bus 4 moves inwards and down the slope, while the purple arrow of L4, its inward force Q/|V|, grows as its voltage falls. At t ≈ 7.29 s (0.099 pu more, |V| ≈ 0.74 pu) the balance of the springs no longer exists. With L4 as a constant-power load, the equations have no solution beyond that point, and <code>net.simulate</code> stops there. To show what follows, the video uses a second simulation in which L4 is an impedance load (<code>load-impedance</code>) whose resistance and reactance are given as a time series with <code>add_input</code>: up to t = 7.26 s, the impedance at which L4 took its power in the first simulation; after that, an admittance that keeps growing at the same rate, as if the load kept trying to draw more. Bus 4 then falls down the funnel: |V| is about 0.5 pu at 7.75 s and 0.07 pu at 9.48 s, where the video ends. The power that L4 actually receives drops from about 0.9 pu towards 0.1 pu (right-hand chart), and G1–G3 speed up. The last frame is held for 3 s.</figcaption>
-            <figcaption lang="ja">GUILDA の出力です（実際の速さ）。左上がフェーザの平面、右が漏斗 z = log|V| の上の絵で、同じ結果を <code>plot_spring_model</code> の <code>Dimension=2</code> と <code>Dimension=3</code> で描き、いっしょに動くようにつないでいます。題名には時刻と母線 4 の |V| を示します。左下は <code>plot_trajectory</code> の 2 つのグラフで、縦線が表示中の時刻を示します。すべての母線の |V|（母線 4 は黒）と、母線 4 に注入される有効電力 P です。P は、L4 が受け取る電力に負の符号を付けたものです。G4 は母線 4 の負荷 L4（P = −0.8、Q = −0.2 pu）に置き換え、G1 と G2 にはガバナと積分を付けています。t = 1 s から、G3 と L4 の消費をだんだん増やします（19 s でそれぞれ 0.3 pu 増える傾き）。ばねが伸びて母線 4 が内側へ、斜面の下へ動き、L4 の紫の矢印（内向きの力 Q/|V|）は電圧が下がるにつれて大きくなります。t ≈ 7.29 s（0.099 pu 増、|V| ≈ 0.74 pu）に、ばねのつり合いがなくなります。L4 が定電力負荷のままでは、この先の方程式に解がなく、<code>net.simulate</code> はそこで止まります。その先を見せるため、動画では L4 をインピーダンス負荷（<code>load-impedance</code>）にした 2 回目のシミュレーションを使っています。抵抗とリアクタンスは <code>add_input</code> の時系列で与え、t = 7.26 s までは 1 回目で L4 が電力を受け取っていたときのインピーダンス、その後はアドミタンスが同じ割合で増え続けるようにしました。負荷がさらに電力を引き込もうとし続ける、という想定です。母線 4 は漏斗を落ちていき、|V| は 7.75 s で約 0.5 pu、9.48 s で 0.07 pu になり、動画はそこで終わります。L4 が実際に受け取る電力は約 0.9 pu から 0.1 pu へ向かって減り（左下の右側のグラフ）、G1〜G3 は速くなります。最後のこまは 3 秒止めて見せます。</figcaption>
+            <figcaption lang="en"><code>network.Tutorial6bus</code> with G4 replaced by a load L4 at B004 (P = −0.8, Q = −0.2 pu), and with the governors and the integral on G1 and G2. From t = 1 s, G3 and L4 take more and more (0.3 pu more each in 19 s). Played at half speed. Upper left: the phasor plane (<code>Dimension=2</code>); right: the funnel z = log|V| (<code>Dimension=3</code>); the title shows the time and |V| of B004. The purple arrow at B004 is the inward force Q/|V| of L4. Lower left: |V| of every bus (B004 black) and the active power P injected at B004 (minus the power L4 receives); the vertical line marks the time shown. A constant-power L4 has no solution beyond t ≈ 7.29 s, so L4 is simulated as an impedance load (<code>load-impedance</code>) that takes the same power up to t = 7.26 s and whose admittance keeps growing at the same rate afterwards.</figcaption>
+            <figcaption lang="ja"><code>network.Tutorial6bus</code> の G4 を B004 の負荷 L4（P = −0.8、Q = −0.2 pu）に置き換え、G1 と G2 にガバナと積分を付けた系統です。t = 1 s から G3 と L4 の消費をだんだん増やします（19 s でそれぞれ 0.3 pu 増える傾き）。1/2 の速さで再生しています。左上がフェーザの平面（<code>Dimension=2</code>）、右が漏斗 z = log|V|（<code>Dimension=3</code>）で、題名は時刻と B004 の |V| です。B004 の紫の矢印は、L4 が中心へ引く力 Q/|V| です。左下は各母線の |V|（B004 は黒）と B004 に注入される有効電力 P（L4 が受け取る電力に負の符号を付けたもの）で、縦線が表示中の時刻です。定電力負荷の L4 では t ≈ 7.29 s より先の解がないため、L4 は、t = 7.26 s までは同じ電力を受け取り、その後はアドミタンスが同じ割合で増え続けるインピーダンス負荷（<code>load-impedance</code>）として計算しています。</figcaption>
           </figure>
 
-          <p lang="en">The funnel also shows how the two kinds of power are linked. On the plane, the active power turns points around the centre (the P–δ relation); along the height, the reactive power moves them up and down (the Q–V relation). Because the points are bound to a curved surface, a move in one direction changes the forces in the other.</p>
-          <p lang="ja">漏斗は、2 種類の電力のつながりも見せてくれます。平面の向きでは、有効電力が点を中心のまわりに回します（P と δ の関係）。高さの向きでは、無効電力が点を上下させます（Q と V の関係）。点は曲がった面の上に縛られているので、一方の向きの動きが、もう一方の向きの力を変えます。</p>
+          <p lang="en">The funnel also shows how the two kinds of power are related. On the plane, the active power turns points around the centre (the P–δ relation); along the height, the reactive power moves them up and down (the Q–V relation). Because the points are bound to a curved surface, a move in one direction changes the forces in the other.</p>
+          <p lang="ja">漏斗の上では、2 種類の電力の関係も見えます。平面の向きでは、有効電力が点を中心のまわりに回します（P と δ の関係）。高さの向きでは、無効電力が点を上下させます（Q と V の関係）。点は曲がった面の上に縛られているので、一方の向きの動きが、もう一方の向きの力を変えます。</p>
           <div class="lec-callout">
             <p lang="en">For readers who know energy functions: the terms of the structure-preserving energy function of a power system can be read as the kinetic energy of the generator masses, the elastic energy of the springs, and the potential energy of the weights on the funnel. The balance of the generalized forces on the funnel then gives the active and reactive power equations of each bus. This page does not go further into it.</p>
             <p lang="ja">エネルギー関数を知っている人へ：電力系統の構造保存型エネルギー関数の各項は、発電機の質点の運動エネルギー、ばねの弾性エネルギー、漏斗の上のおもりの位置エネルギーとして読むことができます。漏斗の上での一般化力のつり合いが、各母線の有効電力と無効電力の方程式になります。このページでは、これ以上は扱いません。</p>
@@ -590,8 +602,8 @@ net.initialize();</code></pre>
         <!-- ============================== GUILDA ============================== -->
         <section id="guilda">
           <h2><span lang="en">Drawing the spring-mass model in GUILDA</span><span lang="ja">GUILDA でばね質点モデルを描く</span></h2>
-          <p lang="en">All the GUILDA pictures on this page come from one family of methods named <code>plot_spring_model</code>. Each draws the buses as points, the generators' internal voltages as their own points, the branches and machine reactances as springs, and arrows for the active power P and the reactive current Iq.</p>
-          <p lang="ja">このページの GUILDA の図は、すべて <code>plot_spring_model</code> という名前のメソッドで描いています。どれも、母線を点、発電機の内部電圧をその発電機自身の点、ブランチと発電機のリアクタンスをばねとして描き、有効電力 P と無効電流 Iq の矢印を添えます。</p>
+          <p lang="en">All the spring-mass pictures on this page are drawn by GUILDA methods named <code>plot_spring_model</code>. Each draws the buses as points, the generators' internal voltages as their own points, the branches and machine reactances as springs, and arrows for the active power P and the reactive current Iq.</p>
+          <p lang="ja">このページのばね質点の図は、すべて GUILDA の <code>plot_spring_model</code> という名前のメソッドで描いています。どれも、母線を点、発電機の内部電圧をその発電機自身の点、ブランチと発電機のリアクタンスをばねとして描き、有効電力 P と無効電流 Iq の矢印を添えます。</p>
           <dl class="lec-terms">
             <dt><code>net.plot_spring_model</code></dt>
             <dd><span lang="en">The equilibrium of the network after <code>net.initialize()</code>: one picture.</span><span lang="ja"><code>net.initialize()</code> の後の、系統の平衡点を 1 枚の絵に描きます。</span></dd>
@@ -623,7 +635,7 @@ G3 = result.plot_spring_model(Dimension=3);</code></pre>
           <h2><span lang="en">Summary</span><span lang="ja">まとめ</span></h2>
           <ul>
             <li><span lang="en">Seen from a frame turning at the rated frequency, each bus voltage is a point on a plane; a change of frequency is a common rotation of all points.</span><span lang="ja">定格の周波数で回る座標から見ると、各母線の電圧は平面上の点になります。周波数の変化は、すべての点の共通の回転として見えます。</span></li>
-            <li><span lang="en">A line is a spring with constant B = 1/X: its force is −j times the line current. Its torque along the circle is the active power, its force towards the centre the reactive current Q/|V|.</span><span lang="ja">送電線は、ばね係数 B = 1/X のばねで、その力は線路電流の −j 倍です。円に沿う向きのトルクが有効電力、中心へ向かう力が無効電流 Q/|V| に対応します。</span></li>
+            <li><span lang="en">A line is a spring whose constant is minus the line susceptance, −b = 1/X: its force is −j times the line current. Its torque along the circle is the active power, its force towards the centre the reactive current Q/|V|.</span><span lang="ja">送電線は、ばね係数が送電線のサセプタンスの符号を変えた −b ＝ 1/X のばねで、その力は線路電流の −j 倍です。円に沿う向きのトルクが有効電力、中心へ向かう力が無効電流 Q/|V| に対応します。</span></li>
             <li><span lang="en">The power flow solution is the position where all springs balance; the slack bus only fixes the direction of the picture.</span><span lang="ja">潮流計算の解は、すべてのばねがつり合う位置です。slack 母線は絵の向きの基準を決めるだけです。</span></li>
             <li><span lang="en">A larger load turns the whole picture backward (the frequency falls); the generator masses are the inertia that makes this start slowly; governors slow the turning.</span><span lang="ja">負荷が増えると絵全体が後ろへ回り（周波数の低下）、発電機の質量（慣性）がその動き出しをゆるやかにします。ガバナは回転を遅くします。</span></li>
             <li><span lang="en">The pull-back torque of a spring is largest at 90°; a point pushed beyond what the springs can hold slips around: loss of synchronism.</span><span lang="ja">ばねが引き戻すトルクは 90° で最大です。ばねが支えきれないところまで押し出された点は、円を回って滑ります。これが脱調です。</span></li>
@@ -632,14 +644,7 @@ G3 = result.plot_spring_model(Dimension=3);</code></pre>
         </section>
 
         <section id="related">
-          <h2><span lang="en">Related Parts and Live Scripts</span><span lang="ja">関連する Part とライブスクリプト</span></h2>
-          <h3><span lang="en">Related Parts</span><span lang="ja">関連する Part</span></h3>
-          <ul class="lec-cards">
-          <li><a class="lec-card" href="part2-power-flow.html"><small>Part 2</small><b><span lang="en">Power flow</span><span lang="ja">潮流計算</span></b><span><span lang="en">The balance of the springs, as equations.</span><span lang="ja">ばねのつり合いを、方程式として解く。</span></span></a></li>
-          <li><a class="lec-card is-c2" href="part3-time-simulation.html"><small>Part 3</small><b><span lang="en">Time-domain simulation</span><span lang="ja">時間シミュレーション</span></b><span><span lang="en">The swing equation, loss of synchronism and frequency over time.</span><span lang="ja">動揺方程式、脱調、周波数の時間変化。</span></span></a></li>
-          <li><a class="lec-card is-c3" href="part7-continuation-power-flow.html"><small>Part 7</small><b><span lang="en">Continuation power flow and the power-flow Jacobian</span><span lang="ja">連続潮流計算と電力方程式のヤコビアン</span></b><span><span lang="en">Voltage collapse seen on the PV curve.</span><span lang="ja">電圧崩壊を PV カーブで見る。</span></span></a></li>
-          </ul>
-          <h3><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h3>
+          <h2><span lang="en">Live Scripts</span><span lang="ja">ライブスクリプト</span></h2>
           <ul class="lec-scripts">
             <li><span lang="en"><code>_GUILDAtutorial/Part4_SpringMassModel.mlx</code>: after starting GUILDA, open it with <code>open Part4_SpringMassModel.mlx</code>. The graphs on this page can be drawn with the Part 4 Live Script.</span><span lang="ja"><code>_GUILDAtutorial/Part4_SpringMassModel.mlx</code> です。GUILDA を起動してから、<code>open Part4_SpringMassModel.mlx</code> で開きます。このページの図は Part 4 のライブスクリプトで描けます。</span></li>
           </ul>
