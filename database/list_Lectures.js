@@ -50,8 +50,8 @@ const lectureData = [
     field_ja: "動特性",
     title: "Time-domain simulation",
     title_ja: "時間シミュレーション",
-    summary: "Follow the response to faults and other disturbances in time: the swing of the generators, transient stability and the equal-area criterion, and the frequency after a disturbance.",
-    summary_ja: "事故などの外乱への応答を時間を追って調べます。発電機の揺れ、過渡安定度と等面積法、外乱の後の周波数の変化を扱います。",
+    summary: "Follow the response to faults and other disturbances in time: the swing of the generators, transient stability and the critical clearing time, and the frequency after a disturbance.",
+    summary_ja: "事故などの外乱への応答を時間を追って調べます。発電機の揺れ、過渡安定度と臨界除去時間、外乱の後の周波数の変化を扱います。",
     link: "lecture/part3-time-simulation.html",
     ready: true
   },
