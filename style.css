@@ -195,16 +195,36 @@ body.home-layout main { max-width: 1000px; width: 100%; box-sizing: border-box; 
 .tab-content > p, .tab-content > ul, .tab-content > ol:not([class]), .tab-content section > p, .tab-content section > ul { max-width: 50em; }
 .tab-content.active { display: block; }
 
-/* Hero: the network that spells GUILDA, full width. Its colours sit on the page background, so it has no frame.
-   height: auto keeps the aspect ratio of whatever image is there; the width/height attributes only reserve space. */
-.home-hero { margin: 8px 0 0; }
-.home-hero picture { display: block; }
-.home-hero img { display: block; width: 100%; max-width: 1200px; height: auto; margin: 0 auto; }
-
-/* Hidden on screen, read by screen readers */
-.visually-hidden {
-  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
-  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+/* ヒーローセクション: title left, tilted mark at the right end standing on a soft contact shadow */
+.hero { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 0 28px; border-bottom: 1px solid var(--line); }
+.hero-text { min-width: 0; }
+/* The title never wraps: its size follows the viewport so the longest language still fits beside (or, on phones, below) the mark */
+.hero-title {
+  font-size: clamp(1.25rem, 5.4vw, 4rem); font-weight: 800; letter-spacing: 0.02em; color: var(--brand); white-space: nowrap;
+  border-bottom: none; line-height: 1.1; margin: 0 0 14px 0; padding: 0;
+}
+.hero-subtitle { font-size: clamp(0.9rem, 2vw, 1.15rem); font-weight: 400; color: var(--muted); margin: 0; }
+.hero-mark { position: relative; flex: none; width: clamp(64px, 11vw, 112px); margin-right: clamp(0px, 2vw, 24px); padding-bottom: 14px; }
+.hero-mark img { position: relative; z-index: 1; display: block; width: 100%; height: auto; transform: translateY(-6px) rotate(-8deg); border-radius: 14%; }
+.hero-mark::after {
+  content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 14px; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 26%, transparent), transparent);
+}
+/* A pointer over the mark makes it hop once on its shadow */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-mark:hover img { animation: hero-hop 0.9s cubic-bezier(0.3, 0, 0.3, 1); }
+  .hero-mark:hover::after { animation: hero-hop-shadow 0.9s cubic-bezier(0.3, 0, 0.3, 1); }
+}
+@keyframes hero-hop {
+  0%, 100% { transform: translateY(-6px) rotate(-8deg); }
+  35% { transform: translateY(-22px) rotate(-14deg); }
+  60% { transform: translateY(-3px) rotate(-5deg); }
+  78% { transform: translateY(-10px) rotate(-9deg); }
+}
+@keyframes hero-hop-shadow { 0%, 100% { transform: scaleX(1); opacity: 1; } 35% { transform: scaleX(0.7); opacity: 0.55; } 78% { transform: scaleX(0.88); opacity: 0.8; } }
+@media (max-width: 560px) {
+  .hero { flex-direction: column-reverse; align-items: flex-start; gap: 12px; }
+  .hero-title { font-size: clamp(1.25rem, 6.6vw, 2.4rem); }
 }
 
 .home-intro { max-width: 680px; margin: 26px 0 16px; font-size: 1.1rem; color: var(--ink-2); }
@@ -1997,7 +2017,6 @@ img, video { height: auto; }
   table:not(.req-table):not(.compare-table) { font-size: 0.85rem; }
   th, td { padding: 8px 10px; }
   th { min-width: 0; }
-  .home-hero { margin: 4px -16px 0; }
   .home-intro { font-size: 1rem; margin-top: 18px; }
   .home-actions .btn { flex: 1 1 100%; justify-content: center; }
   .btn { white-space: normal; text-align: center; }
