@@ -453,7 +453,27 @@ G.animate();</code></pre>
                 </figcaption>
               </figure>
             </li>
-            <!-- slide 02 Jacobian structure: added with its video (manifest.md) -->
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/about/analysis/02-jacobian-structure.mp4" poster="./images/about/analysis/02-jacobian-structure.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The IEEE 9-bus system (an AVR and a PSS on each generator) is linearized, and the Jacobian of its DAE is drawn with its rows and columns grouped by element. Then the part of generator 1 with its AVR and PSS is taken out and drawn the same way. Its state rows equal those of the whole Jacobian (difference 0), and added to the part of all the other elements it gives the whole Jacobian back (difference 7.1e-15, rounding)." data-aria-label-ja="IEEE 9 母線系統（各発電機に AVR と PSS 付き）を近似線形化し、DAE のヤコビ行列を要素ごとに区切って表示します。次に、発電機 1 とその AVR・PSS の部分だけを取り出して同じように表示します。取り出した部分の状態の行は全体のヤコビ行列と同じ値で（差 0）、残りのすべての要素の部分と足すと全体に戻ります（差は丸め誤差の 7.1e-15）。"></video></div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">The Jacobian, taken out element by element</span><span lang="ja">ヤコビ行列を要素ごとに取り出す</span></h3>
+                  <span class="vc-caption"><span lang="en">The IEEE 9-bus system (an AVR and a PSS on each generator) is linearized, and the Jacobian of its DAE is drawn with its rows and columns grouped by element. Then the part of generator 1 with its AVR and PSS is taken out and drawn the same way. Its state rows equal those of the whole Jacobian (difference 0), and added to the part of all the other elements it gives the whole Jacobian back (difference 7.1e-15, rounding).</span><span lang="ja">IEEE 9 母線系統（各発電機に AVR と PSS 付き）を近似線形化し、DAE のヤコビ行列を要素ごとに区切って表示します。次に、発電機 1 とその AVR・PSS の部分だけを取り出して同じように表示します。取り出した部分の状態の行は全体のヤコビ行列と同じ値で（差 0）、残りのすべての要素の部分と足すと全体に戻ります（差は丸め誤差の 7.1e-15）。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE9bus(LocalController=true);    % AVR and PSS on each generator
+res = net.get_sys();
+res.plot_matrix(Matrix="J");                     % the Jacobian of the network
+sv_gen = ["B001SG1", "B001SG1CA1", "B001SG1CP2"];   % generator 1, its AVR, PSS
+res_g = res.get_contribution(sv_gen);
+res_g.plot_matrix(Matrix="J");                   % the part of those three
+J = res.get_ss("DAE", Format="struct").A;        % the whole Jacobian
+lv_gen = contains(res_g.StateName, "B001SG1");   % the rows of their states
+max(abs(res_g.A(lv_gen,:) - J(lv_gen,:)), [], "all")
+sv_all = [unique(res.tab_variable.Owner)', "Branch"];   % every element
+res_o = res.get_contribution(setdiff(sv_all, sv_gen));   % all the others
+max(abs(res_g.A + res_o.A - J), [], "all")</code></pre>
+                </figcaption>
+              </figure>
+            </li>
             <li class="vc-item">
               <figure>
                 <div class="vc-media"><video src="./images/about/analysis/03-controller-pss.mp4" poster="./images/about/analysis/03-controller-pss.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="Starting from the IEEE 68-bus system with AVRs only, a PSS is added to one generator after another. Each pass of the loop initializes, linearizes and simulates a fault, and draws the eigenvalue map and the frequency deviation of the generators again. With AVRs only 14 eigenvalues are unstable; from the twelfth PSS on, none is." data-aria-label-ja="IEEE 68 母線系統で、AVR だけの状態から発電機に PSS を 1 台ずつ追加します。ループの各回で初期化・近似線形化・事故の時間応答シミュレーションを行い、固有値マップと各発電機の角周波数偏差を描き直します。AVR だけでは 14 個の固有値が不安定ですが、12 台目の追加ですべて安定になります。"></video></div>
@@ -484,8 +504,87 @@ end</code></pre>
                 </figcaption>
               </figure>
             </li>
-            <!-- slide 04 user-written controller: added with its video (manifest.md) -->
-            <!-- slide 05 OPF formulation: added with its video (manifest.md) -->
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/about/analysis/04-custom-controller.mp4" poster="./images/about/analysis/04-custom-controller.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A governor that changes the mechanical power in proportion to the frequency deviation is written as a subclass of LocalController and saved in the GUILDA folder (_GUILDAobject/+controller/+governor/Droop.m). After GUILDA.update_keymap registers its key &quot;gov-droop&quot;, add_local_controller adds it to a generator. When the IEEE 9-bus system loses 0.1 pu of mechanical power at 1 s, the frequency keeps falling with the default governors (constant mechanical power) and settles at about −0.004 pu with this governor on the three generators." data-aria-label-ja="周波数のずれに比例して機械入力を変えるガバナを LocalController を継承したクラスとして書き、GUILDA のフォルダ内（_GUILDAobject/+controller/+governor/Droop.m）に保存します。GUILDA.update_keymap でキー &quot;gov-droop&quot; を登録すると、add_local_controller で発電機に追加できます。IEEE 9 母線系統で 1 秒に機械入力が 0.1 pu 減ると、既定のガバナ（機械入力一定）では周波数が下がり続け、このガバナを 3 台に付けると約 −0.004 pu で落ち着きます。"></video></div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">A controller you write works like a bundled one</span><span lang="ja">自作の制御器を、同梱の制御器と同じように使う</span></h3>
+                  <span class="vc-caption"><span lang="en">A governor that changes the mechanical power in proportion to the frequency deviation is written as a subclass of LocalController and saved in the GUILDA folder (_GUILDAobject/+controller/+governor/Droop.m). After GUILDA.update_keymap registers its key "gov-droop", add_local_controller adds it to a generator. When the IEEE 9-bus system loses 0.1 pu of mechanical power at 1 s, the frequency keeps falling with the default governors (constant mechanical power) and settles at about −0.004 pu with this governor on the three generators.</span><span lang="ja">周波数のずれに比例して機械入力を変えるガバナを LocalController を継承したクラスとして書き、GUILDA のフォルダ内（_GUILDAobject/+controller/+governor/Droop.m）に保存します。GUILDA.update_keymap でキー "gov-droop" を登録すると、add_local_controller で発電機に追加できます。IEEE 9 母線系統で 1 秒に機械入力が 0.1 pu 減ると、既定のガバナ（機械入力一定）では周波数が下がり続け、このガバナを 3 台に付けると約 −0.004 pu で落ち着きます。</span></span>
+                  <pre class="vc-cmd"><code>% _GUILDAobject/+controller/+governor/Droop.m (in the GUILDA folder)
+classdef Droop &lt; LocalController
+% Governor with a proportional frequency feedback: Pmech = Pmech_ref - K*omega
+    properties (Constant, Hidden)
+        key    = "gov-droop"
+        s_role = "governor"
+    end
+    properties (SetAccess=protected, Hidden)
+        sv_x    = strings(0,1)             % no state
+        sv_u    = ["omega"; "Pmech_ref"]   % omega is read from the generator
+        sv_y    = "Pmech"                  % drives Pmech of the generator
+        sv_para = "K"
+    end
+    methods (Access={?Component})
+        function obj = Droop(tag, param)
+            arguments
+                tag (1,1) string
+                param.K (1,1) double = 20
+            end
+            obj@LocalController("CG" + tag);
+            obj.a_Parameter{1} = Parameter(obj, "dynamics", struct(K=param.K));
+        end
+    end
+    methods
+        function [x, u] = get_equilibrium(obj, V, u_gen)
+            x = zeros(0,1);
+            u = [0; u_gen(obj.a_Component.sv_u == "Pmech")];
+        end
+    end
+    methods (Static)
+        function dx = fcn_dx(t, x, V, u, p, w0), dx = zeros(0,1); end
+        function y = fcn_y(t, x, V, u, p, w0), y = u(2) - p(1)*u(1); end
+        function M = fcn_Mass(t, x, V, u, p, w0), M = zeros(0,0); end
+        function [A, Bv, Bu] = Jacobi_dx(t, x, V, u, p, w0)
+            A = zeros(0,0);  Bv = zeros(0,2);  Bu = zeros(0,2);
+        end
+        function [C, Dv, Du] = Jacobi_Y(t, x, V, u, p, w0)
+            C = zeros(1,0);  Dv = zeros(1,2);  Du = [-p(1), 1];
+        end
+    end
+end
+
+% Command Window
+GUILDA.update_keymap;   % registers the key of the new class
+net = network.IEEE9bus();
+sc = net.add_scenario("loss", Time=[0, 30]);
+sc.add_input("B002SG1", "Pmech", -0.1, [1, 30]);   % 0.1 pu less Pmech from 1 s
+res0 = net.simulate("loss");   % default governors (gov-static)
+gens = ["B001SG1", "B002SG1", "B003SG1"];
+for s = gens, net.get_element(s).add_local_controller("gov-droop"); end
+net.initialize();
+res1 = net.simulate("loss");   % gov-droop on the three generators
+res0.plot_trajectory(Quantity="omega");
+res1.plot_trajectory(Quantity="omega");</code></pre>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="vc-item">
+              <figure>
+                <div class="vc-media"><video src="./images/about/analysis/05-opf-formulation.mp4" poster="./images/about/analysis/05-opf-formulation.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="The AC optimal power flow problem of the IEEE 14-bus system is built and its objective and constraints are listed in the Command Window. The objective (generation cost), the output limits of a generator and the angle-difference limit of a line are shown one by one; then the same problem is solved, its summary is printed and plot_dispatch draws the outputs (P, Q) of the components and the bus voltages (magnitude and angle)." data-aria-label-ja="IEEE 14 母線系統の AC 最適潮流計算の問題を作り、目的関数と制約の一覧をコマンドウィンドウに表示します。目的関数（発電コスト）、発電機の出力の上下限、線路の位相差の制約を一つずつ確かめてから同じ問題を解き、結果の要約と、各機器の出力（P, Q）と母線電圧（大きさと位相）の棒グラフを表示します。"></video></div>
+                <figcaption>
+                  <h3 class="vc-title"><span lang="en">Look at the optimization problem, then solve it</span><span lang="ja">最適化問題を確かめてから解く</span></h3>
+                  <span class="vc-caption"><span lang="en">The AC optimal power flow problem of the IEEE 14-bus system is built and its objective and constraints are listed in the Command Window. The objective (generation cost), the output limits of a generator and the angle-difference limit of a line are shown one by one; then the same problem is solved, its summary is printed and plot_dispatch draws the outputs (P, Q) of the components and the bus voltages (magnitude and angle).</span><span lang="ja">IEEE 14 母線系統の AC 最適潮流計算の問題を作り、目的関数と制約の一覧をコマンドウィンドウに表示します。目的関数（発電コスト）、発電機の出力の上下限、線路の位相差の制約を一つずつ確かめてから同じ問題を解き、結果の要約と、各機器の出力（P, Q）と母線電圧（大きさと位相）の棒グラフを表示します。</span></span>
+                  <pre class="vc-cmd"><code>net = network.IEEE14bus();
+prob = net.build_opf_problem(Method="AC OPF");
+net.solver_OPF.disp_formulation(Method="AC OPF", Problem=prob)
+show(prob.Objective.GenCost)
+showbounds(prob.Variables.B002SG1)
+show(prob.Constraints.VargMax1_EL001)
+res = net.calculate_optimal_powerflow(Method="AC OPF", Problem=prob);
+res.disp_summary()
+res.plot_dispatch();</code></pre>
+                </figcaption>
+              </figure>
+            </li>
             <li class="vc-item">
               <figure>
                 <div class="vc-media"><video src="./images/about/analysis/06-stability-opf.mp4" poster="./images/about/analysis/06-stability-opf.png" width="1280" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A lower limit of 0.048 on the damping ratio is added to the AC optimal power flow of the IEEE 14-bus system. Over the outer iterations the smallest damping ratio rises from 0.0447 to 0.0481 and the cost from 8081.5 to 8566.7. The network is then initialized at the solution and linearized: every electromechanical mode has a damping ratio of 4.8 % or more." data-aria-label-ja="IEEE 14 母線系統の AC 最適潮流計算に、最小減衰比 0.048 の制約を加えます。外側の反復で最小減衰比は 0.0447 から 0.0481 に、コストは 8081.5 から 8566.7 に上がります。その解を動作点として初期化して近似線形化すると、電気機械モードの減衰比はすべて 4.8 % 以上です。"></video></div>
