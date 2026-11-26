@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-title-ja="GUILDA ドキュメント - ホーム">GUILDA Documentation - Home</title>
-  <script src="doc-lang.js?v=20261126b"></script>
-  <link rel="stylesheet" href="style.css?v=20261126b">
+  <script src="doc-lang.js?v=20261126c"></script>
+  <link rel="stylesheet" href="style.css?v=20261126c">
   <style>
     /* Header links to the other site (the class reference and For Developer pages on the guilda Pages) */
     a.tab-button.tab-link { text-decoration: none; }
@@ -30,8 +30,8 @@
     @media (max-width: 760px) { .tutorial-audience { grid-template-columns: minmax(0, 1fr); } }
   </style>
   
-  <script src="./database/list_Tutorials.js?v=20261126b"></script>
-  <script src="./database/list_Lectures.js?v=20261126b"></script>
+  <script src="./database/list_Tutorials.js?v=20261126c"></script>
+  <script src="./database/list_Lectures.js?v=20261126c"></script>
 </head>
 <body class="home-layout">
 
@@ -52,16 +52,12 @@
 
   <main>
     <div id="tab-home" class="tab-content active">
-      <!-- Hero: a power-flow diagram whose network spells "GUILDA" (images/home/guilda-network.gif, 1200 px wide).
-           With reduced motion the still poster (guilda-network.png) is shown instead. The width and height
-           attributes only give the aspect ratio before the image loads; CSS sets height: auto, so a new
-           image with another height needs only new attribute values. The h1 is for screen readers. -->
-      <div class="home-hero">
-        <h1 class="visually-hidden"><span lang="en">GUILDA Documentation: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span><span lang="ja">GUILDA ドキュメント: Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</span></h1>
-        <picture>
-          <source media="(prefers-reduced-motion: reduce)" srcset="./images/home/guilda-network.png">
-          <img src="./images/home/guilda-network.gif" width="1200" height="311" alt="A power-flow diagram whose buses and branches spell GUILDA, with dots flowing along the branches" data-alt-ja="母線とブランチで GUILDA の文字を描いた潮流図。ブランチに沿って点が流れます。">
-        </picture>
+      <div class="hero">
+        <div class="hero-text">
+          <h1 class="hero-title"><span lang="en">GUILDA Documentation</span><span lang="ja">GUILDA ドキュメント</span></h1>
+          <p class="hero-subtitle">Grid &amp; Utility Infrastructure Linkage Dynamics Analyzer</p>
+        </div>
+        <div class="hero-mark" aria-hidden="true"><img src="./images/GUILDA-logo-square.png" alt="" width="128" height="128"></div>
       </div>
 
       <p class="home-intro" lang="en">A MATLAB power-system simulator for students and researchers in systems and control. Combine blocks into models, then analyse and share them.</p>
