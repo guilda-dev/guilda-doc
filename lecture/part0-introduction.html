@@ -241,6 +241,137 @@ net.plot_diagram();</code></pre>
             <figcaption lang="ja">発電機はそれぞれ自分の動揺方程式に従います。電気出力がすべての発電機の状態と負荷で決まるため、これらの式は送電網を通して結び付いています。</figcaption>
           </figure>
 
+          <h3 id="water"><span lang="en">The swing equation as a water tank</span><span lang="ja">動揺方程式を水槽で表す</span></h3>
+          <p lang="en">The swing equation has the form of a water balance. Represent generator <span class="lec-math-inline" data-tex="i"></span> by a water tank, as in the figure below, with the following correspondence.</p>
+          <p lang="ja">動揺方程式は、水槽にたまる水の収支と同じ形をしています。下の図のように発電機 <span class="lec-math-inline" data-tex="i"></span> を 1 つの水槽で表し、次のように対応させます。</p>
+          <dl class="lec-terms">
+            <dt><span lang="en">Water level</span><span lang="ja">水位</span></dt>
+            <dd><span lang="en">The height of the surface above a line drawn on the wall of the tank is the speed deviation <span class="lec-math-inline" data-tex="\omega_i"></span>. The line stands for rated speed, <span class="lec-math-inline" data-tex="\omega_i = 0"></span>; a surface below the line means <span class="lec-math-inline" data-tex="\omega_i < 0"></span>.</span><span lang="ja">水槽の壁に引いた線から測った水面の高さを、速さのずれ <span class="lec-math-inline" data-tex="\omega_i"></span> とします。線は定格の速さ（<span class="lec-math-inline" data-tex="\omega_i = 0"></span>）を表し、水面が線より下なら <span class="lec-math-inline" data-tex="\omega_i < 0"></span> です。</span></dd>
+            <dt><span lang="en">Cross-section</span><span lang="ja">断面積</span></dt>
+            <dd><span lang="en">The cross-section of the tank is proportional to the inertia constant <span class="lec-math-inline" data-tex="M_i"></span>, so the water above the line is proportional to <span class="lec-math-inline" data-tex="M_i\,\omega_i"></span>. To first order in <span class="lec-math-inline" data-tex="\omega_i"></span>, <span class="lec-math-inline" data-tex="M_i\,\omega_i"></span> is the kinetic energy of the rotor in excess of its value at rated speed, divided by the rated power. For the same net inflow, the level of a wide tank changes slowly.</span><span lang="ja">水槽の断面積を慣性定数 <span class="lec-math-inline" data-tex="M_i"></span> に比例させます。線より上にある水の量は <span class="lec-math-inline" data-tex="M_i\,\omega_i"></span> に比例します。<span class="lec-math-inline" data-tex="M_i\,\omega_i"></span> は、<span class="lec-math-inline" data-tex="\omega_i"></span> の 1 次の近似で、回転子の運動エネルギーが定格の速さのときより増えた分を定格出力で割った値です。同じだけ水が増えても、断面積の大きい水槽ほど水位はゆっくり変わります。</span></dd>
+            <dt><span lang="en">Inflow</span><span lang="ja">流入</span></dt>
+            <dd><span lang="en">The water that the tap pours in per unit time is the mechanical input <span class="lec-math-inline" data-tex="P_{\mathrm{m},i}"></span> from the turbine.</span><span lang="ja">蛇口から単位時間に流れ込む水の量を、タービンからの機械入力 <span class="lec-math-inline" data-tex="P_{\mathrm{m},i}"></span> とします。</span></dd>
+            <dt><span lang="en">Outflow to the network</span><span lang="ja">送電網への流出</span></dt>
+            <dd><span lang="en">The water that leaves through the pipe at the bottom per unit time is the electrical output <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span>. How much leaves is decided by the state of the whole network, not by this tank alone.</span><span lang="ja">底の管から単位時間に流れ出す水の量を、電気出力 <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span> とします。どれだけ流れ出すかは、この水槽だけでなく系統全体の状態で決まります。</span></dd>
+            <dt><span lang="en">Flow that follows the level</span><span lang="ja">水位に比例する流れ</span></dt>
+            <dd><span lang="en">A thin side pipe joins the tank to a basin whose surface always stays on the line. The flow through it is proportional to the level difference, <span class="lec-math-inline" data-tex="D_i\,\omega_i"></span>: out of the tank while the surface is above the line, into it while the surface is below. This is the damping term.</span><span lang="ja">横の細い管は、水面がいつも線の高さにある別の水槽につながっています。この管には水位の差に比例して <span class="lec-math-inline" data-tex="D_i\,\omega_i"></span> の水が流れ、水面が線より上なら水槽から出ていき、線より下なら水槽に入ってきます。これが制動の項です。</span></dd>
+          </dl>
+          <p lang="en">With this correspondence, the swing equation says that the rate at which the water in the tank increases, <span class="lec-math-inline" data-tex="M_i\,\mathrm{d}\omega_i/\mathrm{d}t"></span>, equals the inflow minus the two outflows.</p>
+          <p lang="ja">こう対応させると、動揺方程式は、水槽の水が増える速さ <span class="lec-math-inline" data-tex="M_i\,\mathrm{d}\omega_i/\mathrm{d}t"></span> が、流入から 2 つの流出を引いた量に等しいという式になります。</p>
+
+          <figure class="lec-figure is-compact is-scroll" style="--lec-min-w: 500px; --lec-fig-max: 620px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 640 336" role="img" aria-label="Generator i as a water tank: the level above a dashed line is the speed deviation, the cross-section is proportional to the inertia, a tap pours in the mechanical input, a pipe at the bottom carries the electrical output to the network, and a thin side pipe to a basin held at the line carries the damping flow">
+              <defs><marker id="p0-arrow-w1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker></defs>
+              <!-- pipes: tap, side pipe to the basin, outlet to the network -->
+              <path d="M160 34 H308 V58" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M160 34 H308 V58" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <path d="M140 234 H254" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M140 234 H254" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <path d="M406 234 H548" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M406 234 H548" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <!-- falling water from the tap -->
+              <rect class="f-brand" x="304" y="60" width="8" height="54"/>
+              <!-- basin held at the line, and the tank -->
+              <rect class="f-brand" style="stroke:none" x="41" y="150" width="98" height="99"/>
+              <line class="s-brand" x1="41" y1="150" x2="139" y2="150"/>
+              <rect class="f-brand" style="stroke:none" x="251" y="112" width="158" height="137"/>
+              <line class="s-brand" x1="251" y1="112" x2="409" y2="112"/>
+              <path class="s-ink" d="M40 120 V250 H140 V240 M140 228 V120"/>
+              <path class="s-ink" d="M250 50 V228 M250 240 V250 H410 V240 M410 228 V50"/>
+              <!-- the line of rated speed -->
+              <line class="s-line is-dashed" x1="28" y1="150" x2="470" y2="150"/>
+              <text class="t-strong" x="478" y="155">ωᵢ = 0</text>
+              <text lang="en" class="t-muted t-small" x="478" y="174">rated speed</text>
+              <text lang="ja" class="t-muted t-small" x="478" y="174">定格の速さ</text>
+              <text lang="en" class="t-muted t-small t-mid" x="90" y="108">basin held at the line</text>
+              <text lang="ja" class="t-muted t-small t-mid" x="90" y="108">水位を線上に保つ水槽</text>
+              <!-- level -->
+              <line class="s-ink" x1="432" y1="150" x2="432" y2="113" marker-start="url(#p0-arrow-w1)" marker-end="url(#p0-arrow-w1)"/>
+              <text class="t-strong" x="440" y="136">ωᵢ</text>
+              <!-- flows -->
+              <text class="t-strong" x="322" y="84">Pmᵢ</text>
+              <text lang="en" class="t-muted t-small" x="322" y="102">inflow: mechanical input</text>
+              <text lang="ja" class="t-muted t-small" x="322" y="102">流入：機械入力</text>
+              <line class="s-ink" x1="238" y1="214" x2="156" y2="214" marker-end="url(#p0-arrow-w1)"/>
+              <text class="t-strong t-mid" x="197" y="206">Dᵢωᵢ</text>
+              <text lang="en" class="t-muted t-small t-mid" x="195" y="266">reversed if ωᵢ &lt; 0</text>
+              <text lang="ja" class="t-muted t-small t-mid" x="195" y="266">ωᵢ &lt; 0 では逆向き</text>
+              <line class="s-ink" x1="420" y1="214" x2="530" y2="214" marker-end="url(#p0-arrow-w1)"/>
+              <text class="t-strong t-mid" x="475" y="206">Peᵢ</text>
+              <text lang="en" class="t-muted" x="556" y="239">network</text>
+              <text lang="ja" class="t-muted" x="556" y="239">送電網へ</text>
+              <!-- cross-section -->
+              <line class="s-ink" x1="252" y1="272" x2="408" y2="272" marker-start="url(#p0-arrow-w1)" marker-end="url(#p0-arrow-w1)"/>
+              <text lang="en" class="t-mid" x="330" y="292">cross-section ∝ Mᵢ</text>
+              <text lang="ja" class="t-mid" x="330" y="292">断面積 ∝ Mᵢ</text>
+              <text class="t-strong t-mid" x="320" y="326">Mᵢ dωᵢ/dt = Pmᵢ − Peᵢ − Dᵢωᵢ</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Generator <span class="lec-math-inline" data-tex="i"></span> as a water tank. The level above the dashed line is the speed deviation <span class="lec-math-inline" data-tex="\omega_i"></span>, and the cross-section is proportional to the inertia <span class="lec-math-inline" data-tex="M_i"></span>. The tap pours in the mechanical input <span class="lec-math-inline" data-tex="P_{\mathrm{m},i}"></span>; the electrical output <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span> leaves for the network, and the damping flow <span class="lec-math-inline" data-tex="D_i\,\omega_i"></span> goes to the basin on the left.</figcaption>
+            <figcaption lang="ja">発電機 <span class="lec-math-inline" data-tex="i"></span> を水槽で表した図です。破線から測った水位が速さのずれ <span class="lec-math-inline" data-tex="\omega_i"></span>、断面積が慣性 <span class="lec-math-inline" data-tex="M_i"></span> に比例します。蛇口から機械入力 <span class="lec-math-inline" data-tex="P_{\mathrm{m},i}"></span> が流れ込み、電気出力 <span class="lec-math-inline" data-tex="P_{\mathrm{e},i}"></span> が送電網へ、制動の流れ <span class="lec-math-inline" data-tex="D_i\,\omega_i"></span> が左の水槽へ流れ出します。</figcaption>
+          </figure>
+
+          <p lang="en">The network is drawn as pipes that join the outlets of the tanks, and the loads draw water from these pipes (figure below). Just as the network stores almost no electrical energy, the pipes hold almost no water. At every moment, therefore, the outflows of the tanks add up to the water that the loads draw plus the water that leaks on the way, which stands for the losses. A tank whose outflows exceed its inflow loses water, and its level, the speed, falls.</p>
+          <p lang="ja">送電網は各水槽の出口をつなぐ管で表し、負荷はこの管から水を取り出すものとします（下の図）。送電網が電気エネルギーをほとんど蓄えないのと同じく、管には水がほとんどたまりません。そのため、各水槽から流れ出す水の合計は、いつの瞬間も、負荷が取り出す水と途中で漏れる水（損失にあたります）の合計に等しくなります。流出の合計が流入より多い水槽では水が減り、水位（速さ）が下がります。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 330" role="img" aria-label="Three tanks, one for each generator, with their outlets joined by pipes, the network; two loads draw water from the pipes; the outflows add up to the loads plus the losses">
+              <defs><marker id="p0-arrow-w2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker></defs>
+              <!-- pipes: taps, outlets, network, branches to the loads -->
+              <path d="M130 168 V216 M390 168 V216 M650 168 V216 M124 216 H656 M260 216 V258 M520 216 V258 M114 22 H170 V44 M374 22 H430 V44 M634 22 H690 V44" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M130 168 V216 M390 168 V216 M650 168 V216 M124 216 H656 M260 216 V258 M520 216 V258 M114 22 H170 V44 M374 22 H430 V44 M634 22 H690 V44" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <!-- generator 1 -->
+              <rect class="f-brand" x="166" y="46" width="8" height="54"/>
+              <rect class="f-brand" style="stroke:none" x="66" y="100" width="128" height="69"/>
+              <line class="s-brand" x1="66" y1="100" x2="194" y2="100"/>
+              <path class="s-ink" d="M65 50 V170 H124 M136 170 H195 V50"/>
+              <line class="s-line is-dashed" x1="52" y1="100" x2="208" y2="100"/>
+              <text lang="en" class="t-strong" x="72" y="74">Generator 1</text>
+              <text lang="ja" class="t-strong" x="72" y="74">発電機 1</text>
+              <text class="t-strong" x="182" y="40">Pm₁</text>
+              <line class="s-ink" x1="108" y1="178" x2="108" y2="204" marker-end="url(#p0-arrow-w2)"/>
+              <text class="t-strong" x="144" y="196">Pe₁</text>
+              <!-- generator 2 -->
+              <rect class="f-brand" x="426" y="46" width="8" height="54"/>
+              <rect class="f-brand" style="stroke:none" x="326" y="100" width="128" height="69"/>
+              <line class="s-brand" x1="326" y1="100" x2="454" y2="100"/>
+              <path class="s-ink" d="M325 50 V170 H384 M396 170 H455 V50"/>
+              <line class="s-line is-dashed" x1="312" y1="100" x2="468" y2="100"/>
+              <text lang="en" class="t-strong" x="332" y="74">Generator 2</text>
+              <text lang="ja" class="t-strong" x="332" y="74">発電機 2</text>
+              <text class="t-strong" x="442" y="40">Pm₂</text>
+              <line class="s-ink" x1="368" y1="178" x2="368" y2="204" marker-end="url(#p0-arrow-w2)"/>
+              <text class="t-strong" x="404" y="196">Pe₂</text>
+              <!-- generator 3 -->
+              <rect class="f-brand" x="686" y="46" width="8" height="54"/>
+              <rect class="f-brand" style="stroke:none" x="586" y="100" width="128" height="69"/>
+              <line class="s-brand" x1="586" y1="100" x2="714" y2="100"/>
+              <path class="s-ink" d="M585 50 V170 H644 M656 170 H715 V50"/>
+              <line class="s-line is-dashed" x1="572" y1="100" x2="728" y2="100"/>
+              <text lang="en" class="t-strong" x="592" y="74">Generator 3</text>
+              <text lang="ja" class="t-strong" x="592" y="74">発電機 3</text>
+              <text class="t-strong" x="702" y="40">Pm₃</text>
+              <line class="s-ink" x1="628" y1="178" x2="628" y2="204" marker-end="url(#p0-arrow-w2)"/>
+              <text class="t-strong" x="664" y="196">Pe₃</text>
+              <!-- loads -->
+              <line class="s-ink" x1="260" y1="266" x2="260" y2="292" marker-end="url(#p0-arrow-w2)"/>
+              <text lang="en" class="t-muted" x="272" y="288">load</text>
+              <text lang="ja" class="t-muted" x="272" y="288">負荷</text>
+              <line class="s-ink" x1="520" y1="266" x2="520" y2="292" marker-end="url(#p0-arrow-w2)"/>
+              <text lang="en" class="t-muted" x="532" y="288">load</text>
+              <text lang="ja" class="t-muted" x="532" y="288">負荷</text>
+              <text lang="en" class="t-muted t-mid" x="390" y="244">network: pipes that store no water</text>
+              <text lang="ja" class="t-muted t-mid" x="390" y="244">送電網：水をためない管</text>
+              <text lang="en" class="t-strong t-mid" x="390" y="320">Pe₁ + Pe₂ + Pe₃ = power of the loads + losses</text>
+              <text lang="ja" class="t-strong t-mid" x="390" y="320">Pe₁ + Pe₂ + Pe₃ ＝ 負荷が使う電力 ＋ 損失</text>
+              </svg>
+            </div>
+            <figcaption lang="en">Three generators joined through the network, with the side pipes of the figure above left out. Every level is on its dashed line: each tank pours out as much as flows in, and the frequency is the rated value. The outflows add up to the loads plus the losses at every moment.</figcaption>
+            <figcaption lang="ja">3 台の発電機を送電網でつないだ図です（上の図の横の管は省略しています）。どの水位も破線の上にあり、各水槽の流入と流出が等しく、周波数は定格値です。流出の合計は、いつの瞬間も負荷と損失の合計に等しくなります。</figcaption>
+          </figure>
+
           <h3 id="bus-frequency"><span lang="en">The frequency of each bus, and synchronism</span><span lang="ja">母線ごとの周波数と同期</span></h3>
           <p lang="en">The voltage of bus <span class="lec-math-inline" data-tex="k"></span> is a sinusoid close to the rated frequency. With its phase angle <span class="lec-math-inline" data-tex="\theta_k(t)"></span>, measured from the same reference as the rotor angles, the voltage and its frequency <span class="lec-math-inline" data-tex="f_k"></span> are</p>
           <p lang="ja">母線 <span class="lec-math-inline" data-tex="k"></span> の電圧は、定格周波数に近い正弦波です。回転子の角度と同じ基準から測った位相角を <span class="lec-math-inline" data-tex="\theta_k(t)"></span> とすると、電圧とその周波数 <span class="lec-math-inline" data-tex="f_k"></span> は次のように書けます。</p>
@@ -253,12 +384,84 @@ net.plot_diagram();</code></pre>
           <p lang="en">Here <span class="lec-math-inline" data-tex="n"></span> is the number of buses. In a synchronized state the frequency is therefore the same at every bus, and this common value <span class="lec-math-inline" data-tex="f = f_0 (1 + \omega_\mathrm{s})"></span> is the <strong>system frequency</strong>. The differences between the phase angles stay constant, so the power on each line is constant as well.</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="n"></span> は母線の数です。同期した状態では、どの母線で測っても周波数は同じ値になります。この共通の値 <span class="lec-math-inline" data-tex="f = f_0 (1 + \omega_\mathrm{s})"></span> が<strong>系統周波数</strong>です。位相角の差は一定に保たれるので、各送電線を流れる電力も一定になります。</p>
 
+          <p lang="en">In the tank picture, the network takes more water out of a tank whose level has been higher than the others, and less out of one whose level has been lower. Here the picture differs from ordinary connected tanks. In connected tanks, the flow in a pipe is set by the difference of the levels themselves, it stops when the levels are equal, and the levels simply even out. The power on a line is set by the difference of the phase angles, and the angle difference changes by the time integral of the speed difference, that is, of the level difference. So the extra flow keeps growing while one level stays higher, is still large when the levels have become equal, and pushes the levels past each other: they swing against each other before they settle. This is the motion of masses joined by springs, the picture of Part 4 (<a href="part4-spring-mass-model.html#springs">transmission lines as springs</a>). For the same reason, the flows in the pipes do not stop in a synchronized state: the levels are equal, and the constant angle differences keep the flows constant.</p>
+          <p lang="ja">水槽のたとえでは、送電網は、水位がほかより高い状態が続いた水槽からより多くの水を引き出し、低い状態が続いた水槽からはより少なく引き出します。ここは、ふつうの連結した水槽とは異なります。連結した水槽では、管の流れは水位の差そのもので決まり、水位がそろえば止まるので、水位はそのままならされます。送電線の電力は位相角の差で決まり、位相角の差は、速さの差（水位の差）を時間で積分した分だけ変わります。そのため、一方の水位が高いあいだは余分な流れが増え続け、水位がそろった時点でもまだ大きく残っていて、水位を行き過ぎさせます。こうして水位は揺れ合いながら落ち着きます。これは、ばねでつながれたおもりの動きで、Part 4 の見方です（<a href="part4-spring-mass-model.html#springs">送電線をばねに見立てる</a>）。同じ理由で、同期した状態でも管の流れは止まりません。水位はそろっていて、一定の位相角の差が一定の流れを保ちます。</p>
+
           <h3 id="common-frequency"><span lang="en">The common frequency when supply and demand do not balance</span><span lang="ja">需給がつり合わないときの共通の周波数</span></h3>
           <p lang="en">The value of <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> follows from the swing equations. In a synchronized steady state <span class="lec-math-inline" data-tex="\mathrm{d}\omega_i/\mathrm{d}t = 0"></span> for every generator, and the sum of the <span class="lec-math-inline" data-tex="m"></span> swing equations gives</p>
           <p lang="ja"><span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> の値は、動揺方程式から決まります。同期した定常状態では、どの発電機でも <span class="lec-math-inline" data-tex="\mathrm{d}\omega_i/\mathrm{d}t = 0"></span> です。<span class="lec-math-inline" data-tex="m"></span> 本の動揺方程式を足し合わせると、次の式が得られます。</p>
           <div class="lec-math" data-tex="0 = \sum_{i=1}^{m} P_{\mathrm{m},i} - \sum_{i=1}^{m} P_{\mathrm{e},i} - \Bigl(\sum_{i=1}^{m} D_i\Bigr)\,\omega_\mathrm{s} \quad\Longrightarrow\quad \omega_\mathrm{s} = \frac{\sum_i P_{\mathrm{m},i} - \sum_i P_{\mathrm{e},i}}{\sum_i D_i}"></div>
           <p lang="en">The sum of the electrical outputs is the power consumed by the loads plus the losses. If the mechanical input of the generators is smaller than this, <span class="lec-math-inline" data-tex="\omega_\mathrm{s} < 0"></span>: the generators synchronize at a common frequency <strong>below the rated value</strong>, and the frequency does not return to <span class="lec-math-inline" data-tex="f_0"></span> by itself. Governors increase the mechanical input as the frequency falls; this makes the deviation smaller but leaves part of it. AGC integrates the frequency deviation and changes the inputs until the frequency is back at <span class="lec-math-inline" data-tex="f_0"></span> (Part 8).</p>
           <p lang="ja">電気出力の和は、負荷が消費する電力と損失の和です。発電機の機械入力の和がこれより小さければ <span class="lec-math-inline" data-tex="\omega_\mathrm{s} < 0"></span> となり、発電機は<strong>定格より低い</strong>共通の周波数で同期します。周波数がひとりでに <span class="lec-math-inline" data-tex="f_0"></span> に戻ることはありません。ガバナは周波数が下がると機械入力を増やすので、ずれは小さくなりますが、一部は残ります。AGC は周波数のずれを積分し、周波数が <span class="lec-math-inline" data-tex="f_0"></span> に戻るまで入力を変えます（Part 8）。</p>
+
+          <p lang="en">In the tank picture: when a load starts to draw more water, the outflows of the tanks increase at once. How this extra outflow is shared at that moment is set by the network, by how close each generator is electrically to the load, and not by the size of the tanks; the levels therefore start to fall at different rates. The levels then swing against each other as described above, and finally all settle at one common height <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> below the lines (figure below). There each side pipe brings <span class="lec-math-inline" data-tex="D_i\,|\omega_\mathrm{s}|"></span> into its tank from the basin held at the line, so that each tank pours out <span class="lec-math-inline" data-tex="P_{\mathrm{e},i} = P_{\mathrm{m},i} + D_i\,|\omega_\mathrm{s}|"></span>; the sum over the tanks is the formula above. As long as the taps are not opened further, nothing brings the levels back to the lines. A governor acts like a float valve that opens the tap more the lower the level is. It keeps the tap open only while the level stays below the line, so it reduces the deviation but does not remove it. AGC keeps opening the taps as long as the level is below the line, and stops only when the level is back on the line (Part 8).</p>
+          <p lang="ja">水槽のたとえで見ると、負荷が取り出す水が増えたとき、各水槽からの流出はすぐに増えます。その瞬間に増えた分をどの水槽がどれだけ受け持つかは、水槽の大きさではなく、負荷との電気的な近さを通して送電網で決まります。そのため水位は、水槽ごとに異なる速さで下がり始めます。その後、上で述べたように水位は揺れ合い、最後はすべてが線より下の同じ高さ <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> にそろいます（下の図）。このとき、各水槽には線の高さに保たれた水槽から横の管を通して <span class="lec-math-inline" data-tex="D_i\,|\omega_\mathrm{s}|"></span> の水が入り、各水槽からの流出は <span class="lec-math-inline" data-tex="P_{\mathrm{e},i} = P_{\mathrm{m},i} + D_i\,|\omega_\mathrm{s}|"></span> になります。これを全部の水槽について足したものが上の式です。蛇口をさらに開かない限り、水位を線まで戻すものはありません。ガバナは、水位が下がるほど蛇口を大きく開く浮き弁のように働きます。蛇口を開いたままにするには水位が線より下にある必要があるので、ずれは小さくなりますが、なくなりはしません。AGC は、水位が線より下にあるあいだ蛇口を開き続け、水位が線に戻ったところで止めます（Part 8）。</p>
+
+          <figure class="lec-figure is-scroll" style="--lec-min-w: 600px;">
+            <div class="lec-scroll">
+              <svg class="lec-svg" viewBox="0 0 780 304" role="img" aria-label="Left: supply and demand balance and both levels are on their lines. Right: after the demand has risen and the swings have died out, both levels is at the same height below its line, and the side pipes bring water into each tank">
+              <defs><marker id="p0-arrow-w3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-arrow" d="M0 0 L10 5 L0 10 Z"/></marker></defs>
+              <!-- left: balanced -->
+              <path d="M100 178 V214 M250 178 V214 M94 214 H256 M175 214 V236 M44 170 H74 M78 34 H100 V44 M194 170 H224 M228 34 H250 V44" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M100 178 V214 M250 178 V214 M94 214 H256 M175 214 V236 M44 170 H74 M78 34 H100 V44 M194 170 H224 M228 34 H250 V44" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <rect class="f-brand" x="97" y="46" width="6" height="64"/>
+              <rect class="f-brand" style="stroke:none" x="27" y="110" width="18" height="69"/>
+              <line class="s-brand" x1="27" y1="110" x2="45" y2="110"/>
+              <rect class="f-brand" style="stroke:none" x="73" y="110" width="54" height="69"/>
+              <line class="s-brand" x1="73" y1="110" x2="127" y2="110"/>
+              <path class="s-ink" d="M26 90 V180 H46 V176 M46 164 V90"/>
+              <path class="s-ink" d="M72 60 V164 M72 176 V180 H94 M106 180 H128 V60"/>
+              <line class="s-line is-dashed" x1="20" y1="110" x2="138" y2="110"/>
+              <rect class="f-brand" x="247" y="46" width="6" height="64"/>
+              <rect class="f-brand" style="stroke:none" x="177" y="110" width="18" height="69"/>
+              <line class="s-brand" x1="177" y1="110" x2="195" y2="110"/>
+              <rect class="f-brand" style="stroke:none" x="223" y="110" width="54" height="69"/>
+              <line class="s-brand" x1="223" y1="110" x2="277" y2="110"/>
+              <path class="s-ink" d="M176 90 V180 H196 V176 M196 164 V90"/>
+              <path class="s-ink" d="M222 60 V164 M222 176 V180 H244 M256 180 H278 V60"/>
+              <line class="s-line is-dashed" x1="170" y1="110" x2="288" y2="110"/>
+              <line class="s-ink" x1="175" y1="242" x2="175" y2="264" marker-end="url(#p0-arrow-w3)"/>
+              <text lang="en" class="t-muted t-small" x="186" y="260">load</text>
+              <text lang="ja" class="t-muted t-small" x="186" y="260">負荷</text>
+              <text lang="en" class="t-strong t-mid" x="175" y="22">supply and demand balance</text>
+              <text lang="ja" class="t-strong t-mid" x="175" y="22">需給がつり合っている</text>
+              <text class="t-mid" x="175" y="292">ΣPmᵢ = ΣPeᵢ,  ωᵢ = 0</text>
+              <line class="s-line is-dashed" x1="390" y1="8" x2="390" y2="296"/>
+              <!-- right: after the load increase -->
+              <path d="M500 178 V214 M650 178 V214 M494 214 H656 M575 214 V236 M444 170 H474 M478 34 H500 V44 M594 170 H624 M628 34 H650 V44" style="fill:none;stroke:var(--brand);stroke-width:12;stroke-linejoin:miter"/>
+              <path d="M500 178 V214 M650 178 V214 M494 214 H656 M575 214 V236 M444 170 H474 M478 34 H500 V44 M594 170 H624 M628 34 H650 V44" style="fill:none;stroke:var(--lec-c1-soft);stroke-width:9;stroke-linejoin:miter"/>
+              <rect class="f-brand" x="497" y="46" width="6" height="94"/>
+              <rect class="f-brand" style="stroke:none" x="427" y="110" width="18" height="69"/>
+              <line class="s-brand" x1="427" y1="110" x2="445" y2="110"/>
+              <rect class="f-brand" style="stroke:none" x="473" y="140" width="54" height="39"/>
+              <line class="s-brand" x1="473" y1="140" x2="527" y2="140"/>
+              <path class="s-ink" d="M426 90 V180 H446 V176 M446 164 V90"/>
+              <path class="s-ink" d="M472 60 V164 M472 176 V180 H494 M506 180 H528 V60"/>
+              <line class="s-line is-dashed" x1="420" y1="110" x2="538" y2="110"/>
+              <line class="s-ink" x1="446" y1="154" x2="470" y2="154" marker-end="url(#p0-arrow-w3)"/>
+              <rect class="f-brand" x="647" y="46" width="6" height="94"/>
+              <rect class="f-brand" style="stroke:none" x="577" y="110" width="18" height="69"/>
+              <line class="s-brand" x1="577" y1="110" x2="595" y2="110"/>
+              <rect class="f-brand" style="stroke:none" x="623" y="140" width="54" height="39"/>
+              <line class="s-brand" x1="623" y1="140" x2="677" y2="140"/>
+              <path class="s-ink" d="M576 90 V180 H596 V176 M596 164 V90"/>
+              <path class="s-ink" d="M622 60 V164 M622 176 V180 H644 M656 180 H678 V60"/>
+              <line class="s-line is-dashed" x1="570" y1="110" x2="688" y2="110"/>
+              <line class="s-ink" x1="596" y1="154" x2="620" y2="154" marker-end="url(#p0-arrow-w3)"/>
+              <line class="s-ink" x1="575" y1="242" x2="575" y2="264" marker-end="url(#p0-arrow-w3)"/>
+              <text lang="en" class="t-muted t-small" x="586" y="260">load (increased)</text>
+              <text lang="ja" class="t-muted t-small" x="586" y="260">負荷（増加後）</text>
+              <line class="s-ink" x1="694" y1="111" x2="694" y2="139" marker-start="url(#p0-arrow-w3)" marker-end="url(#p0-arrow-w3)"/>
+              <text class="t-strong" x="702" y="130">ωₛ</text>
+              <text class="t-small t-mid" x="460" y="198">Dᵢ|ωₛ|</text>
+              <text lang="en" class="t-strong t-mid" x="575" y="22">after demand rises, synchronized</text>
+              <text lang="ja" class="t-strong t-mid" x="575" y="22">需要が増え、同期した後</text>
+              <text class="t-mid" x="575" y="292">ΣPmᵢ + ΣDᵢ|ωₛ| = ΣPeᵢ</text>
+              </svg>
+            </div>
+            <figcaption lang="en">The tanks before and after the demand rises, with the taps unchanged (no governor or AGC). After the swings have died out, all the levels are at the same height <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> below the lines, and the side pipes bring <span class="lec-math-inline" data-tex="D_i\,|\omega_\mathrm{s}|"></span> into each tank; together these flows make up the difference between the outflows and the inflows.</figcaption>
+            <figcaption lang="ja">需要が増える前と後の水槽です。蛇口は変えていません（ガバナと AGC なし）。揺れが収まると、すべての水位が線より下の同じ高さ <span class="lec-math-inline" data-tex="\omega_\mathrm{s}"></span> にそろい、横の管から各水槽に <span class="lec-math-inline" data-tex="D_i\,|\omega_\mathrm{s}|"></span> の水が入ります。これらの流れの合計が、流出の合計と流入の合計の差を埋めます。</figcaption>
+          </figure>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
             <div class="lec-scroll">
