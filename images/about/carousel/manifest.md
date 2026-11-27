@@ -145,8 +145,8 @@ G.BusHeightMode = "V";
 - poster: `08-eigen-participation.png`
 - type: interactive (11.7 s)
 - replaces: the eigenvalue still `images/about/output-eigenvalues.png`
-- JA: IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.35 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。
-- EN: The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.35 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.
+- JA: IEEE 68 母線系統を近似線形化し、左の固有値の図でモードをクリックしています。右のネットワーク図の色が、そのモードへの各母線の参加率に変わります。0.39 Hz の地域間振動モードでは多くの発電機が関わり、1.63 Hz のローカルモードでは母線 B011 の発電機だけが関わります。最後に母線 B014 をクリックすると、下の表にその母線の状態ごとの参加率が出ます。
+- EN: The IEEE 68-bus system is linearized and modes are clicked on the eigenvalue map on the left. The diagram on the right is recolored with the participation of each bus in that mode: many generators take part in the inter-area mode of 0.39 Hz, only the generator at bus B011 in the local mode of 1.63 Hz. A click on bus B014 then lists the participation of each of its states in the table below.
 - code:
 
 ```matlab
