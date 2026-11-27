@@ -16,6 +16,14 @@
     .lec2-tablewrap th { min-width: 0; white-space: nowrap; }
     .lec2-tablewrap th, .lec2-tablewrap td { padding: 6px 12px; }
     .lec2-tablewrap td.lec2-num, .lec2-tablewrap th.lec2-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    /* .lec2-side: a figure and a table side by side on wide screens, stacked below 761px */
+    @media (min-width: 761px) {
+      .lec2-side { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; }
+      .lec-figure.is-scroll .lec2-side .lec-scroll > img { min-width: 0; }
+      .lec2-side .lec2-tablewrap { margin: 0; }
+      .lec2-side .lec2-tablewrap table { min-width: 0; margin: 0; font-size: 0.85rem; }
+      .lec2-side .lec2-tablewrap th, .lec2-side .lec2-tablewrap td { padding: 5px 8px; }
+    }
   </style>
 </head>
 <body class="lec">
@@ -347,6 +355,7 @@ result.plot_convergence();</code></pre>
           <p lang="ja">図と表は、GUILDA で計算した IEEE 9 母線系統（<a href="#fig-ieee9">上の単線結線図</a>）の潮流です。</p>
 
           <figure class="lec-figure is-scroll" style="--lec-min-w: 560px;">
+            <div class="lec2-side">
             <div class="lec-scroll">
               <img src="../images/lecture/part2/ieee9-flow.png" alt="Power flow of the IEEE 9-bus system drawn by GUILDA: the buses B001 to B009 as bars coloured by voltage magnitude, highest at B001 (1.04 pu) and lowest at B005 (about 0.996 pu), and small white triangles on the branches pointing in the direction of the active power" data-alt-ja="GUILDA で描いた IEEE 9 母線系統の潮流。母線 B001〜B009 は電圧の大きさで色分けした棒で、最も高いのが B001（1.04 pu）、最も低いのが B005（約 0.996 pu）です。ブランチ上の白い小さな三角は有効電力の向きを指しています。" width="928" height="678">
             </div>
@@ -367,6 +376,7 @@ result.plot_convergence();</code></pre>
                   <tr><td>B009</td><td>PQ</td><td class="lec2-num">1.97</td><td class="lec2-num">1.03</td><td class="lec2-num">0.00</td><td class="lec2-num">0.00</td></tr>
                 </tbody>
               </table>
+            </div>
             </div>
             <figcaption lang="en">Power flow of the IEEE 9-bus system computed and drawn with GUILDA (<code>plot_diagram</code>). The colour of each bus is its voltage magnitude <span class="lec-math-inline" data-tex="|V|"></span> (pu). The small white triangles on each branch point in the direction of the active power; every triangle points from the larger angle to the smaller one. The table is <code>result.tab_bus</code> of the same result, rounded to two decimal places: the phase angle θ in degrees (<code>Varg</code> holds it in rad), the voltage magnitude V, and the active and reactive power P, Q injected into the network at the bus (positive for generation, negative for load) in pu.</figcaption>
             <figcaption lang="ja">GUILDA で計算し、GUILDA の <code>plot_diagram</code> で描いた IEEE 9 母線系統の潮流です。母線の色は電圧の大きさ <span class="lec-math-inline" data-tex="|V|"></span>（pu）です。ブランチ上の白い小さな三角は有効電力の向きを指しています。どの三角も、位相角の大きい母線から小さい母線へ向いています。表は同じ結果の <code>result.tab_bus</code> を小数第 2 位に丸めたもので、位相角 θ は度（<code>Varg</code> の値は rad）、V は電圧の大きさ、P と Q は母線からネットワークに注入する有効電力と無効電力（発電で正、負荷で負）で、単位は pu です。</figcaption>
