@@ -127,12 +127,12 @@ end
 - type: MATLAB session (Command Window, then the figures)
 - heading JA: 自作の制御器を、同梱の制御器と同じように使う
 - heading EN: A controller you write works like a bundled one
-- JA: 周波数のずれに比例して機械入力を変えるガバナを LocalController を継承したクラスとして書き、GUILDA のフォルダ内（_GUILDAobject/+controller/+governor/Droop.m）に保存します。GUILDA.update_keymap でキー "gov-droop" を登録すると、add_local_controller で発電機に追加できます。IEEE 9 母線系統で 1 秒に機械入力が 0.1 pu 減ると、既定のガバナ（機械入力一定）では周波数が下がり続け、このガバナを 3 台に付けると約 −0.004 pu で落ち着きます。
-- EN: A governor that changes the mechanical power in proportion to the frequency deviation is written as a subclass of LocalController and saved in the GUILDA folder (_GUILDAobject/+controller/+governor/Droop.m). After GUILDA.update_keymap registers its key "gov-droop", add_local_controller adds it to a generator. When the IEEE 9-bus system loses 0.1 pu of mechanical power at 1 s, the frequency keeps falling with the default governors (constant mechanical power) and settles at about −0.004 pu with this governor on the three generators.
+- JA: 周波数のずれに比例して機械入力を変えるガバナを LocalController を継承したクラスとして書き、自分のフォルダ（myModels/+controller/+governor/Droop.m）に保存します。GUILDA.setting で設定 ModelFolder にこのフォルダを指定し、GUILDA.addpath でパスに加え、GUILDA.update_keymap でキー "gov-droop" を登録すると、add_local_controller で発電機に追加できます。IEEE 9 母線系統で 1 秒に機械入力が 0.1 pu 減ると、既定のガバナ（機械入力一定）では周波数が下がり続け、このガバナを 3 台に付けると約 −0.004 pu で落ち着きます。
+- EN: A governor that changes the mechanical power in proportion to the frequency deviation is written as a subclass of LocalController and saved in a folder of your own (myModels/+controller/+governor/Droop.m). After GUILDA.setting sets this folder as ModelFolder, GUILDA.addpath puts it on the path and GUILDA.update_keymap registers its key "gov-droop", add_local_controller adds it to a generator. When the IEEE 9-bus system loses 0.1 pu of mechanical power at 1 s, the frequency keeps falling with the default governors (constant mechanical power) and settles at about −0.004 pu with this governor on the three generators.
 - code:
 
 ```matlab
-% _GUILDAobject/+controller/+governor/Droop.m (in the GUILDA folder)
+% myModels/+controller/+governor/Droop.m (a folder of your own)
 classdef Droop < LocalController
 % Governor with a proportional frequency feedback: Pmech = Pmech_ref - K*omega
     properties (Constant, Hidden)
@@ -174,7 +174,10 @@ classdef Droop < LocalController
     end
 end
 
-% Command Window
+% Command Window (myModels is in the current folder)
+folder = fullfile(pwd, "myModels");   % the folder of your own classes
+GUILDA.setting("Startup", ModelFolder=folder, PrintPathLog=false);
+GUILDA.addpath;   % puts the folder and its subfolders on the path
 GUILDA.update_keymap;   % registers the key of the new class
 net = network.IEEE9bus();
 sc = net.add_scenario("loss", Time=[0, 30]);
@@ -189,12 +192,14 @@ res1.plot_trajectory(Quantity="omega");
 ```
 
 - note: made by `notes/about-anim/make_about_custom_controller.m`. The script writes the
-  class file shown into the GUILDA folder, runs the commands exactly as shown (only
-  `GUILDA.update_keymap` prints), records the two figures as GUILDA draws them (side by
-  side, each under the command that drew it) and deletes the class file again. The editor
-  pane and the Command Window are drawn by the script. GUILDA.keymap finds model classes
-  only under the GUILDA folder (GUILDA.dictionary scans GUILDA.pwd), so the class file must
-  be saved there.
+  class file shown into `myModels/+controller/+governor/` of a new temporary folder, makes
+  that folder the current folder, runs the commands exactly as shown (only
+  `GUILDA.update_keymap` prints; `PrintPathLog=false` keeps `GUILDA.addpath` from printing
+  the folders, so no path of the machine appears), and records the two figures as GUILDA
+  draws them (side by side, each under the command that drew it). At the end it restores
+  the user settings in `@GUILDA/user`, removes the folder from the path, deletes it and
+  runs `GUILDA.update_keymap` again. The editor pane and the Command Window are drawn by
+  the script.
 
 ## 05 最適化問題を確かめてから解く
 
